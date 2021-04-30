@@ -1,0 +1,306 @@
+% !TeX root = ../main.tex
+\chapter{Deep ISM Experiments}
+\label{ch:deep_ism_exp}
+\begin{itemize}
+	\item explain why NuScenes
+	\item give sensor specification
+\end{itemize}
+%==========================================================================%
+%
+%==========================================================================%
+\section{Choice of Ground-Truth}
+\label{sec:choice_of_gt}
+This section details the comparison of different approaches to adapt lidar to radar \gls{bev} projections. First, the sensor characteristics in the chosen dataset will be listed together with the applied methods to adapt the lidar. Afterwards, the different lidar filtering approaches will be evaluated based on the overlap between the lidar and radar maps in the mapped areas quantified by the m\gls{iou} score. 
+%======================================%
+%
+%======================================%
+\subsection{Experimental Setup}
+\label{subsec:exp_setup_gt}
+In the following, evidential occupancy maps of scenes as defined in the NuScenes dataset are created based on the geometric \gls{irm} and \gls{ilm} as described in Sec. \ref{subsec:method_geo_isms}. To find the best overlap between the two types of maps, the first step in the \gls{ilm}, namely the removal of ground detections will be altered. The two filters under investigation are a purely geometric height threshold-based and a semantic filter. Here, height thresholds are compare for different heights in the interval $[0,0.1]$ with step size $0.025$ and between $[0.1,2.0]$ with step size $0.1$ in order to have a higher resolution close to zero. For the semantic filters, in the majority of cases the street detections are closest to the ego vehicle in the \gls{bev} projection followed by sidewalks and terrain. Since the removal of detections in occluded areas has little to no effect for geometric \gls{ism}s, a three stepped removal of the semantics is proposed as follows $[$no street, no street or sidewalk, no street, sidewalk or terrain$]$.
+%======================================%
+%
+%======================================%
+\subsection{Experimental Results}
+\label{subsec:exp_results_gt}
+\begin{figure}
+	\begin{center}
+		\import{imgs/07_deep_ism_exp/choice_of_gt}{qual_results_gt_choice_scene040.pdf_tex}
+		\caption{\label{fig:qual_results_gt_choice_scene040}Example of lidar maps created by successively removing ground-plane semantics and three threshold-based filters, together with the mapped area (white) and the radar map. The white box in the bottom left corner shows that for lower height threshold and up to semantics of sidewalks, many structures detected in the radar map are occluded. On the other hand, setting the height threshold too high (here demonstrated for threshold $1.7m$) removes too many points at the forefront, as shown in the white box in the upper right corner. Height threshold of about $0.5m$ or the removal of semantics up to the terrain level show a good compromise.}
+	\end{center}
+\end{figure} 
+The quantitative comparison in Fig. \ref{fig:miou_results_gt_choice} shows that the successive removal of semantics up to the terrain level leads to increasingly better overlap up to the best reached m\gls{iou} score of $11.27\%$. On the other hand, the height threshold-based filters show improved performance up to a height threshold of $0.5m$ with a score of $10.78\%$ after which the performance starts to decrease. This suggests that for the street and sidewalk level semantics as well as low height threshold large portions of the areas detected by the radar are occluded in the lidar \gls{bev}. This is also qualitatively shown in the lower left white boxes in Fig. \ref{fig:qual_results_gt_choice_scene040}. Moreover, when the height threshold is set too high, portions of the areas detected by the radar are increasingly filtered out, as illustrated in the upper right boxes in Fig. \ref{fig:qual_results_gt_choice_scene040}. Thus, a height threshold of about $0.5m$ or the removal of semantics up to the terrain level provide the best compromise of the compared methods. However, since the semantic information is only available for keyframes in the NuScenes dataset and because the $0.5m$ height threshold filter rivals the best semantic filter in its performance, it is proposed to use the height threshold-based filter to obtain the labels for further experiments.
+\begin{figure}
+	\begin{center}
+		\import{imgs/07_deep_ism_exp/choice_of_gt}{mIouGtVerification.tex}
+		\caption{\label{fig:miou_results_gt_choice}Results of mIoU between different evidential occupancy maps create with variations of geometric \gls{ilm}s and the geometric \gls{irm} computed in the mapped area.}
+	\end{center}
+\end{figure}
+%==========================================================================%
+%
+%==========================================================================%
+\section{Dataset}
+\label{sec:dataset_n_hardware}
+The dataset chosen in this work is the publicly available NuScenes dataset for it contains measurements of all sensor modalities investigated in the experiments (lidar with semantic information, camera, odometry information and radar), is openly available which makes the results comparable and reproducible and is among the datasets containing the biggest amount of data (see Sec. \textcolor{red}{ToDo}). It is separated into $1000$ so called scenes each containing the data of roughly a $20$ second drives during which data from each modality is recorded, which is referred to as sensor sweeps. Additionally, so called samples are defined every $0.5$ seconds containing annotations like bounding boxes and semantics for all sensor modalities. To enable comparability, the train-val-test split is predefined by the NuScenes creators.\\
+For this work, the train-val-test split as proposed by the creators is used, but some of the scenes have been removed. Specifically, all scenes tagged with "night" or "difficult lighting" have been filtered out since they are relatively rare and thus, the networks with camera inputs could not properly adapt. Additionally, some scenes contain little to no ego vehicle movement (e.g. ego vehicle waiting at a red traffic light) which are great scenarios for tracking tasks but largely violate the static environment assumption in occupancy mapping. Thus, only scenes in which the ego vehicle moved at least $20$m are considered.\\
+To obtain denser measurements for occupancy mapping, the sweeps are used to create the occupancy mapping dataset. Here, the sensor modality with the fewest sweeps per scene is identified and chosen as reference. Next, the temporally closest sweeps of the remaining sensors towards the reference are processed. Afterwards, sensor-dependent procedures are applied to create the different baselines, inputs and targets for the investigated geometric and deep \gls{ism}s in form of a $128\times 128$ grid map centered around the hind axle of the ego vehicle and spanning an area of $40 \times 40$ m$^2$.\\
+To obtain the baseline geometric \gls{irm} and \gls{ilm} \gls{bev} images, the \gls{ism}s as detailed in Sec. \ref{subsec:method_geo_isms} and \ref{sec:choice_of_gt}. In the following, the creation of the investigated inputs and targets for the deep \gls{ism} are detailed. 
+%======================================%
+%
+%======================================%
+\subsection{Deep ISM Inputs}
+\label{subsec:def_of_inputs}
+To generate lidar \gls{bev} detection images, first, the ground-plane removal as described in Sec. \ref{sec:choice_of_gt} is applied. Afterwards, the detection positions are discretized into the coordinates of a gray-scale image and marked with value $1.0$ as opposed to the default value of $0.0$ (see Fig. ).
+\\
+For the radar images, the sweeps information of all corner and the front radar are used. All of the static detections are then marked as $1.0$ as opposed to the default pixel value $0.0$. The dynamic detections, distinguishable through a flag provided in the NuScenes dataset, are marked as $0.5$ since they indicate the transition between free and occupied. \textcolor{red}{ToDo how are dynamic detections handled}
+\\
+In case of the camera \gls{bev} images, the homography projection as well as the monodepth projection are considered. To obtain the homography-based \gls{bev} images, lidar points are identified which are only $5$cm away from the ideal flat ground-plane. These lidar detections are then transformed both to the \gls{bev} and the camera image. Afterwards, the corresponding pixel coordinates in both representations are identified and used to compute the homography matrix using a RANSAC-based filter. After identifying the homography for each camera, the images are projected into the \gls{bev} image where overlapping areas are being replaced and areas with no detections remain black. Additionally, a variant is considered where the semantic annotations are transformed using the homography transformation. Here, the semantic labels are being obtained by applying DeepLab V3+ \cite{deeplabv3plus2018} using the Xceptin network \cite{chollet2017xception} as a backbone trained on the Cityscapes dataset without further finetuning.
+\\
+For the monodepth projection, the semi-supervised model as proposed by \cite{guizilini2020robust} is used. Here, a model pretrained on Cityscapes is finetuned in a semi-supervised way on the NuScenes data. The resulting point cloud of all cameras is then projected into the \gls{bev} image while the pixel intensities represent the scaled height information. More specifically, the height is clipped into the interval $[-0.5,1.0]$m and scaled to the intensity interval $[0,1]$.
+%======================================%
+%
+%======================================%
+\subsection{Deep ISM Targets}
+\label{subsec:def_of_targets}
+Finally, the occupancy map patches used as targets to train the deep \gls{ism}s are generated as follows. First the geometric \gls{ilm} as defined in Sec. \ref{subsec:method_geo_isms} and \ref{sec:choice_of_gt} is used to create an occupancy map of the considered scene. To reduce the effect of artifacts due to dynamic objects in the targets, the lidar sweeps are enhanced with dynamic object information. Detections tagged as "dynamic" are only used to produce free space.
+\\
+To obtain the dynamic information for lidar sweeps, the sample's bounding boxes are interpolated for intermediate sweeps and marking all intersecting detections as dynamic. Here, the interpolations are obtained as follows. First, corresponding bounding boxes of dynamic objects are identified by their track ids for two subsequent samples. For each found pair, the bounding box poses are interpolated in the temporally first bounding box's coordinate frame by a third degree polynomial in a way that the first and last position intersect and their derivatives are zero. Here, the coordinate transformation prevents the occurrence of singularities in the interpolation in case of holonomic, short distance motions. The interpolated orientation is given by the arc-tangent of the polynomial's derivative. To finally obtain the interpolated bounding box pose, the way along the interpolated trajectory is integrated and divided into equidistant segments. Under the assumption that the tracked, dynamic object travels with a constant velocity between the two samples, the interpolated pose is given at the point when the relative traveled distance between the first and second sample's pose is closest to the relative time of the sweep between the two samples. The interpolation procedure and the overlay of the resulting interpolated bounding boxes over a lidar sweep's detection image are illustrated in Fig. \ref{fig:dyn_objs_interpolation}.
+\\
+After the creation of the occupancy map using the above described, enhanced geometric \gls{ilm}, patches, centered around each ego vehicle's position during mapping, are cut from the map. As a last step, to regain the information of dynamic objects, filtered out during mapping, the interpolated bounding boxes are marked in the occupancy map patches. 
+\begin{figure}
+	\begin{center}
+		\import{imgs/07_deep_ism_exp/dataset}{dyn_objs_interpolation.pdf_tex}
+		\caption{\label{fig:dyn_objs_interpolation}Illustration of the three steps to obtain interpolations of the 2d bounding box poses on the left hand side together with an example of resulting interpolated bounding boxes (yellow) overlayed on a lidar sweeps \gls{bev} detection image on the right. The three interpolation stages from left to right show the original bounding box poses of two consecutive samples, the poses transformed into the first poses coordinates together with the interpolated poses (gray) and finally the poses back in the original coordinate frame with the interpolations.}
+	\end{center}
+\end{figure} 
+%==========================================================================%
+%
+%==========================================================================%
+\section{Choice of UNet Architecture}
+\label{sec:choice_of_unet_arch}
+%======================================%
+%
+%======================================%
+\subsection{Experimental Setup}
+\label{subsec:exp_setup_unet_arch}
+Since the focus of this work lies on the investigation of radar \gls{ism}s, the architecture search is performed based on radar input images with occupancy map patches for targets (see Sec. \ref{sec:dataset}). More specifically, radar \gls{bev} images based on one sweep's information are used, since they contain the least information and, thus, provide the most difficult task for the network to handle. Moreover, the considered UNet (see Sec. \ref{subsec:method_deep_ism_architecture}) is trained in SoftNet configuration (see Sec. \ref{subsec:method_al_uncert_in_deep_isms}), since it is the baseline configuration as proposed by the literature.
+\\
+The hyperparameters searched with the following procedure are the ResNet's downsample factor $D$ and the amount of filters for each stage $C_k, k \in [0,4]$. With regards to the filters, the approach proposed in the literature to double the amount after each encoder and halve it after each decoder stage respectively up to a maximum number of filters is adapted in this work (see Sec. \ref{subsec:architecture}). Thus, reducing the filter search to the initial amount of filters $C_0$ and the maximum amount of filter $C_{\max}$. These hyperparameters shall be investigated in a two stepped approach. First, $D$ is set to $0.5$ which is half of the most conservative compression rate reported to work without loss in performance (see Sec. \ref{subsec:architecture}). On the other hand, for $C_0$, the following variations are evaluated $[4,8,16,24,32,40]$ with $C_{\max} = \infty$.\\
+Given the results of these variations, a configuration with a good trade-off between inference speed and accuracy is chosen for further optimization. Here, based on personal experience and the architectures reported in the literature, $C_{\max}$ is set to $128$ filters. Additionally, $D$ is successively halved starting from $0.25$, which is still reported throughout the literature to work without significant loss of accuracy, up to the point of collapse in performance.
+\\   
+All these experiments are conducted using Tensorflow 2.1 \cite{abadi2016tensorflow}, using the ADAM optimizer \cite{kingma2014adam} with a learning rate of $0.001$, a dropout rate of $0.3$. The layers are initialized using the HeNormal initializer \cite{he2015delving} and trained until convergence, as indicated by the validation set, to remove the bias due to the random initialization. The experiments are conducted on two NVIDIA Tesla V100 (32GB) GPUs and evaluated on a single core of an Intel Core Processor i7-10750H CPU.
+%======================================%
+%
+%======================================%
+\subsection{Experimental Results}
+\label{subsec:exp_results_unet_arch}
+\begin{itemize}	
+	%
+	% hardware
+	%
+	\item how long is average training time until convergence of chosen model
+\end{itemize}
+%\begin{figure}
+%	\begin{center}
+%		\import{imgs/07_deep_ism_exp/network_tuning}{mIoU_network_tuning.tex}
+%		\caption{\label{fig:mIoU_network_tuning}}
+%	\end{center}
+%\end{figure} 
+%
+%\begin{minipage}{.5\textwidth}
+%	\begin{figure}
+%		\begin{center}
+%			\import{imgs/07_deep_ism_exp/network_tuning}{mIoU_network_tuning.tex}
+%			\caption{\label{fig:mIoU_network_tuning}}
+%		\end{center}
+%	\end{figure} 
+%\end{minipage}
+%%
+%\begin{minipage}{.5\textwidth}
+%	\begin{figure}
+%		\begin{center}
+%			\import{imgs/07_deep_ism_exp/network_tuning}{train_time_network_tuning.tex}
+%			\caption{\label{fig:train_time_network_tuning}}
+%		\end{center}
+%	\end{figure} 
+%\end{minipage}
+\begin{minipage}{.5\textwidth}
+	\import{imgs/07_deep_ism_exp/network_tuning}{mIoU_network_tuning.tex}
+	\captionof{figure}{\label{fig:mIoU_network_tuning}}
+\end{minipage}
+%
+\hfill
+\begin{minipage}{.47\textwidth}
+	\import{imgs/07_deep_ism_exp/network_tuning}{train_time_network_tuning.tex}
+	\captionof{figure}{\label{fig:train_time_network_tuning}} 
+\end{minipage}
+%==========================================================================%
+%
+%==========================================================================%
+\section{Aleatoric Uncertainties in deep ISMs}
+\label{sec:al_uncert_in_deep_isms}
+%======================================%
+%
+%======================================%
+\subsection{Experimental Results}
+\label{subsec:exp_results_aleat_uncert}
+For the following interpretation of quantitative results, it shall be noted that unknown mass in other classes is not seen as false predictions but rather as an indicator for certainty. Thus, the overall false rate only equals the sum over the red scores per row for each class.
+\\ 
+Starting with the R$_1$ scores, as stated in H \ref{hyp:sota_not_model_unc}, the SoftNet configuration treats the aleatoric uncertainty by equally distributing mass into the two classes between which the uncertainty occurs. In this case, the majority of uncertainty in the visible area is at the boundaries between occupied and free areas leading to huge portions of the actually free and occupied class respectively being estimated as dynamic. Due to this bias towards the dynamic class, the true rate for dynamic objects is also the best among the investigated methods. In occluded areas, in addition to huge false rates of dynamic objects, an increase of unknown mass can be observed over all classes. This might be due to a combination of bias towards the unknown class in occluded areas and the fact, that the aleatoric uncertainty now also occurs at boundaries between free, occupied and the unknown class. 
+\\
+In contrast to SoftNet, DirNet is capable of shifting the aleatoric uncertainty into the unknown class which can be seen by less than half of the overall false dynamic predictions in the free and occupied categories while at the same time increasing the unknown mass portion over all classes. Moreover, in the occluded area, where more aleatoric uncertainty can be expected, larger portions are shifted into the unknown class which also results in smaller false rates in for free and occupied cells. This is in contrast to the almost steady false rates in the visible and occluded area for SoftNet, additionally highlighting the uncertainty awareness of the DirNet configuration. On top of that, DirNet surpasses the positive rates of SoftNet in all but the biased dynamic class. The improvement in performance might be due to the effect that by modeling the aleatoric uncertainty, the loss function is weighted in a way to increasingly ignore predictions for which the network cannot find a sufficient solution. This leads to more network capacity being focused on the majority of data which leads to better average performance and, thus, better scores. It shall be noted that, while the scores improve, this behavior might lead to a neglection of edge cases.
+\\
+Finally, ShiftNet demonstrates even better capabilities in shifting the aleatoric uncertainties to the unknown class as compared to DirNet which is indicated by the highest unknown mass rates of all model variants. This uncertainty-awareness can again also be observed by higher unknown mass rates for the occluded as compared to the visible areas. However, when it comes to predicting occupied space, it shows the worst performance both in positive rates and false free predictions.
+\\\\
+For the R$_{20}$ scores, an overall improvement of all models can be observed as expected. Here, the free space predictions of SoftNet even improve to the point of surpassing the other variants. With regards to aleatoric uncertainty, the unknown mass portions for the DirNet and ShiftNet decrease compared to the R$_1$ scores. Additionally, similar to the R$_1$ scores, an increase in unknown mass can be observed in occluded as compared to visible areas. 
+%==========================%
+% R01
+%==========================%
+\begin{figure}[h!]
+	\footnotesize
+	\begin{tabular}{c|c|cccc|cccc|cccc}
+		&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
+		\hline
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{geo IRM}}}&$p(k|d)$ & \textcolor{mygreen}{0.6} & \textcolor{myred}{19.6} & \textcolor{myred}{0.4} & 79.3 & \textcolor{mygreen}{0.6} & \textcolor{myred}{34.3} & \textcolor{myred}{0.4} & 64.5 & \textcolor{mygreen}{0.6} & \textcolor{myred}{12.6} & \textcolor{myred}{0.4} & 86.3\\
+		&$p(k|f)$ & \textcolor{myred}{0.0} & \textcolor{mygreen}{28.9} & \textcolor{myred}{0.0} & 70.9 & \textcolor{myred}{0.0} & \textcolor{mygreen}{35.9} & \textcolor{myred}{0.0} & 63.9 & \textcolor{myred}{0.0} & \textcolor{mygreen}{9.6} & \textcolor{myred}{0.0} & 90.2\\
+		&$p(k|o)$ & \textcolor{myred}{0.2} & \textcolor{myred}{18.4} & \textcolor{mygreen}{0.8} & 80.5 & \textcolor{myred}{0.3} & \textcolor{myred}{30.6} & \textcolor{mygreen}{0.9} & 68.1 & \textcolor{myred}{0.2} & \textcolor{myred}{14.5} & \textcolor{mygreen}{0.8} & 84.4\\
+		&$p(k|u)$ & 0.0 & 5.4 & 0.1 & 94.4 & - & - & - & - & 0.0 & 5.4 & 0.1 & 94.5\\
+		\hline
+		\multicolumn{13}{c}{}\\
+		\hline
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{SoftNet}}}}&$p(k|d)$ & \textcolor{mygreen}{49.7} & \textcolor{myred}{16.7} & \textcolor{myred}{10.5} & 23.2 & \textcolor{mygreen}{52.5} & \textcolor{myred}{18.8} & \textcolor{myred}{11.5} & 17.2 & \textcolor{mygreen}{48.8} & \textcolor{myred}{15.8} & \textcolor{myred}{9.6} & 25.8\\
+		&$p(k|f)$ & \textcolor{myred}{35.8} & \textcolor{mygreen}{37.0} & \textcolor{myred}{3.3} & 24.0 & \textcolor{myred}{36.2} & \textcolor{mygreen}{42.6} & \textcolor{myred}{3.1} & 18.2 & \textcolor{myred}{35.5} & \textcolor{mygreen}{21.5} & \textcolor{myred}{4.0} & 39.1\\
+		&$p(k|o)$ & \textcolor{myred}{37.8} & \textcolor{myred}{9.6} & \textcolor{mygreen}{17.2} & 35.5 & \textcolor{myred}{43.7} & \textcolor{myred}{11.5} & \textcolor{mygreen}{20.0} & 24.8 & \textcolor{myred}{35.9} & \textcolor{myred}{9.0} & \textcolor{mygreen}{16.2} & 38.9\\
+		&$p(k|u)$ & 25.7 & 8.7 & 4.5 & 61.0 & - & - & - & - & 25.7 & 8.7 & 4.5 & 61.1\\
+		\hline
+		\multicolumn{13}{c}{}\\
+		\hline
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{DirNet}}}}&$p(k|d)$ & \textcolor{mygreen}{31.0} & \textcolor{myred}{21.9} & \textcolor{myred}{12.8} & 34.3 & \textcolor{mygreen}{35.4} & \textcolor{myred}{27.4} & \textcolor{myred}{13.0} & 24.2 & \textcolor{mygreen}{29.0} & \textcolor{myred}{19.9} & \textcolor{myred}{12.3} & 38.7\\
+		&$p(k|f)$ & \textcolor{myred}{13.6} & \textcolor{mygreen}{47.5} & \textcolor{myred}{5.6} & 33.3 & \textcolor{myred}{15.5} & \textcolor{mygreen}{56.8} & \textcolor{myred}{4.6} & 23.2 & \textcolor{myred}{9.0} & \textcolor{mygreen}{22.3} & \textcolor{myred}{8.4} & 60.3\\
+		&$p(k|o)$ & \textcolor{myred}{13.5} & \textcolor{myred}{9.7} & \textcolor{mygreen}{20.7} & 56.1 & \textcolor{myred}{22.4} & \textcolor{myred}{14.3} & \textcolor{mygreen}{22.9} & 40.3 & \textcolor{myred}{10.8} & \textcolor{myred}{8.4} & \textcolor{mygreen}{19.9} & 60.9\\
+		&$p(k|u)$ & 2.7 & 3.7 & 12.0 & 81.6 & - & - & - & - & 2.7 & 3.6 & 12.0 & 81.7\\
+		\hline
+		\multicolumn{13}{c}{}\\
+		\hline
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{ShiftNet}}}}&$p(k|d)$ & \textcolor{mygreen}{31.8} & \textcolor{myred}{19.0} & \textcolor{myred}{7.2} & 41.9 & \textcolor{mygreen}{30.7} & \textcolor{myred}{23.3} & \textcolor{myred}{7.5} & 38.6 & \textcolor{mygreen}{33.3} & \textcolor{myred}{17.2} & \textcolor{myred}{6.9} & 42.7\\
+		&$p(k|f)$ & \textcolor{myred}{7.4} & \textcolor{mygreen}{48.6} & \textcolor{myred}{2.0} & 42.0 & \textcolor{myred}{7.5} & \textcolor{mygreen}{56.0} & \textcolor{myred}{1.6} & 34.9 & \textcolor{myred}{7.6} & \textcolor{mygreen}{28.1} & \textcolor{myred}{3.2} & 61.1\\
+		&$p(k|o)$ & \textcolor{myred}{8.4} & \textcolor{myred}{15.1} & \textcolor{mygreen}{13.7} & 62.8 & \textcolor{myred}{10.0} & \textcolor{myred}{19.2} & \textcolor{mygreen}{14.9} & 55.9 & \textcolor{myred}{7.9} & \textcolor{myred}{13.9} & \textcolor{mygreen}{13.4} & 64.8\\
+		&$p(k|u)$ & 4.0 & 9.4 & 4.7 & 81.9 & - & - & - & - & 4.0 & 9.3 & 4.7 & 82.0\\
+		\hline
+		\multicolumn{2}{c|}{\textbf{R$_1$ Scores}} & \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}\\
+		\multicolumn{13}{c}{}\\
+%==========================%
+% R20
+%==========================%
+		&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
+		\hline
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{geo IRM}}}&$p(k|d)$ & \textcolor{mygreen}{7.1} & \textcolor{myred}{24.5} & \textcolor{myred}{6.8} & 61.4 & \textcolor{mygreen}{4.5} & \textcolor{myred}{43.7} & \textcolor{myred}{7.5} & 44.1 & \textcolor{mygreen}{8.2} & \textcolor{myred}{15.9} & \textcolor{myred}{6.5} & 69.3\\
+		&$p(k|f)$ & \textcolor{myred}{0.4} & \textcolor{mygreen}{47.0} & \textcolor{myred}{0.7} & 51.7 & \textcolor{myred}{0.4} & \textcolor{mygreen}{57.8} & \textcolor{myred}{0.5} & 41.1 & \textcolor{myred}{0.6} & \textcolor{mygreen}{17.5} & \textcolor{myred}{1.2} & 80.6\\
+		&$p(k|o)$ & \textcolor{myred}{2.6} & \textcolor{myred}{16.8} & \textcolor{mygreen}{13.5} & 67.0 & \textcolor{myred}{2.7} & \textcolor{myred}{31.0} & \textcolor{mygreen}{15.4} & 50.7 & \textcolor{myred}{2.5} & \textcolor{myred}{12.3} & \textcolor{mygreen}{13.0} & 72.1\\
+		&$p(k|u)$ & 0.6 & 3.6 & 1.7 & 94.1 & - & - & - & - & 0.6 & 3.5 & 1.7 & 94.1\\
+		\hline
+		\multicolumn{13}{c}{}\\
+		\hline
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{SoftNet}}}}&$p(k|d)$ & \textcolor{mygreen}{52.4} & \textcolor{myred}{21.8} & \textcolor{myred}{12.0} & 13.7 & \textcolor{mygreen}{54.6} & \textcolor{myred}{25.2} & \textcolor{myred}{12.7} & 7.6 & \textcolor{mygreen}{51.9} & \textcolor{myred}{20.6} & \textcolor{myred}{11.3} & 16.2\\
+		&$p(k|f)$ & \textcolor{myred}{21.6} & \textcolor{mygreen}{64.1} & \textcolor{myred}{2.0} & 12.2 & \textcolor{myred}{19.5} & \textcolor{mygreen}{72.0} & \textcolor{myred}{1.6} & 6.9 & \textcolor{myred}{28.1} & \textcolor{mygreen}{42.6} & \textcolor{myred}{3.3} & 26.0\\
+		&$p(k|o)$ & \textcolor{myred}{36.2} & \textcolor{myred}{12.9} & \textcolor{mygreen}{22.8} & 28.1 & \textcolor{myred}{43.2} & \textcolor{myred}{15.3} & \textcolor{mygreen}{25.8} & 15.6 & \textcolor{myred}{33.9} & \textcolor{myred}{12.2} & \textcolor{mygreen}{21.9} & 32.0\\
+		&$p(k|u)$ & 19.2 & 9.9 & 4.6 & 66.3 & - & - & - & - & 19.1 & 9.8 & 4.6 & 66.5\\
+		\hline
+		\multicolumn{13}{c}{}\\
+		\hline
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{DirNet}}}}&$p(k|d)$ & \textcolor{mygreen}{37.1} & \textcolor{myred}{22.7} & \textcolor{myred}{17.4} & 22.8 & \textcolor{mygreen}{39.6} & \textcolor{myred}{29.2} & \textcolor{myred}{18.3} & 12.8 & \textcolor{mygreen}{36.2} & \textcolor{myred}{20.2} & \textcolor{myred}{16.5} & 27.1\\
+		&$p(k|f)$ & \textcolor{myred}{10.9} & \textcolor{mygreen}{61.5} & \textcolor{myred}{5.1} & 22.4 & \textcolor{myred}{11.3} & \textcolor{mygreen}{71.4} & \textcolor{myred}{3.9} & 13.5 & \textcolor{myred}{10.6} & \textcolor{mygreen}{35.4} & \textcolor{myred}{8.3} & 45.7\\
+		&$p(k|o)$ & \textcolor{myred}{15.2} & \textcolor{myred}{10.5} & \textcolor{mygreen}{31.8} & 42.6 & \textcolor{myred}{25.0} & \textcolor{myred}{15.1} & \textcolor{mygreen}{35.2} & 24.6 & \textcolor{myred}{12.0} & \textcolor{myred}{9.1} & \textcolor{mygreen}{30.7} & 48.2\\
+		&$p(k|u)$ & 3.0 & 5.4 & 12.7 & 78.9 & - & - & - & - & 3.0 & 5.4 & 12.6 & 79.0\\
+		\hline
+		\multicolumn{13}{c}{}\\
+		\hline
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{ShiftNet}}}}&$p(k|d)$ & \textcolor{mygreen}{38.5} & \textcolor{myred}{18.1} & \textcolor{myred}{12.7} & 30.7 & \textcolor{mygreen}{35.3} & \textcolor{myred}{22.9} & \textcolor{myred}{13.7} & 28.1 & \textcolor{mygreen}{40.9} & \textcolor{myred}{15.9} & \textcolor{myred}{12.0} & 31.2\\
+		&$p(k|f)$ & \textcolor{myred}{4.7} & \textcolor{mygreen}{62.9} & \textcolor{myred}{3.2} & 29.2 & \textcolor{myred}{4.3} & \textcolor{mygreen}{71.1} & \textcolor{myred}{2.4} & 22.1 & \textcolor{myred}{6.1} & \textcolor{mygreen}{40.8} & \textcolor{myred}{5.3} & 47.8\\
+		&$p(k|o)$ & \textcolor{myred}{6.0} & \textcolor{myred}{13.6} & \textcolor{mygreen}{28.5} & 51.8 & \textcolor{myred}{7.4} & \textcolor{myred}{17.6} & \textcolor{mygreen}{30.9} & 44.1 & \textcolor{myred}{5.7} & \textcolor{myred}{12.4} & \textcolor{mygreen}{27.8} & 54.1\\
+		&$p(k|u)$ & 3.0 & 9.0 & 7.8 & 80.2 & - & - & - & - & 3.0 & 8.9 &7.8 & 80.3\\
+		\hline
+		\multicolumn{2}{c|}{\textbf{R$_{20}$ Scores}} & \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
+	\end{tabular}
+	\caption{\label{tab:deep_ism_r20_results}Results of deep \gls{ism} variants trained on R$_1$ and R$_{20}$ images for visible, occluded and overall areas. Here, the visible area is defined as the area which is not unknown in the geometric \gls{ilm} used to create the ground-truth maps. Thus, only a stochastically insignificant portion of unknown labels remains in the visible area, which is why these scores are excluded from consideration. The scores are given in the form of a confusion matrix for each model where each row shows the probabilities in percentage of estimates given the true class. Values in green correspond to true positives, red shows the percentages of false predictions. The unknown class predictions (black) are treated as the safe state and, as such, do not add to the false rates. Additionally, since the network is permitted to extrapolate the state in unknown areas, all predictions deviating from the unknown class given unknown labels should also not be treated as false.}
+\end{figure} 
+%==========================================================================%
+%
+%==========================================================================%
+\section{Camera-Radar Fusion in deep ISMs}
+\label{sec:cam_radar_fusion_in_deep_isms}
+%======================================%
+%
+%======================================%
+\subsection{Experimental Results}
+\label{subsec:exp_results_cam_inputs}
+\begin{tabular}{c|c|cccc|cccc|cccc}
+	&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
+	\hline
+	\parbox[t]{2mm}{\multirow{4}{*}{
+\rotatebox[origin=c]{90}{\scriptsize{Homog. RGB}}}}&$p(k|d)$ & \textcolor{mygreen}{33.2} & \textcolor{myred}{23.0} & \textcolor{myred}{5.3} & 38.6 & \textcolor{mygreen}{28.3} & \textcolor{myred}{33.0} & \textcolor{myred}{5.6} & 33.0 & \textcolor{mygreen}{36.3} & \textcolor{myred}{18.9} & \textcolor{myred}{4.6} & 40.2\\
+	&$p(k|f)$ & \textcolor{myred}{4.0} & \textcolor{mygreen}{58.9} & \textcolor{myred}{3.1} & 33.9 & \textcolor{myred}{3.1} & \textcolor{mygreen}{70.1} & \textcolor{myred}{2.7} & 24.1 & \textcolor{myred}{6.6} & \textcolor{mygreen}{29.8} & \textcolor{myred}{4.3} & 59.4\\
+	&$p(k|o)$ & \textcolor{myred}{4.1} & \textcolor{myred}{14.6} & \textcolor{mygreen}{11.0} & 70.3 & \textcolor{myred}{4.3} & \textcolor{myred}{22.6} & \textcolor{mygreen}{12.2} & 60.8 & \textcolor{myred}{4.1} & \textcolor{myred}{12.2} & \textcolor{mygreen}{10.6} & 73.1\\
+	&$p(k|u)$ & 3.2 & 4.7 & 5.0 & 87.2 & - & - & - & - & 3.2 & 4.6 & 4.9 & 87.3\\
+	\hline
+	\multicolumn{13}{c}{}\\	
+	\hline
+	\parbox[t]{2mm}{\multirow{4}{*}{
+\rotatebox[origin=c]{90}{\scriptsize{Homog. SemSeg}}}}&$p(k|d)$ & \textcolor{mygreen}{38.1} & \textcolor{myred}{22.3} & \textcolor{myred}{4.6} & 35.0 & \textcolor{mygreen}{34.6} & \textcolor{myred}{30.2} & \textcolor{myred}{4.8} & 30.5 & \textcolor{mygreen}{40.9} & \textcolor{myred}{18.6} & \textcolor{myred}{4.2} & 36.2\\
+	&$p(k|f)$ & \textcolor{myred}{4.0} & \textcolor{mygreen}{62.4} & \textcolor{myred}{2.5} & 31.2 & \textcolor{myred}{3.2} & \textcolor{mygreen}{73.9} & \textcolor{myred}{1.8} & 21.1 & \textcolor{myred}{6.3} & \textcolor{mygreen}{32.2} & \textcolor{myred}{4.2} & 57.3\\
+	&$p(k|o)$ & \textcolor{myred}{4.8} & \textcolor{myred}{15.9} & \textcolor{mygreen}{11.2} & 68.1 & \textcolor{myred}{5.7} & \textcolor{myred}{23.7} & \textcolor{mygreen}{11.6} & 58.9 & \textcolor{myred}{4.6} & \textcolor{myred}{13.6} & \textcolor{mygreen}{11.0} & 70.8\\
+	&$p(k|u)$ & 2.6 & 6.5 & 5.4 & 85.5 & - & - & - & - & 2.6 & 6.4 & 5.4 & 85.6\\
+	\hline
+	\multicolumn{13}{c}{}\\	
+	\hline
+	\parbox[t]{2mm}{\multirow{4}{*}{
+\rotatebox[origin=c]{90}{\scriptsize{MonoDepth}}}}&$p(k|d)$ & \textcolor{mygreen}{40.8} & \textcolor{myred}{16.8} & \textcolor{myred}{7.0} & 35.3 & \textcolor{mygreen}{36.1} & \textcolor{myred}{25.5} & \textcolor{myred}{6.6} & 31.7 & \textcolor{mygreen}{44.3} & \textcolor{myred}{12.0} & \textcolor{myred}{7.1} & 36.6\\
+	&$p(k|f)$ & \textcolor{myred}{3.4} & \textcolor{mygreen}{69.3} & \textcolor{myred}{2.4} & 25.0 & \textcolor{myred}{2.3} & \textcolor{mygreen}{81.4} & \textcolor{myred}{1.5} & 14.9 & \textcolor{myred}{6.4} & \textcolor{mygreen}{38.3} & \textcolor{myred}{4.7} & 50.5\\
+	&$p(k|o)$ & \textcolor{myred}{6.9} & \textcolor{myred}{16.2} & \textcolor{mygreen}{16.0} & 60.9 & \textcolor{myred}{8.2} & \textcolor{myred}{25.2} & \textcolor{mygreen}{15.5} & 51.2 & \textcolor{myred}{6.6} & \textcolor{myred}{13.5} & \textcolor{mygreen}{16.1} & 63.7\\
+	&$p(k|u)$ & 3.3 & 6.5 & 8.0 & 82.1 & - & - & - & - & 3.3 & 6.4 & 8.0 & 82.2\\
+	\hline
+	\multicolumn{13}{c}{}\\		
+	\hline
+	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{MonoDepth \& R$_{20}$}}}}&$p(k|d)$ & \textcolor{mygreen}{42.4} & \textcolor{myred}{14.3} & \textcolor{myred}{12.6} & 30.7 & \textcolor{mygreen}{38.0} & \textcolor{myred}{20.6} & \textcolor{myred}{13.0} & 28.5 & \textcolor{mygreen}{45.7} & \textcolor{myred}{11.3} & \textcolor{myred}{12.3} & 30.7\\
+	&$p(k|f)$ & \textcolor{myred}{2.9} & \textcolor{mygreen}{69.6} & \textcolor{myred}{2.5} & 25.0 & \textcolor{myred}{2.2} & \textcolor{mygreen}{80.0} & \textcolor{myred}{1.6} & 16.1 & \textcolor{myred}{4.9} & \textcolor{mygreen}{42.3} & \textcolor{myred}{4.9} & 47.9\\
+	&$p(k|o)$ & \textcolor{myred}{5.0} & \textcolor{myred}{12.0} & \textcolor{mygreen}{28.8} & 54.1 & \textcolor{myred}{6.4} & \textcolor{myred}{17.2} & \textcolor{mygreen}{30.0} & 46.4 & \textcolor{myred}{4.7} & \textcolor{myred}{10.5} & \textcolor{mygreen}{28.4} & 56.4\\
+	&$p(k|u)$ & 2.0 & 8.1 & 8.0 & 81.9 & - & - & - & - & 1.9 & 8.0 & 8.0 & 82.1\\
+	\hline
+	\multicolumn{2}{c|}{\textbf{ShiftNet}} & \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
+\end{tabular}
+\begin{itemize}
+	\item homography rgb has worst overall performance, followed by homography of semantic segmentation. Monodepth \gls{bev} projection surpasses both the rgb and semantic inputs in all categories. While it should be noted that it has slightly increased false rates in the occupancy category. Thus, monopdeth inputs are chosen for further experiments
+	\item monodepth fusion with radar R$_{20}$ images shows that the radar information mainly benefits in distinguishing dynamic and occupied cells. Free overall performance remains as is.
+\end{itemize}
+
+%==========================================================================%
+%
+%==========================================================================%
+\section{Lidar-Radar Fusion deep ISMs}
+\label{sec:lidar_radar_fusion_in_deep_isms}
+%======================================%
+%
+%======================================%
+\subsection{Experimental Results}
+\label{subsec:exp_results_sensor_fusion}
+\begin{tabular}{c|c|cccc|cccc|cccc}
+	&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
+	\hline
+	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{Lidar}}}}&$p(k|d)$ & \textcolor{mygreen}{47.3} & \textcolor{myred}{10.5} & \textcolor{myred}{16.3} & 25.8 & \textcolor{mygreen}{42.0} & \textcolor{myred}{15.1} & \textcolor{myred}{17.9} & 25.1 & \textcolor{mygreen}{51.1} & \textcolor{myred}{7.5} & \textcolor{myred}{16.4} & 25.0\\
+	&$p(k|f)$ & \textcolor{myred}{2.4} & \textcolor{mygreen}{78.8} & \textcolor{myred}{1.9} & 16.9 & \textcolor{myred}{1.6} & \textcolor{mygreen}{89.3} & \textcolor{myred}{0.9} & 8.1 & \textcolor{myred}{4.5} & \textcolor{mygreen}{51.1} & \textcolor{myred}{4.6} & 39.8\\
+	&$p(k|o)$ & \textcolor{myred}{8.7} & \textcolor{myred}{8.4} & \textcolor{mygreen}{43.6} & 39.3 & \textcolor{myred}{11.0} & \textcolor{myred}{10.8} & \textcolor{mygreen}{46.5} & 31.7 & \textcolor{myred}{8.1} & \textcolor{myred}{7.5} & \textcolor{mygreen}{42.9} & 41.6\\
+	&$p(k|u)$ & 3.0 & 8.2 & 8.7 & 80.1 & - & - & - & - & 3.0 & 8.0 & 8.7 & 80.3\\
+	\hline
+	\multicolumn{13}{c}{}\\
+	\hline
+	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{Lidar \& R$_{20}$}}}}&$p(k|d)$ & \textcolor{mygreen}{47.3} & \textcolor{myred}{9.7} & \textcolor{myred}{18.3} & 24.8 & \textcolor{mygreen}{43.5} & \textcolor{myred}{13.6} & \textcolor{myred}{20.6} & 22.2 & \textcolor{mygreen}{50.6} & \textcolor{myred}{7.4} & \textcolor{myred}{17.4} & 24.6\\
+	&$p(k|f)$ & \textcolor{myred}{1.8} & \textcolor{mygreen}{80.8} & \textcolor{myred}{1.9} & 15.5 & \textcolor{myred}{1.2} & \textcolor{mygreen}{89.8} & \textcolor{myred}{1.1} & 7.9 & \textcolor{myred}{3.6} & \textcolor{mygreen}{56.8} & \textcolor{myred}{4.1} & 35.4\\
+	&$p(k|o)$ & \textcolor{myred}{6.0} & \textcolor{myred}{7.6} & \textcolor{mygreen}{46.8} & 39.5 & \textcolor{myred}{8.1} & \textcolor{myred}{9.6} & \textcolor{mygreen}{52.8} & 29.4 & \textcolor{myred}{5.5} & \textcolor{myred}{6.8} & \textcolor{mygreen}{45.2} & 42.5\\
+	&$p(k|u)$ & 1.6 & 7.6 & 7.4 & 83.3 & - & - & - & - & 1.6 & 7.5 & 7.3 & 83.5\\
+	\hline
+	\multicolumn{2}{c|}{\textbf{ShiftNet}} & \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
+\end{tabular}
+\begin{itemize}
+	\item as expected, lidar has best performance for free and occupied classification for all ShiftNet inputs.
+	\item more surprisingly, lidar is capable to distinguish between dynamic and occupied objects from mere context and achieves better performance than all other inputs for ShiftNet. 
+	\item when fused with R$_{20}$, the overall performance further increases over all classes both in positive and false rates.
+\end{itemize}

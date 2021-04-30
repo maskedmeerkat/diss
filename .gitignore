@@ -1,3 +1,25 @@
+# tex generated files
+*.acn
+*.acr
+*.alg
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.idx
+*.ist
+*.log
+*.out
+*.run.xml
+*.slg
+*.syg
+*.syi
+*.synctex.gz
+*.thm
+*.toc
+
+# 
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

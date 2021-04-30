@@ -1,0 +1,321 @@
+% !TeX root = ../main.tex
+
+\chapter{State of the Art}
+\label{ch:state_of_the_art}
+This chapter contains the current state-of-the-art in fields relevant for this thesis.
+
+%==========================================================================%
+%
+%==========================================================================%
+\section{Occupancy Mapping}
+\label{sec:occupancy_mapping}
+Occupancy grid maps are an often employed form of environmental representation in the field of robotics \cite{carrillo2015autonomous,elfes1989using,fleuret2007multicamera}. In this form, first introduced by \cite{elfes1989using}, the surrounding is stored as a \gls{bev} grid map where each cell contains information about the corresponding environmental patch's occupancy state. Here, a cell is defined to be occupied, if the robot is not able to traverse the area and free vice versa. In the original form, this state is expressed in the probabilistic domain using the probabilities for occupied \gls{sym:p_o} and free \gls{sym:p_f} for which the following holds
+\begin{align}
+	p_o &\in [0,1]\\
+	p_f &= 1-p_o\\
+	\vec{p} &= \begin{bmatrix} p_f & p_o \end{bmatrix}
+\end{align}
+Here, $p_o$ equaling zero indicates a cell being free, $p_o$ equaling one indicates a cell being occupied and $p_o$ equaling 0.5 represents the unknown state.  
+\\
+An alternative to the probabilistic formulation is proposed in \cite{pagac1996evidential} which is widely applied for evidential mapping \cite{moras2011moving,yu2015evidential,mouhagir2017using}. It uses the evidential representation \cite{dempster1968generalization,shafer1976mathematical} to define the occupancy state as the so called power set
+\begin{align}
+	2^{U} = \{\emptyset, F, O, U\}, \qquad U = \{F,O\}	
+\end{align}
+consisting of the empty $\emptyset$, free $F$, occupied $O$ and unknown set $U$. Additionally, mass functions $m(A)$ are defined which map each element of $2^{U}$ to the amount of evidence associated with it. In their normalized form, which will be assumed from here on, the mass functions are defined to suffice the following conditions
+\begin{align}
+	\label{eq:evidential_norm}
+	m(\emptyset) &= 0\\
+	\sum_{A \in 2^{U}} m(A) &= 1
+\end{align} 
+In the normalized form, $m(\emptyset)$ is always zero and, thus, can be removed from consideration. The vector of normalized mass functions can than be written as follows
+\begin{align}
+	\vec{m} = \begin{bmatrix} m(F), & m(O), & m(U) \end{bmatrix}^{\text{T}} = \begin{bmatrix} m_f, & m_o, & m_u \end{bmatrix}^{\text{T}}
+\end{align}
+The evidential formulation adds and additional degree of freedom by modeling the unknown class separately. This allows to distinguish the case of conflicting information, indicating a cell to be free and occupied at the same time, from the case of absent information which, in the probabilistic view, both results in $p_o$ equaling 0.5. In \cite{moras2011moving,yu2015evidential,kurdej2012map}, it is proposed to utilize the conflicting information to represent dynamic objects which comes naturally since they are neither free nor occupied but rather in a transition state.
+
+To build such occupancy maps, sensor measurements are being fed into so called \gls{ism}s to obtain an estimate of the occupancy state around the vehicle. This estimate is then transformed into map coordinates and fused into the map using evidential combination rules. To obtain unbiased maps in which each information is weighted equally, the \gls{ism} estimates have to be informational independent \cite{pagac1996evidential}. The following sections will elaborate on the variants of \gls{ism}s and evidential combination rules at hand.
+%==========================================================================%
+%
+%==========================================================================%
+\section{Geometric Inverse Sensor Models}
+\label{sec:geo_ism}
+In contrast to sensor models, which describe the sensor characteristics given the environment, \gls{ism}s describe the environment given the sensor measurements. These models can be divided into two categories. On the one hand, the physical measurement principles of the sensor can be used to define a geometrical relationship between the measurement and the environment. On the other hand, data-driven methods can be applied to learn the \gls{ism} from large bodies of data. Even though it is possible to use other data-driven methods to learn \gls{ism}s, the literature mainly focuses on the application of deep artificial neural networks. These models are specifically suited for the task at hand, since they excel over other data-driven methods when it comes to utilizing large amounts of data \cite{zhou2014big} and are universal function approximators \cite{hornik1991approximation}.
+%==========================================================================%
+%
+%==========================================================================%
+\subsection{Ray-Casting in geo ISMs}
+\label{subsec:ray_casting}
+Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. Elfes \cite{elfes1989using} proposed in his seminal work, to model these sensors in the Bayesian framework as follows. First, rays are cast from the sensor towards objects marking the regions crossed by the ray with the ideal \gls{idm} for a detection. This ideal \gls{idm} defines everything between the detected object and the sensor as free, the position of the object as occupied and everything else as unknown. Fig. \ref{fig:idm} a) shows the ideal \gls{idm} in the probabilistic framework for a detection at $(4,0)$ and a sensor positioned at $(0,0)$. Afterwards, the ideal \gls{idm} is convoluted with a radial and angular Gaussian noise model resulting in the posterior probability distribution for the detection. In \cite{loop2016closed}, Loop et al. show that the application of a Gaussian noise model always leads a decision boundary between free and occupied space slightly in front of the actual object boundary. They, hence, propose an alternative noise model using a b-spline to tackle the problem. The application of the b-spline noise model onto the ideal \gls{idm}, which has been widely adopted in evidential occupancy mapping \cite{mouhagir2017using,reineking2013evidential,yu2015evidential}, is depicted in Fig. \ref{fig:idm} b), c).
+\begin{figure}
+	\begin{center}
+		\import{imgs/05_state_of_the_art/geo_isms/}{idm.pdf_tex}
+		\caption{\label{fig:idm} Visualization of a) the ideal \gls{idm} with the sensor at position $(0,0)$ and the detection at $(4,0)$, b) the influence of radial Gaussian noise and c) radial and angular Gaussian noise on the ideal \gls{idm}.}
+	\end{center}
+\end{figure}  
+In \cite{pagac1996evidential}, Pagac et al. proposed a formulation of the evidential \gls{idm} (indicated with subscript "ev") based on the probabilistic one (indicated with subscript "prob") as follows  
+\begin{align}
+	\label{eq:ev_ray_casting_model}
+	\text{\gls{idm}}_{\text{ev}} &=
+	\begin{cases}
+		\begin{bmatrix} 2\Delta p, &0, &1 - 2\Delta p \end{bmatrix}^{\top}, & \text{\gls{idm}}_{\text{prob}} < 0.5 \\
+		\begin{bmatrix} 0, &2\Delta p, &1 - 2\Delta p \end{bmatrix}^{\top}, & \text{\gls{idm}}_{\text{prob}} \geq 0.5
+	\end{cases}\\
+	\Delta p &= \| 0.5 - \text{\gls{idm}}_{\text{prob}} \|
+\end{align}
+Eventually, to arrive at the \gls{ism}, this \gls{idm} is applied on each detection of the sensor measurement and their influences are accumulated using one of the fusion approaches described in \ref{subsec:combination_of_independent_evidence}.
+%======================================%
+%
+%======================================%
+\subsection{Geo ISMs for Lidars}
+\label{subsec:geo_ism_lidar}
+In the case of lidar sensors, the measurements often contain both detections belonging to obstacles and driveable ground points. In contrast to obstacle detections, ground points only free space information, leading to the removal of all occupancy mass when applying the \gls{idm}. Thus, in order to make this distinction, a common first step before projecting the detections into \gls{bev} and applying the \gls{idm} consists in ground plane detection. 
+The most simple approach to detect ground points, under the assumption of a flat surface, is the application of a height threshold as e.g. proposed in \cite{thrun2006stanley}. This, however, often leads to artifacts since the ground in most environments has a non-zero curvature. Solutions for this problem, as described in \cite{narksri2018slope}, range from fitting either a single plane or piece-wise planar model e.g. using RANSAC or the Hough transform \cite{fischler1981random,hough1962method,oliveira2016scene,tian2020fast} and classifying all points within a given distance as ground, performing the classification based on thresholds of local features like average height, average variance, deviation in region normal vectors etc. \cite{li2014motion,asvadi2015detection}, through to the application of Conditional Random Fields \cite{rummelhard2017ground}, Markov Random Fields \cite{guo2011graph}, deep learning or manual labeling \cite{velas2018cnn}. 
+%======================================%
+%
+%======================================%
+\subsection{Geo ISMs for Cameras}
+\label{subsec:geo_ism_camera}
+In the case of cameras, measurements are usually provided as a 2D projection not equal to \gls{bev}. Thus, in order to compute the \gls{bev} projection, the first step consists in obtaining the depth information. Mallot et al. \cite{mallot1991inverse} propose to utilize a homographic transformation, they refer to as inverse perspective mapping, which projects the whole environment including all objects on a flat ground surface in \gls{bev}. This geometric transformation can either be obtained via triangulation, in case of given intrinsic and extrinsic camera parameters, or by providing at least four point correspondences between the camera and the \gls{bev} image. These correspondences can e.g. be provided by projecting radar or lidar both into \gls{bev} and into the camera's pixel coordinates. This transformation, however, causes several problems. First, it depends on the camera calibration and, thus, needs to be recalibrated to account for changes. Additionally, all non-driveable objects violate the transformation's assumption of flatness and, therefore, appear as stretched out shapes on the ground which have to be filtered in a way to retain there actual boundaries. Finally, since this pipeline does not recover a meaningful 3D point cloud of the environment, the methods to distinguish between ground and obstacle points as described for lidar are not applicable. To obtain this distinction, an additional step is required which could include e.g. semantic segmentation or object detection.\\
+%
+Alternatively, the depth can be estimated using the temporal correlation of subsequent images which was originally proposed to solve problems like structure from motion \cite{longuet1981computer} or visual SLAM \cite{davison2007monoslam}. These methods can be divided into so called feature-based and direct approaches, both of which have been heavily investigated in the past \cite{ma2020image}. However, all depth estimation methods relying on temporal correlation assume a static environment and, thus, are, in their original formulation, incapable of estimating the depth for dynamic objects. A practical solution is currently still under investigation, as detailed in \cite{saputra2018visual}.\\ 
+%
+Another way of obtaining depth information of monocular images is by solving the ill-posed problem of directly inferring the depth using deep learning. Eigen et al. \cite{eigen2014depth} where on of the first to tackle the problem by training a multi-scale network in a supervised way on interpolated lidar depth labels. In \cite{liu2015deep,li2015depth}, this approach is extended through an additionally post-processing step with a CRF. Also, \cite{laina2016deeper} show improved performance when the inverse Huber loss (BerHu) is applied for training. Moreover, Cao et al. \cite{cao2017estimating} reformulated the depth regression as a classification problem by discretizing depth labels. This is further improved in \cite{fu2018deep} by using ordinal regression which is still one of the state-of-the-art supervised methods to date. However, most of the time, expensive lidar sensors are deployed to obtain sparse depth labels. As a means to obtain cheaper dense depth supervision, Garg et al. \cite{garg2016unsupervised} proposed a self-supervised learning approach using a stereo camera. They achieve this feat by reconstructing the image of one camera using the other camera's image through a transformation defined by the depth estimate and the given extrinsics between the stereo pair. The comparison of the so reconstructed image with the original image is then used as a supervision signal. This approach is extended in \cite{godard2017unsupervised} by estimating the disparities for both stereo cameras and additionally enforcing the disparities to be consistent. Zhou et al. \cite{zhou2017unsupervised} improve this approach by integrating findings from \cite{ummenhofer2017demon} to arrive at at fully self-supervised monocular method. In their approach, the fixed correspondence between the stereo pair is being replaced by temporal context with a pose estimation network to obtain the relative motion. However, due to utilizing the temporal context as supervision signal, methods of this kind inherit the problems of structure from motion, as mentioned above (e.g. dynamic objects). To alleviate this problem, Yang et al. \cite{yang2020d3vo} propose, similarly as in \cite{feng2019leveraging}, to account for heteroscedastic aleatoric uncertainties in the loss to dampen the influence of outliers. Alternatively, Godard et al. \cite{godard2019digging} propose to alter the loss function by, instead of using the average loss between all temporal contexts, using the minimum reprojection loss to ignore occlusion outliers and an auto-masking loss to further remove outliers like moving objects, pixels at far distances or from low gradient environments. To obtain the best of two worlds, Kuznietsov et al. \cite{kuznietsov2017semi} proposed a semi-supervised method which deploys sparse lidar depth labels in addition to a direct image alignment loss. Recently, Guizilini et al. \cite{guizilini2020robust} proposed a semi-supervised improvement over \cite{godard2019digging} which additionally adapts the network architecture in a more information preserving way.
+%======================================%
+%
+%======================================%
+\subsection{Geo ISMs for Radars}
+\label{subsec:geo_ism_radar}
+For automotive radars, the measurements are provided in the form of point clouds in Cartesian coordinates with attributes ranging from relative velocity, false alarm probabilities, dynamic states (e.g. oncoming, crossing, etc.) up to track ids, depending on the features offered by the manufacturer \cite{caesar2020nuscenes}. Since the detections are provided in Cartesian coordinates, they can easily be projected into \gls{bev} and the ray-casting, as described in subsec. \ref{subsec:ray_casting}, can be applied \cite{bouzouraa2010fusion,dube2014detection}. However, the accuracy of radars is not constant, as assumed in the standard \gls{ism}, but rather depends on the radial distance, reflecting material, detection angle and disturbances like multi-path reflections and atmospheric interferences. Therefore, the \gls{idm}'s probabilities have to be adapted to account for these influences as proposed in \cite{clarke2012sensor}. This model is further extended in \cite{werber2015automotive} to account for the fact that radars can detect objects in occluded areas through multi-path reflection and, thus, violate line-of-sight assumption made in subsec. \ref{subsec:ray_casting}. The model is adapted by ignoring free space of rays which falls together with occupied areas of other rays. In \cite{prophet2018adaptions}, the ego vehicle's velocity is identified as an additional factor to decrease the \gls{idm}'s probabilities. Moreover, a further adaptation is proposed to tackle the sparseness in free space predicted by the \gls{irm} caused by the limited amount of detections provided by the radars. They tackle the problem in the following way
+\begin{enumerate}
+	\item identify the detection $D_1$ which is closest to the boundary of the \gls{fov}
+	\item define the cone spanned between $D_1$ and the \gls{fov}'s border as free space
+	\item in case another radar provides detections falling inside the first's \gls{fov}, identify the detection $D_2$ closest to $D_1$ and restrict the free space cone's angle by $D_2$   
+\end{enumerate}
+A different approach to tackle the sparsity of free space is proposed in \cite{slutsky2019dual}. Here, they use the standard \gls{idm} in presence of detection and an additional so called "negative ISM" in the remaining \gls{fov}, which defines the area as partially free. This is used to dampen the effect of false positives from other radars with overlapping \gls{fov}s. However, it should be mentioned that imaging radars have been deployed for their experiments which provide way denser point clouds than current standard automotive radars.
+%==========================================================================%
+%
+%==========================================================================%
+\section{Deep Inverse Sensor Models}
+\label{sec:deep_isms}
+In recent years, the literature solely focuses on the creation of deep \gls{ism}s utilizing deep \gls{cnn}s. 
+%======================================%
+%
+%======================================%
+\subsection{Deep ISM Architecture}
+\label{subsec:architecture}
+Architecture-wise, the majority of works utilize UNets \cite{ronneberger2015u} consisting of an encoder and a subsequent decoder network with skip connections \cite{prophet2019semantic,sless2019road,wirges2018evidential,weston2019probably,schulter2018learning,lu2019monocular,mani2020monolayout}. The encoder network successively subsamples, commonly by a factor of two, the feature dimension either using a form of pooling (e.g. max or average pooling) to obtain shift invariance or strided convolutions as an alternative with a learned kernel. This results in bringing the spatial dimensions closer allowing the computation of increasingly global features while keeping the convolution kernel size small. The decoder is the inverse of the encoder using a bilinear upsampling \cite{odena2016deconvolution} to replace the subsampling layers. The skip connections either add or concatenate information of the encoder to corresponding decoding layers. This is done in order to regain the information lost in during encoding. These skip connections can include additional convolutions which are mostly used to compress the amount of features before concatenation. While the feature dimension is successively halved in the encoder, the amount of features is commonly doubled after each subsampling. This introduces the initial amount of features as an architectural hyperparameter and, in some cases, a maximal number of features. An example of such a standard UNet architecture is depicted in subsec. \ref{subsec:method_deep_ism} in Fig. \ref{fig:std_unet}.
+\\
+\begin{figure}
+	\begin{center}
+		\import{imgs/05_state_of_the_art/deep_ism/}{conv_n_resnet_layer.pdf_tex}
+		\caption{\label{fig:conv_n_resnet_layer}Structure of convolution (left) and ResNet layer (right) as commonly used in the literature with the kernel size $K$, stride $s$, amount of channels $C$ and channel reduction factor $D$. The green blocks in the ResNet layer are convolutions as depicted on the left-hand side.}
+	\end{center}
+\end{figure} 
+The convolution layers normally consist of $3\times 3$ convolutions with Dropout, followed by leaky ReLU activations and batch normalization, which is depicted on the left-hand side in Fig. \ref{fig:conv_n_resnet_layer}. Some of the variations to UNets include exchanging the encoder with backbone networks like VGG19 \cite{simonyan2014very,wulff2018early} or EfficientNet \cite{tan2019efficientnet,philion2020lift}. However, most commonly, the standard convolution layer is replaced by a ResNet layer \cite{he2016deep,wirges2018evidential,reiher2020sim2real,roddick2020predicting,philion2020lift}. Here, the $3 \times 3$ convolution is replaced by a miniature UNet first compressing the feature channels with a $1\times 1$ convolution, followed by the actual $3 \times 3$ convolution and, finally, decompressing it back to the original channel dimension, again, using a $1 \times 1$ convolution. Additionally, before applying the final output non-linearity, the input features are added to the outputs. The sum of \gls{mac} over the ResNet layer's three convolutions can be written as follows
+\begin{align}
+	1\cdot 1\cdot WHC_{\text{in}}\dfrac{C_{\text{in}}}{D} + 3\cdot 3\cdot WH\dfrac{C_{\text{in}}^2}{D^2} +1\cdot 1\cdot WH\dfrac{C_{\text{in}}}{D}C_{\text{out}}
+\end{align} 
+
+for features of width $W$, height $H$, a channel reduction by $D$ and $C_{\text{in}}$, $C_{\text{out}}$ input and output channels respectively. For $C_{\text{in}} = C_{\text{out}}$, the ResNet layer needs less \gls{mac}s compared to the $9\cdot WHC_{\text{in}}^2$ \gls{mac}s of a $3 \times 3$ convolution for $D > 1.12$. Different sources report only minor accuracy decrease for $D = 4$ or higher, leading to $11.8\%$ of the \gls{mac}s needed for the standard convolution \cite{he2016deep,Bazarevsky2018}. 
+\\
+While all authors agree upon the fact that re-weighting the loss to account for class imbalance is necessary, they diverge in the choice of the underlying loss function. In the majority of cases, the training is setup as a semantic segmentation problem, training the network on the cross entropy loss \cite{prophet2019semantic,lombacher2017semantic,hendy2020fishing,wulff2018early}. On a different note, Weston et al. \cite{weston2019probably} and Lu et al. \cite{lu2019monocular} train a \gls{vae} \cite{kingma2013auto} for which the log-likelihood is optimized in visible and the KL divergence in occluded areas. This results in a Gaussian distributed log-odds space which equals the prior's distribution in unobserved areas. Weston et al. further define the log-odds as priors to the final sigmoid activation and arrive at the final prediction by marginalizing over the log-odds. Another alternative is proposed by Sless et al. \cite{sless2019road} who apply the Lovasz loss \cite{berman2018lovasz} as a differentiable surrogate to the intersection-over-union. Here, the Lovasz loss comes with the benefit of accounting for class imbalances by design. Eventually, Wirges et al. \cite{wirges2018evidential} define the training as a regression problem and, thus, apply the $L_1$ and $L_2$ losses for optimization. This enables them to utilize the continuous nature of the training targets to continuously dampen the influence of the loss in areas with high target uncertainties.\\
+When it comes to choosing an optimizer, the vast majority of works use the ADAM optimizer \cite{kingma2014adam,verdoja2019deep,wirges2018evidential,weston2019probably,schulter2018learning}.
+%======================================%
+%
+%======================================%
+\subsection{Deep ISMs for Cameras}
+\label{subsec:deep_ism_camera}
+In the vision domain, the environment representation is often elevated from the binary classification into free and occupied space towards estimating a more detailed semantic layout including classes like vehicles, streets, sidewalks, vegetation etc. Since there are a vast amount of different approaches to tackle the problems in this field of research, Fig. \ref{tab:deep_icm_comparison} provides a short overview of the solution space.
+The main problem in training a deep \gls{icm} to estimate such a semantic layout is the transformation between camera and \gls{bev} projection. To solve this, Schulter et al. \cite{schulter2018learning} propose to preprocess the images by estimating the monocular depth and semantic information. These estimates are further used to create a semantically annotated \gls{bev} image which is then fed into a neural network for refinement. In \cite{philion2020lift}, an end-to-end architecture is proposed to combine the monodepth estimation and the \gls{bev} refinement into a single network. This is achieved by first predicting a feature vector and a categorical depth distribution for each pixel, resulting in a 3D point cloud in the shape of a pyramid. Each 3D point is then assigned with the feature vector, scaled by the probability of the categorical depth distribution. Here, the learned feature vector has the potential to encompass more relevant information than the semantic labels provided in \cite{schulter2018learning}. Afterwards, the point cloud is projected into \gls{bev} and further refined by another, simultaneously trained network. An alternative path to handle the transformation to \gls{bev} is to directly feed the image into a \gls{fcn} and learn the transformation implicitly, as proposed in \cite{mani2020monolayout,lu2019monocular}. To obtain a more explicit integration of the transformation into the network, Reiher et al. \cite{reiher2020sim2real} and Roddick and Cipolla \cite{roddick2020predicting} proposed use a spatial transformer layer \cite{jaderberg2015spatial} to transform the latent space according to the homography defined by the camera intrinsics and exterinsics as explained in subsec. \ref{subsec:geo_ism_camera}. Similarly, Pan et al. \cite{pan2020cross} define a custom layer called "View Transformer Module" which uses a \gls{mlp} to learn the positional mapping between the compressed camera and the \gls{bev} features.\\ 
+Another problem of training a deep \gls{icm} is that most image datasets like Kitti \cite{geiger2013vision} or CityScapes \cite{cordts2016cityscapes} do not come with semantic map data which adds the challenge to provide labels. To overcome this problem, Schulter et al. \cite{schulter2018learning} train their refinement network in a way that the outputs resample simulated patches of street layouts. This feat can be achieved by utilizing an adversarial loss as known from the literature of \gls{gan} \cite{goodfellow2020generative}. Since the goal is not only to refine the semantic monodepth point cloud projections to resemble general real street layouts but also to show the street layout at hand, an additional reconstruction loss is introduced. This prohibits the refinements to stray too far from the original street layout.
+Additionally, in case of GPS measurements, patches from OpenStreetMaps \cite{haklay2008openstreetmap} can be aligned with the vehicles pose to offer another training signal. Another way to obtain \gls{bev} labels is to use depth information from sensors like lidars, stereo cameras or through monodepth and transform semantic segmentation estimates into \gls{bev} \cite{mani2020monolayout,lu2019monocular}. Since this results in sparse labels, one can apply an additional adversarial loss on OpenStreetMaps to enhance resemblance with real street layouts \cite{mani2020monolayout}. A completely different approach is to utilize simulation environments to obtain high quality semantic \gls{bev} labels. In \cite{reiher2020sim2real}, networks are trained purely based on simulated \gls{bev} labels and semantic input images. They demonstrate that semantic inputs can work to a certain extend as a proxy to bridge simulation and real world measurements. Similarly, Pan et al. \cite{pan2020cross} train their network both with simulated and real world inputs. Here, the simulated inputs can be directly fed into the network and a reconstruction loss can be utilized. The real world inputs, however, are first transformed to semantic images which are then, via a style transfer network \cite{jing2019neural}, transformed to resemble simulated images. Since there are no labels for real world inputs, an adversarial loss between the generated outputs and the simulated labels is applied.\\  
+Finally, there remains the question of how to handle occluded areas. In \cite{schulter2018learning}, this problem is addressed in the preprocessing step by masking out objects not belonging to the street geometry like pedestrians and vehicles and only optimizing the loss in the unmasked areas. This leads the networks to interpolate the masked areas as if no occluding objects were present. Alternatively, Mani et al. propose to reduce occlusion of static semantics and increase density of the labels by projecting and integrating a certain amount of future labels to the current vehicle position using odometry measurements. A different approach is to acknowledge the fact of missing information in occluded areas and estimating them as unknown, thereby reducing the ill-posedness of the problem. This can e.g. be achieved by assigning those areas to a separate unknown class \cite{reiher2020sim2real} or by masking the areas and assigning a specific loss which equally distributes probability into all classes \cite{roddick2020predicting}. 
+\begin{center}
+	\begin{tabular}{c|m{2.5cm}|m{2.5cm}|m{2.5cm}|m{2.5cm}}
+		& monodepth + semantics & \gls{fcn} & spatial trafo. layer & learned trafo. layer\\
+		\hline
+		adversarial & \cite{schulter2018learning} & \cite{mani2020monolayout} & & \\
+		\hline
+		maps & \cite{schulter2018learning,philion2020lift} & \cite{mani2020monolayout} & \cite{roddick2020predicting} & \\
+		\hline
+		sparse supervision &  & \cite{mani2020monolayout,lu2019monocular} &  &\\
+		\hline
+		simulation &  & \cite{reiher2020sim2real} & \cite{reiher2020sim2real} & \cite{pan2020cross}
+	\end{tabular}
+\captionof{table}{\label{tab:deep_icm_comparison}Overview of deep \gls{icm} literature with row-wise supervision approaches and column-wise solutions for the transformation between camera and \gls{bev} projection}
+\end{center} 
+%======================================%
+%
+%======================================%
+\subsection{Deep ISMs for Range Sensors}
+\label{subsec:deep_ism_range}
+The origins of approximating \gls{ism}s for range sensors using neural networks go back to the 90s \cite{van1995neural,thrun1993exploration}. One this range sensors have in common is the fact that the measurement signals can be directly projected into \gls{bev} images and fed into neural networks. This makes the training on radar and lidar data quite similar. One differentiating factor, however, is the measurement signal representation. In case of lidar, the simplest representation can be obtained by projecting the detections into \gls{bev} and feeding it into the neural network \cite{liang2018deep}. To provide additional input information, Wirges et al. \cite{wirges2018evidential} use the intensities, detection positions and transmissions measured by the lidar and mark them in separate channels each for ground and non-ground points, arriving at six input channels. Hendy et al. \cite{hendy2020fishing} additionally compute the density of all lidar detections and the maximal height value for each grid cells as input features, resulting in eight channels. Eventually, Wulff et al. \cite{wulff2018early} use the detection positions, cell density, height thresholded detections, six height statistics (min, max, mean, min-max difference, mean-standard-deviation, mean-variance) and the same six statistics for the reflectivity which sums up to a 15 channel input. Similar approaches can be observed when it comes to radar sensor. Here, it has been proposed to either use the detection positions directly \cite{sless2019road} or to accumulate detections over time in order to account for the sparsity \cite{prophet2019semantic,lombacher2017semantic}. Additionally, features like radar cross section, signal to noise ratio, ambiguous Doppler interval and relative x and y velocities can be encoded into separate channels \cite{hendy2020fishing}. Weston et al. \cite{weston2019probably} use a radar setup which provides the raw, dense range returns without Doppler information. These measurements are projected into a polar \gls{bev} image and fed into the network. The only other approach that uses polar instead of Cartesian coordinates is proposed by Verdoja et al. \cite{verdoja2019deep}. However, instead of encoding the inputs and targets as images, they rather perform inference on a vector of range measurements where each dimension corresponds to an angular bin. Given this input vector, a Laplacian depth distribution is predicted for each dimension which can be convoluted with the ideal ray-casting model from subsec. \ref{subsec:ray_casting} and afterwards utilized for occupancy mapping.\\
+%======================================%
+%
+%======================================%
+\subsection{Fusion of Sensor Modalities in deep ISMs}
+\label{subsec:deep_ism_fusion}
+Fusing range sensor modalities is trivial since they already start in the same representation space and can, thus, be fused at any point in the network either by concatenation, summation or a specific network layer like an attention layer \cite{vaswani2017attention}. On the other hand, to fuse camera measurements into a \gls{bev} representation, many different approaches have been proposed. Wulff et al. propose an early fusion by first transforming the camera image into \gls{bev} via an affine transformation given by its camera parameters and concatenating it with the range measurements. Alternatively, Liang et al. \cite{liang2018deep} propose a so called "continuous fusion layer" which fuses intermediate features of a camera encoder network with features of the lidar encoder network. This is realized by extracting the k nearest lidar point for each \gls{bev} pixel, projecting them to the camera image, taking the camera image's pixel values and feeding them into an \gls{mlp} where they are weighted by their distances towards the \gls{bev} pixel. Finally, Hendy et al. \cite{hendy2020fishing} propose a late fusion on the softmax values by applying either average or priority pooling.    
+%==========================================================================%
+%
+%==========================================================================%
+\section{Evidential Combination Rules}
+\label{sec:evidence_theory}
+
+
+%======================================%
+%
+%======================================%
+\subsection{Combination of independent Evidence}
+\label{subsec:combination_of_independent_evidence}
+There are mainly two combination rules used to combine independent evidences in the evidential occupancy mapping framework. One of those rules is Dempster's rule of combination \cite{dempster1968generalization} which is applied in numerous works on occupancy maps \cite{pagac1996evidential,yu2015evidential,moras2011moving,mouhagir2017using}. It can be used to fuse two independent sources of evidence $\vec{m}_1$ and $\vec{m}_2$ as shown for the occupancy specific case by the following equations
+\begin{align}
+	\label{eq:conflict}
+	K &= m_{f1}m_{o2}+m_{o1}m_{f2}\\
+	\label{eq:dempsters_rule}
+	\vec{m}_1 \oplus_D \vec{m}_2 &=  
+	\begin{bmatrix} 
+		(m_{f1}m_{f2} + m_{f1}m_{u2} + m_{u1}m_{f2}) / (1-K)\\
+		(m_{o1}m_{o2} + m_{o1}m_{u2} + m_{u1}m_{o2}) / (1-K)\\
+		m_{u1}m_{u2}/(1-K)\\
+	\end{bmatrix}
+\end{align}
+This combination rule is defined in a way that removes the influence of the conflict $K$, requiring the need for the normalization of the fused mass by $1-K$. Additionally, the unknown mass after the combination $m_{u12}$ is always less or equal to the biggest in going unknown mass, which can be written as follows
+\begin{align}
+	\max(m_{u1}, m_{u2}) \geq m_{u12} 
+\end{align}
+To show this property, it is sufficient to prove it for one of the in-going unknown masses, since Dempster's combination rule is associative. Thus, the property shall be shown under the assumption that $m_{u1}$ is the bigger in-going unknown mass. It then follows that
+\begin{align}
+	m_{u1} &\geq m_{u12} \underbrace{=}_{\text{with } \eqref{eq:dempsters_rule}} m_{u1}\dfrac{m_{u2}}{1-K} \qquad| \div m_{u1}
+\end{align}
+In case of $m_{u1} = 0$ both sides equal zero. For $m_{u1} \in (0,1]$, the following holds
+\begin{align}
+	1 &\geq \dfrac{m_{u2}}{1-K} \underbrace{=}_{\text{with }\eqref{eq:evidential_norm}} \dfrac{1-m_{f2}-m_{o2}}{1-K} \qquad|\cdot (1-K)\\
+	1 - K &\underbrace{=}_{\text{with }\eqref{eq:conflict}} 1-m_{f1}m_{o2}-m_{o1}m_{f2} \geq 1-m_{f2}-m_{o2} \qquad| -1+m_{f1}m_{o2}+m_{o1}m_{f2}\\
+	0 &\geq m_{f2}\underbrace{(m_{o1}-1)}_{\leq 0} + m_{o2}\underbrace{(m_{f1}-1)}_{\leq 0} \qquad\blacksquare
+\end{align}
+The alternative to Dempster's rule, which is equally often applied in evidential occupancy mapping \cite{wirges2018evidential,kurdej2012map,reineking2013evidential}, is Yager's rule of combination \cite{yager1987dempster} as shown for the occupancy specific case by the following equations
+\begin{align}
+	\label{eq:yagers_rule}
+	\vec{m}_1 \oplus_Y \vec{m}_2 &=  
+	\begin{bmatrix} 
+		(m_{f1}m_{f2} + m_{f1}m_{u2} + m_{u1}m_{f2})\\
+		(m_{o1}m_{o2} + m_{o1}m_{u2} + m_{u1}m_{o2})\\
+		m_{u1}m_{u2} + K\\
+	\end{bmatrix}
+\end{align}
+with $K$ as defined in \eqref{eq:conflict}. In contrast to Dempster's rule, Yager's rule redistributes the conflicting portion of the fused masses into the unknown class. In the case of big conflicts $K$, this allows to recuperate unknown mass.
+\\
+For the sake of completeness, it shall be mentioned that, for the general, multi-hypothesis case, there is a big body of literature describing the shortcomings of Dempster's and Yager's rule together with propositions of how to handle them \cite{zadeh1979validity,han2008modified,yang2013evidential,zhang2020new}. 
+%======================================%
+%
+%======================================%
+\subsection{Combination of dependent Evidence}
+\label{subsec:combination_of_dependent_evidence}
+In case of dependencies between evidences, direct combination, as proposed is sec. \ref{subsec:combination_of_independent_evidence}, leads to accounting twice for the dependent portion of information. The literature proposes two lines of solutions namely removing the redundancy of one of the evidence masses before combining them or adapting the combination rule to account for occurring redundancies. Here, the problem with newly proposed combination rules is that some do not suffice all properties of evidential combination rules like associativity and normalization as pointed out in \cite{cattaneo2011belief}. This would pose the tedious task of first verifying the methods for correctness while at the same time Dempster's and Yager's rule from subsec. \ref{subsec:combination_of_independent_evidence} already provide valid operations. Moreover, there is no preference or comparison in the literature between the two categories. Thus, the focus in this work lies on removing redundancies before combining evidences.\\
+To discount evidential masses, Shafer \cite{shafer1976mathematical} has proposed a discount operation as follows
+\begin{align}
+	\label{eq:discount_op}
+	\gamma \otimes \gls{sym:vec_m} = [\gamma \gls{sym:m_f}, \gamma \gls{sym:m_o}, 1-\gamma+\gamma\gls{sym:m_u}]^\top
+\end{align}
+This operation has been adopted in all of the following methods, while different approaches have been proposed to obtain the discount factor $\gamma$.
+%
+One way to obtain the discount factor, as proposed in \cite{jiang2009combination} and further adopted in \cite{guralnik2006handling}, is to predefine redundancy categories like highly, weakly and non-dependent with corresponding redundancy weights $2/3, 1/3, 0$. To provide an example, similar measurements from the same sensor over time is highly dependent while similar measurements form different sensor sources over time is weakly dependent. 
+%
+Alternatively, Su et al. \cite{su2015handling} propose to obtain redundancy factors between sources of information like sensors, experts and models via statistical experiments. They propose to utilize the Pearson correlation coefficient \cite{benesty2009pearson} as a statistical measure. This has been adapted by Shi et al. \cite{shi2017research} by using the Spearman rank correlation coefficient instead and, eventually, combined by Xu et al. \cite{xu2017dependent} who multiply both Pearson and Spearman coefficients to form a hybrid approach.
+%
+On a different note, Yager \cite{yager2009fusion} proposed to use the specificity $Sp$ and entropy $H$ to measure that information is mostly distributed into single element classes and to measure conflicting information respectively. These can be defined both for the general and occupancy mapping case as follows
+\begin{align}
+	\label{eq:specificity}
+	Sp(\gls{sym:vec_m}) &= \sum_{A \in 2^{U}}\dfrac{m(A)}{card(A)}=\dfrac{\gls{sym:m_f}}{1}+\dfrac{\gls{sym:m_o}}{1}+\dfrac{\gls{sym:m_u}}{2} \in [0.5,1]\\
+	\label{eq:entropy}
+	H(\gls{sym:vec_m}) &= \sum_{A \in 2^{U}} -\log_2(Pl(A))m(A) = -\log_2(\gls{sym:m_f} + \gls{sym:m_u})\gls{sym:m_f} - \log_2(\gls{sym:m_o} + \gls{sym:m_u})\gls{sym:m_o} \in [0,1]\\
+	Pl(A) &= \sum_{B|B\cap A \neq \emptyset}m(B)
+\end{align}
+with $card(A)$ being the cardinality of a set $A$. In case of the entropy, Jiang et al. \cite{jiang2009combination} have proposed to compute a discounting factor for each of the fused masses $\gls{sym:vec_m}_i$ as follows
+\begin{align}
+	\gamma_i = 1-\dfrac{H_i}{\sum_{i=1}^{2}H_i}
+\end{align}
+Note that these measures have also been applied in occupancy mapping to assess the quality of maps \cite{yu2015evidential}.
+%
+Eventually, Ding et al. \cite{ding2002general} picked up the idea of entropy as a quality measure and extended it with mutual information to arrive at a so called "generalized correlation coefficient" $R_g$ between two evidential masses as follows
+\begin{align}
+	\label{eq:mutual_info_with_entrop}
+	R_g(\gls{sym:vec_m}_1,\gls{sym:vec_m}_2) = \dfrac{I(\gls{sym:vec_m}_1,\gls{sym:vec_m}_2)}{\sqrt{H(\gls{sym:vec_m}_1)H(\gls{sym:vec_m}_2)}}
+\end{align}
+This is used in \cite{su2018research} to define a discount factor to remove redundancy in one of the masses as follows
+\begin{align}
+	\gamma = 1/R_g(\gls{sym:vec_m}_1,\gls{sym:vec_m}_2)
+\end{align}
+%==========================================================================%
+%
+%==========================================================================%
+\subsection{Combination of Evidence during Training}
+\label{subsec:uncertainties_ev_theory}
+In this subsection, it will be discussed how to train neural networks to predict evidential mass functions. Real world datasets almost always contain disturbances in the form of noise and outliers. In both cases, the network is faced with similar input information and either slightly or sometimes substantially differing targets. Here, the network implicitly combines the input information in order to arrive at a single estimate when faced with similar inputs during inference. As an example, in case of identical inputs but differing outputs, training the network with a mean-squared error results in taking the mean of the provided targets \cite{goodfellow2016deep}. In case of slightly differing inputs, the combination result not only depends on the loss but also on the distance in input space, the network capacity and the applied regularization. One common way to explicitly handle those disturbances is by training the network to learn a model for them. While this approach is difficult for the outlier case, much work has been published to learn a \gls{pdf} to capture the data noise, also referred to as aleatoric noise \cite{kendall2017uncertainties}.
+In case of regression problems, the majority of works model the noise as a Gaussian distribution \cite{yang2020d3vo,feng2019leveraging,kendall2017uncertainties}. This can be achieved by adding an additional output channel, interpreting the two channels as mean $\mu$ and variance $\sigma$ and optimizing the following cost function over the $N$ training tuples $(x_i,y_i)$.
+\begin{align}
+	\mathcal{L} &= \dfrac{1}{N}\sum_{i=1}^{N} \dfrac{(\mu(x_i) - y_i)^2}{\sigma(x_i)}+\log(\sigma(x_i))
+\end{align}
+For classification, the common approach is to apply Softmax output activations coupled with a cross-entropy loss. This trains the network to predict the weights of a Categorical distribution $\mathrm{Cat}(\tilde{y}_i|x_i)$ \cite{goodfellow2016deep}. To further estimate the aleatoric uncertainties, the network can be altered to predict a Dirichlet distribution $\mathrm{Dir}(p_i|\vec{\alpha}(x_i))$ over the weights by estimating its shape parameters \gls{sym:vec_alpha} $\in \mathbb{R}_{>1}$. Here, the shape parameters can be estimated by either using an exponential \cite{wu2019quantifying} or ReLU \cite{sensoy2018evidential} output activation before adding one to each dimension. To further obtain the final predictions, the estimated Dirichlet distribution $\mathrm{Dir}(p_i|\vec{\alpha}(x_i))$ is treated as a prior to a Multinomial distribution $\mathrm{Mult}(\tilde{y}_i|p_i)$ and has to be marginalized out. Thus, to train the network, the negative marginal log-likelihood 
+\begin{align}
+	\mathcal{L}_i &= -\log\left( \int\prod_{k=1}^{K}p_{ik}^{y_{ik}}\dfrac{1}{\mathrm{Beta}(\vec{\alpha}_i)}\prod_{k=1}^{K}p_{ik}^{\alpha_{ik}^{-1}}d\vec{p}_i \right)  = \sum_{k=1}^{K}y_{ik}(\log(S_i)-\log(\alpha_{ik}))	
+\end{align}  
+can be minimized, as proposed in \cite{wu2019quantifying,sensoy2018evidential}. Here, $\mathrm{Beta}(\cdot)$ equals the Beta distribution and $S_i = \sum_{k=1}^{K} \alpha_k$. Sensoy et al. \cite{sensoy2018evidential} additionally propose to minimize the Bayes risk for the \gls{mse}
+\begin{align}
+	\label{eq:bayes_risk_mse}
+	\mathcal{L}_i = \int \underbrace{\| \vec{y}_i - \vec{p}_i\|^{2}_{2}}_{\text{amount of error}}\underbrace{\dfrac{1}{\mathrm{Beta}(\vec{\alpha}_i)}\prod_{k=1}^{K}p_{ik}^{\alpha_{ik}^{-1}}}_{\text{probability of error}}d\vec{p}_i = \sum_{k=1}^{K}(y_{ik}-\tilde{p}_{ik})^2 + \dfrac{\tilde{p}_{ik}(1-\tilde{p}_{ik})}{S_i+1}
+\end{align} 
+as an empirically verified more stable variant.\\
+%
+Josang \cite{audun2018subjective} proposed the so called "subjective logic" framework, where he argues that evidential masses can be expressed as probabilistic Dirichlet distributions using evidence $e \in \mathbb{R}_{\geq 0}$ as the connecting element. The evidence can be used as follows to transform one representation to the other
+\begin{align}
+	\label{eq:e2m}
+	\vec{b} &= \dfrac{\vec{e}}{S} \text{ and } u = \dfrac{K}{S}\\
+	\label{eq:e2p}
+	\vec{p} &= \mathbb{E}[\mathrm{Dir}(\vec{e})] = \dfrac{\vec{\alpha}}{S}\\
+	\alpha_k &= e_k + 1
+\end{align} 
+This allows to model the aleatoric uncertainties for evidential masses with a network by first learning a Dirichlet distribution as mentioned above and further applying the transformations from eq. \eqref{eq:e2m} \cite{sensoy2018evidential}. 
+%==========================================================================%
+%
+%==========================================================================%
+%\section{Variants of Convolutional Neural Network Layers}
+%\label{sec:cnn_layers}
+%\gls{fcn}s have become the de facto standard machine learning approach to perform semantic segmentation on images. These networks can be logically divided into layers where each layer consists of a \gls{conv} operation, followed by operations to normalize and regularize the outputs and concluded by a non-linear activation.\\
+%With regards to the \gls{conv} operation, there have been many variants proposed over the years. The original form, as proposed by LeCun et al. \cite{lecun1995convolutional}, applies the same learned kernel on each pixel location of the $W$ wide and $H$ high image to obtain a feature encoding of the pixel and its spatial context over all $N$ channels. In most cases, there is no clear preference on spatial direction, resulting in a quadratic kernel of dimension $K \times K$ times the amount of channels. This operation is performed $M$ times to obtain the $M$ output features resulting $WHNK^2M$ \gls{mac}. Since a single $5 \times 5$ \gls{conv} results in $25\cdot WHNM$ operations while two stacked $3 \times 3$ \gls{conv}s only need $18 \cdot WHNM$ operations, the filter dimension is almost always set to $K=3$ \cite{simonyan2014very}. Fig. \ref{fig:conv_layers} shows \textcolor{red}{ToDo}. 
+%An alternative, initially introduced in AlexNet \cite{krizhevsky2017imagenet} to divide the computation load between two processors, consists in splitting the image channel-wise into $G$ groups and perform the \gls{conv} separately on each group resulting in $WHNK^2M/G$ \gls{mac}. Here, each group is responsible for producing $M/G$ output channels which are, thus, completely distinct from each other. Additionally to splitting computation on resources, it has been reported that features throughout channels exhibit sparse correlations. Thus, performing grouped \gls{conv}s reduces unnecessary \gls{mac} between uncorrelated feature channels. This leads to $1/G$ times reduction in \gls{mac} and parameters, while remaining, and in some chases exceeding, accuracy compared to standard \gls{conv} \cite{xie2017aggregated}. 
+%A special case of grouped \gls{conv}s are so called depthwise separable \gls{conv}s as first introduced in \cite{vanhoucke2014learning} and since then applied in architectures like MobileNet \cite{howard2017mobilenets} and Xception \cite{chollet2017xception}. This operation is a grouped \gls{conv} with $G = M = N$ followed by a $1 \times 1$ standard \gls{conv}. In doing so, the standard \gls{conv} is, thus, split into first convolving the the spatial dimension and then convolving the convolved spatial dimension channel-wise, resulting in $WHN(K^2+M)$ \gls{mac}. Compared to the standard $3 \times 3$ \gls{conv}, this variant needs less \gls{mac} in case more than one feature is computed.
+%% conv > depthwise separable conv
+%%\begin{align}
+%%	WHNK^2M &> WHN(K^2+M) &| K=3\\
+%%	\Leftrightarrow M &> 1.125 & 
+%%\end{align} 
+%Another way to reduce \gls{mac} while still convolving spatially and channel-wise is used in ResNet \cite{he2016deep}. Here, a bottleneck \gls{conv} is proposed where the input is first convolved using a $1 \times 1$ \gls{conv} to compress the $N$ input to $\tilde{M}=\alpha N$ output channels with $\alpha \in [0,1]$. This is followed by the actual $3 \times 3$ \gls{conv}. Finally, a $1 \times 1$ \gls{conv} is applied to upsample the amount of channels again from $\tilde{M}$ to $M>\tilde{M}$. This results in $WH\alpha N(N+K^2\alpha N+M)$ \gls{mac}. In case of a one-to-one operation where $M=N$ with $K=3$, this results in less \gls{mac} for channel compressions of $\alpha < 0.8$ as compared to standard \gls{conv}. While it has been shown, that for minor compressions, the accuracy of standard \gls{conv} can be maintained, it is also possible to compress up to the point where accuracy is lost. On another note, the application of the bottleneck as compared to standard \gls{conv} increases the depth of networks by a factor of three. This makes the back-propagation of gradients numerically less stable. To counteract, skip connections can be introduced for a one-to-one connection which add the inputs channel-wise with to the outputs. It has been shown that this makes it in general possible to train deeper networks.
+%Similarly to ResNet, ResNeXt \cite{xie2017aggregated} also uses the bottleneck \gls{conv}. However, the standard $3 \times 3$ \gls{conv} is replaced by a grouped $3\times 3$ \gls{conv} to obtain a further parameter to tune computation speed against accuracy.
+%This has been further improved upon in MobileNetV2 \cite{sandler2018mobilenetv2}, by using inverted bottleneck \gls{conv}. Here, they argue that the compressed feature representation contains all information needed and, thus, use the compressed feature space as inputs to layers. These features are then expanded via a $1\times 1$ \gls{conv} to a higher dimensional space, followed by a $3 \times 3$ depthwise \gls{conv} and concluded by a $1\times 1$ \gls{conv} to again compress the feature space. They also apply residual connections directly between the low dimensional input and output features. This, similarly to ResNet results in $WH\beta N(N+K^2\beta N+M)$ computations, while $\beta \in [1,\infty)$.
+%\begin{figure}
+%	\begin{center}
+%		\import{imgs/05_state_of_the_art/nn_layers/}{all_convs.pdf_tex}
+%		\caption{\label{fig:conv_layers} \gls{conv} layer}
+%	\end{center}
+%\end{figure}  
+%\begin{center}
+%	\begin{tabular}{c|c|c}
+%		\gls{conv} type & \gls{mac} & examples of networks \\
+%		\hline
+%		\gls{conv} & $WHNK^2M$ & standard CNNs \\
+%		group \gls{conv} & $WHNMK^2/G$ & AlexNet\\
+%		depthwise separable \gls{conv} & $WHN(K^2+M)$ & MobileNet, Xception\\
+%		bottleneck \gls{conv} & $WH\alpha N(N+K^2\alpha N+M)$ & ResNet\\
+%		bottleneck with group \gls{conv} & $WH\alpha N(N+K^2\alpha N/G+M)$ & ResNeXt\\
+%		inverse bottleneck \gls{conv} & $WH\beta N(N+K^2\beta N/G+M)$ & MobileNetV2\\
+%	\end{tabular}
+%	\captionof{table}{\label{tab:ops_in_conv}Overview of the amount of \gls{mac} for each variant of the \gls{conv} in \gls{cnn}s with examples of networks these variants have been applied in.}
+%\end{center}
+%Finally, the question of how to obtain global image features remains to be discussed. The architecture deployed for all deep \gls{ism}s mentioned in sec. \ref{sec:deep_isms} is a UNet with skip connections as proposed in \cite{ronneberger2015u}. It consists of an encoder in which variants of the above mentioned convolutions are applied in stacked layers. Moreover, strided \gls{conv}s are used periodically where the \gls{conv} kernel is only applied to every $s$th pixel. This leads to a learned subsampling of the feature dimension which is used in order to successively obtain features on a global scale. To regain the initial dimensionality for the final prediction output, the encoder is mirrored by a decoder again consisting of stacked \gls{conv} layers. The strided \gls{conv} is replaced in the decoder by either nearest-neighbor or bilinear interpolations. In older works and some rare cases nowadays deconvolution \cite{zeiler2010deconvolutional}, also referred to as transposed convolution, is applied to perform the upsampling. This operation, however, leads to so called checkerboard artifacts, as explained in \cite{odena2016deconvolution}. Finally, skip connections are applied to either add or concatenate intermediate features from the encoder to layers in the decoder. This results in a numerically more stable gradients during backpropagation and decreased loss in information.
+
+
+
+
+

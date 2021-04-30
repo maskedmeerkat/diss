@@ -1,0 +1,493 @@
+% !TeX root = ../main.tex
+\chapter{Research Approach}
+\label{ch:research_approach}
+The main objective of this thesis is to answer the question of how to extend an already verified \gls{ism} with the predictions of an unverified one. More specifically, the scenario of a given geometric \gls{irm} is considered. It is assumed that this \gls{irm} is verified but produces sparse occupancy estimates since it relies on sparse radar detections. This leads to reduced coverage and slow convergence during occupancy mapping. To increase the coverage and convergence speed, the dense interpolations of a learned \gls{irm} shall be utilized.\\ 
+To achieve this, the objective can be divided into the following three goals. First, a model shall be learned from data which is capable of estimating the evidential occupancy state in the close vicinity of the ego vehicle. Here, the focus will lie on measurements in the form of sparse radar detections. However, to showcase the generalizability of the approach, the model will also be applied on two other sensors typically deployed for automated driving, namely camera and lidar data. Next, the learned \gls{irm}s estimates shall be fused over time into an evidential occupancy map. Finally, a fusion approach shall be defined to combine the data-driven model's predictions with a geometric \gls{ism}.\\
+The consequent sections elaborate the requirements for each of the three afore mentioned tasks which is followed by an analysis of the research gap. 
+%==========================================================================%
+%
+%==========================================================================%
+\section{Requirements}
+\label{sec:requirements}
+This section details the requirements for both the trainable \gls{ism} and the approach .
+
+%======================================%
+%
+%======================================%
+\subsection{Requirements for deep, evidential ISMs}
+\label{subsec:requirements_for_ev_representation}
+The requirements for the learned \gls{ism} are of theoretical as well as practical nature. First, to obtain a generalized measurement representation, \gls{bev} grid maps shall be used as inputs. This is the de facto standard for deep \gls{ism}s in literature given point cloud inputs (see sec. \ref{sec:deep_isms}). Moreover, while it might not be without loss of information, other sensor data e.g. provided by cameras can also be transformed into \gls{bev}. Additionally, the outputs shall also be provided as \gls{bev} grid maps to ease the later fusion into \gls{bev} occupancy maps. Therefore, the following requirement can be formulated 
+\\
+\setcounter{req}{1}
+\setcounter{subreq}{0}
+\begin{subreq}[R\ref{subreq:input_output}] \label{subreq:input_output}
+	The model must be capable of utilizing the spatial coherence in \gls{bev} grid maps and deliver estimates also in the form of \gls{bev} grid maps.
+\end{subreq}
+Secondly, the sensor data can include many different sources of noise which is especially true when it comes to radar. In order for the model to learn all these effects, 
+\\
+\begin{subreq}[R\ref{subreq:big_data}] \label{subreq:big_data}
+	the model must be capable to learn from big data.
+\end{subreq}
+Third, the model should be obtained as resource efficient as possible. Therefore, the following requirement arises
+\\
+\begin{subreq}[R\ref{subreq:min_requirements}] \label{subreq:min_requirements}
+	Minimize the amount of manpower, work hours and equipment needed to create the deep, evidential \gls{ism}.
+\end{subreq}
+Also, the data-driven \gls{ism} should be able to run in parallel with the already existing geometric \gls{ism} on the hardware of production-ready vehicles in real-time. Since the deep \gls{ism}'s estimates are only used as an enhancement, the real-time constraint can be relaxed to near real-time. The sensor with the highest capture frequency in the NuScenes dataset is the lidar sensor with 20Hz. It is thus proposed to aim for a 10Hz inference time. To emulate these hardware restrictions, the requirement can be formulated as follows
+\\
+\begin{subreq}[R\ref{subreq:resource_efficient_inference}] \label{subreq:resource_efficient_inference}
+	The deep, evidential \gls{ism} shall be executable with 100Hz on a single core of a CPU (Intel Core Processor i7-10750H).
+\end{subreq}
+For this work, the width and height of input and output grid maps shall be $128\times 128$ cells for an area of $40m \times 40m$. This is an acceptable range for low speed scenarios like parking. Additionally, the resolution of $31,25 cm$ per cell is satisfactory for the deep \gls{ism}, as it is mainly used to enhance the geometric \gls{ism}. Thus, leading to the following requirement\\
+\begin{subreq}[R\ref{subreq:grid_map_size}] \label{subreq:grid_map_size}
+	The input and output grid maps shall cover an area of $40m \times 40m$ with $128 \times 128$ cells.
+\end{subreq}
+Finally, on the theoretical side, the model shall estimate the evidential classes as defined in \ref{sec:occupancy_mapping}, leading to the following requirements
+\\
+\begin{subreq}[R\ref{subreq:ev_rep}] \label{subreq:ev_rep}
+	The predicted output should capture the amount of free, occupied and unknown information.
+\end{subreq}
+\begin{subreq}[R\ref{subreq:unknown_mass}] \label{subreq:unknown_mass}
+	The unknown mass should be an inverse measure for the overall information content capturing both uncertainty and lack of information.
+\end{subreq}
+\begin{subreq}[R\ref{subreq:conflicting_mass}] \label{subreq:conflicting_mass}
+	The amount of conflicting information, which is realized by mass being evenly distributed both into the free and occupied class, shall be an indicator for dynamic objects.
+\end{subreq}
+
+%======================================%
+%
+%======================================%
+\subsection{Requirements for Usage of deep, evidential ISMs as Priors in Occupancy Mapping}
+\label{subsec:requirements_for_usage_of_deep_ims_as_priors_in_occmapping}
+As mentioned in R\ref{subreq:resource_efficient_inference}, the deep \gls{ism} only operates at near real-time. Thus, fusion will be realized asynchronously by fusing the geometric and deep \gls{ism} estimates directly into the map whenever predictions are available. Therefore, the deep \gls{ism} estimates have to suffice the additional specification for \gls{ism}s used in occupancy mapping, as defined in sec. \ref{sec:occupancy_mapping}, namely
+\\
+\setcounter{req}{2}
+\setcounter{subreq}{0}
+\begin{subreq}[R\ref{subreq:indep_info}] \label{subreq:indep_info}
+	The deep \gls{ism} estimates have to be informational independent over time.
+\end{subreq}
+Additionally, deep \gls{ism}s do also provide predictions in regions further away from sensor measurements through means of data-driven interpolation. This poses the potential to overwrite high certain predictions close to data through many low certain predictions accumulated over time. Therefore, the accumulation of deep \gls{ism} estimates shall be performed in a way that
+\\
+\begin{subreq}[R\ref{subreq:no_falsification}] \label{subreq:no_falsification}
+	Regions assigned with high certainty shall not be overwritten by many estimates with low certainty. 
+\end{subreq}
+Eventually, as mentioned above, the geometric \gls{ism} is considered to be a verified, production-ready model which shall solely be enhanced by the deep \gls{ism} estimates to increase convergence speed and spatial coverage of the occupancy maps. Thus, given enough measurements, the geometric \gls{ism} should be trusted over the deep \gls{ism} resulting in the following requirement
+\begin{subreq}[R\ref{subreq:initialize_with_deep_ism}] \label{subreq:initialize_with_deep_ism}
+	The occupancy map shall be initialized with the deep \gls{ism}'s estimates up to the point when a definable amount of measurements are collected.
+\end{subreq}
+\begin{subreq}[R\ref{subreq:converge_to_geo_ism}] \label{subreq:converge_to_geo_ism}
+	The occupancy map shall converge to the geometric \gls{ism} with increasing amount of measurements.
+\end{subreq}
+%==========================================================================%
+%
+%==========================================================================%
+\section{Research Needs}
+\label{sec:research_needs}
+In this section, the state-of-the-art from chapter \ref{ch:state_of_the_art} is analyzed with respect to the requirements defined in sec \ref{sec:requirements}.
+
+%======================================%
+%
+%======================================%
+\subsection{Research Needs for deep, evidential Inverse Sensor Models}
+\label{subsec:research_needs_for_deep_isms}
+The current state-of-the-art approaches all tackle the creation of deep \gls{ism} by applying \gls{cnn}s in the form of UNets with skip connections. While the interpretation of the input varies between it being an image or some kind of multi-channel \gls{bev} grid map, \gls{cnn}s are an appropriate choice for they are designed to leverage spatial context from matrix-like data. Moreover, through recent breakthroughs like Dropout for regularization, BatchNorm for normalization and skip connections for conservation of information, current \gls{cnn} models can be designed with increase number of stacked layers. This results in increased modeling capacities allowing them to capture the information from big amounts of data. Thus, the application of UNets as the de facto standard model already suffices R\ref{subreq:input_output} and R\ref{subreq:big_data}.\\ 
+With regards to resource efficient generation of labels, as posed in R\ref{subreq:min_requirements}, the state-of-the-art in all cases relies on automatic label generation. For the case of \gls{bev} occupancy target, as considered in this work, geometric \gls{ilm}s from 360$^\circ$ spinning lidars are generated as labels. For most automated driving test vehicles, these types of lidars are already deployed for verification, making lidar data easily accessible. Moreover, after once manually defining the geometric \gls{ilm}, no additional manual labor is required. Therefore, the automatic generation of \gls{bev} occupancy target via geometric \gls{ilm}s suffices R\ref{subreq:min_requirements}.\\
+Nevertheless, the radar sensors used in this work have reduced perception capabilities when compared to those lidars. More specifically, the deployed radars can detect objects in 3D but, due to their antenna configuration, can only distinguish the 2D position and velocity. These measurements are additionally filtered and broken down to only a few detections, e.g. 64 detections for the radars in this work. Based on this, the question arises which lidar detections should be filtered out to obtain the best overlap between the two sensor modalities. So far in the literature, only threshold-based ground plane removal has been proposed to adapt the lidar detections and only for specific datasets not including NuScenes. Since a proper overlap between target and input information is important to reduce potential outliers and because the specific sensor orientation might have an influence on the perceptive capabilities, a more thorough investigation based on the NuScenes setup shall be performed. To narrow the methods down, the often applied threshold-based method shall be compared with different semantic segmentation-based ground plane removal results. This can be formulated as follows
+\\
+\begin{requ}[RQ\ref{requ:what_is_best_gt}] \label{requ:what_is_best_gt}
+	Which of the following methods results in the best overlap with respect to \gls{iou} between accumulated lidar and radar detections: threshold-based or semantic segmentation-based ground plane removal?
+\end{requ}
+Finally, with regards to resource efficiency during inference, the literature only discloses run time information on GPUs. Therefore, a rough architecture search shall be conducted for UNets with skip connections and ResNet layers to answer the following question\\
+\begin{requ}[RQ\ref{requ:network_search}] \label{requ:network_search}
+	How should the amount of filters of a UNet architecture be chosen to maximize performance while keeping the run time at about 10Hz?
+\end{requ}
+Additionally, the majority of deep \gls{ism} in the literature model the problem in the probabilistic framework which does not suffice R\ref{subreq:ev_rep}. On the evidential side, the problem is either modeled as a three class classification or a regression task, both of which suffice R\ref{subreq:ev_rep}. However, to the best of the authors knowledge, non of the published methods model dynamic objects by distributing mass equally to the free and occupied class. Training on dynamic objects targets disqualifies the standard classification approach, since the dynamic object targets are not represented as a one-hot encoding. On the other hand, regression problems can cope with continuous targets. Thus, the training of deep \gls{ism}s will be defined as a regression problem in this work. Additionally, since no prior work has been done in this area, the capabilities of deep \gls{ism}s to model dynamic objects with regards to R \ref{subreq:conflicting_mass} given different sensor modalities shall investigated to answer the following questions
+\begin{requ}[RQ\ref{requ:dyn_objects}] \label{requ:dyn_objects}
+	To which extend are deep \gls{ism}s capable to estimate the position of dynamic objects given radar, camera and lidar data respectively?
+\end{requ}
+\begin{requ}[RQ\ref{requ:dyn_objects_with_radar}] \label{requ:dyn_objects_with_radar}
+	To which extend does the capability of deep \gls{ism}s to estimate the position of dynamic objects given camera and lidar inputs respectively change, when radar information is added? 
+\end{requ}
+Additionally, neither the classification nor the regression approaches for deep evidential \gls{ism}s do explicitly handle occurring aleatoric uncertainties, letting us arrive at the following hypothesis.
+\\
+\begin{hyp}[H\ref{hyp:sota_not_model_unc}] \label{hyp:sota_not_model_unc}
+	In case of occurring aleatoric uncertainty, the current state of the art deep \gls{ism}s distribute the mass evenly into the free and occupied class rather than shifting it to the unknown class. 
+\end{hyp}
+In case H\ref{hyp:sota_not_model_unc} holds, these models would, thus, lack the possibility to distinguish between dynamic objects and regions of high uncertainty. Additionally, the unknown class cannot be used as a measure of information content, since some of the uncertainty is distributed into the free and occupied classes. This behavior would violate the requirements R\ref{subreq:unknown_mass}, hence, raising the following research questions. 
+\\
+\begin{requ}[RQ\ref{requ:how_to_sep_uncertainty}] \label{requ:how_to_sep_uncertainty}
+	How can a deep, evidential \gls{ism} be defined to separate conflicting mass due to aleatoric uncertainty into the unknown class while leaving conflicting mass due to dynamic objects untouched. 
+\end{requ}
+%======================================%
+%
+%======================================%
+\subsection{Research Needs for Usage of deep, evidential ISMs as Priors in Occupancy Mapping}
+\label{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}
+With regards to occupancy mapping with deep \gls{ism}s, not much literature is available. To the best of the authors knowledge, the only instances of occupancy mapping with deep \gls{ism}s use the standard Bayes filtering approach. Thus, the first step consists in analyzing the characteristics and identifying short comings when applying deep \gls{ism}s for occupancy mapping.\\
+First, in contrast to geometric \gls{ism}s which only provide estimates in regions directly affected by data, deep \gls{ism}s additionally perform interpolations in intermediate regions and even extrapolations in regions further away from data. To illustrate the issue arising from this behavior, consider the example depicted in Fig. \ref{fig:info_dependence}. Here, a scenario is shown in which the ego vehicle only partially observes a wall to its left-hand side for the first two time steps. Based on the majority of observations captured in the training dataset, the network might tend to extrapolate the wall as rectangular. In the standard occupancy formulation, this information is treated as independent and, thus, accumulated. When the vehicle finally obtains measurements of the wall's contour in the former occluded area, the extrapolation might have already be accumulated to high certainty. Therefore, many estimates based on measurements of this area would have to be accumulated to correct the assigned training data bias. In a similar way, this effect can also lead to overwriting area with predictions close to data with later occurring extrapolations. This thought experiment leads to the following hypothesis.
+\begin{figure}
+	\begin{center}
+		\import{imgs/06_research_approach}{info_dependence.pdf_tex}
+		\caption{\label{fig:info_dependence}Illustration of informational dependence between deep \gls{ism} predictions over time on the example of dataset bias. Here, the ego vehicle (black) drives along a wall and obtains radar measurements (orange) over three time steps. In each time step, the contour of the wall is estimated (blue).}
+	\end{center}
+\end{figure}  
+\\
+\begin{hyp}[H\ref{hyp:temporal_dependence}] \label{hyp:temporal_dependence}
+	Due to inter- and extrapolation in areas not directly measured, deep \gls{ism}s contain informational dependence between time steps. This leads to accumulation of bias and or falsification of previously correct assigned areas when their estimates are fused into the occupancy maps using a combination rule that assumes informational independence.  
+\end{hyp} 
+In case H\ref{hyp:temporal_dependence} holds, the literature in sec. \ref{subsec:combination_of_dependent_evidence} suggests to either remove the redundancy before combination or adapt the combination rule itself to account for the redundancy. This work will focus on removing the redundancy beforehand using Eq. \ref{eq:discount_op} since the Yager and Dempster combination rule, as defined in subsec. \ref{subsec:combination_of_independent_evidence}, provide well studied, often used fusion methods for evidential occupancy mapping. To remove the redundancy, half of the approaches in the literature focus on defining a constant redundancy weighting between sensor modalities. This is, however, not applicable for the setup in this work, since there is only one sensor modality and the dependency depends on the environment.\\
+The other half proposes approaches to measure the amount of information in each to be fused mass and compare them using the mutual information, as stated in Eq. \ref{eq:mutual_info_with_entrop}. However, no general procedure is proposed to measure the mutual information in signals. Thus, the following questions emerges
+\begin{requ}[RQ\ref{requ:how_to_meas_redund}] \label{requ:how_to_meas_redund}
+	How can the mutual information be measured to asses the informational redundancy in evidential occupancy mapping?
+\end{requ}
+\begin{requ}[RQ\ref{requ:how_to_define_discount_fact}] \label{requ:how_to_define_discount_fact}
+	How can a discount factor be defined based on the mutual information to remove the amount of redundant information between two evidential occupancy masses?
+\end{requ}
+Additionally, the problem arises that the evidential representation for occupancy mapping slightly differs from the standard in that it defines the conflict state as a meaningful transition state and not as another source of uncertainty based on contradictory information sources. Therefore, the regularly used entropy and the corresponding discount factors cannot be utilized in the proposed form. Also, the second commonly used measure, namely the specificity, quantifies how much mass is distributed into single element classes like the free and occupied class in contrast to the unknown which is both free and occupied. However, the specificity for evidential occupancy mapping is in the interval $[0.5,1.0]$ which can easily be seen by examining Eq. \ref{eq:specificity}. Thus, even for a total lack of information indicated by $\vec{m} = [0,0,1]^\top$, the specificity equals $0.5$ disqualifying it as a direct measure for information, too. This leads to the following research questions 
+\begin{requ}[RQ\ref{requ:how_to_meas_info}] \label{requ:how_to_meas_info}
+	How can the information content in evidential occupancy mapping be measured?
+\end{requ}
+Eventually, to utilize the deep \gls{ism} estimates as priors according to R\ref{subreq:initialize_with_deep_ism} and \ref{subreq:converge_to_geo_ism}, a procedure has to be developed to answer the following questions
+\begin{requ}[RQ\ref{requ:disable_deep_ism_influence}] \label{requ:disable_deep_ism_influence}
+	How can the influence of the deep \gls{ism} be disabled in case a definable amount of data has been collected, as defined in R\ref{subreq:initialize_with_deep_ism} and \ref{subreq:converge_to_geo_ism}?
+\end{requ}
+%==========================================================================%
+%
+%==========================================================================%
+\section{Overview of Methodology}
+\label{sec:framework_overview}
+In this section, a framework is presented to address the research questions defined in Sec. \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}. The framework extends the standard evidential occupancy mapping pipeline \cite{pagac1996evidential} to incorporate estimates of a data-driven \gls{ism}, as shown in Fig. \ref{fig:illustrative_system_overview}. Here, the choices of how to obtain the data and how to define the architecture are detailed in Sec. \ref{subsec:method_deep_ism_architecture}. For the learned \gls{ism} to suffice R\ref{subreq:unknown_mass} and \ref{subreq:conflicting_mass}, a method to investigate H\ref{hyp:sota_not_model_unc} is proposed in Sec. \ref{subsec:method_al_uncert_in_deep_isms}.\\
+The incorporation of the deep \gls{ism}s information is realized by fusing the estimates directly into the map rather than first fusing it with the geo \gls{ism}'s estimate. This is done, in order to enable an asynchronous fusion of information into the map, which allows for differing execution times of the \gls{ism}s. The specific choice of the fusion methods for both geometric and deep \gls{ism}s are detailed in Sec. \textcolor{red}{Todo}.
+\begin{figure}
+	\begin{center}
+		\import{imgs/06_research_approach/}{illustrative_system_overview.pdf_tex}
+		\caption{\label{fig:illustrative_system_overview}Structural overview of the proposed framework, showing how the \gls{bev} input is transformed both by the deep and geometric \gls{ism} into occupancy estimates. After removing the temporal redundancy, both \gls{ism}'s estimates are fused into the occupancy map.}
+	\end{center}
+\end{figure} 
+%======================================%
+%
+%======================================%
+\subsection{Definition of geometric ISMs for Lidars and Radars}
+\label{subsec:method_geo_isms}
+Both lidar and radar sensors provide range measurements and, thus, the ray casting \gls{ism} as explained in Sec. \ref{subsec:ray_casting} can be applied. However, for reasons detailed in Sec. \ref{subsec:geo_ism_lidar} and \ref{subsec:geo_ism_radar}, additional steps have to be taken. 
+\\
+In case of the \textbf{\gls{ilm}}, first the non-ground detections are removed. Then, for each angle around the ego vehicle without a detection in line of sight, a free space ray is cast setting all cells between the lidar sensor up to a max range along the angle to $\vec{m}=[pF,0,1-pF]^\top$ with $pF$ being a parameter of the \gls{ilm}. Next, for each detection in line of sight, a ray is cast as defined in \cite{pagac1996evidential} with a parameterizable opening angle, free and occupied probability $pF, pO$. In case of labeling with lidar, the detections are enhanced with the motion state. For dynamic detections, the model in Eq. \ref{eq:ev_ray_casting_model} is adapted as follows
+\begin{align}
+	\label{eq:ev_ray_casting_model_for_dy}
+	\text{\gls{idm}}_{\text{ev}} &=
+	\begin{cases}
+		\begin{bmatrix} 2\Delta p, &0, &1 - 2\Delta p \end{bmatrix}^{\top}, & \text{\gls{idm}}_{\text{prob}} < 0.5 \\
+		\begin{bmatrix} \Delta p, &\Delta p, &1 - 2\Delta p \end{bmatrix}^{\top}, & \text{\gls{idm}}_{\text{prob}} \geq 0.5
+	\end{cases} 
+\end{align} 
+An algorithmic summary of the geometric \gls{ilm} is shown in Alg. \ref{alg:geo_ilm}.\\
+\begin{algorithm}
+	\caption{\label{alg:geo_ilm}geometric Inverse Lidar Model}
+	remove non-obstacle detections\;
+	initialize all cells in the \gls{ilm} image to $m_u=1$\;
+	\For{angle \text{in} discretizedAnlges360}{
+		\If{(no detection along current angle)}{
+			\FuncCall{castFreeSpaceRay}{angle, maxRange, openingAngle=angle, pF}\;
+		}
+		\Else{
+			\If{(detection is static)}{
+				\Comment{see Eq.\ref{eq:ev_ray_casting_model}}
+				\FuncCall{castStatRay}{angle, rangeToDetection, openingAngle, pF, pO}\;
+			}
+			\Else{
+				\Comment{see Eq.\ref{eq:ev_ray_casting_model_for_dy}}
+				\FuncCall{castDynRay}{angle, rangeToDetection, openingAngle, pF, pD}\;
+			}
+		}
+	}
+\end{algorithm}
+For the \textbf{\gls{irm}}, the main problem when applying the ray casting model from Sec. \ref{subsec:ray_casting} is the assumption that only objects in line of sight are measured. This assumption is violated for the radar since objects can be detected in occluded areas due to multi-path reflections. This leads to big amounts of free space being assigned to static objects by \gls{ism} rays cast towards detections in occluded areas. In this work, the occlusion problem is addressed similar to \cite{werber2015automotive} with the alteration that free space rays are not only ignored in occupied regions of other rays, but end at the collision range. In case the contours of all objects are densely detected, this would suffice to solve the problem. However, radar detections are also sparse which is why measurements of preceding time steps are additionally used to define end points of \gls{ism} rays. Another problem connected with the sparsity is the low coverage of free space. In this work, the method proposed in \cite{prophet2018adaptions} is altered by instead casting the original rays again but with a much wider opening angle. This assumes that the area close to the sensor is to a large degree free up to the closest detection. The remaining effects listed in Sec. \ref{subsec:geo_ism_radar} only aim at scaling the \gls{ism} to account for different sensor effects and are, thus, comparatively of minor importance. An algorithmic summary of the geometric \gls{irm} used in this work is shown in Alg. \ref{alg:geo_irm}.
+\begin{algorithm}
+	\caption{\label{alg:geo_irm}geometric Inverse Radar Model}
+	remove non-obstacle detections\;
+	initialize all cells in the \gls{irm} image to $m_u=1$\;
+	\For{angle \text{in} anlgesWithCurrentDetections}{
+		\Comment{range at which the free space of the ray is stopped}
+		cutOffRange = $\infty$\;
+		\If{(current or previous detection hit by current ray)}{
+			cutOffRange = rangeFirstHitDetection
+		}			
+		\If{(detection is static)}{
+			\Comment{see Eq.\ref{eq:ev_ray_casting_model}}
+			\FuncCall{castStatRay}{angle, rangeToDetection, openingAngle, pF, pO, cutOffRange}\;
+		}
+		\Else{
+			\Comment{see Eq.\ref{eq:ev_ray_casting_model_for_dy}}
+			\FuncCall{castDynRay}{angle, rangeToDetection, openingAngle, pF, pD, cutOffRange}\;
+		}
+	}
+\end{algorithm}
+%======================================%
+%
+%======================================%
+\subsection{Methodology to define the Ground-Truth}
+\label{subsec:method_choice_of_gt}
+To obtain deep \gls{ism}s, first, the generation of labels according to RQ\ref{requ:what_is_best_gt} has to be addressed. Here, the NuScenes dataset provides semantic labels for the lidar detections which can be utilized to cover the semantic ground-plane filtering approaches. As an alternative, threshold-based filtering shall be considered by removing all lidar detections beneath a certain height threshold. The sensor specifics, considered semantic labels and specification of height thresholds are detailed in Sec. \ref{sec:choice_of_gt}.
+\\
+To account for the fact that radars can utilize multi-path reflections to obtain detections hidden for the lidar, the geometric \gls{ism}s (see Sec. \ref{subsec:method_geo_isms}) of both sensors will be used. Additionally, to account for the sparseness in radar data, the \gls{ism}s are mapped over subsequent time steps and afterwards compared. This not only tackles the sparseness but also softens the requirement for lidar and radar measurements to exactly align by discretizing them into the \gls{bev} grid map's cells. 
+\\
+To obtain a quantitative comparison, the m\gls{iou} score is computed between the evidential occupancy map classes. This score is a standard to measure the overlap between semantic classes in computer vision and is capable to handle the class imbalance present in this experiment. Nevertheless, to soften the class imbalance, the score shall only be computed in areas which can be potentially affected by the respective \gls{ism}s. 
+%======================================%
+%
+%======================================%
+\subsection{Methodology to define the deep ISM Architecture}
+\label{subsec:method_deep_ism_architecture}
+Next, the network architecture has to be analyzed to suffice RQ\ref{requ:network_search}. To restrict the search space to a feasible subset, the architecture as illustrated in Fig. \ref{fig:std_unet} is considered. Here, the initial grid dimension is halved after each of the four encoder steps using strided $3\times 3$ convolutions while the number of channels is doubled up to a maximum. This is inverted in the decoder using bilinear upsampling. All convolution layers are structured as suggested in the literature (see subsec. \ref{subsec:architecture} and Fig. \ref{fig:conv_n_resnet_layer}). Whenever the grid's height and width remain constant, ResNet layers, as shown in Fig. \ref{fig:conv_n_resnet_layer}, are deployed to increase efficiency. The last three layers consist of two additional convolution layer without Dropout and the output layer, specifically designed for the applied loss. A detailed description of the hyperparameters and the choices made for the architecture search are elaborated in Sec. \ref{sec:choice_of_unet_arch}.
+\begin{figure}[h!]
+	\begin{minipage}{0.5\textwidth}
+		\centering
+		\begin{tabular}{c|c|c}
+			\multicolumn{3}{c}{}             \\			
+			\multicolumn{3}{c}{}             \\				
+			layers & abbr. & parameters \\
+			\hline
+			\textcolor[rgb]{0.2,0.4,0.8}{ResNet} & res$(\cdot)$ & $K=3, C_{\text{out}}, D$ \\
+			\textcolor[rgb]{0.18,0.76,0.49}{Convolution} & conv$_s(\cdot)$ & $K=3, C_{\text{out}}, s$\\
+			\textcolor[rgb]{0.18,0.76,0.49}{conv without Dropout} & \underline{conv}$_s(\cdot)$ & $K=3, C_{\text{out}}, s$\\		
+			\textcolor[rgb]{0.57,0.25,0.67}{bilinear upsampling} & up$_u(\cdot)$ & $K=3 ,C_{\text{out}}, u$\\
+			Concatenation & cat$(\cdot ,\cdot)$ & ---\\
+			Input / \textcolor[rgb]{1.0,0.4,0.0}{Output} & $x$ / y$(\cdot)$& --- / ---\\
+			\multicolumn{3}{c}{}             \\					
+			\multicolumn{3}{c}{\textbf{Layers}}             \\
+		\end{tabular}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.47\textwidth}
+		\begin{center}
+			\import{imgs/06_research_approach/}{std_unet.pdf_tex}
+		\end{center}
+	\end{minipage}\\
+	%
+	%
+	%
+	\begin{minipage}{0.4\textwidth}
+		\centering
+		\begin{tabular}{l|c|l}
+			layers & abbr. & dimension\\
+			\hline
+			$x$ & $e_{00}$ & $128 \times 128 \times C_\text{in}$\\	
+			res$_D(e_{00})$ & $e_{01}$ & $128 \times 128 \times C_0$\\
+			&&                                                       \\
+			&&                                                       \\
+			\underline{conv}$_1(e_{01})$ & $s_0$ & $128 \times 128 \times 4$ \\
+			&&                                                   \\
+			\hline
+			conv$_2(e_{01})$ & $e_{10}$ & $64 \times 64 \times C_1$\\
+			res$_D(e_{10})$ & $e_{11}$ & $64 \times 64 \times C_1$ \\
+			\underline{conv}$_1(e_{11})$ & $s_1$ & $64 \times 64 \times 4$ \\
+			&&                                                 \\
+			\hline
+			conv$_2(e_{11})$ & $e_{20}$ & $32 \times 32 \times C_2$\\
+			res$_D(e_{20})$ & $e_{21}$ & $32 \times 32 \times C_2$ \\
+			\underline{conv}$_1(e_{21})$ & $s_2$ & $32 \times 32 \times 4$ \\
+			&&                                                 \\
+			\hline
+			conv$_2(e_{21})$ & $e_{30}$ & $16 \times 16 \times C_3$\\
+			res$_D(e_{30})$ & $e_{31}$ & $16 \times 16 \times C_3$ \\
+			\underline{conv}$_1(e_{31})$ & $s_3$ & $16 \times 16 \times 4$ \\
+			&&                                                 \\
+			\hline
+			conv$_2(e_{31})$ & $e_{40}$ & $8 \times 8 \times C_4$\\
+			res$_D(e_{40})$ & $e_{41}$ & $8 \times 8 \times C_4$ \\
+			\multicolumn{3}{c}{}             \\
+			\multicolumn{3}{c}{\textbf{Encoder Architecture}}             \\
+		\end{tabular}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.02\textwidth}
+		\centering
+		\begin{tabular}{c}
+			\\		
+			\\		
+			\\	
+			\\	
+			\\
+			$\longrightarrow$\\	
+			\\	
+			\\	
+			\\	
+			$\longrightarrow$\\	
+			\\	
+			\\	
+			\\	
+			$\longrightarrow$\\	
+			\\	
+			\\	
+			\\	
+			$\longrightarrow$\\	
+			\\	
+			\\	
+			$\longrightarrow$\\	
+			\\	
+			\\
+		\end{tabular}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.55\textwidth}
+		\centering
+		\begin{tabular}{l|c|l}
+			layers & abbr. & dimension\\
+			\hline
+			y$(d_{04})$ & $d_{05}$ & $128 \times 128 \times C_\text{out}$\\	
+			\underline{conv}$_1(d_{03})$ & $d_{04}$ & $128 \times 128 \times 4$\\
+			\underline{conv}$_1(d_{02})$ & $d_{03}$ & $128 \times 128 \times 4$\\
+			res$_D(d_{01})$ & $d_{02}$ & $128 \times 128 \times C_0$\\
+			cat$(d_{00},s_0)$ & $d_{01}$ & $128 \times 128 \times C_0$\\
+			up$_2(d_{12})$ & $d_{00}$ & $128 \times 128 \times C_0$\\
+			\hline
+			&&\\
+			res$_D(d_{11})$ & $d_{12}$ & $64 \times 64 \times C_1$\\
+			cat$(d_{10},s_1)$ & $d_{11}$ & $64 \times 64 \times C_1$\\
+			up$_2(d_{22})$ & $d_{10}$ & $64 \times 64 \times C_1$\\
+			\hline
+			&&\\
+			res$_D(d_{21})$ & $d_{22}$ & $32 \times 32 \times C_2$\\
+			cat$(d_{20},s_2)$ & $d_{21}$ & $32 \times 32 \times C_2$\\
+			up$(d_{32})$ & $d_{20}$ & $32 \times 32 \times C_2$\\
+			\hline
+			&&\\
+			res$_D(d_{31})$ & $d_{32}$ & $16 \times 16 \times C_3$\\
+			cat$(d_{30},s_3)$ & $d_{31}$ & $16 \times 16 \times C_3$\\
+			up$_2(d_{40})$ & $d_{30}$ & $16 \times 16 \times C_3$\\
+			\hline
+			&&\\
+			res$_D(e_{41})$ & $d_{40}$ & $8 \times 8 \times C_4$\\
+			\multicolumn{3}{c}{}             \\
+			\multicolumn{3}{c}{\textbf{Decoder Architecture}} \\
+		\end{tabular}
+	\end{minipage}
+\caption{\label{fig:std_unet}Illustration of the UNet variant's architecture used in this work. The skip connections between encoder and decoder are realized with a convolution, compressing the amount of features to 4 channels and, afterwards, concatenating them with the features of a subsequent layer. Convolution and ResNet layers are structured as shown in Fig. \ref{fig:conv_n_resnet_layer}. The skip connection in the ResNet layer is realized by adding the input to the ResNet layers output before applying the non-linearity.}
+\end{figure}
+%======================================%
+%
+%======================================%
+\subsection{Methodology to account for aleatoric Uncertainties in deep ISMs}
+\label{subsec:method_al_uncert_in_deep_isms}
+As explained in Sec. \ref{subsec:research_needs_for_deep_isms}, the baseline deep \gls{ism} considered in this work shall model the evidential occupancy estimation using a Softmax output activation (see Eq. \ref{eq:softmax}) and the \gls{mse}, as the standard regression loss. This configuration is from here on referred to as SoftNet. 
+\begin{align}
+	\label{eq:softmax}
+	\sigma(\vec{z})_i &= \dfrac{e^{z_i}}{\sum_{k=1}^{K}e^{z_k}}\\
+	\label{eq:mse}
+	\mathcal{L}_{\text{MSE}} &= \sum_{k=1}^{K}(\hat{y}_k - \tilde{y}_k)^2
+\end{align}
+In case of occurring aleatoric uncertainty, the network is confronted with both information indicating a pixel to be free and occupied, leading to H\ref{hyp:sota_not_model_unc}. To investigate H\ref{hyp:sota_not_model_unc} further, first, the architecture as specified in Sec. \textcolor{red}{ToDo} will be trained in the SoftNet configuration using the data as specified in Sec. \textcolor{red}{ToDo}. Next, the \textcolor{red}{magic fancy score} will be computed for the test data predictions, which is an expansion of the commonly used \gls{iou} and thus provides more detailed insights. Additionally, two alternatives to SoftNet shall be investigated. 
+\\
+For the first variation, the evidential occupancy classes are extended to separately model the dynamic class instead of mixing it into the free and occupied classes. With regards to the network, the Softmax output as well as the \gls{mse} loss have to be extended by one dimension to realize this configuration. Additionally, to adapt the targets, an operation which shifts the evidential occupancy labels $\hat{\vec{m}}=[b_f,b_o,u]^\top$ to the extended representation $\hat{\vec{m}}'=[b_d',b_f',b_o',u']^\top$, sufficing R \ref{subreq:ev_rep}, \ref{subreq:unknown_mass} and \ref{subreq:conflicting_mass}, can be defined as follows
+\begin{align}
+	\label{eq:extend_shift}
+	\vec{m}' &\looparrowleft \vec{m}\\
+	b_d' &= 2\cdot \min(b_f,b_o)\\
+	b_{f/o}' &= b_{f/o} - \min(b_f,b_o)\\
+	u' &= u
+\end{align}
+Here, $\min(b_f,b_o)$ describes the amount of mass being equal in both the free and occupied class. This portion is extracted from both classes, which doubles its amount, and shifted to the newly created dynamic class, leaving the unknown class untouched.\\ 
+Moreover, to use estimates in the extended representation $\tilde{\vec{m}}'$ in the evidential occupancy mapping pipeline, a compression operation can be defined as follows
+\begin{align}
+	\label{eq:compress_shift}
+	\vec{m} &\looparrowleft \vec{m}'\\
+	b_{f/o} &= b_{f/o}' - \min(b_f',b_o') + \dfrac{b_d'}{2}\\
+	u &= u' + 2\cdot\min(b_f',b_o')
+\end{align}
+This operation quantifies the learned aleatoric uncertainty between the free and occupied class as $\min(b_f',b_o')$, extracts it from their respective classes and shifts it to the unknown class. Also, the dynamic mass is split into equal portions and added to the free and occupied class respectively, to account for R \ref{subreq:conflicting_mass}. The network trained on the extended labels $\hat{\vec{m}}'$ and capable of producing evidential estimates $\tilde{\vec{m}}$ by applying the shift operation defined in Eq. \ref{eq:compress_shift} is from here on referred to as ShiftNet.
+\\
+The second variation is heavily based on the method proposed by Sensoy et al. \cite{sensoy2018evidential} who train a Dirichlet network on the Bayes risk of the \gls{mse} (see Eq. \ref{eq:bayes_risk_mse}) to model aleatoric uncertainty and use subjective logic (see Eq. \ref{eq:e2m} and \ref{eq:e2p}) to transform the Dirichlet \gls{pdf} to evidential masses. This will be referred to as DirNet. However, in the original formulation of Sensoy et al., all unknown mass is solely due to aleatoric uncertainty. But, in the evidential occupancy formulation, the unknown mass both represents uncertainty and lack of information. Thus, to additionally provide labels for the unknown mass e.g. in unobserved areas, the loss from Eq. \ref{eq:bayes_risk_mse} shall be altered as follows
+\begin{align}
+	\mathcal{L}_i = (\hat{u}_i-\tilde{u}_{i})^2 + \sum_{k\in [f,o]}(b_{ik}-\tilde{p}_{ik})^2 + \dfrac{\tilde{p}_{ik}(1-\tilde{p}_{ik})}{S_i+1} 
+\end{align}
+\begin{figure}
+	\begin{center}
+		\import{imgs/06_research_approach/method/}{deep_ism_variants.pdf_tex}
+		\caption{\label{fig:deep_ism_variants}Illustration of the three deep \gls{ism} configurations investigated in this work.}
+	\end{center}
+\end{figure}
+To account for the class imbalance in all of the above mentioned deep \gls{ism} variants, the mean loss is computed separately for the labels of each class and afterwards summed up over all classes to obtain a final score. 
+%======================================%
+%
+%======================================%
+\subsection{Methodology to use deep \gls{ism}s in Occupancy Mapping}
+\label{subsec:method_to_use_deep_isms_in_occmaps}
+In order to investigate H\ref{hyp:temporal_dependence}, an alternative to the standard combination rules for evidential occupancy mapping will be proposed in this section. The problem addressed in H\ref{hyp:temporal_dependence} revolves around accumulation of redundant information over time. This, directly leads to the question of how to measure the information content in deep \gls{ism}s in the first place, as formulated in RQ\ref{requ:how_to_meas_info}. As stated in Sec. \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}, the commonly used entropy and specificity measure cannot be used to quantify the information in evidential occupancy mapping. However, since the deep \gls{ism}s in this work are constructed in a way to suffice R\ref{subreq:unknown_mass}, the unknown mass can be directly utilized to quantify the information content instead.\\
+Given the unknown mass as a measure for information, the problem of how to quantify the temporal redundancy shall be tackled (RQ\ref{requ:how_to_meas_redund}). In this work, the redundancy shall be assessed through mutual information, for reasons explained in Sec. \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}. Alternatives will be discussed in Sec. \textcolor{red}{ToDo disscussion section}. To obtain the mutual information, this work proposes to use temporally accumulated measurement signals as inputs for the deep \gls{ism}s. In doing so, the deep \gls{ism} learns to directly approximate the occupancy state $\vec{m}_{0:T}$ given the information $I_{0:T}$ of time step zero up to the current step $T$. On the other hand, before fusion, the map provides a successively obtained estimate of the environment state $\vec{m}_{0:T-1}$ of all previous measurements. Ideally, this means that the deep \gls{ism} prediction contains all of the information stored in the occupancy map around the current ego vehicle's location with the addition of the information captured in the current time step. Thus, using the unknown mass as an inverse measure for information, the non-redundant part of the information can be defined as follows
+\begin{align}
+	\label{eq:non_redund_info}
+	I_{T|0:T} &= I_{0:T} - I_{0:T-1} = \underbrace{m_{u,0:T-1} - m_{u,0:T}}_{\equiv\Delta m_{u}}
+\end{align}
+At this point, it should be mentioned that the map region around the vehicle could simply be updated by replacing the old map state with the new deep \gls{ism} estimate. This, however, would remove all of the geometric \gls{ism}'s influences. Therefore, it is rather proposed to discount the deep \gls{ism} estimate according to the amount of non-redundant information $\Delta m_{u}$ and combine it with the current map state.\\
+To do so, RQ\ref{requ:how_to_define_discount_fact} has to be answered to obtain a discount factor for the discount operation defined in Eq. \ref{eq:discount_op}. The requirements for the discount factor $\gamma$ can be formulated as follows
+\begin{align}
+	\label{eq:discount_factor_behavior}
+	\gamma &= 
+	\begin{cases}
+		0, \Delta m_{u} < 0\\
+		0, \lim\limits_{\Delta m_{u} \rightarrow 0}\\
+		1, \lim\limits_{\Delta m_{u} \rightarrow 1}\\
+	\end{cases}
+\end{align}
+It should be noted that, ideally, $\Delta m_{u} < 0$ never occurs since the next time step's estimate is based on at least the same amount of information as the previous one. Since $\Delta m_u$ lies within the interval $[-1,1]$, the behavior defined in Eq. \ref{eq:discount_factor_behavior} can e.g. be achieved in a linear way as follows
+\begin{align}
+	\label{eq:relu_discount_factor}
+	\gamma &= \mathrm{ReLU}(\Delta m_u)
+\end{align}
+However, alternatives like a scaled hyperbolic tangent non-linearity can also be applied to e.g. dampen the influence of highly certain and highly redundant estimates. Since no clear preference is given, this work will focus on the discount factor as defined in Eq. \ref{eq:relu_discount_factor}. Finally, the decision of which combination rule to chose to combine the deep \gls{ism} estimate after discounting the redundancy will be postponed to Sec. \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
+%======================================%
+%
+%======================================%
+\subsection{Methodology to use deep \gls{ism}s as Priors in Occupancy Mapping}
+\label{subsec:method_to_use_deep_isms_as_priors_in_occmaps}
+In this section, the requirements R\ref{subreq:initialize_with_deep_ism} and \ref{subreq:converge_to_geo_ism} shall be tackled. To do so, it shall be first discussed how the prior information is integrated into the map. Normally, as explained in Sec. \ref{sec:occupancy_mapping}, the map's state is initially set to the prior e.g. obtained through previous mapping of the environment. In this work, however, the map shall be initialized using a deep \gls{ism} during mapping. A simple procedure to do so would be to initially set the state of all grid cells to unknown. Afterwards, if a grid cell is still in the initial state and falls in the deep \gls{ism}'s field of view, replace the grid cell's value by the deep \gls{ism}'s estimate and leave it untouched otherwise. However, since the deep \gls{ism}'s estimates are noisy, potentially prone to errors and to account for the fact that the estimates might improve due to better measurement coverage at later time steps, the following three stepped procedure is proposed to filter these effects. First, in the \textbf{start phase}, all cells shall still be set to $m_u = 1$. 
+\\
+\\
+Afterwards, in the \textbf{initialization phase}, both the geometric and deep \gls{ism} estimates are integrated into the map. This phase lasts until a definable amount of measurement information has been collected. In this work, the information content is described using the unknown mass (see Sec. \ref{subsec:method_to_use_deep_isms_in_occmaps}). Therefore, a threshold on the unknown mass $\underline{m}_u$ is introduced to quantify whether enough data has been collected in a parameterizable way. Thus, the deep \gls{ism} should be integrated into the map in a way that the unknown mass never falls below $\underline{m}_u$. At the same time, in case the true occupancy state changes, the combination should be conducted in a way to allow shifting mass between occupied and free while keeping or even recuperating unknown mass. This is important since once the unknown mass has reached $\underline{m}_u$, the deep \gls{ism}'s influence is suppressed leading to the possibility that the state change cannot be fully successful.
+\\
+To achieve this, the following procedure is proposed.
+\\
+First, restrict the certainty of the deep \gls{ism} estimates to $\underline{m}_u$ using the discounting operation as follows
+\begin{align}
+	\tilde{\vec{m}}' &= (1-\underline{m}_u) \otimes \tilde{\vec{m}}
+\end{align}
+The restricted deep \gls{ism} certainty together with the discounting of non-redundant information makes sure that once a map cell's unknown mass has fallen beneath $\underline{m}_u$, all further deep \gls{ism} estimates are ignored. However, it is still possible for the deep \gls{ism} to reduce the unknown mass below the lower limit in the combination step as long as it has not been reached. Therefore, the discount factor to remove the redundancy has to be adapted to suffice the following condition
+\begin{align}
+	\vec{m}^{0:T} &= \vec{m}^{0:T-1} \oplus (\gamma \otimes \tilde{\vec{m}}^{0:T})\\
+	\underline{m}_u &\leq m^{0:T}_{u}
+\end{align} 
+Here, the adaption of $\gamma$ in a way so that the fusion respects the lower bound $\underline{m}_{u}$ depends on the choice of combination rule. Since the combination requires the possibility to recuperate unknown mass, Yager's rule is chosen over Dempster's (for details on the properties of evidential combination rules see sec. \ref{subsec:combination_of_independent_evidence}). Given Yager's combination rule, $\gamma$ shall be chosen as follows
+\begin{align}
+	\underline{m}_u &\leq m^{0:T}_{u} \underbrace{=}_{\eqref{eq:yagers_rule}} m_{u}^{0:T-1}\tilde{m}_{u}^{T}+K \\
+%
+	\underline{m}_u & \underbrace{\leq}_{\eqref{eq:discount_op}\text{ \& }\eqref{eq:conflict}} m_{u}^{0:T-1}(1-\gamma+\gamma\tilde{m}_{u}^{0:T}) + m_{o}^{0:T-1}\gamma\tilde{m}_{f}^{0:T} + m_{f}^{0:T-1}\gamma\tilde{m}_{o}^{0:T}\\
+%
+	\underline{m}_u &\leq m_{u}^{0:T-1} + \gamma (\underbrace{m_{u}^{0:T-1}\tilde{m}_{u}^{0:T} - m_{u}^{0:T-1} + m_{o}^{0:T-1}\tilde{m}_{f}^{0:T} + m_{f}^{0:T-1}\tilde{m}_{o}^{0:T}}_{=: \xi}) \quad|-m_{u}^{0:T-1} |\div\xi
+\end{align}
+Since the above derivation is made for the case of combination in the initialization phase, both the map cell's and deep \gls{ism} estimate's unknown masses are in the interval $[\underline{m}_u,1]$. Thus, given $K=1$ and $\underline{m}_u = 0$, no solution for $\gamma$ can be found to suffice the requirement above. This setting, however, would be pointless since it disables the function of the lower bound $\underline{m}_u$ as a distinction between the initialization and convergence phase.
+Thus, given $\underline{m}_u > 0$, $|\xi| \in (0,1]$ and the two following solutions can be found 
+\begin{align}
+	\text{case: } \xi > 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\leq \gamma\\
+	\text{case: } \xi < 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\geq \gamma 
+\end{align}
+Once the unknown mass has fallen below the threshold $\underline{m}_u$, the \textbf{convergence phase} starts. Here, the geometric \gls{ism} should still be integrated into the map while the influence of the deep \gls{ism} should be disabled, guaranteeing a convergence towards the geometric \gls{ism}. To achieve this, a combination rule has to be chosen that integrates geometric \gls{ism} estimates in a way to strictly reduce the unknown mass but is also capable to shift mass between the free and occupied class to e.g. account for changes in the occupancy state (parked car starts to move) or for correction purposes.
+The three phases of the proposed procedure are depicted in Fig. \ref{fig:three_phased_approach}. In the next section, the choices for combination rules for both the deep and geometric \gls{ism} to suffice the requirements of each phase are elaborated on. Afterwards, in sec. \ref{subsec:adaptation_of_redund_removal_to_sat_m_u_lower}, an adaptation of the discount factor to remove the redundancy in a way to respect the lower bound on the unknown mass $\underline{m}_{u}$ is defined.
+\begin{figure}
+	\begin{center}
+		\import{imgs/06_research_approach/method/}{three_phased_approach.pdf_tex}
+		\caption{\label{fig:three_phased_approach}Illustration of the three phases of a grid cell's occupancy state. Beginning with the start phase where the evidential mass is set to be all unknown. Afterwards, in the initialization phase, the unknown mass can be shifted into the free and occupied class and be recuperated using the deep and geometric \gls{ism}'s predictions. Finally, in the convergence phase, the geometric \gls{ism}'s estimates are used to strictly reduce the unknown mass while the deep \gls{ism} is being disabled.}
+	\end{center}
+\end{figure}  
+%======================================%
+%
+%======================================%
+\subsection{Choice of Combination Rule for Initialization and Convergence Phase}
+\label{subsec:choice_of_combination_rule_for_init_and_converge_phase}
+The first step to obtain the behavior as described in sec. \ref{subsec:method_to_use_deep_isms_in_occmaps}, is an analysis of the requirements for both the initialization and convergence phase. 
+Starting with the initialization phase, 
+%======================================%
+%
+%======================================%
+\subsection{Adaptation of Redundancy Removal to satisfy lower Bound on unknown Mass}
+\label{subsec:adaptation_of_redund_removal_to_sat_m_u_lower}
+
+

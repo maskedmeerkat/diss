@@ -1,0 +1,120 @@
+% !TeX document-id = {472b8256-ff07-4ed3-835a-b0348069229a}
+% !TeX program = lualatex
+% !BIB program = biber
+% !TeX spellcheck = en_us
+\documentclass[12pt,
+	a4paper,
+	bibliography=totocnumbered, % totoc,
+	captions=tableheading,
+	headings=normal,
+	parskip=half*,
+	chapterentrydots=true,
+	numbers=noenddot,
+	twoside,
+	openright
+	]{scrreprt}
+
+
+% Load packages and setup document to match ika style
+\input{utils/config}
+% Load references from file
+\addbibresource{literature/bibliography.bib}
+% Load acronyms from file
+\loadglsentries[acronym]{glossaries/acronym_entries}
+% Load symbols from file
+\loadglsentries[symbolslist]{glossaries/symbol_entries}
+
+
+\input{utils/functions.tex}
+
+% Begin document
+\begin{document}
+
+% Add cover page
+\include{chapters/01_cover}
+\addblankpage
+\include{chapters/02_preface}
+\addblankpage
+% Restore ika geometry
+\newgeometry{left=3cm, right=2cm, top=3cm, bottom=2.5cm}
+
+% \includepdf[pages={1}]{chapters/themenstellung.pdf}
+
+% Adding table of content
+{
+	% Custom page header
+	\ihead{Contents}
+	\thispagestyle{empty}
+	\pagenumbering{arabic}
+	\pagestyle{plain}
+	%\setcounter{page}{3}
+	\clearpage
+	% Make table of content
+	\tableofcontents
+	\newpage
+}
+
+%\include{chapters/04_introduction}
+\include{chapters/05_state_of_the_art}
+\include{chapters/06_research_approach}
+\include{chapters/07_deep_ism_exp}
+%\include{chapters/08_occ_mapping_exp}
+%\include{chapters/09_experimental_results}
+%\include{chapters/10_discussion}
+% \import{chapters/}{10_Graveyard}
+
+
+% Appendix
+% \appendix % not used in word template?!
+
+
+% Align table to the left
+
+\setlength\LTleft{-6pt}
+\setlength\LTright{0pt}
+
+% List of symbols
+{
+	\ihead{Symbols}
+	%\thispagestyle{empty}
+	\printglossary[type=symbolslist,style=symbunitlong,title=List of Symbols,toctitle=Symbols]
+	\newpage
+}
+% List of Abbreviations
+{
+	\ihead{Abbreviations}
+	%\thispagestyle{empty}
+	\printglossary[type=acronym,style=long,title=List of Abbreviations,toctitle=Abbreviations]
+	\clearpage
+}
+% Bibliography list
+{
+	\ihead{Bibliography}
+	%\thispagestyle{empty}
+	\printbibliography
+	\newpage
+}
+\glsaddall 
+
+
+% % List of figures
+% {
+% 	\ihead{Figures}
+% 	\thispagestyle{empty}
+% 	\listoffigures
+% 	\newpage
+% }
+
+
+% List of Todos
+%{
+%	\ihead{Todos}
+%	\thispagestyle{empty}
+%	\listoftodos
+%	\newpage
+%}
+
+
+\input{chapters/99_Appendix.tex}
+
+\end{document}

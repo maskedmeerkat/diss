@@ -1,0 +1,1436 @@
+% Encoding: UTF-8
+
+@InProceedings{carrillo2015autonomous,
+  author       = {Carrillo, Henry and Dames, Philip and Kumar, Vijay and Castellanos, Jos{\'e} A},
+  booktitle    = {2015 IEEE international conference on robotics and automation (ICRA)},
+  title        = {Autonomous robotic exploration using occupancy grid maps and graph slam based on shannon and r{\'e}nyi entropy},
+  year         = {2015},
+  organization = {IEEE},
+  pages        = {487--494},
+  groups       = {Occupancy Mapping},
+}
+
+@Article{elfes1989using,
+  author    = {Elfes, Alberto},
+  journal   = {Computer},
+  title     = {Using occupancy grids for mobile robot perception and navigation},
+  year      = {1989},
+  number    = {6},
+  pages     = {46--57},
+  volume    = {22},
+  groups    = {Occupancy Mapping},
+  publisher = {IEEE},
+}
+
+@Article{fleuret2007multicamera,
+  author    = {Fleuret, Francois and Berclaz, Jerome and Lengagne, Richard and Fua, Pascal},
+  journal   = {IEEE transactions on pattern analysis and machine intelligence},
+  title     = {Multicamera people tracking with a probabilistic occupancy map},
+  year      = {2007},
+  number    = {2},
+  pages     = {267--282},
+  volume    = {30},
+  groups    = {Occupancy Mapping},
+  publisher = {IEEE},
+}
+
+@InProceedings{pagac1996evidential,
+  author       = {Pagac, Daniel and Nebot, Eduardo Mario and Durrant-Whyte, Hugh},
+  booktitle    = {Proceedings of IEEE International Conference on Robotics and Automation},
+  title        = {An evidential approach to probabilistic map-building},
+  year         = {1996},
+  organization = {IEEE},
+  pages        = {745--750},
+  volume       = {1},
+  groups       = {Occupancy Mapping},
+}
+
+@Article{dempster1968generalization,
+  author    = {Dempster, Arthur P},
+  journal   = {Journal of the Royal Statistical Society: Series B (Methodological)},
+  title     = {A generalization of Bayesian inference},
+  year      = {1968},
+  number    = {2},
+  pages     = {205--232},
+  volume    = {30},
+  groups    = {Evidential Theory},
+  publisher = {Wiley Online Library},
+}
+
+@Book{shafer1976mathematical,
+  author    = {Shafer, Glenn},
+  publisher = {Princeton university press},
+  title     = {A mathematical theory of evidence},
+  year      = {1976},
+  volume    = {42},
+  groups    = {Evidential Theory},
+}
+
+@InProceedings{moras2011moving,
+  author       = {Moras, Julien and Cherfaoui, V{\'e}ronique and Bonnifait, Philippe},
+  booktitle    = {2011 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Moving objects detection by conflict analysis in evidential grids},
+  year         = {2011},
+  organization = {IEEE},
+  pages        = {1122--1127},
+  groups       = {Occupancy Mapping},
+}
+
+@Article{zadeh1979validity,
+  author  = {Zadeh, L},
+  journal = {Univ. of California, Berkeley},
+  title   = {On the validity of Dempster’s rule of combination, Memo M 79/24},
+  year    = {1979},
+  volume  = {74},
+  groups  = {problems with Dempster},
+}
+
+@Article{hornik1991approximation,
+  author    = {Hornik, Kurt},
+  journal   = {Neural networks},
+  title     = {Approximation capabilities of multilayer feedforward networks},
+  year      = {1991},
+  number    = {2},
+  pages     = {251--257},
+  volume    = {4},
+  groups    = {Neural Networks},
+  publisher = {Elsevier},
+}
+
+@Article{vespa2018efficient,
+  author    = {Vespa, Emanuele and Nikolov, Nikolay and Grimm, Marius and Nardi, Luigi and Kelly, Paul HJ and Leutenegger, Stefan},
+  journal   = {IEEE Robotics and Automation Letters},
+  title     = {Efficient octree-based volumetric SLAM supporting signed-distance and occupancy mapping},
+  year      = {2018},
+  number    = {2},
+  pages     = {1144--1151},
+  volume    = {3},
+  groups    = {geo ISM},
+  publisher = {IEEE},
+}
+
+@InProceedings{verdoja2019deep,
+  author       = {Verdoja, Francesco and Lundell, Jens and Kyrki, Ville},
+  booktitle    = {2019 IEEE-RAS 19th International Conference on Humanoid Robots (Humanoids)},
+  title        = {Deep Network Uncertainty Maps for Indoor Navigation},
+  year         = {2019},
+  organization = {IEEE},
+  pages        = {112--119},
+  groups       = {deep ISM},
+}
+
+@InProceedings{loop2016closed,
+  author       = {Loop, Charles and Cai, Qin and Orts-Escolano, Sergio and Chou, Philip A},
+  booktitle    = {2016 Fourth International Conference on 3D Vision (3DV)},
+  title        = {A closed-form Bayesian fusion equation using occupancy probabilities},
+  year         = {2016},
+  organization = {IEEE},
+  pages        = {380--388},
+  groups       = {geo ISM},
+}
+
+@InProceedings{werber2015automotive,
+  author       = {Werber, Klaudius and Rapp, Matthias and Klappstein, Jens and Hahn, Markus and Dickmann, J{\"u}rgen and Dietmayer, Klaus and Waldschmidt, Christian},
+  booktitle    = {2015 IEEE MTT-S International Conference on Microwaves for Intelligent Mobility (ICMIM)},
+  title        = {Automotive radar gridmap representations},
+  year         = {2015},
+  organization = {IEEE},
+  pages        = {1--4},
+  groups       = {geo ISM},
+}
+
+@InProceedings{yu2015evidential,
+  author       = {Yu, Chunlei and Cherfaoui, Veronique and Bonnifait, Philippe},
+  booktitle    = {2015 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Evidential occupancy grid mapping with stereo-vision},
+  year         = {2015},
+  organization = {IEEE},
+  pages        = {712--717},
+  groups       = {Occupancy Mapping},
+}
+
+@InProceedings{mouhagir2017using,
+  author       = {Mouhagir, Hafida and Cherfaoui, V{\'e}ronique and Talj, Reine and Aioun, Fran{\c{c}}ois and Guillemard, Franck},
+  booktitle    = {2017 IEEE 20th International Conference on Intelligent Transportation Systems (ITSC)},
+  title        = {Using evidential occupancy grid for vehicle trajectory planning under uncertainty with tentacles},
+  year         = {2017},
+  organization = {IEEE},
+  pages        = {1--7},
+  groups       = {Occupancy Mapping},
+}
+
+@InProceedings{wirges2018evidential,
+  author       = {Wirges, Sascha and Stiller, Christoph and Hartenbach, Felix},
+  booktitle    = {2018 IEEE intelligent vehicles symposium (IV)},
+  title        = {Evidential occupancy grid map augmentation using deep learning},
+  year         = {2018},
+  organization = {IEEE},
+  pages        = {668--673},
+  groups       = {deep ISM},
+}
+
+@Article{yager1987dempster,
+  author    = {Yager, Ronald R},
+  journal   = {Information sciences},
+  title     = {On the Dempster-Shafer framework and new combination rules},
+  year      = {1987},
+  number    = {2},
+  pages     = {93--137},
+  volume    = {41},
+  groups    = {Evidential Theory},
+  publisher = {Elsevier},
+}
+
+@InCollection{kurdej2012map,
+  author    = {Kurdej, Marek and Moras, Julien and Cherfaoui, V{\'e}ronique and Bonnifait, Philippe},
+  booktitle = {Belief Functions: Theory and Applications},
+  publisher = {Springer},
+  title     = {Map-aided fusion using evidential grids for mobile perception in urban environment},
+  year      = {2012},
+  pages     = {343--350},
+  groups    = {Occupancy Mapping},
+}
+
+@InProceedings{reineking2013evidential,
+  author       = {Reineking, Thomas and Clemens, Joachim},
+  booktitle    = {Proceedings of the 16th International Conference on Information Fusion},
+  title        = {Evidential FastSLAM for grid mapping},
+  year         = {2013},
+  organization = {IEEE},
+  pages        = {789--796},
+  groups       = {Occupancy Mapping},
+}
+
+@InProceedings{han2008modified,
+  author       = {Han, Deqiang and Han, Chongzhao and Yang, Yi},
+  booktitle    = {2008 11th International Conference on Information Fusion},
+  title        = {A modified evidence combination approach based on ambiguity measure},
+  year         = {2008},
+  organization = {IEEE},
+  pages        = {1--6},
+  groups       = {problems with Dempster},
+}
+
+@Article{yang2013evidential,
+  author    = {Yang, Jian-Bo and Xu, Dong-Ling},
+  journal   = {Artificial Intelligence},
+  title     = {Evidential reasoning rule for evidence combination},
+  year      = {2013},
+  pages     = {1--29},
+  volume    = {205},
+  groups    = {problems with Dempster},
+  publisher = {Elsevier},
+}
+
+@Article{zhang2020new,
+  author    = {Zhang, Pengdan and Tian, Ye and Kang, Bingyi},
+  journal   = {IEEE Access},
+  title     = {A new synthesis combination rule based on evidential correlation coefficient},
+  year      = {2020},
+  pages     = {39898--39906},
+  volume    = {8},
+  groups    = {problems with Dempster},
+  publisher = {IEEE},
+}
+
+@Article{su2018research,
+  author    = {Su, Xiaoyan and Li, Lusu and Shi, Fengjian and Qian, Hong},
+  journal   = {IEEE Access},
+  title     = {Research on the fusion of dependent evidence based on mutual information},
+  year      = {2018},
+  pages     = {71839--71845},
+  volume    = {6},
+  groups    = {combination of dependent evidences},
+  publisher = {IEEE},
+}
+
+@Article{yager2009fusion,
+  author    = {Yager, Ronald R},
+  journal   = {International journal of general systems},
+  title     = {On the fusion of non-independent belief structures},
+  year      = {2009},
+  number    = {5},
+  pages     = {505--531},
+  volume    = {38},
+  groups    = {combination of dependent evidences},
+  publisher = {Taylor \& Francis},
+}
+
+@Article{shi2017research,
+  author    = {Shi, Fengjian and Su, Xiaoyan and Qian, Hong and Yang, Ning and Han, Wenhua},
+  journal   = {Sensors},
+  title     = {Research on the fusion of dependent evidence based on rank correlation coefficient},
+  year      = {2017},
+  number    = {10},
+  pages     = {2362},
+  volume    = {17},
+  groups    = {combination of dependent evidences},
+  publisher = {Multidisciplinary Digital Publishing Institute},
+}
+
+@InProceedings{postica2016robust,
+  author       = {Postica, Gheorghii and Romanoni, Andrea and Matteucci, Matteo},
+  booktitle    = {2016 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+  title        = {Robust moving objects detection in lidar data exploiting visual cues},
+  year         = {2016},
+  organization = {IEEE},
+  pages        = {1093--1098},
+  groups       = {lidar ground-plane removal},
+}
+
+@Article{fischler1981random,
+  author    = {Fischler, Martin A and Bolles, Robert C},
+  journal   = {Communications of the ACM},
+  title     = {Random sample consensus: a paradigm for model fitting with applications to image analysis and automated cartography},
+  year      = {1981},
+  number    = {6},
+  pages     = {381--395},
+  volume    = {24},
+  publisher = {ACM New York, NY, USA},
+}
+
+@InProceedings{oliveira2016scene,
+  author       = {Oliveira, Miguel and Santos, V{\'\i}tor and Sappa, Angel D and Dias, Paulo},
+  booktitle    = {Robot 2015: Second Iberian Robotics Conference},
+  title        = {Scene representations for autonomous driving: an approach based on polygonal primitives},
+  year         = {2016},
+  organization = {Springer},
+  pages        = {503--515},
+  groups       = {lidar ground-plane removal},
+}
+
+@InProceedings{moosmann2009segmentation,
+  author       = {Moosmann, Frank and Pink, Oliver and Stiller, Christoph},
+  booktitle    = {2009 IEEE Intelligent Vehicles Symposium},
+  title        = {Segmentation of 3D lidar data in non-flat urban environments using a local convexity criterion},
+  year         = {2009},
+  organization = {IEEE},
+  pages        = {215--220},
+  groups       = {lidar ground-plane removal},
+}
+
+@InProceedings{rummelhard2017ground,
+  author       = {Rummelhard, Lukas and Paigwar, Anshul and N{\`e}gre, Amaury and Laugier, Christian},
+  booktitle    = {2017 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Ground estimation and point cloud segmentation using SpatioTemporal Conditional Random Field},
+  year         = {2017},
+  organization = {IEEE},
+  pages        = {1105--1110},
+  groups       = {lidar ground-plane removal},
+}
+
+@Article{thrun2006stanley,
+  author    = {Thrun, Sebastian and Montemerlo, Mike and Dahlkamp, Hendrik and Stavens, David and Aron, Andrei and Diebel, James and Fong, Philip and Gale, John and Halpenny, Morgan and Hoffmann, Gabriel and others},
+  journal   = {Journal of field Robotics},
+  title     = {Stanley: The robot that won the DARPA Grand Challenge},
+  year      = {2006},
+  number    = {9},
+  pages     = {661--692},
+  volume    = {23},
+  groups    = {lidar ground-plane removal},
+  publisher = {Wiley Online Library},
+}
+
+@Article{tian2020fast,
+  author    = {Tian, Yifei and Song, Wei and Chen, Long and Sung, Yunsick and Kwak, Jeonghoon and Sun, Su},
+  journal   = {Applied Sciences},
+  title     = {Fast planar detection system using a GPU-based 3D Hough transform for LiDAR point clouds},
+  year      = {2020},
+  number    = {5},
+  pages     = {1744},
+  volume    = {10},
+  groups    = {lidar ground-plane removal},
+  publisher = {Multidisciplinary Digital Publishing Institute},
+}
+
+@Misc{hough1962method,
+  author    = {Hough, Paul VC},
+  month     = dec #{~18},
+  note      = {US Patent 3,069,654},
+  title     = {Method and means for recognizing complex patterns},
+  year      = {1962},
+  publisher = {Google Patents},
+}
+
+@InProceedings{asvadi2015detection,
+  author       = {Asvadi, Alireza and Peixoto, Paulo and Nunes, Urbano},
+  booktitle    = {2015 IEEE 18th International Conference on Intelligent Transportation Systems},
+  title        = {Detection and tracking of moving objects using 2.5 d motion grids},
+  year         = {2015},
+  organization = {IEEE},
+  pages        = {788--793},
+  groups       = {lidar ground-plane removal},
+}
+
+@Article{li2014motion,
+  author    = {Li, Qingquan and Zhang, Liang and Mao, Qingzhou and Zou, Qin and Zhang, Pin and Feng, Shaojun and Ochieng, Washington},
+  journal   = {Sensors},
+  title     = {Motion field estimation for a dynamic scene using a 3D LiDAR},
+  year      = {2014},
+  number    = {9},
+  pages     = {16672--16691},
+  volume    = {14},
+  groups    = {lidar ground-plane removal},
+  publisher = {Multidisciplinary Digital Publishing Institute},
+}
+
+@InProceedings{narksri2018slope,
+  author       = {Narksri, Patiphon and Takeuchi, Eijiro and Ninomiya, Yoshiki and Morales, Yoichi and Akai, Naoki and Kawaguchi, Nobuo},
+  booktitle    = {2018 21st International Conference on intelligent transportation systems (ITSC)},
+  title        = {A slope-robust cascaded ground segmentation in 3D point cloud for autonomous vehicles},
+  year         = {2018},
+  organization = {IEEE},
+  pages        = {497--504},
+  groups       = {lidar ground-plane removal},
+}
+
+@InProceedings{guo2011graph,
+  author       = {Guo, Chunzhao and Sato, Wataru and Han, Long and Mita, Seiichi and McAllester, David},
+  booktitle    = {2011 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Graph-based 2D road representation of 3D point clouds for intelligent vehicles},
+  year         = {2011},
+  organization = {IEEE},
+  pages        = {715--721},
+  groups       = {lidar ground-plane removal},
+}
+
+@InProceedings{velas2018cnn,
+  author       = {Velas, Martin and Spanel, Michal and Hradis, Michal and Herout, Adam},
+  booktitle    = {2018 IEEE International Conference on Autonomous Robot Systems and Competitions (ICARSC)},
+  title        = {Cnn for very fast ground segmentation in velodyne lidar data},
+  year         = {2018},
+  organization = {IEEE},
+  pages        = {97--103},
+  groups       = {lidar ground-plane removal},
+}
+
+@InProceedings{zhang2014loam,
+  author    = {Zhang, Ji and Singh, Sanjiv},
+  booktitle = {Robotics: Science and Systems},
+  title     = {LOAM: Lidar Odometry and Mapping in Real-time.},
+  year      = {2014},
+  number    = {9},
+  volume    = {2},
+  groups    = {lidar ground-plane removal},
+}
+
+@Article{mallot1991inverse,
+  author    = {Mallot, Hanspeter A and B{\"u}lthoff, Heinrich H and Little, JJ and Bohrer, Stefan},
+  journal   = {Biological cybernetics},
+  title     = {Inverse perspective mapping simplifies optical flow computation and obstacle detection},
+  year      = {1991},
+  number    = {3},
+  pages     = {177--185},
+  volume    = {64},
+  groups    = {geo ICM},
+  publisher = {Springer},
+}
+
+@Article{longuet1981computer,
+  author    = {Longuet-Higgins, H Christopher},
+  journal   = {Nature},
+  title     = {A computer algorithm for reconstructing a scene from two projections},
+  year      = {1981},
+  number    = {5828},
+  pages     = {133--135},
+  volume    = {293},
+  groups    = {geo ICM},
+  publisher = {Springer},
+}
+
+@Article{davison2007monoslam,
+  author    = {Davison, Andrew J and Reid, Ian D and Molton, Nicholas D and Stasse, Olivier},
+  journal   = {IEEE transactions on pattern analysis and machine intelligence},
+  title     = {MonoSLAM: Real-time single camera SLAM},
+  year      = {2007},
+  number    = {6},
+  pages     = {1052--1067},
+  volume    = {29},
+  groups    = {geo ICM},
+  publisher = {IEEE},
+}
+
+@InProceedings{rublee2011orb,
+  author       = {Rublee, Ethan and Rabaud, Vincent and Konolige, Kurt and Bradski, Gary},
+  booktitle    = {2011 International conference on computer vision},
+  title        = {ORB: An efficient alternative to SIFT or SURF},
+  year         = {2011},
+  organization = {Ieee},
+  pages        = {2564--2571},
+  groups       = {geo ICM},
+}
+
+@InProceedings{rosten2006machine,
+  author       = {Rosten, Edward and Drummond, Tom},
+  booktitle    = {European conference on computer vision},
+  title        = {Machine learning for high-speed corner detection},
+  year         = {2006},
+  organization = {Springer},
+  pages        = {430--443},
+  groups       = {geo ICM},
+}
+
+@InProceedings{calonder2010brief,
+  author       = {Calonder, Michael and Lepetit, Vincent and Strecha, Christoph and Fua, Pascal},
+  booktitle    = {European conference on computer vision},
+  title        = {Brief: Binary robust independent elementary features},
+  year         = {2010},
+  organization = {Springer},
+  pages        = {778--792},
+  groups       = {geo ICM},
+}
+
+@Article{lowe2004distinctive,
+  author    = {Lowe, David G},
+  journal   = {International journal of computer vision},
+  title     = {Distinctive image features from scale-invariant keypoints},
+  year      = {2004},
+  number    = {2},
+  pages     = {91--110},
+  volume    = {60},
+  groups    = {geo ICM},
+  publisher = {Springer},
+}
+
+@InProceedings{bay2006surf,
+  author       = {Bay, Herbert and Tuytelaars, Tinne and Van Gool, Luc},
+  booktitle    = {European conference on computer vision},
+  title        = {Surf: Speeded up robust features},
+  year         = {2006},
+  organization = {Springer},
+  pages        = {404--417},
+  groups       = {geo ICM},
+}
+
+@Article{loiola2007survey,
+  author    = {Loiola, Eliane Maria and de Abreu, Nair Maria Maia and Boaventura-Netto, Paulo Oswaldo and Hahn, Peter and Querido, Tania},
+  journal   = {European journal of operational research},
+  title     = {A survey for the quadratic assignment problem},
+  year      = {2007},
+  number    = {2},
+  pages     = {657--690},
+  volume    = {176},
+  groups    = {geo ICM},
+  publisher = {Elsevier},
+}
+
+@Article{ma2020image,
+  author    = {Ma, Jiayi and Jiang, Xingyu and Fan, Aoxiang and Jiang, Junjun and Yan, Junchi},
+  journal   = {International Journal of Computer Vision},
+  title     = {Image matching from handcrafted to deep features: A survey},
+  year      = {2020},
+  pages     = {1--57},
+  groups    = {geo ICM},
+  publisher = {Springer},
+}
+
+@Article{saputra2018visual,
+  author    = {Saputra, Muhamad Risqi U and Markham, Andrew and Trigoni, Niki},
+  journal   = {ACM Computing Surveys (CSUR)},
+  title     = {Visual SLAM and structure from motion in dynamic environments: A survey},
+  year      = {2018},
+  number    = {2},
+  pages     = {1--36},
+  volume    = {51},
+  groups    = {geo ICM},
+  publisher = {ACM New York, NY, USA},
+}
+
+@Article{eigen2014depth,
+  author  = {Eigen, David and Puhrsch, Christian and Fergus, Rob},
+  journal = {Advances in neural information processing systems},
+  title   = {Depth map prediction from a single image using a multi-scale deep network},
+  year    = {2014},
+  pages   = {2366--2374},
+  volume  = {27},
+  groups  = {MonoDepth},
+}
+
+@InProceedings{li2015depth,
+  author    = {Li, Bo and Shen, Chunhua and Dai, Yuchao and Van Den Hengel, Anton and He, Mingyi},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {Depth and surface normal estimation from monocular images using regression on deep features and hierarchical crfs},
+  year      = {2015},
+  pages     = {1119--1127},
+  groups    = {MonoDepth},
+}
+
+@InProceedings{liu2015deep,
+  author    = {Liu, Fayao and Shen, Chunhua and Lin, Guosheng},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {Deep convolutional neural fields for depth estimation from a single image},
+  year      = {2015},
+  pages     = {5162--5170},
+  groups    = {MonoDepth},
+}
+
+@InProceedings{laina2016deeper,
+  author       = {Laina, Iro and Rupprecht, Christian and Belagiannis, Vasileios and Tombari, Federico and Navab, Nassir},
+  booktitle    = {2016 Fourth international conference on 3D vision (3DV)},
+  title        = {Deeper depth prediction with fully convolutional residual networks},
+  year         = {2016},
+  organization = {IEEE},
+  pages        = {239--248},
+  groups       = {MonoDepth},
+}
+
+@Article{cao2017estimating,
+  author    = {Cao, Yuanzhouhan and Wu, Zifeng and Shen, Chunhua},
+  journal   = {IEEE Transactions on Circuits and Systems for Video Technology},
+  title     = {Estimating depth from monocular images as classification using deep fully convolutional residual networks},
+  year      = {2017},
+  number    = {11},
+  pages     = {3174--3182},
+  volume    = {28},
+  groups    = {MonoDepth},
+  publisher = {IEEE},
+}
+
+@InProceedings{fu2018deep,
+  author    = {Fu, Huan and Gong, Mingming and Wang, Chaohui and Batmanghelich, Kayhan and Tao, Dacheng},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  title     = {Deep ordinal regression network for monocular depth estimation},
+  year      = {2018},
+  pages     = {2002--2011},
+  groups    = {MonoDepth},
+}
+
+@InProceedings{garg2016unsupervised,
+  author       = {Garg, Ravi and Bg, Vijay Kumar and Carneiro, Gustavo and Reid, Ian},
+  booktitle    = {European conference on computer vision},
+  title        = {Unsupervised cnn for single view depth estimation: Geometry to the rescue},
+  year         = {2016},
+  organization = {Springer},
+  pages        = {740--756},
+  groups       = {MonoDepth},
+}
+
+@InProceedings{godard2017unsupervised,
+  author    = {Godard, Cl{\'e}ment and Mac Aodha, Oisin and Brostow, Gabriel J},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  title     = {Unsupervised monocular depth estimation with left-right consistency},
+  year      = {2017},
+  pages     = {270--279},
+  groups    = {MonoDepth},
+}
+
+@InProceedings{ummenhofer2017demon,
+  author    = {Ummenhofer, Benjamin and Zhou, Huizhong and Uhrig, Jonas and Mayer, Nikolaus and Ilg, Eddy and Dosovitskiy, Alexey and Brox, Thomas},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  title     = {Demon: Depth and motion network for learning monocular stereo},
+  year      = {2017},
+  pages     = {5038--5047},
+  groups    = {MonoDepth},
+}
+
+@InProceedings{zhou2017unsupervised,
+  author    = {Zhou, Tinghui and Brown, Matthew and Snavely, Noah and Lowe, David G},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  title     = {Unsupervised learning of depth and ego-motion from video},
+  year      = {2017},
+  pages     = {1851--1858},
+  groups    = {MonoDepth},
+}
+
+@InProceedings{yang2020d3vo,
+  author    = {Yang, Nan and Stumberg, Lukas von and Wang, Rui and Cremers, Daniel},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  title     = {D3VO: Deep Depth, Deep Pose and Deep Uncertainty for Monocular Visual Odometry},
+  year      = {2020},
+  pages     = {1281--1292},
+  groups    = {MonoDepth},
+}
+
+@InProceedings{feng2019leveraging,
+  author       = {Feng, Di and Rosenbaum, Lars and Timm, Fabian and Dietmayer, Klaus},
+  booktitle    = {2019 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Leveraging heteroscedastic aleatoric uncertainties for robust real-time lidar 3d object detection},
+  year         = {2019},
+  organization = {IEEE},
+  pages        = {1280--1287},
+  groups       = {MonoDepth},
+}
+
+@InProceedings{godard2019digging,
+  author    = {Godard, Cl{\'e}ment and Mac Aodha, Oisin and Firman, Michael and Brostow, Gabriel J},
+  booktitle = {Proceedings of the IEEE international conference on computer vision},
+  title     = {Digging into self-supervised monocular depth estimation},
+  year      = {2019},
+  pages     = {3828--3838},
+  groups    = {MonoDepth},
+}
+
+@InProceedings{kuznietsov2017semi,
+  author    = {Kuznietsov, Yevhen and Stuckler, Jorg and Leibe, Bastian},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {Semi-supervised deep learning for monocular depth map prediction},
+  year      = {2017},
+  pages     = {6647--6655},
+  groups    = {MonoDepth},
+}
+
+@InProceedings{guizilini2020robust,
+  author       = {Guizilini, Vitor and Li, Jie and Ambrus, Rares and Pillai, Sudeep and Gaidon, Adrien},
+  booktitle    = {Conference on Robot Learning},
+  title        = {Robust Semi-Supervised Monocular Depth Estimation With Reprojected Distances},
+  year         = {2020},
+  organization = {PMLR},
+  pages        = {503--512},
+  groups       = {MonoDepth},
+}
+
+@InProceedings{bouzouraa2010fusion,
+  author       = {Bouzouraa, Mohamed Essayed and Hofmann, Ulrich},
+  booktitle    = {2010 IEEE Intelligent Vehicles Symposium},
+  title        = {Fusion of occupancy grid mapping and model based object tracking for driver assistance systems using laser and radar sensors},
+  year         = {2010},
+  organization = {IEEE},
+  pages        = {294--300},
+  groups       = {Geo IRM},
+}
+
+@InProceedings{caesar2020nuscenes,
+  author    = {Caesar, Holger and Bankiti, Varun and Lang, Alex H and Vora, Sourabh and Liong, Venice Erin and Xu, Qiang and Krishnan, Anush and Pan, Yu and Baldan, Giancarlo and Beijbom, Oscar},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  title     = {nuscenes: A multimodal dataset for autonomous driving},
+  year      = {2020},
+  pages     = {11621--11631},
+  groups    = {Datasets},
+}
+
+@InProceedings{dube2014detection,
+  author       = {Dub{\'e}, Renaud and Hahn, Markus and Sch{\"u}tz, Markus and Dickmann, J{\"u}rgen and Gingras, Denis},
+  booktitle    = {2014 IEEE Intelligent Vehicles Symposium Proceedings},
+  title        = {Detection of parked vehicles from a radar based occupancy grid},
+  year         = {2014},
+  organization = {IEEE},
+  pages        = {1415--1420},
+  groups       = {Geo IRM},
+}
+
+@InProceedings{werber2015automotive,
+  author       = {Werber, Klaudius and Rapp, Matthias and Klappstein, Jens and Hahn, Markus and Dickmann, J{\"u}rgen and Dietmayer, Klaus and Waldschmidt, Christian},
+  booktitle    = {2015 IEEE MTT-S International Conference on Microwaves for Intelligent Mobility (ICMIM)},
+  title        = {Automotive radar gridmap representations},
+  year         = {2015},
+  organization = {IEEE},
+  pages        = {1--4},
+  groups       = {Geo IRM},
+}
+
+@InProceedings{clarke2012sensor,
+  author       = {Clarke, Bryan and Worrall, Stewart and Brooker, Graham and Nebot, Eduardo},
+  booktitle    = {2012 IEEE/RSJ International Conference on Intelligent Robots and Systems},
+  title        = {Sensor modelling for radar-based occupancy mapping},
+  year         = {2012},
+  organization = {IEEE},
+  pages        = {3047--3054},
+  groups       = {Geo IRM},
+}
+
+@InProceedings{prophet2018adaptions,
+  author       = {Prophet, Robert and Stark, Henriette and Hoffmann, Marcel and Sturm, Christian and Vossiek, Martin},
+  booktitle    = {2018 IEEE MTT-S International Conference on Microwaves for Intelligent Mobility (ICMIM)},
+  title        = {Adaptions for automotive radar based occupancy gridmaps},
+  year         = {2018},
+  organization = {IEEE},
+  pages        = {1--4},
+  groups       = {Geo IRM},
+}
+
+@InProceedings{slutsky2019dual,
+  author       = {Slutsky, Michael and Dobkin, Daniel},
+  booktitle    = {2019 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Dual inverse sensor model for radar occupancy grids},
+  year         = {2019},
+  organization = {IEEE},
+  pages        = {1760--1767},
+  groups       = {Geo IRM},
+}
+
+@InProceedings{schulter2018learning,
+  author    = {Schulter, Samuel and Zhai, Menghua and Jacobs, Nathan and Chandraker, Manmohan},
+  booktitle = {Proceedings of the European Conference on Computer Vision (ECCV)},
+  title     = {Learning to look around objects for top-view representations of outdoor scenes},
+  year      = {2018},
+  pages     = {787--802},
+  groups    = {deep ICM},
+}
+
+@Article{lu2019monocular,
+  author    = {Lu, Chenyang and van de Molengraft, Marinus Jacobus Gerardus and Dubbelman, Gijs},
+  journal   = {IEEE Robotics and Automation Letters},
+  title     = {Monocular semantic occupancy grid mapping with convolutional variational encoder--decoder networks},
+  year      = {2019},
+  number    = {2},
+  pages     = {445--452},
+  volume    = {4},
+  groups    = {deep ICM},
+  publisher = {IEEE},
+}
+
+@InProceedings{mani2020monolayout,
+  author    = {Mani, Kaustubh and Daga, Swapnil and Garg, Shubhika and Narasimhan, Sai Shankar and Krishna, Madhava and Jatavallabhula, Krishna Murthy},
+  booktitle = {The IEEE Winter Conference on Applications of Computer Vision},
+  title     = {MonoLayout: Amodal scene layout from a single image},
+  year      = {2020},
+  pages     = {1689--1697},
+  groups    = {deep ICM},
+}
+
+@Article{reiher2020sim2real,
+  author  = {Reiher, Lennart and Lampe, Bastian and Eckstein, Lutz},
+  journal = {arXiv preprint arXiv:2005.04078},
+  title   = {A Sim2Real Deep Learning Approach for the Transformation of Images from Multiple Vehicle-Mounted Cameras to a Semantically Segmented Image in Bird's Eye View},
+  year    = {2020},
+  groups  = {deep ICM},
+}
+
+@Article{pan2020cross,
+  author    = {Pan, Bowen and Sun, Jiankai and Leung, Ho Yin Tiga and Andonian, Alex and Zhou, Bolei},
+  journal   = {IEEE Robotics and Automation Letters},
+  title     = {Cross-view semantic segmentation for sensing surroundings},
+  year      = {2020},
+  number    = {3},
+  pages     = {4867--4873},
+  volume    = {5},
+  groups    = {deep ICM},
+  publisher = {IEEE},
+}
+
+@InProceedings{roddick2020predicting,
+  author    = {Roddick, Thomas and Cipolla, Roberto},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  title     = {Predicting Semantic Map Representations from Images using Pyramid Occupancy Networks},
+  year      = {2020},
+  pages     = {11138--11147},
+  groups    = {deep ICM},
+}
+
+@InProceedings{philion2020lift,
+  author       = {Philion, Jonah and Fidler, Sanja},
+  booktitle    = {European Conference on Computer Vision},
+  title        = {Lift, splat, shoot: Encoding images from arbitrary camera rigs by implicitly unprojecting to 3d},
+  year         = {2020},
+  organization = {Springer},
+  pages        = {194--210},
+  groups       = {deep ICM},
+}
+
+@Article{hendy2020fishing,
+  author  = {Hendy, Noureldin and Sloan, Cooper and Tian, Feng and Duan, Pengfei and Charchut, Nick and Xie, Yuesong and Wang, Chuang and Philbin, James},
+  journal = {arXiv preprint arXiv:2006.09917},
+  title   = {FISHING Net: Future Inference of Semantic Heatmaps In Grids},
+  year    = {2020},
+  groups  = {deep Fusion},
+}
+
+@Article{jaderberg2015spatial,
+  author  = {Jaderberg, Max and Simonyan, Karen and Zisserman, Andrew and others},
+  journal = {Advances in neural information processing systems},
+  title   = {Spatial transformer networks},
+  year    = {2015},
+  pages   = {2017--2025},
+  volume  = {28},
+  groups  = {Neural Networks},
+}
+
+@Article{geiger2013vision,
+  author    = {Geiger, Andreas and Lenz, Philip and Stiller, Christoph and Urtasun, Raquel},
+  journal   = {The International Journal of Robotics Research},
+  title     = {Vision meets robotics: The kitti dataset},
+  year      = {2013},
+  number    = {11},
+  pages     = {1231--1237},
+  volume    = {32},
+  groups    = {Datasets},
+  publisher = {Sage Publications Sage UK: London, England},
+}
+
+@InProceedings{cordts2016cityscapes,
+  author    = {Cordts, Marius and Omran, Mohamed and Ramos, Sebastian and Rehfeld, Timo and Enzweiler, Markus and Benenson, Rodrigo and Franke, Uwe and Roth, Stefan and Schiele, Bernt},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {The cityscapes dataset for semantic urban scene understanding},
+  year      = {2016},
+  pages     = {3213--3223},
+  groups    = {Datasets},
+}
+
+@Article{goodfellow2020generative,
+  author    = {Goodfellow, Ian and Pouget-Abadie, Jean and Mirza, Mehdi and Xu, Bing and Warde-Farley, David and Ozair, Sherjil and Courville, Aaron and Bengio, Yoshua},
+  journal   = {Communications of the ACM},
+  title     = {Generative adversarial networks},
+  year      = {2020},
+  number    = {11},
+  pages     = {139--144},
+  volume    = {63},
+  groups    = {Neural Networks},
+  publisher = {ACM New York, NY, USA},
+}
+
+@Article{haklay2008openstreetmap,
+  author    = {Haklay, Mordechai and Weber, Patrick},
+  journal   = {IEEE Pervasive Computing},
+  title     = {Openstreetmap: User-generated street maps},
+  year      = {2008},
+  number    = {4},
+  pages     = {12--18},
+  volume    = {7},
+  publisher = {Ieee},
+}
+
+@Article{jing2019neural,
+  author    = {Jing, Yongcheng and Yang, Yezhou and Feng, Zunlei and Ye, Jingwen and Yu, Yizhou and Song, Mingli},
+  journal   = {IEEE transactions on visualization and computer graphics},
+  title     = {Neural style transfer: A review},
+  year      = {2019},
+  groups    = {Neural Networks},
+  publisher = {IEEE},
+}
+
+@InProceedings{verdoja2019deep,
+  author       = {Verdoja, Francesco and Lundell, Jens and Kyrki, Ville},
+  booktitle    = {2019 IEEE-RAS 19th International Conference on Humanoid Robots (Humanoids)},
+  title        = {Deep Network Uncertainty Maps for Indoor Navigation},
+  year         = {2019},
+  organization = {IEEE},
+  pages        = {112--119},
+  groups       = {deep ILM},
+}
+
+@InProceedings{prophet2019semantic,
+  author       = {Prophet, Robert and Li, Gang and Sturm, Christian and Vossiek, Martin},
+  booktitle    = {2019 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Semantic Segmentation on Automotive Radar Maps},
+  year         = {2019},
+  organization = {IEEE},
+  pages        = {756--763},
+  groups       = {deep IRM},
+}
+
+@InProceedings{van1995neural,
+  author       = {Van Dam, Joris WM and Kr{\"o}se, Ben JA and Groen, Franciscus CA},
+  booktitle    = {International Workshop on Reasoning with Uncertainty in Robotics},
+  title        = {Neural network applications in sensor fusion for an autonomous mobile robot},
+  year         = {1995},
+  organization = {Springer},
+  pages        = {263--278},
+  groups       = {deep ILM},
+}
+
+@InProceedings{thrun1993exploration,
+  author       = {Thrun, Sebastian B},
+  booktitle    = {IEEE international conference on neural networks},
+  title        = {Exploration and model building in mobile robot domains},
+  year         = {1993},
+  organization = {IEEE},
+  pages        = {175--180},
+  groups       = {deep ILM},
+}
+
+@InProceedings{weston2019probably,
+  author       = {Weston, Rob and Cen, Sarah and Newman, Paul and Posner, Ingmar},
+  booktitle    = {2019 International Conference on Robotics and Automation (ICRA)},
+  title        = {Probably unknown: Deep inverse sensor modelling radar},
+  year         = {2019},
+  organization = {IEEE},
+  pages        = {5446--5452},
+  groups       = {deep IRM},
+}
+
+@InProceedings{sless2019road,
+  author    = {Sless, Liat and El Shlomo, Bat and Cohen, Gilad and Oron, Shaul},
+  booktitle = {Proceedings of the IEEE International Conference on Computer Vision Workshops},
+  title     = {Road Scene Understanding by Occupancy Grid Learning from Sparse Radar Clusters using Semantic Segmentation},
+  year      = {2019},
+  pages     = {0--0},
+  groups    = {deep IRM},
+}
+
+@InProceedings{wirges2018evidential,
+  author       = {Wirges, Sascha and Stiller, Christoph and Hartenbach, Felix},
+  booktitle    = {2018 IEEE intelligent vehicles symposium (IV)},
+  title        = {Evidential occupancy grid map augmentation using deep learning},
+  year         = {2018},
+  organization = {IEEE},
+  pages        = {668--673},
+  groups       = {deep ILM},
+}
+
+@InProceedings{berman2018lovasz,
+  author    = {Berman, Maxim and Rannen Triki, Amal and Blaschko, Matthew B},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  title     = {The lov{\'a}sz-softmax loss: A tractable surrogate for the optimization of the intersection-over-union measure in neural networks},
+  year      = {2018},
+  pages     = {4413--4421},
+  groups    = {Neural Networks},
+}
+
+@InProceedings{lombacher2017semantic,
+  author       = {Lombacher, Jakob and Laudt, Kilian and Hahn, Markus and Dickmann, J{\"u}rgen and W{\"o}hler, Christian},
+  booktitle    = {2017 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Semantic radar grids},
+  year         = {2017},
+  organization = {IEEE},
+  pages        = {1170--1175},
+  groups       = {deep IRM},
+}
+
+@InProceedings{liang2018deep,
+  author    = {Liang, Ming and Yang, Bin and Wang, Shenlong and Urtasun, Raquel},
+  booktitle = {Proceedings of the European Conference on Computer Vision (ECCV)},
+  title     = {Deep continuous fusion for multi-sensor 3d object detection},
+  year      = {2018},
+  pages     = {641--656},
+  groups    = {deep Fusion},
+}
+
+@InProceedings{wulff2018early,
+  author       = {Wulff, Florian and Sch{\"a}ufele, Bernd and Sawade, Oliver and Becker, Daniel and Henke, Birgit and Radusch, Ilja},
+  booktitle    = {2018 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Early fusion of camera and lidar for robust road detection based on U-Net FCN},
+  year         = {2018},
+  organization = {IEEE},
+  pages        = {1426--1431},
+  groups       = {deep Fusion},
+}
+
+@InProceedings{ronneberger2015u,
+  author       = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
+  booktitle    = {International Conference on Medical image computing and computer-assisted intervention},
+  title        = {U-net: Convolutional networks for biomedical image segmentation},
+  year         = {2015},
+  organization = {Springer},
+  pages        = {234--241},
+  groups       = {Neural Networks},
+}
+
+@InProceedings{he2016deep,
+  author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {Deep residual learning for image recognition},
+  year      = {2016},
+  pages     = {770--778},
+  groups    = {Neural Networks},
+}
+
+@InProceedings{long2015fully,
+  author    = {Long, Jonathan and Shelhamer, Evan and Darrell, Trevor},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {Fully convolutional networks for semantic segmentation},
+  year      = {2015},
+  pages     = {3431--3440},
+  groups    = {Neural Networks},
+}
+
+@Article{simonyan2014very,
+  author  = {Simonyan, Karen and Zisserman, Andrew},
+  journal = {arXiv preprint arXiv:1409.1556},
+  title   = {Very deep convolutional networks for large-scale image recognition},
+  year    = {2014},
+  groups  = {Neural Networks},
+}
+
+@Article{kingma2013auto,
+  author  = {Kingma, Diederik P and Welling, Max},
+  journal = {arXiv preprint arXiv:1312.6114},
+  title   = {Auto-encoding variational bayes},
+  year    = {2013},
+  groups  = {Neural Networks},
+}
+
+@InProceedings{berman2018lovasz,
+  author    = {Berman, Maxim and Rannen Triki, Amal and Blaschko, Matthew B},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
+  title     = {The lov{\'a}sz-softmax loss: A tractable surrogate for the optimization of the intersection-over-union measure in neural networks},
+  year      = {2018},
+  pages     = {4413--4421},
+  groups    = {Neural Networks},
+}
+
+@InProceedings{vaswani2017attention,
+  author    = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, {\L}ukasz and Polosukhin, Illia},
+  booktitle = {Advances in neural information processing systems},
+  title     = {Attention is all you need},
+  year      = {2017},
+  pages     = {5998--6008},
+  groups    = {Neural Networks},
+}
+
+@Article{krizhevsky2017imagenet,
+  author    = {Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+  journal   = {Communications of the ACM},
+  title     = {Imagenet classification with deep convolutional neural networks},
+  year      = {2017},
+  number    = {6},
+  pages     = {84--90},
+  volume    = {60},
+  groups    = {Neural Networks},
+  publisher = {ACM New York, NY, USA},
+}
+
+@InProceedings{xie2017aggregated,
+  author    = {Xie, Saining and Girshick, Ross and Doll{\'a}r, Piotr and Tu, Zhuowen and He, Kaiming},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {Aggregated residual transformations for deep neural networks},
+  year      = {2017},
+  pages     = {1492--1500},
+  groups    = {Neural Networks},
+}
+
+@Article{lecun1995convolutional,
+  author  = {LeCun, Yann and Bengio, Yoshua and others},
+  journal = {The handbook of brain theory and neural networks},
+  title   = {Convolutional networks for images, speech, and time series},
+  year    = {1995},
+  number  = {10},
+  pages   = {1995},
+  volume  = {3361},
+  groups  = {Layers},
+}
+
+@Article{vanhoucke2014learning,
+  author  = {Vanhoucke, Vincent},
+  journal = {ICLR invited talk},
+  title   = {Learning visual representations at scale},
+  year    = {2014},
+  pages   = {2},
+  volume  = {1},
+  groups  = {Layers},
+}
+
+@Article{howard2017mobilenets,
+  author  = {Howard, Andrew G and Zhu, Menglong and Chen, Bo and Kalenichenko, Dmitry and Wang, Weijun and Weyand, Tobias and Andreetto, Marco and Adam, Hartwig},
+  journal = {arXiv preprint arXiv:1704.04861},
+  title   = {Mobilenets: Efficient convolutional neural networks for mobile vision applications},
+  year    = {2017},
+  groups  = {Layers},
+}
+
+@InProceedings{chollet2017xception,
+  author    = {Chollet, Fran{\c{c}}ois},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {Xception: Deep learning with depthwise separable convolutions},
+  year      = {2017},
+  pages     = {1251--1258},
+  groups    = {Layers},
+}
+
+@InProceedings{sandler2018mobilenetv2,
+  author    = {Sandler, Mark and Howard, Andrew and Zhu, Menglong and Zhmoginov, Andrey and Chen, Liang-Chieh},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {Mobilenetv2: Inverted residuals and linear bottlenecks},
+  year      = {2018},
+  pages     = {4510--4520},
+  groups    = {Layers},
+}
+
+@InProceedings{zeiler2010deconvolutional,
+  author       = {Zeiler, Matthew D and Krishnan, Dilip and Taylor, Graham W and Fergus, Rob},
+  booktitle    = {2010 IEEE Computer Society Conference on computer vision and pattern recognition},
+  title        = {Deconvolutional networks},
+  year         = {2010},
+  organization = {IEEE},
+  pages        = {2528--2535},
+  groups       = {Layers},
+}
+
+@Article{odena2016deconvolution,
+  author  = {Odena, Augustus and Dumoulin, Vincent and Olah, Chris},
+  journal = {Distill},
+  title   = {Deconvolution and checkerboard artifacts},
+  year    = {2016},
+  number  = {10},
+  pages   = {e3},
+  volume  = {1},
+  groups  = {Neural Networks},
+}
+
+@Article{yager1983entropy,
+  author    = {Yager, Ronald R},
+  journal   = {International Journal of General System},
+  title     = {Entropy and specificity in a mathematical theory of evidence},
+  year      = {1983},
+  number    = {4},
+  pages     = {249--260},
+  volume    = {9},
+  groups    = {combination of dependent evidences},
+  publisher = {Taylor \& Francis},
+}
+
+@InProceedings{yu2015evidential,
+  author       = {Yu, Chunlei and Cherfaoui, Veronique and Bonnifait, Philippe},
+  booktitle    = {2015 IEEE Intelligent Vehicles Symposium (IV)},
+  title        = {Evidential occupancy grid mapping with stereo-vision},
+  year         = {2015},
+  organization = {IEEE},
+  pages        = {712--717},
+  groups       = {combination of dependent evidences},
+}
+
+@Article{cattaneo2011belief,
+  author    = {Cattaneo, Marco EGV},
+  journal   = {International Journal of Approximate Reasoning},
+  title     = {Belief functions combination without the assumption of independence of the information sources},
+  year      = {2011},
+  number    = {3},
+  pages     = {299--315},
+  volume    = {52},
+  groups    = {combination of dependent evidences},
+  publisher = {Elsevier},
+}
+
+@InProceedings{jiang2009combination,
+  author       = {Jiang, Hai-Na and Xu, Xiao-Bin and Wen, Cheng-Lin},
+  booktitle    = {2009 International Conference on Wavelet Analysis and Pattern Recognition},
+  title        = {The combination method for dependent evidence and its application for simultaneous faults diagnosis},
+  year         = {2009},
+  organization = {IEEE},
+  pages        = {496--501},
+  groups       = {combination of dependent evidences},
+}
+
+@Article{jousselme2006measuring,
+  author    = {Jousselme, A-L and Liu, Chunsheng and Grenier, Dominic and Boss{\'e}, {\'E}loi},
+  journal   = {IEEE Transactions on Systems, Man, and Cybernetics-Part A: Systems and Humans},
+  title     = {Measuring ambiguity in the evidence theory},
+  year      = {2006},
+  number    = {5},
+  pages     = {890--903},
+  volume    = {36},
+  groups    = {combination of dependent evidences},
+  publisher = {IEEE},
+}
+
+@InProceedings{guralnik2006handling,
+  author       = {Guralnik, Valerie and Mylaraswamy, Dinkar and Voges, Hal},
+  booktitle    = {2006 IEEE aerospace conference},
+  title        = {On handling dependent evidence and multiple faults in knowledge fusion for engine health management},
+  year         = {2006},
+  organization = {IEEE},
+  pages        = {9--pp},
+  groups       = {combination of dependent evidences},
+}
+
+@Book{shafer1976mathematical,
+  author    = {Shafer, Glenn},
+  publisher = {Princeton university press},
+  title     = {A mathematical theory of evidence},
+  year      = {1976},
+  volume    = {42},
+  groups    = {combination of dependent evidences},
+}
+
+@Article{su2015handling,
+  author    = {Su, Xiaoyan and Mahadevan, Sankaran and Xu, Peida and Deng, Yong},
+  journal   = {International Journal of Intelligent Systems},
+  title     = {Handling of dependence in Dempster--Shafer theory},
+  year      = {2015},
+  number    = {4},
+  pages     = {441--467},
+  volume    = {30},
+  groups    = {combination of dependent evidences},
+  publisher = {Wiley Online Library},
+}
+
+@Article{shi2017research,
+  author    = {Shi, Fengjian and Su, Xiaoyan and Qian, Hong and Yang, Ning and Han, Wenhua},
+  journal   = {Sensors},
+  title     = {Research on the fusion of dependent evidence based on rank correlation coefficient},
+  year      = {2017},
+  number    = {10},
+  pages     = {2362},
+  volume    = {17},
+  groups    = {combination of dependent evidences},
+  publisher = {Multidisciplinary Digital Publishing Institute},
+}
+
+@Article{xu2017dependent,
+  author    = {Xu, Honghui and Deng, Yong},
+  journal   = {IEEE Access},
+  title     = {Dependent evidence combination based on shearman coefficient and pearson coefficient},
+  year      = {2017},
+  pages     = {11634--11640},
+  volume    = {6},
+  groups    = {combination of dependent evidences},
+  publisher = {IEEE},
+}
+
+@Article{ding2002general,
+  author    = {Ding, Jing and Wang, W-s and Zhao, Y-l},
+  journal   = {JOURNAL-SICHUAN UNIVERSITY ENGINEERING SCIENCE EDITION},
+  title     = {General correlation coefficient between variables based on mutual information},
+  year      = {2002},
+  number    = {3},
+  pages     = {1--5},
+  volume    = {34},
+  groups    = {combination of dependent evidences},
+  publisher = {UNKNOWN},
+}
+
+@Article{su2018research,
+  author    = {Su, Xiaoyan and Li, Lusu and Shi, Fengjian and Qian, Hong},
+  journal   = {IEEE Access},
+  title     = {Research on the fusion of dependent evidence based on mutual information},
+  year      = {2018},
+  pages     = {71839--71845},
+  volume    = {6},
+  groups    = {combination of dependent evidences},
+  publisher = {IEEE},
+}
+
+@InCollection{benesty2009pearson,
+  author    = {Benesty, Jacob and Chen, Jingdong and Huang, Yiteng and Cohen, Israel},
+  booktitle = {Noise reduction in speech processing},
+  publisher = {Springer},
+  title     = {Pearson correlation coefficient},
+  year      = {2009},
+  pages     = {1--4},
+  groups    = {combination of dependent evidences},
+}
+
+@Book{goodfellow2016deep,
+  author    = {Goodfellow, Ian and Bengio, Yoshua and Courville, Aaron and Bengio, Yoshua},
+  publisher = {MIT press Cambridge},
+  title     = {Deep learning},
+  year      = {2016},
+  number    = {2},
+  volume    = {1},
+}
+
+@InProceedings{kendall2017uncertainties,
+  author    = {Kendall, Alex and Gal, Yarin},
+  booktitle = {Advances in neural information processing systems},
+  title     = {What uncertainties do we need in bayesian deep learning for computer vision?},
+  year      = {2017},
+  pages     = {5574--5584},
+  groups    = {aleatoric noise},
+}
+
+@Article{wu2019quantifying,
+  author  = {Wu, Qingyang and Li, He and Li, Lexin and Yu, Zhou},
+  journal = {arXiv preprint arXiv:1906.04450},
+  title   = {Quantifying intrinsic uncertainty in classification via deep dirichlet mixture networks},
+  year    = {2019},
+  groups  = {aleatoric noise},
+}
+
+@Article{sensoy2018evidential,
+  author  = {Sensoy, Murat and Kaplan, Lance and Kandemir, Melih},
+  journal = {arXiv preprint arXiv:1806.01768},
+  title   = {Evidential deep learning to quantify classification uncertainty},
+  year    = {2018},
+  groups  = {aleatoric noise},
+}
+
+@Book{audun2018subjective,
+  author    = {Audun Josang},
+  publisher = {Springer},
+  title     = {Subjective Logic: A formalism for reasoning under uncertainty},
+  year      = {2018},
+  groups    = {aleatoric noise},
+}
+
+@InProceedings{tan2019efficientnet,
+  author       = {Tan, Mingxing and Le, Quoc},
+  booktitle    = {International Conference on Machine Learning},
+  title        = {Efficientnet: Rethinking model scaling for convolutional neural networks},
+  year         = {2019},
+  organization = {PMLR},
+  pages        = {6105--6114},
+  groups       = {Neural Networks},
+}
+
+@Article{odena2016deconvolution,
+  author  = {Odena, Augustus and Dumoulin, Vincent and Olah, Chris},
+  journal = {Distill},
+  title   = {Deconvolution and checkerboard artifacts},
+  year    = {2016},
+  number  = {10},
+  pages   = {e3},
+  volume  = {1},
+  groups  = {Layers},
+}
+
+@Article{Bazarevsky2018,
+  author  = {Valentin Bazarevsky and Andrei Tkachenka},
+  journal = {Google AI Blog},
+  title   = {Mobile Real-time Video Segmentation},
+  year    = {2018},
+  groups  = {Neural Networks},
+}
+
+@Article{kingma2014adam,
+  author  = {Kingma, Diederik P and Ba, Jimmy},
+  journal = {arXiv preprint arXiv:1412.6980},
+  title   = {Adam: A method for stochastic optimization},
+  year    = {2014},
+  groups  = {Neural Networks},
+}
+
+@InProceedings{deeplabv3plus2018,
+  author    = {Liang-Chieh Chen and Yukun Zhu and George Papandreou and Florian Schroff and Hartwig Adam},
+  booktitle = {ECCV},
+  title     = {Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation},
+  year      = {2018},
+  groups    = {Neural Networks},
+}
+
+@InProceedings{chollet2017xception,
+  author    = {Chollet, Fran{\c{c}}ois},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  title     = {Xception: Deep learning with depthwise separable convolutions},
+  year      = {2017},
+  pages     = {1251--1258},
+  groups    = {Neural Networks},
+}
+
+@InProceedings{he2015delving,
+  author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  booktitle = {Proceedings of the IEEE international conference on computer vision},
+  title     = {Delving deep into rectifiers: Surpassing human-level performance on imagenet classification},
+  year      = {2015},
+  pages     = {1026--1034},
+  groups    = {Neural Networks},
+}
+
+@InProceedings{abadi2016tensorflow,
+  author    = {Abadi, Mart{\'\i}n and Barham, Paul and Chen, Jianmin and Chen, Zhifeng and Davis, Andy and Dean, Jeffrey and Devin, Matthieu and Ghemawat, Sanjay and Irving, Geoffrey and Isard, Michael and others},
+  booktitle = {12th $\{$USENIX$\}$ Symposium on Operating Systems Design and Implementation ($\{$OSDI$\}$ 16)},
+  title     = {Tensorflow: A system for large-scale machine learning},
+  year      = {2016},
+  pages     = {265--283},
+  groups    = {Neural Networks},
+}
+
+@Article{kingma2014adam,
+  author  = {Kingma, Diederik P and Ba, Jimmy},
+  journal = {arXiv preprint arXiv:1412.6980},
+  title   = {Adam: A method for stochastic optimization},
+  year    = {2014},
+  groups  = {Neural Networks},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}
+
+@Comment{jabref-meta: grouping:
+0 AllEntriesGroup:;
+1 StaticGroup:Occupancy Mapping\;0\;0\;0x008080ff\;\;\;;
+1 StaticGroup:Evidential Theory\;0\;1\;0xb3e6e6ff\;\;\;;
+2 StaticGroup:problems with Dempster\;0\;0\;0x8a8a8aff\;\;\;;
+2 StaticGroup:combination of dependent evidences\;0\;1\;0x8a8a8aff\;\;\;;
+2 StaticGroup:aleatoric noise\;0\;1\;0x8a8a8aff\;\;\;;
+1 StaticGroup:Neural Networks\;0\;1\;0x9980e6ff\;\;\;;
+2 StaticGroup:Layers\;0\;1\;0x8a8a8aff\;\;\;;
+1 StaticGroup:geo ISM\;0\;1\;0xccffccff\;\;\;;
+2 StaticGroup:geo ICM\;0\;1\;0x8a8a8aff\;\;\;;
+2 StaticGroup:MonoDepth\;0\;1\;0x00ffffff\;\;\;;
+2 StaticGroup:lidar ground-plane removal\;0\;0\;0xe699b3ff\;\;\;;
+2 StaticGroup:Geo IRM\;0\;1\;0x8a8a8aff\;\;\;;
+1 StaticGroup:deep ISM\;0\;1\;0x669966ff\;\;\;;
+2 StaticGroup:deep IRM\;0\;0\;0x8a8a8aff\;\;\;;
+2 StaticGroup:deep ILM\;0\;0\;0x8a8a8aff\;\;\;;
+2 StaticGroup:deep ICM\;0\;0\;0x8a8a8aff\;\;\;;
+2 StaticGroup:deep Fusion\;0\;1\;0x8a8a8aff\;\;\;;
+1 StaticGroup:Datasets\;0\;0\;0x8a8a8aff\;\;\;;
+}

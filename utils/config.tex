@@ -1,0 +1,449 @@
+% Präambel: Pakete laden etc.
+% ===========================
+%-----------------------Allgemein---------------------------%
+%scrhack, um @addtolists warnings zu unterdrücken, bei Paketen, die KOMA kennt (insbesondere listings)
+\usepackage{scrhack}
+%Input und Output Zeichensatz
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%English
+\usepackage[english]{babel}
+%needed for babel
+\usepackage{csquotes}
+%change font or background color, e.g. in table headings
+\usepackage{xcolor}
+\usepackage{colortbl}
+%hyperref. BEST PACKAGE EVER. See documentation. Set pdfborder={0 0 0} in final version
+\usepackage[raiselinks, pdfpagelabels, hypertexnames=true, pdfborder={0 0 1}, hidelinks, citebordercolor=yellow, linktoc=all]{hyperref}
+%Text in Dokument kann mehrspaltig sein
+\usepackage{multicol}
+%enables \textsubscript
+% \usepackage{subscript} % No need for this packacge according to ctan.org
+\usepackage{booktabs}
+
+%enable \gls
+\usepackage[automake,nonumberlist,acronym,toc,nopostdot,nomain,numberedsection=autolabel]{glossaries}
+\newglossary[slg]{symbolslist}{syi}{syg}{Symbols} % create add. symbolslist
+\makeglossaries
+% Displays unit in symbole list
+\newglossarystyle{symbunitlong}{
+	\setglossarystyle{long4col}
+	\renewcommand*{\glossentry}[2]{
+		\glstarget{##1}{\glossentryname{##1}} %
+		& \glssymbol{##1}
+		& \glossentrydesc{##1}  \tabularnewline
+	}
+}
+\makeindex
+\setacronymstyle{long-short}
+\glsaddall
+
+%enable \todo
+\usepackage[colorinlistoftodos]{todonotes}\reversemarginpar
+%enable subfigures
+\usepackage{subcaption}
+
+
+%%%%%%%%%%%%%%%%%%%%%% ADDED BY MHO %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\usepackage{parskip}
+\usepackage[titletoc]{appendix}
+\usepackage{import}
+% theorem styles (hypothesis, research questions, requirements,...)
+\usepackage{ntheorem}
+\theoremseparator{:}
+\newtheorem{hyp}{Hypothesis}
+\newtheorem{subhyp}{Hypothesis}
+\renewcommand\thesubhyp{\thehyp\arabic{subhyp}}
+\newtheorem{requ}{Research Question}
+\newtheorem{subrequ}{Research Question}
+\renewcommand\thesubrequ{\therequ\arabic{subrequ}}
+\newtheorem{req}{Requirement}
+\newtheorem{subreq}{Requirement}
+\renewcommand\thesubreq{\thereq.\arabic{subreq}}
+% to proprly include matplotlib graphs rendered as pgfs
+%\usepackage{pgf}
+\usepackage{pgfplots}
+% new commands
+\definecolor{mygreen}{rgb}{0.0, 0.5, 0.0}
+\definecolor{myred}{rgb}{0.5, 0.0, 0.0}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\DontPrintSemicolon
+% Define pseudocode formatting
+\renewcommand{\KwSty}[1]{\textnormal{\textcolor{blue!90!black}{\ttfamily\bfseries #1}}\unskip}
+\renewcommand{\ArgSty}[1]{\textnormal{\ttfamily #1}\unskip}
+\SetKwComment{Comment}{\color{green!50!black}// }{}
+\renewcommand{\CommentSty}[1]{\textnormal{\ttfamily\color{green!50!black}#1}\unskip}
+\newcommand{\assign}{\leftarrow}
+\newcommand{\var}{\texttt}
+\newcommand{\FuncCall}[2]{\texttt{\bfseries #1(#2)}}
+\SetKwProg{Function}{function}{}{}
+\renewcommand{\ProgSty}[1]{\texttt{\bfseries #1}}
+
+
+
+%-----------------------Formatierung---------------------------%
+%set paper geometry
+\usepackage[left=3cm,  % 3.3cm
+    right=2cm, % 2.0cm
+    top=3cm,
+    bottom=2.5cm,
+    footskip=1.75cm,
+    headsep=1.75cm
+    ]{geometry}
+
+%set footer and header positions
+\addtolength{\headsep}{-1\headheight}
+\addtolength{\footskip}{-1\footheight}
+%use scrlayer for custom header and footer
+\usepackage[markcase=noupper,    % remove the uppercasing
+                        headsepline=0.75pt
+                     ]{scrlayer-scrpage}
+%Define content of header and footer
+\renewcommand{\chapterpagestyle}{scrheadings}
+\renewcommand{\headfont}{\normalfont}
+\pagestyle{scrheadings}
+\clearscrheadfoot
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\ihead{\makebox[1cm][l]{\thechapter}\leftmark}
+\ohead{\thepage}
+%font Arial
+%\usepackage[scaled=1]{uarial}
+\renewcommand{\rmdefault}{ptm} % Times new Roman
+\renewcommand{\sfdefault}{phv} % Arial
+\renewcommand{\familydefault}{\sfdefault} %select Arial
+%define footnote format
+\deffootnote%
+{1.5em}% Einzug des Fußnotentextes; bei dreistelligen Fußnoten evtl. vergrößern
+{1em}% zusätzlicher Absatzeinzug in der Fußnote
+{%
+\makebox[1.5em]% Raum für Fußnotenzeichen: ebenso groß wie Einzug des FN-Textes
+[l]% Ausrichtung des Fußnotenzeichens: [r]echts, [l]inks
+{\textsuperscript{\thefootnotemark}}% Fußnotenzeichen
+}
+% 1,25-facher Zeilenabstand
+\usepackage{setspace}
+\setstretch{1.166} %LaTeX has its own stretch at 11pt, which combined with this one gives 1.25
+%Zeilenumbruch bei URLs im Literaturverzeichnis
+\usepackage{ulem}
+%Definiert, dass URL nach jedem Buchstaben gtrennt werden kann
+\makeatletter
+\g@addto@macro\UrlBreaks{\do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i%
+\do\j\do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t\do\u\do\v\do\w%
+\do\x\do\y\do\z\do\&\do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9\do\0}
+\makeatother 
+% Keine einzelnen Zeilen beim Anfang eines Abschnitts (Schusterjungen) 
+\clubpenalty=10000 
+% Keine einzelnen Zeilen am Ende eines Abschnitts (Hurenkinder) 
+\widowpenalty= 10000 \displaywidowpenalty = 10000
+%-----------------------MathMode---------------------------%
+%serifenlose Formelschrift
+%\usepackage{sansmath}\sansmath
+%euro symbol
+\usepackage{eurosym} 
+%standard math package
+\usepackage{amsmath}
+\usepackage{mathtools}
+%math symbols
+\usepackage{amssymb}
+%enables \mathscr for caligraphic writing
+\usepackage{mathrsfs}
+%-----------------------Kapitel---------------------------%
+%11pt, bold
+\setkomafont{chapter}{\bfseries\normalsize}
+\setkomafont{section}{\bfseries\normalsize}
+\setkomafont{subsection}{\bfseries\normalsize}
+\setkomafont{subsubsection}{\bfseries\normalsize}
+\setkomafont{paragraph}{\bfseries\normalsize}
+%Indentation of chapter titles
+\renewcommand{\chapterformat}{\makebox[1cm][l]{\thechapter}}
+\RedeclareSectionCommand[
+  %afterindent=false,
+  beforeskip=0pt,
+  afterskip=6pt]{chapter}
+\renewcommand{\sectionformat}{\makebox[2cm][l]{\thesection}}
+\RedeclareSectionCommand[
+  %afterindent=false,
+  beforeskip=6pt,
+  afterskip=6pt]{section}
+\renewcommand{\subsectionformat}{\makebox[2cm][l]{\thesubsection}}
+\RedeclareSectionCommand[
+  %afterindent=false,
+  beforeskip=6pt,
+  afterskip=6pt]{subsection}
+\renewcommand{\subsubsectionformat}{\makebox[2cm][l]{\thesubsubsection}}
+\RedeclareSectionCommand[
+  %afterindent=false,
+  beforeskip=6pt,
+  afterskip=6pt]{subsubsection}
+\renewcommand*{\paragraphformat}{\makebox[2cm][l]{\theparagraph}}
+\RedeclareSectionCommand[
+  %afterindent=false,
+  beforeskip=6pt,
+  afterskip=6pt]{paragraph}
+%-----------------------Inhaltsverzeichnis---------------------------%
+%Maximale Gliederungstiefe, die noch ins Inhaltsverzeichnis aufgenommen wird
+%maximum depth for the table of contents
+%Tiefe von 4 erlaubt, aber häufig Verwendung von 3
+%\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{4}
+%Nummerierung der Überschriften bis zu welcher Schachtelung
+\setcounter{secnumdepth}{4}
+% Formatierung des Inhaltsverzeichnisses
+\setkomafont{disposition}{\normalfont} 
+\addtokomafont{chapterentry}{\normalfont}
+%COUNTER needed, to have 12pt space before AND after each new chapter, but 6pt else
+%LaTeX lets us only set space before a contentsline, so we have to check, if a
+%section is the first in its chapter, and only then add 12pt before the section
+\newcounter{sectionref}
+\setcounter{sectionref}{1}
+%set indentation in table of contents
+\makeatletter
+\renewcommand{\l@chapter}{\vspace{12pt} \setcounter{sectionref}{1} \@dottedtocline{1}{0cm}{0.9cm}}
+\renewcommand\l@section{ \ifthenelse{\value{sectionref}=1}{\vspace{12pt}}{\vspace{6pt}} \stepcounter{sectionref} \@dottedtocline{2}{0.3cm}{1.25cm}}
+\renewcommand\l@subsection{\vspace{6pt}\@dottedtocline{3}{0.6cm}{1.34cm}}
+\renewcommand*\l@subsubsection{\vspace{6pt}\@dottedtocline{4}{0.9cm}{1,82cm}}
+%narrow dots, like in WORD
+\renewcommand\@dotsep{1}% default is 4.5
+\makeatother
+%-----------------------Abbildungen---------------------------%
+\usepackage{graphicx}
+%import von .svg, .eps etc.
+\usepackage{import}
+\usepackage{epstopdf} %converting to PDF
+%import graphic pictures depending on pdf or not
+\usepackage{rotating} %rotate caption if in landscape
+
+% used to draw arrows between table columns
+\usepackage{tikz}
+\usetikzlibrary{tikzmark}
+
+%include pdf pages
+\usepackage{pdfpages}
+%enables eps graphic import
+\usepackage{epstopdf}
+%Enable float H option
+\usepackage{float}
+%set captions
+\usepackage[format=hang,
+    justification=justified,
+    singlelinecheck=off,
+    position=bottom,
+    skip=6pt,
+    belowskip=6pt
+    ]{caption}
+%enable subfigures inside a figure
+%enables rotating figures without caption
+\usepackage{lscape}
+%let the caption begin at 2.5cm relative to textbox
+\DeclareCaptionLabelFormat{ikalabel}{\makebox[2cm][l]{\figurename~\thefigure:}}
+\captionsetup{labelformat=ikalabel,labelsep=none}
+% Anpassung der Tabellen- und Bildbeschriftung an das IKA-Layout, e.g. "Abb. 1-1:    " (Teil 2)
+\renewcommand{\thefigure}{{\thechapter-\arabic{figure}}}
+\addto\captionsenglish{
+\renewcommand{\figurename}{Fig.}
+}
+\renewcommand{\thesubfigure}{\roman{subfigure}}
+%-----------------------Tabellen---------------------------%
+%better tables
+\usepackage{tabularx}
+%enable long tables for list of abbreviations etc.
+\usepackage{longtable}
+%enable multirow or multicolumn table cells
+\usepackage{multirow}
+% Durchgehende Nummerierung für Abbildungen und Tabellen: IKA fordert Tabllen mit Abb-Caption: Abb. X-Y
+\makeatletter
+\let\c@table\c@figure
+\makeatother
+% Anpassung der Tabellen- und Bildbeschriftung an das IKA-Layout, e.g. "Abb. 1-1:    " (Teil 2)
+\renewcommand{\thetable}{{\thechapter-\arabic{table}}}
+\addto\captionsenglish{
+\renewcommand{\tablename}{Fig.}
+}
+%Farben in Tabellen
+\usepackage{colortbl}
+%-----------------------Gleichungen---------------------------%
+% Anpassung der Gleichungsbeschriftung an das IKA-Layout, e.g. "Gl. 1-1" bzw. Eq. im Englischen --> für Deutsch Eq. im Folgenden mit Gl. ersetzen
+\makeatletter
+%    \def\@eqnnum{{\normalfont \normalcolor Gl.~\theequation}}
+    \def\tagform@#1{\maketag@@@{Eq.~\ignorespaces#1\unskip\@@italiccorr}}
+\makeatother
+% Anpassung der Gleichungsbeschriftung an das IKA-Layout, e.g. "Gl. 1-1:    " (Teil 2)
+\renewcommand{\theequation}{{\thechapter-\arabic{equation}}}
+%-----------------------Literaturverzeichnis---------------------------%
+%maxbibnames = alle Autoren ausschreiben
+\usepackage[maxalphanames=1, minalphanames=1, style=alphabetic, backend=biber, sorting = nyt, maxcitenames=5, maxbibnames=1000,giveninits=true]{biblatex}
+\DeclareNameAlias{default}{family-given}
+
+%zeilenumbruch nach autor
+\renewcommand*{\mkbibnamefamily}[1]{\MakeUppercase{#1}}	% UpperCase für Namen
+\renewcommand*{\newunitpunct}{\addcomma\space}   		% Komma statt Punkt
+\renewcommand*{\finentrypunct}{}                        % kein Punkt am Ende der Einträge
+\DeclareFieldFormat[article, book, inbook, inproceedings, misc, techreport, phdthesis]{citetitle}{#1}
+\DeclareFieldFormat[article, book, inbook, inproceedings, misc, techreport, phdthesis]{title}{#1}
+
+\renewcommand*{\labelnamepunct}{\newline}				% Zeilenumbruch statt Komma hinter Autoren
+\renewcommand*{\labelalphaothers}{}						% "+" bei mehreren Autoren entfernen
+\renewbibmacro{in:}{}									% "in:" Zusatz bei Artikel in Journaleinträgen entfernen
+\renewcommand*{\bibfont}{}
+
+% Formatierung der Zitierungslabels
+\DeclareLabelalphaTemplate{
+	\labelelement{
+		\field[uppercase,final]{shorthand}
+		\field[uppercase]{label}
+		\field[uppercase,strwidth=3,strside=left,ifnames=1]{labelname}
+		\field[uppercase,strwidth=1,strside=left]{labelname}
+	}
+	\labelelement{
+		\field[strwidth=2,strside=right]{year}
+	}
+}
+\renewcommand{\labelnamepunct}{\newline\bibsentence}
+%zeilenumbruch nach titel
+\usepackage{xpatch}
+\makeatletter
+\def\do#1{
+  \ifcsdef{blx@bbx@#1}
+    {\xpatchbibdriver{#1}
+       {\printlist{language}%
+        \newunit\newblock}
+       {\printlist{language}%
+        \printunit{\newline\bibsentence}}
+       {}{}}
+    {}} 
+\abx@doentrytypes
+\makeatother
+%keine kursiven schriften im literaturverzeichnis
+\DeclareFieldFormat{citetitle}{{#1}}
+\DeclareFieldFormat{journaltitle}{{#1}}
+\DeclareFieldFormat{issuetitle}{{#1}}
+\DeclareFieldFormat{maintitle}{{#1}}
+\DeclareFieldFormat{booktitle}{{#1}}
+\DeclareFieldFormat{title}{{#1}}
+%keine anführungsstriche um den titel
+\DeclareFieldFormat[article]{title}{#1}
+\DeclareFieldFormat[thesis]{title}{#1}
+\DeclareFieldFormat[inproceedings]{title}{#1}
+\DeclareFieldFormat[incollection]{title}{#1}
+%kein in: vor journals
+\renewbibmacro{in:}{} 
+\urlstyle{same} %keine formatierung für urls
+%commas betwwen mltiple cites
+\renewcommand\multicitedelim{\addcomma\space}
+%no "and" or "und" between authors
+\DefineBibliographyExtras{english}{%
+  \renewcommand*{\finalnamedelim}{\addcomma\addspace}%
+}
+%-----------------------Weitere Funktionalität---------------------------%
+%Abkürzungsverzeichns
+\usepackage{acronym}
+%Listings
+\usepackage{listings}
+\lstset{
+    frame=single,
+    breaklines=true,
+    basicstyle=\footnotesize\ttfamily, %monospace font
+    escapeinside={(}{)}
+}
+%draw bezier curves and oter stuff
+\usepackage{epic,bez123}
+%use SI units
+\usepackage[
+    per-mode=symbol,
+    mode=text,
+    ]{siunitx}
+%\sisetup{
+%    range-phrase = ~bis~,
+%    output-decimal-marker={,},
+%}
+\sisetup{
+	detect-all,
+	locale=DE
+}
+
+\DeclareSIUnit\none{\textendash}
+% for lorem ipsum
+\usepackage{lipsum}
+%make length calculations
+\usepackage{calc}
+
+% RWTH Farbdefinitionen
+\definecolor{blueRWTH}{cmyk}{1.0,0.5,0,0}
+\definecolor{blueLightRWTH}{cmyk}{0.75,0.38,0,0}
+\definecolor{blueLighterRWTH}{cmyk}{0.45,0.14,0,0}
+
+\definecolor{greenRWTH}{cmyk}{0.7,0.0,1.0,0}
+\definecolor{greenLightRWTH}{cmyk}{0.525,0,0.75,0}
+\definecolor{greenLighterRWTH}{cmyk}{0.35,0,0.5,0}
+
+\definecolor{orangeRWTH}{cmyk}{0,0.4,1.0,0}
+\definecolor{orangeLightRWTH}{cmyk}{0,0.3,0.75,0}
+\definecolor{orangeLighterRWTH}{cmyk}{0,0.2,0.5,0}
+
+\definecolor{redRWTH}{cmyk}{0.15,1,1,0}
+\definecolor{redLightRWTH}{cmyk}{0.1125,0.75,0.75,0}
+\definecolor{redLighterRWTH}{cmyk}{0.075,0.5,0.5,0}
+\definecolor{rwthLight}{cmyk}{0.0,0.0,0.0,0.5}
+\definecolor{rwthLight2}{cmyk}{0.0,0.0,0.0,0.8}
+\definecolor{yellowPaper}{cmyk}{0,0.02,0.15,0}
+
+\definecolor{ikagrey}{RGB}{128,128,128}
+
+% \pgfplotsset{
+% 	colormap ={rwth}{color(0pt)=(white); color(1pt)=(blueRWTH); color(2pt)=(blueRWTH)}
+% }
+
+\usepackage{listofitems}
+
+\newcommand{\drawtwodimensionalhistogram}[6]{%
+	\setsepchar{,}
+	\readlist\argx{#1}
+	\edef\xmin{\argx[1]}
+	\edef\xmax{\argx[2]}
+
+	\readlist\argy{#2}
+	\edef\ymin{\argy[1]}
+	\edef\ymax{\argy[2]}
+	
+	\readlist\argp{#3}
+	\edef\mux{\argp[1]}
+	\edef\sigmax{\argp[2]}
+	\edef\muy{\argp[3]}
+	\edef\sigmay{\argp[4]}
+	\edef\ellipseangle{\argp[5]}
+	\edef\positiondata{#4}
+	
+	\readlist\argn{#5}
+	\def\xlabelname{\argn[1]}
+	\def\ylabelname{\argn[2]}
+	\readlist\argu{#6}
+	\def\xunit{\argu[1]}
+	\def\yunit{\argu[2]}
+
+	\input{content/figures/histogram.tex}
+}
+\setlength{\arrayrulewidth}{1pt}
+
+\usepackage{collcell}
+\usepackage{xstring}
+
+\newcommand*{\MaxNumber}{1.0}%
+\newcommand{\ApplyGradient}[1]{
+\if\IfDecimal{#1}
+	\pgfmathsetmacro{\PercentColor}{100.0*(abs(#1))/(\MaxNumber)}
+	\edef\x{\noexpand\cellcolor{redRWTH!\PercentColor}}\x\textcolor{black}{#1}%
+\else
+	#1
+\fi
+}
+
+\newcolumntype{R}{>{\collectcell\ApplyGradient}r<{\endcollectcell}}
+
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=-70, align=center, text width = 2.8cm,minimum height=1.4cm, minimum width=2.8cm, draw=black, trapezium stretches=true,fill=orangeLighterRWTH!50]
+\tikzstyle{process} = [rectangle, align=center, minimum width=3cm, text width=3cm, minimum height=1.4cm, draw=black,fill=blueLighterRWTH!50]
+\tikzstyle{arrow} = [->, shorten >= 0.1cm, shorten <= 0.1cm]
+
+%\let\vec\mathbf
+\renewcommand\vec{\boldsymbol}

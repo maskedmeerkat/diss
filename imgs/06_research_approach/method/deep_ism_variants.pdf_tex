@@ -1,0 +1,137 @@
+%% Creator: Inkscape 1.0 (4035a4fb49, 2020-05-01), www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'deep_ism_variants.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{453.54330709bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.5046422)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{deep_ism_variants.pdf}}%
+    \put(0.42241165,0.38276175){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{z}}$\end{tabular}}}}%
+    \put(0.56525807,0.38276175){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{m}}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{deep_ism_variants.pdf}}%
+    \put(0.42241163,0.23393362){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{z}}$\end{tabular}}}}%
+    \put(0.56525807,0.23393362){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{m}}'$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{deep_ism_variants.pdf}}%
+    \put(0.4586209,0.05075573){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize $1$\end{tabular}}}}%
+    \put(0.67592564,0.03656551){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize$p_o$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{deep_ism_variants.pdf}}%
+    \put(0.45655453,0.11224984){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize ReLu$(\tilde{\vec{z}})+1$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{deep_ism_variants.pdf}}%
+    \put(0.53639223,0.03179845){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{z}}$\end{tabular}}}}%
+    \put(0.60218381,0.10861143){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Dir$(\tilde{\vec{\alpha}})$\end{tabular}}}}%
+    \put(0.42241163,0.08510541){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{z}}$\end{tabular}}}}%
+    \put(0.56525807,0.08510541){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{\alpha}}$\end{tabular}}}}%
+    \put(0.04869796,0.36848096){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize  SoftNet\end{tabular}}}}%
+    \put(0.04869796,0.21965281){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize  ShiftNet\end{tabular}}}}%
+    \put(0.04869796,0.07082461){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize  DirNet\end{tabular}}}}%
+    \put(0.84910888,0.23524313){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{m}}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{deep_ism_variants.pdf}}%
+    \put(0.48633344,0.37782222){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize{$1$}\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{deep_ism_variants.pdf}}%
+    \put(0.45655453,0.40990615){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Softmax$(\tilde{\vec{z}})$\end{tabular}}}}%
+    \put(0.53639223,0.32945476){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{z}}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{deep_ism_variants.pdf}}%
+    \put(0.48633344,0.22899404){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize{$1$}\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{deep_ism_variants.pdf}}%
+    \put(0.45655453,0.26107801){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Softmax$(\tilde{\vec{z}})$\end{tabular}}}}%
+    \put(0.53639223,0.18062654){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{z}}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{deep_ism_variants.pdf}}%
+    \put(0.84910888,0.08683158){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{m}}$\end{tabular}}}}%
+    \put(0.75071439,0.08364202){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize subjective\end{tabular}}}}%
+    \put(0.77055811,0.06379827){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize logic\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{deep_ism_variants.pdf}}%
+    \put(0.84910888,0.38276175){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{m}}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=12]{deep_ism_variants.pdf}}%
+    \put(0.59970531,0.25179582){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $1$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=13]{deep_ism_variants.pdf}}%
+    \put(0.59970531,0.40062398){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $1$\end{tabular}}}}%
+    \put(0.65568838,0.32870756){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_o$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=14]{deep_ism_variants.pdf}}%
+    \put(0.62743439,0.32902216){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}}%
+    \put(0.68365621,0.32867917){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=15]{deep_ism_variants.pdf}}%
+    \put(0.88369798,0.40062398){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $1$\end{tabular}}}}%
+    \put(0.93968105,0.32870756){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_o$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=16]{deep_ism_variants.pdf}}%
+    \put(0.91142702,0.32902216){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}}%
+    \put(0.96764884,0.32867917){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=17]{deep_ism_variants.pdf}}%
+    \put(0.88355617,0.25179582){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $1$\end{tabular}}}}%
+    \put(0.93953919,0.17987932){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_o$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=18]{deep_ism_variants.pdf}}%
+    \put(0.91128521,0.18019393){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}}%
+    \put(0.96750702,0.17985094){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=19]{deep_ism_variants.pdf}}%
+    \put(0.88355617,0.10296761){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $1$\end{tabular}}}}%
+    \put(0.93953919,0.0310512){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_o$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=20]{deep_ism_variants.pdf}}%
+    \put(0.91128521,0.03136581){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}}%
+    \put(0.96750702,0.03102283){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=21]{deep_ism_variants.pdf}}%
+    \put(0.6697092,0.17987932){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_o$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=22]{deep_ism_variants.pdf}}%
+    \put(0.64624352,0.18019393){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=23]{deep_ism_variants.pdf}}%
+    \put(0.69288859,0.17985094){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=24]{deep_ism_variants.pdf}}%
+    \put(0.6230925,0.18019393){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_d$\end{tabular}}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=25]{deep_ism_variants.pdf}}%
+    \put(0.78378729,0.19929604){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\looparrowright$\end{tabular}}}}%
+    \put(0.75071439,0.23898357){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize compress\end{tabular}}}}%
+    \put(0.77055816,0.2191398){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize shift\end{tabular}}}}%
+    \put(0.20288738,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Input\end{tabular}}}}%
+    \put(0.34403071,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize UNet\end{tabular}}}}%
+    \put(0.48225135,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Output\end{tabular}}}}%
+    \put(0.46240758,0.43958765){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Nonlinearity\end{tabular}}}}%
+    \put(0.61755137,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Training\end{tabular}}}}%
+    \put(0.90290327,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Testing\end{tabular}}}}%
+  \end{picture}%
+\endgroup%
