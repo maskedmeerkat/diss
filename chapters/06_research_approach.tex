@@ -439,23 +439,27 @@ However, alternatives like a scaled hyperbolic tangent non-linearity can also be
 %======================================%
 \subsection{Methodology to use deep \gls{ism}s as Priors in Occupancy Mapping}
 \label{subsec:method_to_use_deep_isms_as_priors_in_occmaps}
-In this section, the requirements R\ref{subreq:initialize_with_deep_ism} and \ref{subreq:converge_to_geo_ism} shall be tackled. To do so, it shall be first discussed how the prior information is integrated into the map. Normally, as explained in Sec. \ref{sec:occupancy_mapping}, the map's state is initially set to the prior e.g. obtained through previous mapping of the environment. In this work, however, the map shall be initialized using a deep \gls{ism} during mapping. A simple procedure to do so would be to initially set the state of all grid cells to unknown. Afterwards, if a grid cell is still in the initial state and falls in the deep \gls{ism}'s field of view, replace the grid cell's value by the deep \gls{ism}'s estimate and leave it untouched otherwise. However, since the deep \gls{ism}'s estimates are noisy, potentially prone to errors and to account for the fact that the estimates might improve due to better measurement coverage at later time steps, the following three stepped procedure is proposed to filter these effects. First, in the \textbf{start phase}, all cells shall still be set to $m_u = 1$. 
+In this section, the requirements R\ref{subreq:initialize_with_deep_ism} and \ref{subreq:converge_to_geo_ism} shall be tackled. To do so, it shall be first discussed how the prior information is integrated into the map. Normally, as explained in Sec. \ref{sec:occupancy_mapping}, the map's state is initially set to the prior e.g. obtained through previous mapping of the environment. In this work, however, the map shall be initialized using a deep \gls{ism} during mapping. A simple procedure to do so would be to initially set the state of all grid cells to unknown. Afterwards, if a grid cell is still in the initial state and falls in the deep \gls{ism}'s field of view, replace the grid cell's value by the deep \gls{ism}'s estimate and leave it untouched otherwise. However, since the deep \gls{ism}'s estimates are noisy, potentially prone to errors and to account for the fact that the estimates might improve due to better measurement coverage at later time steps, the following three stepped procedure is proposed to filter these effects. 
 \\
 \\
-Afterwards, in the \textbf{initialization phase}, both the geometric and deep \gls{ism} estimates are integrated into the map. This phase lasts until a definable amount of measurement information has been collected. In this work, the information content is described using the unknown mass (see Sec. \ref{subsec:method_to_use_deep_isms_in_occmaps}). Therefore, a threshold on the unknown mass $\underline{m}_u$ is introduced to quantify whether enough data has been collected in a parameterizable way. Thus, the deep \gls{ism} should be integrated into the map in a way that the unknown mass never falls below $\underline{m}_u$. At the same time, in case the true occupancy state changes, the combination should be conducted in a way to allow shifting mass between occupied and free while keeping or even recuperating unknown mass. This is important since once the unknown mass has reached $\underline{m}_u$, the deep \gls{ism}'s influence is suppressed leading to the possibility that the state change cannot be fully successful.
+\textbf{Start Phase}\\
+First, in the start phase, all cells shall be set to $m_u = 1$. 
 \\
-To achieve this, the following procedure is proposed.
+\\
+\textbf{Initialization Phase}\\
+Afterwards, in the initialization phase, both the geometric and deep \gls{ism} estimates are integrated into the map. This phase lasts until a definable amount of measurement information has been collected. In this work, the information content is described using the unknown mass (see Sec. \ref{subsec:method_to_use_deep_isms_in_occmaps}). Therefore, a threshold on the unknown mass $\underline{m}_u$ is introduced to quantify whether enough data has been collected in a parameterizable way. Since the deep \gls{ism} shall only be used to initialize the map, its estimates should be integrated in a way that the unknown mass never falls below $\underline{m}_u$. At the same time, in case the true occupancy state changes, the combination should be conducted in a way to allow shifting mass between occupied and free while keeping or even recuperating unknown mass. The possibility to recuperate unknown mass is important since once the unknown mass has reached $\underline{m}_u$, the deep \gls{ism}'s influence is suppressed leading to the possibility that the state change cannot be fully successful. To achieve this, the following procedure is proposed.
 \\
 First, restrict the certainty of the deep \gls{ism} estimates to $\underline{m}_u$ using the discounting operation as follows
 \begin{align}
 	\tilde{\vec{m}}' &= (1-\underline{m}_u) \otimes \tilde{\vec{m}}
 \end{align}
+This restriction of certainty, however, does not influence the amount of redundancy in the deep \gls{ism} estimates. Thus, the next step consists of removing the redundancy as proposed in sec. \ref{subsec:method_to_use_deep_isms_in_occmaps} by an additional discounting operation.\\
 The restricted deep \gls{ism} certainty together with the discounting of non-redundant information makes sure that once a map cell's unknown mass has fallen beneath $\underline{m}_u$, all further deep \gls{ism} estimates are ignored. However, it is still possible for the deep \gls{ism} to reduce the unknown mass below the lower limit in the combination step as long as it has not been reached. Therefore, the discount factor to remove the redundancy has to be adapted to suffice the following condition
 \begin{align}
 	\vec{m}^{0:T} &= \vec{m}^{0:T-1} \oplus (\gamma \otimes \tilde{\vec{m}}^{0:T})\\
 	\underline{m}_u &\leq m^{0:T}_{u}
 \end{align} 
-Here, the adaption of $\gamma$ in a way so that the fusion respects the lower bound $\underline{m}_{u}$ depends on the choice of combination rule. Since the combination requires the possibility to recuperate unknown mass, Yager's rule is chosen over Dempster's (for details on the properties of evidential combination rules see sec. \ref{subsec:combination_of_independent_evidence}). Given Yager's combination rule, $\gamma$ shall be chosen as follows
+Here, the adaption of $\gamma$ in a way that the fusion respects the lower bound $\underline{m}_{u}$, depends on the choice of combination rule. Since the combination requires the possibility to recuperate unknown mass, Yager's rule is chosen over Dempster's (for details on the properties of evidential combination rules see sec. \ref{subsec:combination_of_independent_evidence}). Given Yager's combination rule, $\gamma$ shall be chosen as follows
 \begin{align}
 	\underline{m}_u &\leq m^{0:T}_{u} \underbrace{=}_{\eqref{eq:yagers_rule}} m_{u}^{0:T-1}\tilde{m}_{u}^{T}+K \\
 %
@@ -463,13 +467,22 @@ Here, the adaption of $\gamma$ in a way so that the fusion respects the lower bo
 %
 	\underline{m}_u &\leq m_{u}^{0:T-1} + \gamma (\underbrace{m_{u}^{0:T-1}\tilde{m}_{u}^{0:T} - m_{u}^{0:T-1} + m_{o}^{0:T-1}\tilde{m}_{f}^{0:T} + m_{f}^{0:T-1}\tilde{m}_{o}^{0:T}}_{=: \xi}) \quad|-m_{u}^{0:T-1} |\div\xi
 \end{align}
-Since the above derivation is made for the case of combination in the initialization phase, both the map cell's and deep \gls{ism} estimate's unknown masses are in the interval $[\underline{m}_u,1]$. Thus, given $K=1$ and $\underline{m}_u = 0$, no solution for $\gamma$ can be found to suffice the requirement above. This setting, however, would be pointless since it disables the function of the lower bound $\underline{m}_u$ as a distinction between the initialization and convergence phase.
+Since the above derivation is made for the case of combination in the initialization phase, both the map cell's and deep \gls{ism} estimate's unknown masses are in the interval $[\underline{m}_u,1]$. Thus, given $K=1$ and $\underline{m}_u = 0$, no solution for $\gamma$ can be found to suffice the requirement above. This setting, however, would be pointless since by setting $\underline{m}_u = 0$, the function of the lower bound $\underline{m}_u$ as a distinction between the initialization and convergence phase would be disabled.
 Thus, given $\underline{m}_u > 0$, $|\xi| \in (0,1]$ and the two following solutions can be found 
 \begin{align}
 	\text{case: } \xi > 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\leq \gamma\\
 	\text{case: } \xi < 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\geq \gamma 
 \end{align}
-Once the unknown mass has fallen below the threshold $\underline{m}_u$, the \textbf{convergence phase} starts. Here, the geometric \gls{ism} should still be integrated into the map while the influence of the deep \gls{ism} should be disabled, guaranteeing a convergence towards the geometric \gls{ism}. To achieve this, a combination rule has to be chosen that integrates geometric \gls{ism} estimates in a way to strictly reduce the unknown mass but is also capable to shift mass between the free and occupied class to e.g. account for changes in the occupancy state (parked car starts to move) or for correction purposes.
+Therefore, the final discount factor to both reduce the informational redundancy in the deep \gls{ism} estimate and at the same time respects a lower bound on the unknown mass $\underline{m}_{u}$ can be written as 
+\begin{align}
+	\text{case: } \xi > 0 \rightarrow \gamma &\geq \left(\dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi}, \text{ReLU}(\Delta m_{u}) \right) \\
+%
+	\text{case: } \xi < 0 \rightarrow \gamma &\leq \left(\dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi}, \text{ReLU}(\Delta m_{u}) \right)
+\end{align}
+\\
+\\
+\textbf{Convergence Phase}
+Once the unknown mass has fallen below the threshold $\underline{m}_u$, the convergence phase starts. Here, the geometric \gls{ism} should still be integrated into the map while the influence of the deep \gls{ism} should be disabled, guaranteeing a convergence towards the geometric \gls{ism}. To achieve this, a combination rule has to be chosen that integrates geometric \gls{ism} estimates in a way to strictly reduce the unknown mass but is also capable to shift mass between the free and occupied class to e.g. account for changes in the occupancy state (parked car starts to move) or for correction purposes.
 The three phases of the proposed procedure are depicted in Fig. \ref{fig:three_phased_approach}. In the next section, the choices for combination rules for both the deep and geometric \gls{ism} to suffice the requirements of each phase are elaborated on. Afterwards, in sec. \ref{subsec:adaptation_of_redund_removal_to_sat_m_u_lower}, an adaptation of the discount factor to remove the redundancy in a way to respect the lower bound on the unknown mass $\underline{m}_{u}$ is defined.
 \begin{figure}
 	\begin{center}
