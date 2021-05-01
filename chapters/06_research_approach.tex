@@ -443,7 +443,7 @@ In this section, the requirements R\ref{subreq:initialize_with_deep_ism} and \re
 \\
 \\
 \textbf{Start Phase}\\
-First, in the start phase, all cells shall be set to $m_u = 1$. 
+First, in the start phase, all cells shall be set to $m_u = 1$ as illustrated on the left side in Fig. \ref{fig:three_phased_approach}. 
 \\
 \\
 \textbf{Initialization Phase}\\
@@ -473,34 +473,41 @@ Thus, given $\underline{m}_u > 0$, $|\xi| \in (0,1]$ and the two following solut
 	\text{case: } \xi > 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\leq \gamma\\
 	\text{case: } \xi < 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\geq \gamma 
 \end{align}
-Therefore, the final discount factor to both reduce the informational redundancy in the deep \gls{ism} estimate and at the same time respects a lower bound on the unknown mass $\underline{m}_{u}$ can be written as 
+Here, the case of $\xi > 0$, can be further simplified. Since $\underline{m}_u -m_{u}^{0:T-1} \leq 0$ and $\gamma \in [0,1]$, $\gamma$ already fulfills the requirement and, thus, does not need to be adapted.\\
+Therefore, the final discount factor to both reduce the informational redundancy in the deep \gls{ism} estimate and, at the same time, respects a lower bound on the unknown mass $\underline{m}_{u}$ can be written as 
 \begin{align}
-	\text{case: } \xi > 0 \rightarrow \gamma &\geq \left(\dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi}, \text{ReLU}(\Delta m_{u}) \right) \\
+	\text{case: } \xi > 0 \rightarrow \tilde{\gamma} &= \gamma\\
 %
-	\text{case: } \xi < 0 \rightarrow \gamma &\leq \left(\dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi}, \text{ReLU}(\Delta m_{u}) \right)
+	\text{case: } \xi < 0 \rightarrow \tilde{\gamma} &= \min \left(\gamma, \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} \right)
 \end{align}
+To fuse the geo \gls{ism} estimates into the map during the initialization phase, it is again proposed to use Yager's combination rule. The reason is the same as for the deep \gls{ism} fusion and revolves around the fact that Yager's rule is better suited to cope with changes in the true occupancy state.\\
+In the center of Fig. \ref{fig:three_phased_approach}, the main properties of the initialization phase to alter the map's state up the the lower bound $\underline{m}_{u}$ are depicted. It also shows the capability to move mass between free and occupied while recuperating unknown mass. 
 \\
 \\
-\textbf{Convergence Phase}
-Once the unknown mass has fallen below the threshold $\underline{m}_u$, the convergence phase starts. Here, the geometric \gls{ism} should still be integrated into the map while the influence of the deep \gls{ism} should be disabled, guaranteeing a convergence towards the geometric \gls{ism}. To achieve this, a combination rule has to be chosen that integrates geometric \gls{ism} estimates in a way to strictly reduce the unknown mass but is also capable to shift mass between the free and occupied class to e.g. account for changes in the occupancy state (parked car starts to move) or for correction purposes.
-The three phases of the proposed procedure are depicted in Fig. \ref{fig:three_phased_approach}. In the next section, the choices for combination rules for both the deep and geometric \gls{ism} to suffice the requirements of each phase are elaborated on. Afterwards, in sec. \ref{subsec:adaptation_of_redund_removal_to_sat_m_u_lower}, an adaptation of the discount factor to remove the redundancy in a way to respect the lower bound on the unknown mass $\underline{m}_{u}$ is defined.
+\textbf{Convergence Phase}\\
+Once the unknown mass has fallen below the threshold $\underline{m}_u$, the convergence phase starts. Here, the geometric \gls{ism} should still be integrated into the map while the influence of the deep \gls{ism} should be disabled, guaranteeing a convergence towards the geometric \gls{ism}.
+\\
+Here, the combination rule for the deep \gls{ism} as defined for the initialization phase already makes sure that the influence of the deep \gls{ism} is being disabled in the convergence phase. 
+\\
+For the geo \gls{ism}, a combination rule has to be chosen that integrates the estimates in a way to strictly reduce the unknown mass but at the same time is capable to shift mass between the free and occupied class to, again, account for changes in the occupancy state or for correction purposes. To suffice these requirements, the usage of an adapted Yager's rule is proposed. The adaption seeks to disable the capability to recuperate unknown mass to ensure that the unknown mass always remain below $\underline{m}_{u}$. To do so, it is proposed to assign the conflict $K$ in equal portions to the free and occupied mass instead of assigning it to the unknown mass. This can be written as follows
+\begin{align}
+	\label{eq:bauers_rule}
+	\vec{m}_1 \oplus_B \vec{m}_2 &=  
+	\begin{bmatrix} 
+		m_{f1}m_{f2} + m_{f1}m_{u2} + m_{u1}m_{f2} + K/2\\
+		m_{o1}m_{o2} + m_{o1}m_{u2} + m_{u1}m_{o2} + K/2\\
+		m_{u1}m_{u2}\\
+	\end{bmatrix}
+\end{align}
+To underline the modesty of the author, this rule shall be unknown as Bauer's combination rule.
+\\
+The combination approaches for each phase together with a comparison against the two baseline combination rules is provided in sec. \textcolor{red}{todo}. Furthermore, sec. \textcolor{red}{todo} shows the experimental results of applying this procedure for occupancy mapping.
 \begin{figure}
 	\begin{center}
 		\import{imgs/06_research_approach/method/}{three_phased_approach.pdf_tex}
 		\caption{\label{fig:three_phased_approach}Illustration of the three phases of a grid cell's occupancy state. Beginning with the start phase where the evidential mass is set to be all unknown. Afterwards, in the initialization phase, the unknown mass can be shifted into the free and occupied class and be recuperated using the deep and geometric \gls{ism}'s predictions. Finally, in the convergence phase, the geometric \gls{ism}'s estimates are used to strictly reduce the unknown mass while the deep \gls{ism} is being disabled.}
 	\end{center}
 \end{figure}  
-%======================================%
-%
-%======================================%
-\subsection{Choice of Combination Rule for Initialization and Convergence Phase}
-\label{subsec:choice_of_combination_rule_for_init_and_converge_phase}
-The first step to obtain the behavior as described in sec. \ref{subsec:method_to_use_deep_isms_in_occmaps}, is an analysis of the requirements for both the initialization and convergence phase. 
-Starting with the initialization phase, 
-%======================================%
-%
-%======================================%
-\subsection{Adaptation of Redundancy Removal to satisfy lower Bound on unknown Mass}
-\label{subsec:adaptation_of_redund_removal_to_sat_m_u_lower}
+
 
 

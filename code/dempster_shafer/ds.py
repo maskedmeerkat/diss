@@ -51,9 +51,10 @@ def fuseMasses(m1, m2, combRule = 0, uMin=0.0, entropyScaling=False, eps=1e-8,co
         if (m2[2]*m1[2] - m2[2] + k) < 0:
             h1_2 = np.min((h1_2, h1_2_max))
         else:
-            h1_2 = np.max((h1_2, h1_2_max))
+            # h1_2 = np.max((h1_2, h1_2_max))
+            h1_2 = h1_2
         if h1_2 < 0.001:
-            h1_2=0
+            h1_2 = 0
         
         # scale fr and occ masses
         m1[:-1] *= h1_2
@@ -205,6 +206,6 @@ plotDsOverTime(mDempster, "with Dempster")
 plt.plot([0, numMeas],[uMin, uMin],"b--")
 plt.legend(["free","occupied","unknown","uMin"])
 
-
+plt.show()
 
 
