@@ -15,9 +15,9 @@ tick pos=left,
 width=2.75in,
 x grid style={white!69.0196078431373!black},
 xlabel={experiment number},
-xmin=-0.35, xmax=7.35,
+xmin=0.65, xmax=8.35,
 xtick style={color=black},
-xtick={-1,0,1,2,3,4,5,6,7,8},
+xtick={1,2,3,4,5,6,7,8},
 y grid style={white!69.0196078431373!black},
 ylabel={train time until convergence [h]},
 ymin=0.2875, ymax=120.4625,
@@ -26,18 +26,18 @@ ytick={0,20,40,60,80,100,120,140}
 ]
 \addplot [line width=1.5pt, color0, mark=*, mark size=3, mark options={solid}]
 table {%
-4 65.5
-6 25
-7 18.75
+5 65.5
+7 25
+8 18.75
 };
 \addplot [line width=1.5pt, color1, mark=*, mark size=3, mark options={solid}]
 table {%
-0 7.5
-1 5.75
-2 7.5
-3 6.25
-4 65.5
-5 115
+1 7.5
+2 5.75
+3 7.5
+4 6.25
+5 65.5
+6 115
 };
 \end{axis}
 

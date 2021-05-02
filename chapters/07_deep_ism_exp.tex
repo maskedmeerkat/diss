@@ -84,55 +84,45 @@ After the creation of the occupancy map using the above described, enhanced geom
 \label{subsec:exp_setup_unet_arch}
 Since the focus of this work lies on the investigation of radar \gls{ism}s, the architecture search is performed based on radar input images with occupancy map patches for targets (see Sec. \ref{sec:dataset}). More specifically, radar \gls{bev} images based on one sweep's information are used, since they contain the least information and, thus, provide the most difficult task for the network to handle. Moreover, the considered UNet (see Sec. \ref{subsec:method_deep_ism_architecture}) is trained in SoftNet configuration (see Sec. \ref{subsec:method_al_uncert_in_deep_isms}), since it is the baseline configuration as proposed by the literature.
 \\
-The hyperparameters searched with the following procedure are the ResNet's downsample factor $D$ and the amount of filters for each stage $C_k, k \in [0,4]$. With regards to the filters, the approach proposed in the literature to double the amount after each encoder and halve it after each decoder stage respectively up to a maximum number of filters is adapted in this work (see Sec. \ref{subsec:architecture}). Thus, reducing the filter search to the initial amount of filters $C_0$ and the maximum amount of filter $C_{\max}$. These hyperparameters shall be investigated in a two stepped approach. First, $D$ is set to $0.5$ which is half of the most conservative compression rate reported to work without loss in performance (see Sec. \ref{subsec:architecture}). On the other hand, for $C_0$, the following variations are evaluated $[4,8,16,24,32,40]$ with $C_{\max} = \infty$.\\
+The hyperparameters searched with the following procedure are the downsample factor $D$ of each ResNet layer in the UNet and the amount of filters for each stage $C_k, k \in [0,4]$. With regards to the filters, the approach proposed in the literature to double the amount after each encoder and halve it after each decoder stage respectively up to a maximum number of filters is adapted in this work (see Sec. \ref{subsec:architecture}). Thus, reducing the filter search to the initial amount of filters $C_0$ and the maximum amount of filter $C_{\max}$. These hyperparameters shall be investigated in a two stepped approach. First, $D$ is set to $0.5$ which is half of the most conservative compression rate reported to work without loss in performance (see Sec. \ref{subsec:architecture}). On the other hand, for $C_0$, the following variations are evaluated $[4,8,16,24,32,40]$ with $C_{\max} = \infty$.\\
 Given the results of these variations, a configuration with a good trade-off between inference speed and accuracy is chosen for further optimization. Here, based on personal experience and the architectures reported in the literature, $C_{\max}$ is set to $128$ filters. Additionally, $D$ is successively halved starting from $0.25$, which is still reported throughout the literature to work without significant loss of accuracy, up to the point of collapse in performance.
 \\   
-All these experiments are conducted using Tensorflow 2.1 \cite{abadi2016tensorflow}, using the ADAM optimizer \cite{kingma2014adam} with a learning rate of $0.001$, a dropout rate of $0.3$. The layers are initialized using the HeNormal initializer \cite{he2015delving} and trained until convergence, as indicated by the validation set, to remove the bias due to the random initialization. The experiments are conducted on two NVIDIA Tesla V100 (32GB) GPUs and evaluated on a single core of an Intel Core Processor i7-10750H CPU.
+All these experiments are conducted using Tensorflow 2.1 \cite{abadi2016tensorflow}, the ADAM optimizer \cite{kingma2014adam} with a learning rate of $0.001$ and a dropout rate of $0.3$. The layers are initialized using the HeNormal initializer \cite{he2015delving} and trained until convergence, as indicated by the validation set, to remove the bias due to the random initialization. The experiments are conducted on two NVIDIA Tesla V100 (32GB) GPUs and evaluated on a single core of an Intel Core Processor i7-10750H CPU.
 %======================================%
 %
 %======================================%
 \subsection{Experimental Results}
 \label{subsec:exp_results_unet_arch}
-\begin{itemize}	
-	%
-	% hardware
-	%
-	\item how long is average training time until convergence of chosen model
-\end{itemize}
-%\begin{figure}
-%	\begin{center}
-%		\import{imgs/07_deep_ism_exp/network_tuning}{mIoU_network_tuning.tex}
-%		\caption{\label{fig:mIoU_network_tuning}}
-%	\end{center}
-%\end{figure} 
-%
-%\begin{minipage}{.5\textwidth}
-%	\begin{figure}
-%		\begin{center}
-%			\import{imgs/07_deep_ism_exp/network_tuning}{mIoU_network_tuning.tex}
-%			\caption{\label{fig:mIoU_network_tuning}}
-%		\end{center}
-%	\end{figure} 
-%\end{minipage}
-%%
-%\begin{minipage}{.5\textwidth}
-%	\begin{figure}
-%		\begin{center}
-%			\import{imgs/07_deep_ism_exp/network_tuning}{train_time_network_tuning.tex}
-%			\caption{\label{fig:train_time_network_tuning}}
-%		\end{center}
-%	\end{figure} 
-%\end{minipage}
+As explained above, the architecture search is split into two parts. Here, the first part fixes the ResNet layer's downsample rate $D$ and alternates the initial number of filters $C_0$ with $C_{\max} = \infty$. These hyperparameter configurations are summarized in the experiments $1-6$ in \ref{tab:networking_tuning_exp_setup} while the results are shown in Fig. \ref{fig:network_tuning} marked in orange. The experiments show an exponential decrease in inference time to obtain improve the mIoU. With regards to the time till convergence of training, the time remains about the same up to $C_0 = 24$. Afterwards, or $C_0 = 32$, it more than triples and doubles again for $C_0 = 40$. The behavior of the training and inference time are as expected since \textcolor{red}{todo: show that the complexity of a resnet layer is squared with filter size}.\\
+Based on these results, $C_0 = 32$ is chosen and further used to fine tune $D$ for the following reasons. First, further increasing $C_0$ shows to move the inference speed too far away from the goal of 100 Hz as defined in R\ref{subreq:resource_efficient_inference}. However, increasing $C_0$ from $24-32$ showed a significant improvement in qualitative predictions as can be seen in Fig. \textcolor{red}{todo: show some qualitative results of $C_0=32$ that demonstrate superiority}.
+\begin{center}
+\begin{tabular}{c|c|c|c}
+	experiment number & $C_0$ & $C_{\max}$ & $D$ \\
+	\hline
+	1 & 4 & $\infty$ & 0.5 \\
+	2 & 8 & $\infty$ & 0.5 \\
+	3 & 16 & $\infty$ & 0.5 \\
+	4 & 24 & $\infty$ & 0.5 \\
+	5 & 32 & $\infty$ & 0.5 \\
+	6 & 40 & $\infty$ & 0.5 \\
+	\hline
+	7 & 32 & 128 & 0.25 \\
+	8 & 32 & 128 & 0.125
+\end{tabular}
+\captionof{table}{\label{tab:networking_tuning_exp_setup}Hyperparameter setting for all network tuning experiments}
+\end{center}
+To fine tune the capacity of the network, $C_0$ is fixed to 32 while an upper limited on the number of filters is set to $C_{\max}=128$. Given this setup, $D$ is halved, starting from 0.5 up to the point where the performance collapses. It can be seen that this is the case after the second reduction as shown by the blue dots in the left plot of Fig. \ref{fig:network_tuning}. The parameter settings for the two experiments labeled 7 and 8 are shown in the lower part of \ref{tab:networking_tuning_exp_setup}. The experimental results show that a reduction of $D$ from 0.5 to 0.25 brings the network about $6\%$ closer to the goal of 100 Hz while at the same time roughly keeping its performance. At the same time, it more than halves the training time.  
+\begin{center}
 \begin{minipage}{.5\textwidth}
 	\import{imgs/07_deep_ism_exp/network_tuning}{mIoU_network_tuning.tex}
-	\captionof{figure}{\label{fig:mIoU_network_tuning}}
 \end{minipage}
 %
 \hfill
 \begin{minipage}{.47\textwidth}
-	\import{imgs/07_deep_ism_exp/network_tuning}{train_time_network_tuning.tex}
-	\captionof{figure}{\label{fig:train_time_network_tuning}} 
+	\import{imgs/07_deep_ism_exp/network_tuning}{train_time_network_tuning.tex} 
 \end{minipage}
+	\captionof{figure}{\label{fig:network_tuning}Experimental results of the network tuning experiments. On the left-hand-side, the mIoU over the CPU inference time is shown while on the right-hand-side, the training time is plotted for each experiment. Here, orange marks the first part of the experiments in which the downsamlping rate $D$ is fixed and the initial amount of filters $C_0$ is searched. On the other hand, blue marks the second stage of the parameter search in which $D$ is finetuned.}
+\end{center}
 %==========================================================================%
 %
 %==========================================================================%
