@@ -187,7 +187,7 @@ An algorithmic summary of the geometric \gls{ilm} is shown in Alg. \ref{alg:geo_
 	initialize all cells in the \gls{ilm} image to $m_u=1$\;
 	\For{angle \text{in} discretizedAnlges360}{
 		\If{(no detection along current angle)}{
-			\FuncCall{castFreeSpaceRay}{angle, maxRange, openingAngle=angle, pF}\;
+			\FuncCall{castFreeSpaceRay}{angle, maxRange, openingAngle, pF}\;
 		}
 		\Else{
 			\If{(detection is static)}{
@@ -204,7 +204,6 @@ An algorithmic summary of the geometric \gls{ilm} is shown in Alg. \ref{alg:geo_
 For the \textbf{\gls{irm}}, the main problem when applying the ray casting model from Sec. \ref{subsec:ray_casting} is the assumption that only objects in line of sight are measured. This assumption is violated for the radar since objects can be detected in occluded areas due to multi-path reflections. This leads to big amounts of free space being assigned to static objects by \gls{ism} rays cast towards detections in occluded areas. In this work, the occlusion problem is addressed similar to \cite{werber2015automotive} with the alteration that free space rays are not only ignored in occupied regions of other rays, but end at the collision range. In case the contours of all objects are densely detected, this would suffice to solve the problem. However, radar detections are also sparse which is why measurements of preceding time steps are additionally used to define end points of \gls{ism} rays. Another problem connected with the sparsity is the low coverage of free space. In this work, the method proposed in \cite{prophet2018adaptions} is altered by instead casting the original rays again but with a much wider opening angle. This assumes that the area close to the sensor is to a large degree free up to the closest detection. The remaining effects listed in Sec. \ref{subsec:geo_ism_radar} only aim at scaling the \gls{ism} to account for different sensor effects and are, thus, comparatively of minor importance. An algorithmic summary of the geometric \gls{irm} used in this work is shown in Alg. \ref{alg:geo_irm}.
 \begin{algorithm}
 	\caption{\label{alg:geo_irm}geometric Inverse Radar Model}
-	remove non-obstacle detections\;
 	initialize all cells in the \gls{irm} image to $m_u=1$\;
 	\For{angle \text{in} anlgesWithCurrentDetections}{
 		\Comment{range at which the free space of the ray is stopped}
