@@ -45,7 +45,41 @@ In contrast to sensor models, which describe the sensor characteristics given th
 %==========================================================================%
 \subsection{Ray-Casting in geo ISMs}
 \label{subsec:ray_casting}
-Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. Elfes \cite{elfes1989using} proposed in his seminal work, to model these sensors in the Bayesian framework as follows. First, rays are cast from the sensor towards objects marking the regions crossed by the ray with the ideal \gls{idm} for a detection. This ideal \gls{idm} defines everything between the detected object and the sensor as free, the position of the object as occupied and everything else as unknown. Fig. \ref{fig:idm} a) shows the ideal \gls{idm} in the probabilistic framework for a detection at $(4,0)$ and a sensor positioned at $(0,0)$. Afterwards, the ideal \gls{idm} is convoluted with a radial and angular Gaussian noise model resulting in the posterior probability distribution for the detection. In \cite{loop2016closed}, Loop et al. show that the application of a Gaussian noise model always leads a decision boundary between free and occupied space slightly in front of the actual object boundary. They, hence, propose an alternative noise model using a b-spline to tackle the problem. The application of the b-spline noise model onto the ideal \gls{idm}, which has been widely adopted in evidential occupancy mapping \cite{mouhagir2017using,reineking2013evidential,yu2015evidential}, is depicted in Fig. \ref{fig:idm} b), c).
+Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. Elfes \cite{elfes1989using} proposed in his seminal work, to model these sensors in the Bayesian framework as follows. First, rays are cast from the sensor towards detections, marking the regions crossed by the ray with the ideal \gls{idm}. This ideal \gls{idm} defines everything along the distance $r$ between the true object boundary $\mu_r$ and the sensor as free, the position of the object boundary as occupied and everything else as unknown. Given the true object angle $\mu_{\phi}$,  this can be written as follows 
+\begin{align}
+	\label{eq:ideal_idm}
+	\text{\gls{idm}}_{\text{ideal}}(r,\mu_r) = P(p_o(r) = 1 |\mu_r) &= 
+	\begin{cases}
+		0 &, \phi = \mu_{\phi} \text{ and } r < \mu_r\\
+		1 &, \phi = \mu_{\phi} \text{ and }r = \mu_r\\
+		0.5 &, \phi = \mu_{\phi} \text{ and } \mu_r < r\\				
+		0.5 &, \text{else}		
+	\end{cases}
+\end{align}
+A visualization of the ideal \gls{idm} is depicted in Fig. \ref{fig:idm} a). Next, since the radial measurement $z = (\tilde{\mu}_r, \tilde{\mu}_{\phi})$ is in fact not ideal but contains uncertainty, the ideal \gls{idm} is convoluted with a radial and angular Gaussian noise model. Here, Elfes argues that this model can only be evaluated in closed form for special sensor models and, thus, instead provides visualizations of the numerical results.
+\\\\
+In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s radial component along $\mu_\phi$ using the error function $\text{Erf}(x) = \dfrac{2}{\pi} \int_{0}^{x}e^{-t^2}dt$ and a small object thickness $\tau$ as follows 
+\begin{align}
+	\label{eq:gauss_idm}
+	\text{\gls{idm}}_{\text{Gauss}}(r,\tilde{\mu}_r, \phi = \mu_\phi) = P(p_o(r, \phi = \mu_\phi) = 1 |\tilde{\mu}_r)  =& \dfrac{1}{2}\text{Erf}\left(\dfrac{\tilde{\mu}_r-r}{\sqrt{2}\sigma_r}\right)\\
+	&- \dfrac{1}{4}\text{Erf}\left(\dfrac{\tilde{\mu}_r - r - \tau}{\sqrt{2}\sigma_r}\right) + \dfrac{1}{4} \notag
+\end{align}
+Given that formulation, they continue to show that the application of a Gaussian noise model always leads to a decision boundary between free and occupied space slightly in front of the actual object boundary. This effect can already be seen in Fig. 3 of Elfes' publication. They, hence, propose a quadratic b-spline as an alternative noise model to tackle the problem. Their final radial \gls{idm} after convolving the proposed b-spline with their ideal \gls{idm} can be written as follows
+\begin{align}
+	\label{eq:bspline}
+	\text{BSpline}(x) &= 
+	\begin{cases}
+		0 &, x < -3\\
+		\dfrac{(3+x)^3}{48} &, -3 \leq x \leq -1\\
+		\dfrac{1}{2}+\dfrac{x(3+x)(3-x)}{24} &, -1 < x < 1\\
+		1-\dfrac{(3-x)^3}{48} &, 1 \leq x \leq 3\\
+		1 &, 3 < x\\
+	\end{cases}\\
+%
+	\label{eq:bspline_idm}
+	\text{\gls{idm}}_{\text{B-Spline}}(r,\tilde{\mu}_r, \phi = \mu_\phi) &= \text{BSpline}((r - \tilde{\mu}_r)/\sigma_r) - \dfrac{1}{2}\text{BSpline}((r - \tilde{\mu}_r)/\sigma_r - 3)
+\end{align}
+The application of the b-spline noise model onto the ideal \gls{idm}, which has been widely adopted in evidential occupancy mapping \cite{mouhagir2017using,reineking2013evidential,yu2015evidential}, is depicted in Fig. \ref{fig:idm} b), c).
 \begin{figure}
 	\begin{center}
 		\import{imgs/05_state_of_the_art/geo_isms/}{idm.pdf_tex}
