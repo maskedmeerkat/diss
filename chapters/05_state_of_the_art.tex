@@ -58,9 +58,15 @@ To model a radial sensor, Elfes \cite{elfes1989using} proposed in his seminal wo
 		0.5 &, \text{else}		
 	\end{cases}
 \end{align}
-A visualization of the ideal \gls{idm} is depicted in Fig. \ref{fig:idm} a). Next, since the radial measurement $z = (\tilde{\mu}_r, \tilde{\mu}_{\phi})$ is in fact not ideal but contains uncertainty, the ideal \gls{idm} is convoluted with a radial and angular Gaussian noise model. Here, Elfes argues that this model can only be evaluated in closed form for special sensor models and, thus, instead provides visualizations of the numerical results.
-\\\\
-In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s radial component along $\mu_\phi$ using the error function $\text{Erf}(x) = \dfrac{2}{\pi} \int_{0}^{x}e^{-t^2}dt$ and an object thickness $\tau$ that extends the occupied area behind the object's boundary into the unknown area (visualized in Fig. \ref{fig:radial_geo_idm}) as follows 
+Next, since the radial measurement $z = (\tilde{\mu}_r, \tilde{\mu}_{\phi})$ is in fact not ideal but contains uncertainty, the ideal \gls{idm} is convoluted with a radial and angular Gaussian noise model. Here, Elfes argues that this model can only be evaluated in closed form for special sensor models and, thus, instead provides visualizations of the numerical results. These steps to obtain a 2D probabilistic \gls{idm} are visualized in Fig. \ref{fig:idm}.
+\begin{figure}
+	\begin{center}
+		\import{imgs/05_state_of_the_art/geo_isms/}{idm.pdf_tex}
+		\caption{\label{fig:idm} Visualization of a) the ideal \gls{idm} with the sensor at position $(0,0)$ and the detection at $(4,0)$, b) the influence of radial Gaussian noise and c) radial and angular Gaussian noise on the ideal \gls{idm}.}
+	\end{center}
+\end{figure}  
+\\
+In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s radial component along $\mu_\phi$ using the error function $\text{Erf}(x) = \dfrac{2}{\pi} \int_{0}^{x}e^{-t^2}dt$ as follows 
 \begin{align}
 	\label{eq:gauss_idm}
 	\text{\gls{idm}}_{\text{Gauss}}(r,\tilde{\mu}_r, \sigma_r, \phi = \mu_\phi) = P(p_o(r, \phi = \mu_\phi) = 1 |\tilde{\mu}_r)  =& \dfrac{1}{2}\text{Erf}\left(\dfrac{\tilde{\mu}_r-r}{\sqrt{2}\sigma_r}\right)\\
@@ -72,7 +78,7 @@ In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s r
 		\caption{\label{fig:radial_geo_idm}Example of the ideal \gls{idm} with $\mu_r = 2$ and an object thickness $\tau = 0.3$, together with the \gls{idm}$_{\text{Gauss}}$ with $\sigma_r = 0.1$ and \gls{idm}$_{\text{B-Spline}}$ with the same variance. The left side shows a zoom of the right side around the border between free and occupied space.}
 	\end{center}
 \end{figure} 
-They continue to show that the application of a Gaussian noise model always leads to a slightly shifted decision boundary between free and occupied space with regards to the \gls{idm}$_{\text{ideal}}$'s. This effect is illustrated in the zoomed region, left in Fig. \ref{fig:radial_geo_idm}. Therefore, they propose a quadratic b-spline as an alternative noise model designed in a way to always deliver the same free-occupied-border as the \gls{idm}$_{\text{ideal}}$ while approximately maintaining the shape of the \gls{idm}$_{\text{Gauss}}$ (see Fig. \ref{fig:radial_geo_idm}). The quadratic b-spline and their final radial \gls{idm}, after convolving the proposed b-spline with the ideal \gls{idm}, can be written as follows
+They continue to show that the application of a Gaussian noise model always leads to a slightly shifted decision boundary between free and occupied space with regards to the ideal \gls{idm}'s. This effect is illustrated in the zoomed region left in Fig. \ref{fig:radial_geo_idm}. Therefore, they propose a quadratic b-spline as an alternative noise model designed in a way to always deliver the same free-occupied-border as the \gls{idm}$_{\text{ideal}}$ while approximately maintaining the shape of the \gls{idm}$_{\text{Gauss}}$ (see Fig. \ref{fig:radial_geo_idm}). The quadratic b-spline and the corresponding radial \gls{idm}, after convolving the proposed b-spline with the ideal \gls{idm}, can be written as follows
 \begin{align}
 	\label{eq:bspline}
 	\text{BSpline}(x) &= 
@@ -87,14 +93,9 @@ They continue to show that the application of a Gaussian noise model always lead
 	\label{eq:bspline_idm}
 	\text{\gls{idm}}_{\text{B-Spline}}(r,\tilde{\mu}_r, \sigma_r, \phi = \mu_\phi) &= \text{BSpline}((r - \tilde{\mu}_r)/\sigma_r) - \dfrac{1}{2}\text{BSpline}((r - \tilde{\mu}_r)/\sigma_r - 3)
 \end{align}
-The \gls{idm}, which has been widely adopted in evidential occupancy mapping \cite{mouhagir2017using,reineking2013evidential,yu2015evidential}, is depicted in Fig. \ref{fig:idm} b), c).
-\begin{figure}
-	\begin{center}
-		\import{imgs/05_state_of_the_art/geo_isms/}{idm.pdf_tex}
-		\caption{\label{fig:idm} Visualization of a) the ideal \gls{idm} with the sensor at position $(0,0)$ and the detection at $(4,0)$, b) the influence of radial Gaussian noise and c) radial and angular Gaussian noise on the ideal \gls{idm}.}
-	\end{center}
-\end{figure}  
-In \cite{pagac1996evidential}, Pagac et al. proposed a formulation of the evidential \gls{idm} (indicated with subscript "ev") based on the probabilistic one (indicated with subscript "prob") as follows  
+The \gls{idm}$_{\text{B-Spline}}$ has been widely adopted in occupancy mapping \cite{mouhagir2017using,reineking2013evidential,yu2015evidential}.
+\\
+In \cite{pagac1996evidential}, Pagac et al. extended the probabilistic \gls{idm} to the evidential framework given an arbitrary probabilistic \gls{idm} as follows  
 \begin{align}
 	\label{eq:ev_ray_casting_model}
 	\text{\gls{idm}}_{\text{ev}} &=
@@ -104,7 +105,7 @@ In \cite{pagac1996evidential}, Pagac et al. proposed a formulation of the eviden
 	\end{cases}\\
 	\Delta p &= \| 0.5 - \text{\gls{idm}}_{\text{prob}} \|
 \end{align}
-Eventually, to arrive at the \gls{ism}, this \gls{idm} is applied on each detection of the sensor measurement and their influences are accumulated using one of the fusion approaches described in \ref{subsec:combination_of_independent_evidence}.
+Eventually, to arrive at the \gls{ism}, the \gls{idm} is applied on each detection of the sensor measurement and their influences are accumulated using one of the fusion approaches described in \ref{subsec:combination_of_independent_evidence}.
 %======================================%
 %
 %======================================%
