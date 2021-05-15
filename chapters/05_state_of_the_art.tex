@@ -45,7 +45,9 @@ In contrast to sensor models, which describe the sensor characteristics given th
 %==========================================================================%
 \subsection{Ray-Casting in geo ISMs}
 \label{subsec:ray_casting}
-Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. Elfes \cite{elfes1989using} proposed in his seminal work, to model these sensors in the Bayesian framework as follows. First, rays are cast from the sensor towards detections, marking the regions crossed by the ray with the ideal \gls{idm}. This ideal \gls{idm} defines everything along the distance $r$ between the true object boundary $\mu_r$ and the sensor as free, the position of the object boundary as occupied and everything else as unknown. Given the true object angle $\mu_{\phi}$,  this can be written as follows 
+Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. To describe these sensor models, the following notation shall be introduced. For the geo \gls{ism}s a Gaussian measurement noise is assumed who's true mean is defined in polar coordinates as $(\mu_r, \mu_\phi)$ while its measurement is defined as $(\tilde{\mu_r}, \tilde{\mu_\phi})$ with the estimated measurement variance $(\tilde{\sigma}_r, \tilde{\sigma}_\phi)$.
+\\
+To model a radial sensor, Elfes \cite{elfes1989using} proposed in his seminal work to utilize the Bayesian framework as follows. First, rays are cast from the sensor towards detections, marking the regions crossed by the ray with the ideal \gls{idm}. This ideal \gls{idm} defines everything along the distance $r$ between the true object boundary $\mu_r$ and the sensor as free, the position of the object boundary as occupied and everything else as unknown. Given the true object angle $\mu_{\phi}$,  this can be written as follows 
 \begin{align}
 	\label{eq:ideal_idm}
 	\text{\gls{idm}}_{\text{ideal}}(r,\mu_r) = P(p_o(r) = 1 |\mu_r) &= 
@@ -58,13 +60,19 @@ Most of the sensors deployed in automated driving for environment perception use
 \end{align}
 A visualization of the ideal \gls{idm} is depicted in Fig. \ref{fig:idm} a). Next, since the radial measurement $z = (\tilde{\mu}_r, \tilde{\mu}_{\phi})$ is in fact not ideal but contains uncertainty, the ideal \gls{idm} is convoluted with a radial and angular Gaussian noise model. Here, Elfes argues that this model can only be evaluated in closed form for special sensor models and, thus, instead provides visualizations of the numerical results.
 \\\\
-In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s radial component along $\mu_\phi$ using the error function $\text{Erf}(x) = \dfrac{2}{\pi} \int_{0}^{x}e^{-t^2}dt$ and a small object thickness $\tau$ as follows 
+In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s radial component along $\mu_\phi$ using the error function $\text{Erf}(x) = \dfrac{2}{\pi} \int_{0}^{x}e^{-t^2}dt$ and an object thickness $\tau$ that extends the occupied area behind the object's boundary into the unknown area (visualized in Fig. \ref{fig:radial_geo_idm}) as follows 
 \begin{align}
 	\label{eq:gauss_idm}
-	\text{\gls{idm}}_{\text{Gauss}}(r,\tilde{\mu}_r, \phi = \mu_\phi) = P(p_o(r, \phi = \mu_\phi) = 1 |\tilde{\mu}_r)  =& \dfrac{1}{2}\text{Erf}\left(\dfrac{\tilde{\mu}_r-r}{\sqrt{2}\sigma_r}\right)\\
-	&- \dfrac{1}{4}\text{Erf}\left(\dfrac{\tilde{\mu}_r - r - \tau}{\sqrt{2}\sigma_r}\right) + \dfrac{1}{4} \notag
+	\text{\gls{idm}}_{\text{Gauss}}(r,\tilde{\mu}_r, \sigma_r, \phi = \mu_\phi) = P(p_o(r, \phi = \mu_\phi) = 1 |\tilde{\mu}_r)  =& \dfrac{1}{2}\text{Erf}\left(\dfrac{\tilde{\mu}_r-r}{\sqrt{2}\sigma_r}\right)\\
+	&- \dfrac{1}{4}\text{Erf}\left(\dfrac{\tilde{\mu}_r - r - 3\sigma_r}{\sqrt{2}\sigma_r}\right) + \dfrac{1}{4} \notag
 \end{align}
-Given that formulation, they continue to show that the application of a Gaussian noise model always leads to a decision boundary between free and occupied space slightly in front of the actual object boundary. This effect can already be seen in Fig. 3 of Elfes' publication. They, hence, propose a quadratic b-spline as an alternative noise model to tackle the problem. Their final radial \gls{idm} after convolving the proposed b-spline with their ideal \gls{idm} can be written as follows
+\begin{figure}
+	\begin{center}
+		\import{imgs/05_state_of_the_art/geo_isms/}{radial_geo_idm.pgf}
+		\caption{\label{fig:radial_geo_idm}Example of the ideal \gls{idm} with $\mu_r = 2$ and an object thickness $\tau = 0.3$, together with the \gls{idm}$_{\text{Gauss}}$ with $\sigma_r = 0.1$ and \gls{idm}$_{\text{B-Spline}}$ with the same variance. The left side shows a zoom of the right side around the border between free and occupied space.}
+	\end{center}
+\end{figure} 
+They continue to show that the application of a Gaussian noise model always leads to a slightly shifted decision boundary between free and occupied space with regards to the \gls{idm}$_{\text{ideal}}$'s. This effect is illustrated in the zoomed region, left in Fig. \ref{fig:radial_geo_idm}. Therefore, they propose a quadratic b-spline as an alternative noise model designed in a way to always deliver the same free-occupied-border as the \gls{idm}$_{\text{ideal}}$ while approximately maintaining the shape of the \gls{idm}$_{\text{Gauss}}$ (see Fig. \ref{fig:radial_geo_idm}). The quadratic b-spline and their final radial \gls{idm}, after convolving the proposed b-spline with the ideal \gls{idm}, can be written as follows
 \begin{align}
 	\label{eq:bspline}
 	\text{BSpline}(x) &= 
@@ -77,9 +85,9 @@ Given that formulation, they continue to show that the application of a Gaussian
 	\end{cases}\\
 %
 	\label{eq:bspline_idm}
-	\text{\gls{idm}}_{\text{B-Spline}}(r,\tilde{\mu}_r, \phi = \mu_\phi) &= \text{BSpline}((r - \tilde{\mu}_r)/\sigma_r) - \dfrac{1}{2}\text{BSpline}((r - \tilde{\mu}_r)/\sigma_r - 3)
+	\text{\gls{idm}}_{\text{B-Spline}}(r,\tilde{\mu}_r, \sigma_r, \phi = \mu_\phi) &= \text{BSpline}((r - \tilde{\mu}_r)/\sigma_r) - \dfrac{1}{2}\text{BSpline}((r - \tilde{\mu}_r)/\sigma_r - 3)
 \end{align}
-The application of the b-spline noise model onto the ideal \gls{idm}, which has been widely adopted in evidential occupancy mapping \cite{mouhagir2017using,reineking2013evidential,yu2015evidential}, is depicted in Fig. \ref{fig:idm} b), c).
+The \gls{idm}, which has been widely adopted in evidential occupancy mapping \cite{mouhagir2017using,reineking2013evidential,yu2015evidential}, is depicted in Fig. \ref{fig:idm} b), c).
 \begin{figure}
 	\begin{center}
 		\import{imgs/05_state_of_the_art/geo_isms/}{idm.pdf_tex}
