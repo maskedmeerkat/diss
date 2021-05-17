@@ -50,16 +50,19 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.375)%
+  \begin{picture}(1,0.4375)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0.37841229,0.04726375){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}b) naive IRM\end{tabular}}}}%
+    \put(0.36518311,0.06346167){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}b) naive IRM\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{geo_irm_drawn.pdf}}%
-    \put(0.6440507,0.04726376){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}c) IRM with scaling factors\end{tabular}}}}%
-    \put(0.64280401,0.01419081){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}and free space enrichment\end{tabular}}}}%
+    \put(0.63082152,0.06346166){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}c) IRM with scaling factors\end{tabular}}}}%
+    \put(0.62957483,0.03038871){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}and free space enrichment\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{geo_irm_drawn.pdf}}%
-    \put(0.04525529,0.04726376){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}a) detections of four\end{tabular}}}}%
+    \put(0.03202611,0.06346166){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}a) detections of four\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{geo_irm_drawn.pdf}}%
-    \put(0.09138292,0.01419081){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}corner radars\end{tabular}}}}%
+    \put(0.07815374,0.03038871){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}corner radars\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{geo_irm_drawn.pdf}}%
+    \put(0.05000787,0.38527919){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{multi-path reflection}\end{tabular}}}}%
+    \put(0.05000787,0.40733839){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{outlier}\end{tabular}}}}%
   \end{picture}%
 \endgroup%
