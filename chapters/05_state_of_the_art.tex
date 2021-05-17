@@ -120,6 +120,12 @@ After distinguishing the ground plane detections, several possibilities to adapt
 Another alternative is to remove the ground points and only apply the \gls{idm} for object detections, which is favored by the majority of works \cite{thrun2006stanley,narksri2018slope,fischler1981random,hough1962method,oliveira2016scene,tian2020fast}. However, by removing the ground plane detections, the information about free space gets lost for areas not affected by the object detection's rays. To solve this problem under the assumption of dense detections, \gls{idm} rays are cast for each angle up to a maximum distance within the lidars \gls{fov} instead of only for angles with detections. In doing so, the \gls{idm} can still be applied for all detections hit by rays and all the rays ending at maximum distance are altered to only model the free space. 
 \\
 In case the density assumption is violated, this approach, however, might lead to casting free space rays in between object detections assigning occupied space as partially free. To reduce those cases, the \gls{bev} discretization has to be adapted to the point clouds density. Moreover, since the point cloud becomes increasingly sparse with distance, the opening angle of the rays has to be adapted to reduce the probability of passing through neighboring detections.  
+\begin{figure}
+	\begin{center}
+		\import{imgs/05_state_of_the_art/geo_isms/}{geo_ilm_drawn.pdf_tex}
+		\caption{\label{fig:geo_ilm_drawn}Illustration of the \gls{ilm} stages based on a scene with the ego vehicle and its mounted lidar sensor in the center, two building on its left and two parked vehicles in front of a building on its right side. The phases consist of detecting and removing the ground-plane as shown in a) and b) with ground detections in blue and object detections in orange, followed by the application of the \gls{idm}. Here, three different variants are illustrated. The upper left sector shows the result of only applying the \gls{idm} for angles with object detections. The upper right shows the application of an \gls{idm} with a small opening for all 360$^\circ$ angles using small angular increments. Finally, the bottom sector again shows the \gls{idm} applied for all angles but this time with a larger opening angle and bigger angular increments.}
+	\end{center}
+\end{figure} 
 %======================================%
 %
 %======================================%
