@@ -145,6 +145,7 @@ For this work, only the radar signal prefiltered by the manufacturer are conside
 \\
 However, the accuracy of radars is not constant, as assumed in the standard \gls{idm}, but rather depends on the radial distance, reflecting material, detection angle and atmospheric interferences. Therefore, the \gls{idm}'s probabilities have to be adapted to account for these influences. To do so, Clark et al. \cite{clarke2012sensor} propose the following scaling factor
 \begin{align}
+	\label{eq:clarke_scaling}
 	G_{\text{Clarke}} = G_p G_\phi G_a
 \end{align}
 where $G_p$ scales the \gls{idm} linearly dependent on the received signal's power amplitude relative to its range. Moreover, $G_\phi$ is used to decrease the detection probabilities quadratically depending on the angle between detection and sensor center ray relative to the maximum angle in the sensor's \gls{fov}. Eventually, $G_a$ is used to incorporate the influence of range dependent grid areas. This, however, becomes only relevant for polar grids and can be neglected in Cartesian coordinates. This model is further extended in \cite{prophet2018adaptions} by additionally decreasing the probabilities linearly depending on the ego vehicle's velocity.
