@@ -54,11 +54,12 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{geo_ilm_drawn.pdf}}%
-    \put(0.04829771,0.04726375){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}a) ground-plane\end{tabular}}}}%
-    \put(0.09212575,0.0141908){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}detection\end{tabular}}}}%
-    \put(0.3936857,0.04726375){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}b) ground-plane\end{tabular}}}}%
-    \put(0.43751374,0.0141908){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}removal\end{tabular}}}}%
-    \put(0.75490607,0.04726375){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}c) ray-casting\end{tabular}}}}%
-    \put(0.79158984,0.0141908){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}variants\end{tabular}}}}%
+    \put(0.3936857,0.04726376){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}b) ray casting\end{tabular}}}}%
+    \put(0.42282472,0.01419081){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}problems\end{tabular}}}}%
+    \put(0.04829771,0.04726376){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}a) ground-plane\end{tabular}}}}%
+    \put(0.01512146,0.01419081){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}detection \& removal\end{tabular}}}}%
+    \put(0.75490608,0.04726376){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}c) better tuned\end{tabular}}}}%
+    \put(0.78078947,0.01419081){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ray casting\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{geo_ilm_drawn.pdf}}%
   \end{picture}%
 \endgroup%
