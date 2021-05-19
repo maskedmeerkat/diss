@@ -102,7 +102,7 @@ To be able to investigate RQ\ref{requ:what_is_best_gt}, it is also necessary to 
 \begin{requ}[RQ\ref{requ:filter_outliers_in_geo_irm}] \label{requ:filter_outliers_in_geo_irm}
 	Define an easily tunable procedure which increases the robustness of the geo \gls{irm} against outliers and multi-path reflections in general urban scenarios. As a measure of robustness, the mIoU between the radar and lidar occupancy maps shall be used.
 \end{requ}
-The second problem revolves around the enrichment of free space. Here, the state-of-the-art proposes to define additional free space between the maximum absolute angles of the radar's \gls{fov} cone and its closest detection. This assumes high certainty of the sensor towards the edges of the \gls{fov} cone in order to make the implication of free space based on absence of detections. The remaining literature, however, does not support this assumption, which can be seen by the scaling factor $G_\phi$ in Eq. \ref{eq:clarke_scaling} which reduces the \gls{idm}'s certainty towards the \gls{fov}'s edges in angular direction. Thus, the need arises to provide a free space enrichment method which better suits the sensor certainty
+The second problem revolves around the enrichment of free space. Here, the state-of-the-art proposes to define additional free space between the maximum absolute angles of the radar's \gls{fov} cone and its closest detection. This assumes high certainty of the sensor towards the edges of the \gls{fov} cone in order to make the implication of free space based on absence of detections. The remaining literature, however, does not support this assumption, which can be seen by the scaling factor $G_\varphi$ in Eq. \ref{eq:clarke_scaling} which reduces the \gls{idm}'s certainty towards the \gls{fov}'s edges in angular direction. Thus, the need arises to provide a free space enrichment method which better suits the sensor certainty
 \\
 \begin{requ}[RQ\ref{requ:fr_space_enrichment}] \label{requ:fr_space_enrichment}
 	Define a procedure to assign free space in regions based on the absence of detections which aligns with the sensor certainty.
@@ -176,7 +176,7 @@ Eventually, to utilize the deep \gls{ism} estimates as priors according to R\ref
 \label{sec:framework_overview}
 In this section, a framework is presented to address the research questions defined in Sec. \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}. The framework extends the standard evidential occupancy mapping pipeline \cite{pagac1996evidential} to incorporate estimates of a data-driven \gls{ism}, as shown in Fig. \ref{fig:illustrative_system_overview}. Here, the choices of how to obtain the data and how to define the architecture are detailed in Sec. \ref{subsec:method_deep_ism_architecture}. For the learned \gls{ism} to suffice R\ref{subreq:unknown_mass} and \ref{subreq:conflicting_mass}, a method to investigate H\ref{hyp:sota_not_model_unc} is proposed in Sec. \ref{subsec:method_al_uncert_in_deep_isms}.\\
 The incorporation of the deep \gls{ism}s information is realized by fusing the estimates directly into the map rather than first fusing it with the geo \gls{ism}'s estimate. This is done, in order to enable an asynchronous fusion of information into the map, which allows for differing execution times of the \gls{ism}s. The specific choice of the fusion methods for both geometric and deep \gls{ism}s are detailed in Sec. \textcolor{red}{Todo}.
-\begin{figure}
+\begin{figure}[H]
 	\begin{center}
 		\import{imgs/06_research_approach/}{illustrative_system_overview.pdf_tex}
 		\caption{\label{fig:illustrative_system_overview}Structural overview of the proposed framework, showing how the \gls{bev} input is transformed both by the deep and geometric \gls{ism} into occupancy estimates. After removing the temporal redundancy, both \gls{ism}'s estimates are fused into the occupancy map.}
@@ -185,62 +185,96 @@ The incorporation of the deep \gls{ism}s information is realized by fusing the e
 %======================================%
 %
 %======================================%
-\subsection{Definition of geometric ISMs for Lidars and Radars}
+\subsection{Definition of Geo ILM and IRM}
 \label{subsec:method_geo_isms}
-Both lidar and radar sensors provide range measurements and, thus, the ray casting \gls{ism} as explained in Sec. \ref{subsec:ray_casting} can be applied. However, for reasons detailed in Sec. \ref{subsec:geo_ism_lidar} and \ref{subsec:geo_ism_radar}, additional steps have to be taken. 
+This subsection provides a detailed description of the geo \gls{ilm}'s and \gls{irm}'s algorithm. The further methodology to specify the algorithm's hyperparameters as well as the specific ground-plane removal method used in the \gls{ilm} are detailed in the subsequent sections.
 \\
-In case of the \textbf{\gls{ilm}}, first the non-ground detections have to be removed. Then, for each angle around the ego vehicle without a detection in line of sight, a free space ray is cast setting all cells between the lidar sensor up to a max range along the angle to $\vec{m}=[pF,0,1-pF]^\top$ with $pF$ being a parameter of the \gls{ilm}. Next, for each detection in line of sight, a ray is cast as defined in \cite{pagac1996evidential} with a parameterizable opening angle, free and occupied probability $pF, pO$. In case of labeling with lidar, the detections are enhanced with the motion state. For dynamic detections, the model in Eq. \ref{eq:ev_ray_casting_model} is adapted as follows
-An algorithmic summary of the geometric \gls{ilm} is shown in Alg. \ref{alg:geo_ilm}.\\
-\begin{algorithm}
-	\caption{\label{alg:geo_ilm}geometric Inverse Lidar Model}
-	remove non-obstacle detections\;
+Both lidar and radar sensors use a radial measurement principal which is why it makes sense to model them using the ray casting \gls{ism} as explained in Sec. \ref{subsec:ray_casting}, however in a modified way.  
+\\\\
+\textbf{\gls{ilm}}\\
+In case of the \gls{ilm}, first the ground detections have to be removed. Afterwards, free space rays with opening angle $\varphi_\sphericalangle$ are cast for each angle in increments of $\varphi_\sphericalangle$ in the range $[0^\circ, 360^\circ]$ around the sensor center either up to a maximum distance $r_\text{max}$ or until colliding with a detection. All \gls{bev} grid cells affected by the free space ray are set to $[M_F,0,1-M_F]^\top$ using the tunable free space weight $M_F \in [0,1]$. On the other hand, position of collided detections are either set to $[0,M_O,1-M_O]^\top$ for static detections with the occupied space weight $M_O \in [0,1]$ or to $[M_D, M_D, 1-2M_D]^\top$ for dynamic detections with the dynamic object weight $M_D \in [0,0.5]$. Here, the information about the motion state is not provided by the lidar itself but by external sources like additional labels in the dataset. The additional motion information will only be used to generate labels to train the deep \gls{ism} variants but not, to generate deep \gls{ism} inputs! This procedure has the effect that detections occluded in the \gls{bev} projection are filtered out which better matches the radar's sensing capability. An algorithmic summary of the geometric \gls{ilm} in pseudo code is shown in Alg. \ref{alg:geo_ilm}.\\
+\begin{algorithm}[H]
+	\caption{\label{alg:geo_ilm}Geo ILM}
+	\textbf{Hyperparameters:} $M_F, M_O, M_D, \varphi_\sphericalangle, N$\;
+	\Function{castFreeSpace}{
+		\Comment{see \eqref{eq:idm_radar} with $M_O = M_D = 0$}
+	}
+	remove ground-plane detections\;
 	initialize all cells in the \gls{ilm} image to $m_u=1$\;
-	\For{angle \text{in} discretizedAnlges360}{
-		\If{(no detection along current angle)}{
-			\FuncCall{castFreeSpaceRay}{angle, maxRange, openingAngle, pF}\;
-		}
-		\Else{
+	\For{$\varphi_{\text{center}}$ \text{in} discretizedAnlges360}{
+		\If{(at least one detection in current cone area)}{
+			$(r_{\text{det}}, \varphi_{\text{det}})$ = \FuncCall{getClosestDetectionInsideConeArea}{$\varphi_{\text{center}}$, $\varphi_\sphericalangle$, $r_{\text{max}}$}\;
+			\FuncCall{castFreeSpaceRay}{$\varphi_{\text{center}}$, $r_{\text{det}}$, $\varphi_\sphericalangle$, $M_F$}\;
+			\Comment{mark closest detection}
 			\If{(detection is static)}{
-				\Comment{see Eq.\ref{eq:ev_ray_casting_model}}
-				\FuncCall{castStatRay}{angle, rangeToDetection, openingAngle, pF, pO}\;
+				\FuncCall{assignCellValue}{$(r_{\text{det}}, \varphi_{\text{det}})$, $[0,M_O,1-M_O]$}\;
 			}
 			\Else{
-				\Comment{see Eq.\ref{eq:ev_ray_casting_model_for_dy}}
-				\FuncCall{castDynRay}{angle, rangeToDetection, openingAngle, pF, pD}\;
+				\FuncCall{assignCellValue}{$(r_{\text{det}}, \varphi_{\text{det}})$, $[M_D, M_D, 1-2M_D]$}\;
 			}
+		}
+		\Else{
+			\FuncCall{castFreeSpaceRay}{$\varphi_{\text{center}}$, $r_{\text{max}}$, $\varphi_\sphericalangle$, $M_F$}\;			
 		}
 	}
 \end{algorithm}
-For the \textbf{\gls{irm}}, the main problem when applying the ray casting model from Sec. \ref{subsec:ray_casting} is the assumption that only objects in line of sight are measured. This assumption is violated for the radar since objects can be detected in occluded areas due to multi-path reflections. This leads to big amounts of free space being assigned to static objects by \gls{ism} rays cast towards detections in occluded areas. In this work, the occlusion problem is addressed similar to \cite{werber2015automotive} with the alteration that free space rays are not only ignored in occupied regions of other rays, but end at the collision range. In case the contours of all objects are densely detected, this would suffice to solve the problem. However, radar detections are also sparse which is why measurements of preceding time steps are additionally used to define end points of \gls{ism} rays. Another problem connected with the sparsity is the low coverage of free space. In this work, the method proposed in \cite{prophet2018adaptions} is altered by instead casting the original rays again but with a much wider opening angle. This assumes that the area close to the sensor is to a large degree free up to the closest detection. The remaining effects listed in Sec. \ref{subsec:geo_ism_radar} only aim at scaling the \gls{ism} to account for different sensor effects and are, thus, comparatively of minor importance. An algorithmic summary of the geometric \gls{irm} used in this work is shown in Alg. \ref{alg:geo_irm}.
-\begin{algorithm}
-	\caption{\label{alg:geo_irm}geometric Inverse Radar Model}
+\textbf{\gls{irm}}\\
+For the \gls{irm}, a cone model which is be based on the \gls{idm}$_{\text{B-Spline}}$ as proposed in \cite{loop2016closed} is used with the following adjustments. First, since the \gls{bev} grid resolution of 31,25 cm covers the uncertainty ellipse of the radar, a scaled, evidential version of the \gls{idm}$_{\text{ideal}}$ can be used as an approximation of the \gls{idm}$_{\text{B-Spline}}$'s radial component.
+\\
+In angular direction, it is proposed to linearly approximate the influence of the Gaussian noise, again due to the coarse discretization. However, the scaling shall only affect the free space since cones with a bigger opening angle than the uncertainty would suggest are used to counteract the cases of \gls{idm} rays passing between detections in areas where the point clouds are sparse. While the enlarged cones lead to a desired enrichment of free space they would also lead to blurring the occupied space and with it, object boundaries. Thus, the following adapted evidential \gls{idm} is proposed to be used for radars
+\begin{align}
+	\label{eq:idm_radar}
+	\text{\gls{idm}}_{radar}(r, \varphi, \mu_r, \mu_\varphi) &= 
+	\begin{cases}
+		[M_{F\sphericalangle},0,1-M_{F\sphericalangle}]^\top &, \Delta\varphi \leq \varphi_\sphericalangle, r < \mu_r\\
+		[0,M_O,1-M_O]^\top &, \Delta\varphi \leq \varphi_\sphericalangle, r = \mu_r \text{ , static detection}\\
+		[M_D,M_D,1-2M_D]^\top &, \Delta\varphi \leq \varphi_\sphericalangle,r = \mu_r \text{ , dynamic detection}\\		
+		[0,0,1]^\top &, \text{ else}\\
+	\end{cases}\\
+	%	
+	\text{with } \quad M_{F\sphericalangle} &= M_F(1 - \dfrac{| \Delta\varphi |}{\varphi_\sphericalangle}) \quad\text{ and }\quad \Delta\varphi = \varphi - \mu_\varphi
+\end{align}
+However, for reasons detailed in Sec. \ref{subsec:geo_ism_radar}, \gls{idm}$_{radar}$ can not be directly applied on each detection to obtain the \gls{irm}. Here, the main problem is the assumption that only objects in line of sight are detected. This assumption is violated for the radar since objects can be detected in occluded areas due to multi-path reflections. This leads to big amounts of free space being assigned to static objects by \gls{idm} rays cast towards detections in occluded areas. 
+\\
+In this work, the occlusion problem is addressed similar to \cite{werber2015automotive} with the alteration that the free space part of the \gls{idm} is not only ignored in occupied regions of other rays, but ends at it. In case the contours of all objects are densely detected, this would suffice to solve the problem. However, radar detections are also sparse which is why measurements of preceding time steps are additionally used to densify object boundaries. In contrast to the \gls{ilm}, detections occluded in the \gls{bev} projection shall still be marked as occupied in the \gls{irm} in order not to further increase the sparseness. The time horizon, in which detections are accumulated, shall be set to finite value to dampen the influence of potential outliers. This procedure only introduces the time horizon as hyperparameter and, thus, proposes a good candidate to answer RQ\ref{requ:filter_outliers_in_geo_irm}.
+\\
+Another problem connected with the sparsity is the low coverage of free space. In this work, the method proposed in \cite{prophet2018adaptions} is altered to find an answer for RQ\ref{requ:fr_space_enrichment} by instead casting the original rays again but with a much wider opening angle. This assumes that the manufacturer's prefiltering of the raw radar signal is done in away to preserve detections belonging to the object closest to the sensor. The justification for this assumption is based on that fact that radars are applied in safety critical collision avoidance systems. The second iteration of wider \gls{idm} rays shall only be used to enrich the free space and, thus, use $M_O = 0$. Additionally, it shall be fused with the first iterations \gls{irm} using Dempster's combination rule.
+\\
+An algorithmic summary of the geometric \gls{irm} in pseudo code is shown in Alg. \ref{alg:geo_irm}.\\
+\begin{algorithm}[H]
+	\caption{\label{alg:geo_irm}Geo IRM}
+	\textbf{Hyperparameters:} $M_F^{(1)}, M_F^{(2)}, M_O, M_D, \varphi_\sphericalangle, N$\;	
+	\Function{castFreeSpace}{
+		\Comment{see \eqref{eq:idm_radar} with $M_O = M_D = 0$}
+	}
 	initialize all cells in the \gls{irm} image to $m_u=1$\;
-	\For{angle \text{in} anlgesWithCurrentDetections}{
+	transform previous $N$ radar point clouds of all radars to current \gls{irm} image\;
+	\For{$(\mu_r, \mu_\varphi)$ \text{in} currentDetections}{
 		\Comment{range at which the free space of the ray is stopped}
-		cutOffRange = $\infty$\;
-		\If{(current or previous detection hit by current ray)}{
-			cutOffRange = rangeFirstHitDetection
-		}			
+		$(r_{\text{det}}, \varphi_{\text{det}})$ = \FuncCall{getClosestDetectionInsideConeArea}{$\varphi_{\text{center}}$, $\varphi_\sphericalangle$, $r_{\text{max}}$}\;	
+		\Comment{cast thin and big free space rays}
+		\FuncCall{castFreeSpaceRay}{$\varphi_{\text{center}}$, $r_{\text{det}}$, $\varphi_\sphericalangle$, $M_F$}\;		
+		\FuncCall{DempsterRule}{\FuncCall{castFreeSpaceRay}{$\varphi_{\text{center}}$, $r_{\text{det}}$, $\varphi_\sphericalangle^{(2)}$, $M_F^{(2)}$}}\;
 		\If{(detection is static)}{
-			\Comment{see Eq.\ref{eq:ev_ray_casting_model}}
-			\FuncCall{castStatRay}{angle, rangeToDetection, openingAngle, pF, pO, cutOffRange}\;
+			\FuncCall{assignCellValue}{$(\mu_r, \mu_\varphi)$, $[0,M_O,1-M_O]$}\;
 		}
 		\Else{
-			\Comment{see Eq.\ref{eq:ev_ray_casting_model_for_dy}}
-			\FuncCall{castDynRay}{angle, rangeToDetection, openingAngle, pF, pD, cutOffRange}\;
+			\FuncCall{assignCellValue}{$(\mu_r, \mu_\varphi)$, $[M_D, M_D, 1-2M_D]$}\;
 		}
 	}
 \end{algorithm}
 %======================================%
 %
 %======================================%
-\subsection{Methodology to define the Ground-Truth}
+\subsection{Methodology to define the Geo ISM's Hyperparameters and Removal of Ground-Plane Detections}
 \label{subsec:method_choice_of_gt}
-To obtain deep \gls{ism}s, first, the generation of labels according to RQ\ref{requ:what_is_best_gt} has to be addressed. Here, the NuScenes dataset provides semantic labels for the lidar detections which can be utilized to cover the semantic ground-plane filtering approaches. As an alternative, threshold-based filtering shall be considered by removing all lidar detections beneath a certain height threshold. The sensor specifics, considered semantic labels and specification of height thresholds are detailed in Sec. \ref{sec:choice_of_gt}.
+To obtain deep \gls{ism}s, first, the generation of labels according to RQ\ref{requ:what_is_best_gt} has to be addressed. Here, a dataset with semantic labels for the lidar detections shall be used to cover the semantic ground-plane filtering approaches. As an alternative, threshold-based filtering shall be considered by removing all lidar detections beneath a certain height threshold. The sensor specifics, considered semantic labels and specification of height thresholds are detailed in Sec. \ref{sec:choice_of_gt}.
 \\
 To account for the fact that radars can utilize multi-path reflections to obtain detections hidden for the lidar, the geometric \gls{ism}s (see Sec. \ref{subsec:method_geo_isms}) of both sensors will be used. Additionally, to account for the sparseness in radar data, the \gls{ism}s are mapped over subsequent time steps and afterwards compared. This not only tackles the sparseness but also softens the requirement for lidar and radar measurements to exactly align by discretizing them into the \gls{bev} grid map's cells. 
 \\
-To obtain a quantitative comparison, the m\gls{iou} score is computed between the evidential occupancy map classes. This score is a standard to measure the overlap between semantic classes in computer vision and is capable to handle the class imbalance present in this experiment. Nevertheless, to soften the class imbalance, the score shall only be computed in areas which can be potentially affected by the respective \gls{ism}s. 
+To obtain a quantitative comparison, the m\gls{iou} score is computed between the evidential occupancy map classes. This score is a standard to measure the overlap between semantic classes in computer vision and is capable to handle the class imbalance present in this experiment. Nevertheless, to soften the class imbalance, the score shall only be computed in areas which can be potentially affected by the respective \gls{ism}s.
+\\
+Nevertheless, since this procedure utilizes both the geo \gls{ism}s for lidar and radar, their respective hyperparameters have to be fixed prior to the experiments. This is however difficult since the ground plane removal poses a crucial step in the \gls{ilm}. Additionally, without a fixed \gls{ilm}, there are no labels to tune the \gls{irm} to. Thus, it is proposed that both \gls{ism}s are independently, manually tuned using the height threshold ground-plane removal variant for the \gls{ilm}. 
 %======================================%
 %
 %======================================%
