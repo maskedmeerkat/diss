@@ -11,7 +11,7 @@ To obtain the baseline geometric \gls{irm} and \gls{ilm} \gls{bev} images, the \
 %==========================================================================%
 %
 %==========================================================================%
-\section{Choice of Ground-Truth}
+\section{Parameterization of Geo ILM and IRM}
 \label{sec:choice_of_gt}
 This section details the comparison of different approaches to adapt lidar to radar \gls{bev} projections. First, the sensor characteristics in the chosen dataset will be listed together with the applied methods to adapt the lidar. Afterwards, the different lidar filtering approaches will be evaluated based on the overlap between the lidar and radar maps in the mapped areas quantified by the m\gls{iou} score. 
 %======================================%
@@ -19,7 +19,51 @@ This section details the comparison of different approaches to adapt lidar to ra
 %======================================%
 \subsection{Experimental Setup}
 \label{subsec:exp_setup_gt}
-In the following, evidential occupancy maps of scenes as defined in the NuScenes dataset are created based on the geometric \gls{irm} and \gls{ilm} as described in Sec. \ref{subsec:method_geo_isms}. To find the best overlap between the two types of maps, the first step in the \gls{ilm}, namely the removal of ground detections will be altered. The two filters under investigation are a purely geometric height threshold-based and a semantic filter. Here, height thresholds are compare for different heights in the interval $[0,0.1]$ with step size $0.025$ and in the interval $[0.1,2.0]$ with step size $0.1$ in order to have a higher resolution close to zero. For the semantic filters, in the majority of cases the street detections are closest to the ego vehicle in the \gls{bev} projection followed by sidewalks and terrain. Since the removal of detections in occluded areas has little to no effect for geometric \gls{ism}s, a three stepped removal of the semantics is proposed as follows $[$no street, no street or sidewalk, no street, sidewalk or terrain$]$.
+In the following, evidential occupancy maps of scenes as defined in the NuScenes dataset are created based on the geometric \gls{irm} and \gls{ilm} as described in Sec. \ref{subsec:method_geo_isms}. Because of the large space of parameter configurations, the search is only conducted on a small subset of the available training scenes. To identify the parameters, a two stepped approach is proposed.
+\\
+The first steps consists of estimating the best parameters for the Geo ILM and IRM. Since no additional occupancy ground truth is available to tune both the lidar and radar models, a temporary ILM is manually configured by the author to provide a reference to further perform a parameter grid search for the \gls{irm}. This temporary Geo \gls{ilm} uses the height-threshold-based ground-plane removal since it is the most widely used method in the literature.
+\\
+In the second step, to find the best overlap between the two types of maps, the removal of ground detections in the Geo \gls{ilm} will be altered. The two filters under investigation are a purely geometric height threshold-based and a semantic filter. Here, height thresholds are compared for different heights in the interval $[0,0.1]$ with step size $0.025$ and in the interval $[0.1,2.0]$ with step size $0.1$ in order to have a higher resolution close to zero. For the semantic filters, in the majority of cases the street detections are closest to the ego vehicle in the \gls{bev} projection followed by sidewalks and terrain. Since the removal of detections in occluded areas has little to no effect for geometric \gls{ism}s, a three stepped removal of the semantics is proposed as follows $[$no street, no street or sidewalk, no street, sidewalk or terrain$]$.
+%======================================%
+%
+%======================================%
+\subsection{Experimental Results for Geo ILM and IRM Parameter Tuning}
+\label{subsec:exp_results_params_ilm_irm}
+In order to parameterize the temporary geo \gls{ilm}, the height-threshold will be defined first. Here,the parameter is increased up to the point where additional structure besides street is being removed. Using the so found height threshold of 0.6 cm, the free and occupied weight $M_F, M_O, M_D$ and the opening angle $\varphi_\sphericalangle$ of Alg. \ref{alg:geo_ilm} are balanced in a way that 
+\begin{itemize}
+	\item remaining ground points are being filtered out
+	\item \gls{idm} rays don't cut through object boundaries
+	\item object boundaries are as dense as possible
+	\item free and occupied space has maximal assigned evidential mass
+\end{itemize}
+leading to the parameters summarized in Tab. \ref{tab:ilm_irm_tuning}. For an illustration of the \gls{ilm} tuning, refer to Fig. \ref{fig:ilm_irm_tuning}.
+\begin{figure}[H]
+	\begin{center}
+		\import{imgs/07_deep_ism_exp/choice_of_gt}{ilm_irm_tuning.pdf_tex}
+		\caption{\label{fig:ilm_irm_tuning}Examples of the chosen \gls{ism} parameterization. First three rows showing samples of the geo \gls{irm} variants applied on a specific frame of a scene with the resulting occupancy map of the scene on the right. It can be seen that the additional detections help preserve the occupied space while also restrict free space being assigned behind object boundaries. Moreover, the additional free space rays help to densify the estimated free space while leaving the occupied space unaltered. At the bottom, the used geo \gls{ilm} is applied to the lidar data of the same frame again with the final occupancy map to its right. Additionally, examples of the \gls{ilm} with too little free mass and too small ray opening angle are shown on the right. It can be seen that too small $M_F$ leads to remaining occupied outliers due to imperfect dynamic object removal while too small $\varphi_\sphericalangle$ leads to rays being cast through object boundaries.}
+	\end{center}
+\end{figure} 
+After fixing the temporary \gls{ilm}, it can be used to tune the \gls{irm} using the mIoU between their occupancy maps. As mentioned in Sec. \ref{subsec:method_geo_isms}, three \gls{irm} variants are separately tuned and compared against each other. These variants are the standard ray casting \gls{irm}, an extension using accumulated detections to improve the \gls{idm} ray cutoff at object boundaries and an \gls{irm} with accumulated detections and additional rays with larger opening angle for free space enrichment. As shown in Tab. \ref{tab:geo_irm_comparison}, the accumulation of detections brings additional information about occupied space and helps to correct the free space leading to a better overall mIoU. Additionally, enriching the free space with the larger \gls{idm} rays keeps the occupied score untouched while moving falsely assigned unknown mass to the free class, leading to the best mIoU score of the considered \gls{irm} variants. These variants together with resulting occupancy maps are illustrated in Fig. \ref{fig:ilm_irm_tuning}.
+\begin{center}
+	\begin{tabular}{c|ccc|c}
+		& \multicolumn{4}{c}{mIoU}\\
+		\gls{irm} variants & free & occupied & unknown & overall \\
+		\hline
+		ray casting & 67.0 & 16.8 & 21.5 & 35.1\\
+		ray casting + acc. detections & 70.6 & 27.5 & 21.5 & 39.9\\
+		ray casting + acc. detections + free rays & 76.2 & 27.5 & 22.6 & 42.1\\		
+	\end{tabular}
+	\captionof{table}{\label{tab:geo_irm_comparison}Comparison of mIoU of occupancy maps generated using three \gls{irm} variants and lidar occupancy maps.}
+\end{center}
+\begin{center}
+	\begin{tabular}{c|c|c|c|c|c|c}
+		\gls{ism} & $M_F$ & $M_O$ & $M_D$ & $\varphi_\sphericalangle$ & $M_F^{(2)}$ & $\varphi_\sphericalangle^{(2)}$ \\
+		\hline
+		\gls{ilm} & 0.025 & 0.5 & 0.3 & 3$^\circ$ & - & - \\
+		\gls{irm} & 0.1 & 0.3 & 0.3 & 5$^\circ$ & 0.1 & 30$^\circ$ \\
+	\end{tabular}
+	\captionof{table}{\label{tab:ilm_irm_tuning}Parameter setting for geo \gls{ilm} and \gls{irm}}
+\end{center}
 %======================================%
 %
 %======================================%
