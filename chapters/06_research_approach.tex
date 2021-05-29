@@ -81,7 +81,7 @@ Eventually, as mentioned above, the geometric \gls{ism} is considered to be a ve
 %==========================================================================%
 %
 %==========================================================================%
-\section{Research Needs}
+\section{Review of the State-of-the-Art and Research Needs}
 \label{sec:research_needs}
 In this section, the state-of-the-art from chapter \ref{ch:state_of_the_art} is analyzed with respect to the requirements defined in sec \ref{sec:requirements}.
 
@@ -169,6 +169,17 @@ Eventually, to utilize the deep \gls{ism} estimates as priors according to R\ref
 \begin{requ}[RQ\ref{requ:disable_deep_ism_influence}] \label{requ:disable_deep_ism_influence}
 	How can the influence of the deep \gls{ism} be disabled in case a definable amount of data has been collected, as defined in R\ref{subreq:initialize_with_deep_ism} and \ref{subreq:converge_to_geo_ism}?
 \end{requ}
+
+%======================================%
+%
+%======================================%
+\subsection{Choice of Dataset}
+\label{subsec:choice_of_dataset}
+In order to answer the above posed research questions, a dataset containing big amounts of urban recordings of lidar with semantic information, camera, odometry and radar is required. Additionally, it would be nice to use a public dataset, for it allows comparability and reproducability. At the start of the thesis' implementation phase, the only dataset sufficing these requirements is the publicly available NuScenes dataset \todo{quote}, which can be seen in the dataset comparison \todo{quote table} published in the paper. Additionally, the dataset
+\\
+The dataset is separated into $1000$ so called scenes each containing the data of roughly a $20$ second drive during which data from each modality is recorded, which is referred to as sensor sweeps. Additionally, so called samples are defined every $0.5$ seconds containing annotations like bounding boxes and semantics for all sensor modalities. To enable comparability, the train-val-test split is predefined by the NuScenes creators.
+\\
+\todo{sensor setup}
 %==========================================================================%
 %
 %==========================================================================%
@@ -185,12 +196,21 @@ The incorporation of the deep \gls{ism}s information is realized by fusing the e
 %======================================%
 %
 %======================================%
-\subsection{Definition of Geo ILM and IRM}
-\label{subsec:method_geo_isms}
-Both lidar and radar sensors use a radial measurement principal which is why it makes sense to model them using the ray casting \gls{ism} as explained in Sec. \ref{subsec:ray_casting}, however in a modified way.  
-\\\\
-\textbf{\gls{ilm}}\\
-In case of the \gls{ilm}, first the ground detections have to be removed. To do so, either a height-threshold or a semantic segmentation based approach can be chosen. The specific choice used in this work is detailed in Sec. \ref{sec:choice_of_gt}.
+\subsection{Method to provide dynamic Information for Lidar Sweeps}
+\label{subsec:method_dyn_info_for_lidar}
+To obtain the dynamic information for lidar sweeps, the sample's bounding boxes of dynamic objects are interpolated for intermediate sweeps and all lidar detections intersecting with the boxes are marked as dynamic. Here, the interpolations are obtained as follows. First, corresponding bounding boxes of dynamic objects are identified by their track ids for two subsequent samples. To avoid singularities, the bounding box poses of each identified pair are first transformed into the temporally first bounding box's coordinate frame. Next, a third degree polynomial is fitted in a way that the first and last position intersect and their derivatives are zero. The interpolated orientation is given by the arc-tangent of the polynomial's derivative. To finally obtain the interpolated bounding box pose, the way along the interpolated trajectory is numerically integrated and divided into equidistant segments. Under the assumption that the tracked, dynamic object travels with a constant velocity between the two samples, the interpolated pose is given at the point when the relative traveled distance between the first and second sample's pose is closest to the relative time of the sweep between the two samples. The so identified pose can then be transformed into the coordinate frame of the currently interpolated sweep. The interpolation procedure and the overlay of the resulting interpolated bounding boxes over a lidar sweep's detection image are illustrated in Fig. \ref{fig:dyn_objs_interpolation}. \todo{provide algorithm for interpolation method}
+\begin{figure}
+	\begin{center}
+		\import{imgs/07_deep_ism_exp/dataset}{dyn_objs_interpolation.pdf_tex}
+		\caption{\label{fig:dyn_objs_interpolation}Illustration of the three steps to obtain interpolations of the 2d bounding box poses on the left hand side together with an example of resulting interpolated bounding boxes (yellow) overlayed on a lidar sweep's \gls{bev} detection image on the right. The three interpolation stages from left to right show the original bounding box poses of two consecutive samples, the poses transformed into the first poses coordinates together with the interpolated poses (gray) and finally the poses back in the original coordinate frame with the interpolations.}
+	\end{center}
+\end{figure} 
+%======================================%
+%
+%======================================%
+\subsection{Definition of the Geo ILM}
+\label{subsec:method_geo_ilm}
+Both lidar and radar sensors use a radial measurement principal which is why it makes sense to model them using the ray casting \gls{ism} as explained in Sec. \ref{subsec:ray_casting}, however in a modified way. In case of the \gls{ilm}, first the ground detections have to be removed. To do so, either a height-threshold or a semantic segmentation based approach can be chosen. The specific choice used in this work is detailed in Sec. \ref{sec:choice_of_gt}.
 \\
 Afterwards, free space rays with opening angle $\varphi_\sphericalangle$ are cast for each angle in increments of $\varphi_\sphericalangle$ in the range $[0^\circ, 360^\circ]$ around the sensor center either up to a maximum distance $r_\text{max}$ or until colliding with a detection. All \gls{bev} grid cells affected by the free space ray are set to $[M_F,0,1-M_F]^\top$ using the tunable free space weight $M_F \in [0,1]$. On the other hand, position of collided detections are either set to $[0,M_O,1-M_O]^\top$ for static detections with the occupied space weight $M_O \in [0,1]$ or to $[M_D, M_D, 1-2M_D]^\top$ for dynamic detections with the dynamic object weight $M_D \in [0,0.5]$. Here, the information about the motion state is not provided by the lidar itself but by external sources like additional labels in the dataset. The additional motion information will only be used to generate labels to train the deep \gls{ism} variants but not, to generate deep \gls{ism} inputs! This procedure has the effect that detections occluded in the \gls{bev} projection are filtered out which better matches the radar's sensing capability. An algorithmic summary of the geometric \gls{ilm} in pseudo code is shown in Alg. \ref{alg:geo_ilm}.\\
 \begin{algorithm}[H]
@@ -218,7 +238,11 @@ Afterwards, free space rays with opening angle $\varphi_\sphericalangle$ are cas
 		}
 	}
 \end{algorithm}
-\textbf{\gls{irm}}\\
+%======================================%
+%
+%======================================%
+\subsection{Definition of the Geo IRM}
+\label{subsec:method_geo_irm}
 For the \gls{irm}, a cone model which is be based on the \gls{idm}$_{\text{B-Spline}}$ as proposed in \cite{loop2016closed} is used with the following adjustments. First, since the \gls{bev} grid resolution of 31,25 cm covers the uncertainty ellipse of the radar, a scaled, evidential version of the \gls{idm}$_{\text{ideal}}$ can be used as an approximation of the \gls{idm}$_{\text{B-Spline}}$'s radial component.
 \\
 In angular direction, it is proposed to linearly approximate the influence of the Gaussian noise, again due to the coarse discretization. However, the scaling shall only affect the free space since cones with a bigger opening angle than the uncertainty would suggest are used to counteract the cases of \gls{idm} rays passing between detections in areas where the point clouds are sparse. While the enlarged cones lead to a desired enrichment of free space they would also lead to blurring the occupied space and with it, object boundaries. Thus, the following adapted evidential \gls{idm} is proposed to be used for radars

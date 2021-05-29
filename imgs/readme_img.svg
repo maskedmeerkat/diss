@@ -9,7 +9,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="readme_img.svg"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)"
    id="svg8"
    version="1.1"
    viewBox="0 0 291.25334 157.69501"
@@ -24,9 +24,9 @@
      fit-margin-left="0"
      fit-margin-top="0"
      inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="1912"
-     inkscape:window-height="1017"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:window-height="1001"
      inkscape:window-width="1920"
      showgrid="true"
      inkscape:current-layer="layer1"
@@ -1433,12 +1433,12 @@
        id="image1417" />
     <rect
        ry="0"
-       y="56.913292"
-       x="-62.54678"
-       height="13.259373"
-       width="114.96519"
+       y="56.917583"
+       x="-62.542488"
+       height="13.250787"
+       width="116.9566"
        id="rect1421-1"
-       style="fill:#ff6600;stroke:#ff6600;stroke-width:1.03481;stroke-linecap:butt;stroke-linejoin:round" />
+       style="fill:#ff6600;stroke:#ff6600;stroke-width:1.0434;stroke-linecap:butt;stroke-linejoin:round" />
     <rect
        ry="0"
        y="56.913292"
