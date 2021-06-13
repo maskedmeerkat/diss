@@ -159,6 +159,8 @@ To fine tune the capacity of the network, $C_0$ is fixed to 32 while an upper li
 \subsection{Experimental Setup}
 \label{subsec:exp_setup_aleat_uncert}
 To investigate how to best learn and shift the aleatoric uncertainty as described in RQ\ref{requ:how_to_sep_uncertainty}, the basic UNet architecture as tuned in Sec. \ref{sec:choice_of_unet_arch} is modified and trained in the SoftNet, ShiftNet and DirNet configuration as described in Sec. \ref{subsec:method_al_uncert_in_deep_isms}. These configurations are trained using radar inputs and occupancy map targets as described in Sec. \ref{subsec:def_of_targets_n_inputs}. To better investigate the effect of data uncertainty, radar inputs based on a single timestep's information $R_1$ and based on accumulation of 20 timesteps $R_20$ is compared. Additionally, the geo \gls{irm}'s performance for both radar inputs is evaluated to provide a reference.
+\\
+The metric used to quantify the results is a confusion matrix where the count of predictions in each row is averaged by the amount of true pixels for the row. This makes it possible to handle the huge amount of class predictions by using a running average to as an update scheme. The confusion matrix variant is preferred over the mIoU score since it provides a more detailed means of analysis. 
 %======================================%
 %
 %======================================%
