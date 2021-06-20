@@ -176,7 +176,7 @@ In contrast to SoftNet, DirNet is capable of shifting the aleatoric uncertainty 
 \\\\
 Finally, ShiftNet demonstrates even better capabilities in shifting the aleatoric uncertainties to the unknown class as compared to DirNet which is indicated by the highest unknown mass rates of all model variants. This uncertainty-awareness can again also be observed by higher unknown mass rates for the occluded as compared to the visible areas. The effect of shifted uncertainty is so dominant that it can even be seen in the qualitative results in Fig. \ref{fig:irm_qual_comp} by unknown space (blue) around all occupied boundaries. Regarding the occupied and free space, ShiftNet provides the least false rates and best free space predictions for all classes compared to all learned \gls{irm}s. However, it lacks the capability to properly model the occupied space.  
 \\\\
-For the R$_{20}$ scores, an expected overall improvement of all models can be observed. Here, the free space predictions of SoftNet even improve to the point of surpassing the other variants. With regards to aleatoric uncertainty, the unknown mass portions for the DirNet and ShiftNet decrease compared to the R$_1$ scores as is desired in the light of more input information. Additionally, similar to the R$_1$ scores, an increase in unknown mass can be observed in occluded as compared to visible areas. Another notable change is the improvement in occupied predictions given by ShiftNet, now surpassing SoftNet and almost closing the gap to DirNet. The geo IRM is also capable of improving the dynamic true rate by about seven times and the occupied rate by about 13 times while reducing the respective overall false rates. This is as expected since it can leverage the information of 20 times as many timesteps. Also, the free space true rate reaches about 50$\%$ while only minimally increasing the false rates. These general improvements over the R$_1$-based predictions are also clearly visible in Fig. \ref{fig:irm_qual_comp}. 
+For the R$_{20}$ scores, an expected overall improvement of all models can be observed. Here, the free space predictions of SoftNet even improve to the point of surpassing the other variants. With regards to aleatoric uncertainty, the unknown mass portions for the DirNet and ShiftNet decrease compared to the R$_1$ scores as is desired in the light of more input information. Additionally, similar to the R$_1$ scores, an increase in unknown mass can be observed in occluded as compared to visible areas. Another notable change is the improvement in occupied predictions given by ShiftNet, now surpassing SoftNet and almost closing the gap to DirNet. The geo IRM is also capable of improving the dynamic true rate by about seven times and the occupied rate by about 13 times while reducing the respective overall false rates. This is as expected since it can leverage the information of 20 times as many timesteps. Also, the free space true rate reaches about 50$\%$ while only minimally increasing the false rates. These general improvements over the R$_1$-based predictions are also clearly visible in Fig. \ref{fig:irm_qual_comp}. \todo{Write that you take ShiftNet from here on and why you decided to do so}
 %==========================%
 % R01
 %==========================%
@@ -249,7 +249,7 @@ For the R$_{20}$ scores, an expected overall improvement of all models can be ob
 \begin{figure}[H]
 	\begin{center}
 		\import{imgs/07_deep_ism_exp/aleat_uncert}{irm_qual_comp.pdf_tex}
-		\caption{\label{fig:irm_qual_comp}Qualitative results of the different compared \gls{irm}s (column-wise) for three validation scenes showing the predictions based on R$_1$ and R$_{20}$ in the respective rows with the corresponding label. Scene A illustrates the models capabilities to predict moving objects of any shape (e.g. upper box encloses a moving bus and car). Additionally, the lower box encloses an example of small distinct objects being situated close to each other. Scene B shows an effect of a bias in the radar data (marked in the box). Most of the time, moving objects only occlude parts of the scene temporarily leading to detections of the occluded areas at other times. Thus, if a wall is erroneously detected as moving and no further detections are provided behind it, the models predicts the area behind the wall as free. Finally, scene C illustrates the capacity of the methods to predict the occupancy state in a general parking space, which is one of the main application scenarios of the proposed system.}
+		\caption{\label{fig:irm_qual_comp}Qualitative results of the different compared \gls{irm}s (column-wise) for three validation scenes showing the predictions based on R$_1$ and R$_{20}$ in the respective rows with the corresponding label. Scene A illustrates the models capabilities to predict moving objects of any shape (e.g. two cars, one bus and a cyclist). Additionally, the lower box encloses an example of small distinct objects being situated close to each other. Scene B shows an effect of a bias in the radar data (marked in the box). Most of the time, moving objects only occlude parts of the scene temporarily leading to detections of the occluded areas at other times (e.g. upper box in scene A). Thus, if a wall is erroneously detected as moving and no further detections are provided behind it, the models predicts the area behind the wall as free. Finally, scene C illustrates the capacity of the methods to predict the occupancy state in a general parking space, which is one of the main application scenarios of the proposed system.}
 	\end{center}
 \end{figure}
 %==========================================================================%
@@ -300,7 +300,12 @@ For the R$_{20}$ scores, an expected overall improvement of all models can be ob
 	\item homography rgb has worst overall performance, followed by homography of semantic segmentation. Monodepth \gls{bev} projection surpasses both the rgb and semantic inputs in all categories. While it should be noted that it has slightly increased false rates in the occupancy category. Thus, monopdeth inputs are chosen for further experiments
 	\item monodepth fusion with radar R$_{20}$ images shows that the radar information mainly benefits in distinguishing dynamic and occupied cells. Free overall performance remains as is.
 \end{itemize}
-
+\begin{figure}[H]
+\begin{center}
+	\import{imgs/07_deep_ism_exp/aleat_uncert}{icm_qual_comp.pdf_tex}
+	\caption{\label{fig:icm_qual_comp}}
+\end{center}
+\end{figure}
 %==========================================================================%
 %
 %==========================================================================%
@@ -310,6 +315,7 @@ For the R$_{20}$ scores, an expected overall improvement of all models can be ob
 %
 %======================================%
 \subsection{Experimental Results}
+\todo{need scores for geo ilm}
 \label{subsec:exp_results_sensor_fusion}
 \begin{tabular}{c|c|cccc|cccc|cccc}
 	&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
@@ -341,4 +347,5 @@ For the R$_{20}$ scores, an expected overall improvement of all models can be ob
 \begin{enumerate}
 	\item geo \gls{irm} least false rates but also least positive rates $\rightarrow$ initialize with deep \gls{ism} model and use geo \gls{irm} to converge to secure estimates
 	\item DirNet not properly capable to model dynamic objects. maybe due to the fact that only few samples are provided filtered out by the uncertainty mechanism
+	\item homog rgb results really bad, maybe because not enough network capacity
 \end{enumerate}
