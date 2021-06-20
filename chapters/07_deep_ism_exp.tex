@@ -160,7 +160,7 @@ To fine tune the capacity of the network, $C_0$ is fixed to 32 while an upper li
 \label{subsec:exp_setup_aleat_uncert}
 To investigate how to best learn and shift the aleatoric uncertainty as described in RQ\ref{requ:how_to_sep_uncertainty}, the basic UNet architecture as tuned in Sec. \ref{sec:choice_of_unet_arch} is modified and trained in the SoftNet, ShiftNet and DirNet configuration as described in Sec. \ref{subsec:method_al_uncert_in_deep_isms}. These configurations are trained using radar inputs and occupancy map targets as described in Sec. \ref{subsec:def_of_targets_n_inputs}. To better investigate the effect of data uncertainty, radar inputs based on a single timestep's information $R_1$ and based on accumulation of 20 timesteps $R_20$ is compared. Additionally, the geo \gls{irm}'s performance for both radar inputs is evaluated to provide a reference.
 \\
-The metric used to quantify the results is a confusion matrix where the count of predictions in each row is averaged by the amount of true pixels for the row. This makes it possible to handle the huge amount of class predictions by using a running average to as an update scheme. The confusion matrix variant is preferred over the mIoU score since it provides a more detailed means of analysis. 
+The metric used to quantify the results is a confusion matrix where the count of predictions in each row is averaged by the amount of true pixels for the row. This makes it possible to handle the huge amount of class predictions by using a running average as an update scheme. The confusion matrix variant is preferred over the mIoU score since it provides a more detailed means of analysis. 
 %======================================%
 %
 %======================================%
@@ -168,13 +168,15 @@ The metric used to quantify the results is a confusion matrix where the count of
 \label{subsec:exp_results_aleat_uncert}
 For the following interpretation of quantitative results, it shall be noted that unknown mass in other classes is not seen as false predictions but rather as an indicator for certainty. Thus, the overall false rate only equals the sum over the red scores per row for each class.
 \\ 
-Starting with the R$_1$ scores, as stated in H \ref{hyp:sota_not_model_unc}, the SoftNet configuration treats the aleatoric uncertainty by equally distributing mass into the two classes between which the uncertainty occurs. In this case, the majority of uncertainty in the visible area is at the boundaries between occupied and free areas leading to huge portions of the actually free and occupied class respectively being estimated as dynamic. Due to this bias towards the dynamic class, the true rate for dynamic objects is also the best among the investigated methods. In occluded areas, in addition to huge false rates of dynamic objects, an increase of unknown mass can be observed over all classes. This might be due to a combination of bias towards the unknown class in occluded areas and the fact, that the aleatoric uncertainty now also occurs at boundaries between free, occupied and the unknown class. 
-\\
-In contrast to SoftNet, DirNet is capable of shifting the aleatoric uncertainty into the unknown class which can be seen by less than half of the overall false dynamic predictions in the free and occupied categories while at the same time increasing the unknown mass portion over all classes. Moreover, in the occluded area, where more aleatoric uncertainty can be expected, larger portions are shifted into the unknown class which also results in smaller false rates for free and occupied cells. This is in contrast to the almost steady false rates in the visible and occluded area for SoftNet, additionally highlighting the uncertainty awareness of the DirNet configuration. On top of that, DirNet surpasses the positive rates of SoftNet in all but the biased dynamic class. The improvement in performance might be due to the effect that by modeling the aleatoric uncertainty, the loss function is weighted in a way to increasingly ignore predictions for which the network cannot find a sufficient solution. This leads to more network capacity being focused on the majority of data which leads to better average performance and, thus, better scores. It shall be noted that, while the scores improve, this behavior might lead to a neglection of edge cases.
-\\
-Finally, ShiftNet demonstrates even better capabilities in shifting the aleatoric uncertainties to the unknown class as compared to DirNet which is indicated by the highest unknown mass rates of all model variants. This uncertainty-awareness can again also be observed by higher unknown mass rates for the occluded as compared to the visible areas. However, when it comes to predicting occupied space, it shows the worst performance both in positive rates and false free predictions.
+Starting with the R$_1$ scores, the usage of the modified confusion matrix, as opposed to the mIoU used in \ref{sec:choice_of_gt}, allows a more detailed analysis of the geo \gls{irm}. It can be seen that the geo \gls{irm} provides less then $1\%$ correct predictions both for dynamic and occupied space due to the sparseness in detections, which can also be seen in Fig. \ref{fig:irm_qual_comp}. On top of that, the false free space predictions in these two categories are almost $20\%$ showing the effect of rays cutting through occupied space due to multi-path reflections. On the other hand, while the free space predictions are sparse with about $70\%$ of the space being predicted as unknown, the rest is predicted correctly. In an overall comparison with the deep \gls{irm} variants, the geo \gls{irm} provides the least false rates in all categories but also the smallest positive rates. This is experimentally shows the reason for the approach to use a deep \gls{irm} to initialize the maps and later converge to the geo \gls{irm}.
 \\\\
-For the R$_{20}$ scores, an overall improvement of all models can be observed as expected. Here, the free space predictions of SoftNet even improve to the point of surpassing the other variants. With regards to aleatoric uncertainty, the unknown mass portions for the DirNet and ShiftNet decrease compared to the R$_1$ scores as is desired in the light of more input information. Additionally, similar to the R$_1$ scores, an increase in unknown mass can be observed in occluded as compared to visible areas. 
+Next, the SoftNet configuration treats the aleatoric uncertainty by equally distributing mass into the two classes between which the uncertainty occurs, as stated in H \ref{hyp:sota_not_model_unc}. In this case, the majority of uncertainty in the visible area is at the boundaries between occupied and free areas leading to huge portions of the actually free and occupied class respectively being estimated as dynamic. This effect can be seen in Fig. \ref{fig:irm_qual_comp} by the blurriness of the occupied space. Due to this bias towards the dynamic class, the true rate for dynamic objects is also the best among the investigated methods. In occluded areas, in addition to huge false rates of dynamic objects, an increase of unknown mass can be observed over all classes. This might be due to a combination of bias towards the unknown class in occluded areas and the fact, that the aleatoric uncertainty now also occurs at boundaries between free, occupied and the unknown class. 
+\\\\
+In contrast to SoftNet, DirNet is capable of shifting the aleatoric uncertainty into the unknown class which can be seen by less than half of the overall false dynamic predictions in the free and occupied categories while at the same time increasing the unknown mass portion over all classes. Moreover, in the occluded area, where more aleatoric uncertainty can be expected, larger portions are shifted into the unknown class which also results in smaller false rates for free and occupied cells. These effects can also been seen in Fig. \ref{fig:irm_qual_comp} by the clearer boundaries between free and occupied space and overall more unknown space in occluded regions. This is in contrast to the almost steady false rates in the visible and occluded area for SoftNet, additionally highlighting the uncertainty awareness of the DirNet configuration. On top of that, DirNet surpasses the positive rates of SoftNet in all but the biased dynamic class. The improvement in performance might be due to the effect that by modeling the aleatoric uncertainty, the loss function is weighted in a way to increasingly ignore predictions for which the network cannot find a sufficient solution. This leads to more network capacity being focused on the majority of data which leads to better average performance and, thus, better scores. It shall be noted that, while the scores improve, this behavior might lead to a neglection of edge cases.
+\\\\
+Finally, ShiftNet demonstrates even better capabilities in shifting the aleatoric uncertainties to the unknown class as compared to DirNet which is indicated by the highest unknown mass rates of all model variants. This uncertainty-awareness can again also be observed by higher unknown mass rates for the occluded as compared to the visible areas. The effect of shifted uncertainty is so dominant that it can even be seen in the qualitative results in Fig. \ref{fig:irm_qual_comp} by unknown space (blue) around all occupied boundaries. Regarding the occupied and free space, ShiftNet provides the least false rates and best free space predictions for all classes compared to all learned \gls{irm}s. However, it lacks the capability to properly model the occupied space.  
+\\\\
+For the R$_{20}$ scores, an expected overall improvement of all models can be observed. Here, the free space predictions of SoftNet even improve to the point of surpassing the other variants. With regards to aleatoric uncertainty, the unknown mass portions for the DirNet and ShiftNet decrease compared to the R$_1$ scores as is desired in the light of more input information. Additionally, similar to the R$_1$ scores, an increase in unknown mass can be observed in occluded as compared to visible areas. Another notable change is the improvement in occupied predictions given by ShiftNet, now surpassing SoftNet and almost closing the gap to DirNet. The geo IRM is also capable of improving the dynamic true rate by about seven times and the occupied rate by about 13 times while reducing the respective overall false rates. This is as expected since it can leverage the information of 20 times as many timesteps. Also, the free space true rate reaches about 50$\%$ while only minimally increasing the false rates. These general improvements over the R$_1$-based predictions are also clearly visible in Fig. \ref{fig:irm_qual_comp}. 
 %==========================%
 % R01
 %==========================%
@@ -183,27 +185,27 @@ For the R$_{20}$ scores, an overall improvement of all models can be observed as
 	\begin{tabular}{c|c|cccc|cccc|cccc}
 		&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
 		\hline
-		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{geo IRM}}}&$p(k|d)$ & \textcolor{mygreen}{0.6} & \textcolor{myred}{19.6} & \textcolor{myred}{0.4} & 79.3 & \textcolor{mygreen}{0.6} & \textcolor{myred}{34.3} & \textcolor{myred}{0.4} & 64.5 & \textcolor{mygreen}{0.6} & \textcolor{myred}{12.6} & \textcolor{myred}{0.4} & 86.3\\
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{geo IRM}}}}&$p(k|d)$ & \textcolor{mygreen}{0.6} & \textcolor{myred}{19.6} & \textcolor{myred}{0.4} & 79.3 & \textcolor{mygreen}{0.6} & \textcolor{myred}{34.3} & \textcolor{myred}{0.4} & 64.5 & \textcolor{mygreen}{0.6} & \textcolor{myred}{12.6} & \textcolor{myred}{0.4} & 86.3\\
 		&$p(k|f)$ & \textcolor{myred}{0.0} & \textcolor{mygreen}{28.9} & \textcolor{myred}{0.0} & 70.9 & \textcolor{myred}{0.0} & \textcolor{mygreen}{35.9} & \textcolor{myred}{0.0} & 63.9 & \textcolor{myred}{0.0} & \textcolor{mygreen}{9.6} & \textcolor{myred}{0.0} & 90.2\\
 		&$p(k|o)$ & \textcolor{myred}{0.2} & \textcolor{myred}{18.4} & \textcolor{mygreen}{0.8} & 80.5 & \textcolor{myred}{0.3} & \textcolor{myred}{30.6} & \textcolor{mygreen}{0.9} & 68.1 & \textcolor{myred}{0.2} & \textcolor{myred}{14.5} & \textcolor{mygreen}{0.8} & 84.4\\
 		&$p(k|u)$ & 0.0 & 5.4 & 0.1 & 94.4 & - & - & - & - & 0.0 & 5.4 & 0.1 & 94.5\\
 		\hline
-		\multicolumn{13}{c}{}\\
-		\hline
+%		\multicolumn{13}{c}{}\\
+%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{SoftNet}}}}&$p(k|d)$ & \textcolor{mygreen}{49.7} & \textcolor{myred}{16.7} & \textcolor{myred}{10.5} & 23.2 & \textcolor{mygreen}{52.5} & \textcolor{myred}{18.8} & \textcolor{myred}{11.5} & 17.2 & \textcolor{mygreen}{48.8} & \textcolor{myred}{15.8} & \textcolor{myred}{9.6} & 25.8\\
 		&$p(k|f)$ & \textcolor{myred}{35.8} & \textcolor{mygreen}{37.0} & \textcolor{myred}{3.3} & 24.0 & \textcolor{myred}{36.2} & \textcolor{mygreen}{42.6} & \textcolor{myred}{3.1} & 18.2 & \textcolor{myred}{35.5} & \textcolor{mygreen}{21.5} & \textcolor{myred}{4.0} & 39.1\\
 		&$p(k|o)$ & \textcolor{myred}{37.8} & \textcolor{myred}{9.6} & \textcolor{mygreen}{17.2} & 35.5 & \textcolor{myred}{43.7} & \textcolor{myred}{11.5} & \textcolor{mygreen}{20.0} & 24.8 & \textcolor{myred}{35.9} & \textcolor{myred}{9.0} & \textcolor{mygreen}{16.2} & 38.9\\
 		&$p(k|u)$ & 25.7 & 8.7 & 4.5 & 61.0 & - & - & - & - & 25.7 & 8.7 & 4.5 & 61.1\\
 		\hline
-		\multicolumn{13}{c}{}\\
-		\hline
+%		\multicolumn{13}{c}{}\\
+%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{DirNet}}}}&$p(k|d)$ & \textcolor{mygreen}{31.0} & \textcolor{myred}{21.9} & \textcolor{myred}{12.8} & 34.3 & \textcolor{mygreen}{35.4} & \textcolor{myred}{27.4} & \textcolor{myred}{13.0} & 24.2 & \textcolor{mygreen}{29.0} & \textcolor{myred}{19.9} & \textcolor{myred}{12.3} & 38.7\\
 		&$p(k|f)$ & \textcolor{myred}{13.6} & \textcolor{mygreen}{47.5} & \textcolor{myred}{5.6} & 33.3 & \textcolor{myred}{15.5} & \textcolor{mygreen}{56.8} & \textcolor{myred}{4.6} & 23.2 & \textcolor{myred}{9.0} & \textcolor{mygreen}{22.3} & \textcolor{myred}{8.4} & 60.3\\
 		&$p(k|o)$ & \textcolor{myred}{13.5} & \textcolor{myred}{9.7} & \textcolor{mygreen}{20.7} & 56.1 & \textcolor{myred}{22.4} & \textcolor{myred}{14.3} & \textcolor{mygreen}{22.9} & 40.3 & \textcolor{myred}{10.8} & \textcolor{myred}{8.4} & \textcolor{mygreen}{19.9} & 60.9\\
 		&$p(k|u)$ & 2.7 & 3.7 & 12.0 & 81.6 & - & - & - & - & 2.7 & 3.6 & 12.0 & 81.7\\
 		\hline
-		\multicolumn{13}{c}{}\\
-		\hline
+%		\multicolumn{13}{c}{}\\
+%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{ShiftNet}}}}&$p(k|d)$ & \textcolor{mygreen}{31.8} & \textcolor{myred}{19.0} & \textcolor{myred}{7.2} & 41.9 & \textcolor{mygreen}{30.7} & \textcolor{myred}{23.3} & \textcolor{myred}{7.5} & 38.6 & \textcolor{mygreen}{33.3} & \textcolor{myred}{17.2} & \textcolor{myred}{6.9} & 42.7\\
 		&$p(k|f)$ & \textcolor{myred}{7.4} & \textcolor{mygreen}{48.6} & \textcolor{myred}{2.0} & 42.0 & \textcolor{myred}{7.5} & \textcolor{mygreen}{56.0} & \textcolor{myred}{1.6} & 34.9 & \textcolor{myred}{7.6} & \textcolor{mygreen}{28.1} & \textcolor{myred}{3.2} & 61.1\\
 		&$p(k|o)$ & \textcolor{myred}{8.4} & \textcolor{myred}{15.1} & \textcolor{mygreen}{13.7} & 62.8 & \textcolor{myred}{10.0} & \textcolor{myred}{19.2} & \textcolor{mygreen}{14.9} & 55.9 & \textcolor{myred}{7.9} & \textcolor{myred}{13.9} & \textcolor{mygreen}{13.4} & 64.8\\
@@ -216,27 +218,25 @@ For the R$_{20}$ scores, an overall improvement of all models can be observed as
 %==========================%
 		&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
 		\hline
-		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{geo IRM}}}&$p(k|d)$ & \textcolor{mygreen}{7.1} & \textcolor{myred}{24.5} & \textcolor{myred}{6.8} & 61.4 & \textcolor{mygreen}{4.5} & \textcolor{myred}{43.7} & \textcolor{myred}{7.5} & 44.1 & \textcolor{mygreen}{8.2} & \textcolor{myred}{15.9} & \textcolor{myred}{6.5} & 69.3\\
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{geo IRM}}}}&$p(k|d)$ & \textcolor{mygreen}{7.1} & \textcolor{myred}{24.5} & \textcolor{myred}{6.8} & 61.4 & \textcolor{mygreen}{4.5} & \textcolor{myred}{43.7} & \textcolor{myred}{7.5} & 44.1 & \textcolor{mygreen}{8.2} & \textcolor{myred}{15.9} & \textcolor{myred}{6.5} & 69.3\\
 		&$p(k|f)$ & \textcolor{myred}{0.4} & \textcolor{mygreen}{47.0} & \textcolor{myred}{0.7} & 51.7 & \textcolor{myred}{0.4} & \textcolor{mygreen}{57.8} & \textcolor{myred}{0.5} & 41.1 & \textcolor{myred}{0.6} & \textcolor{mygreen}{17.5} & \textcolor{myred}{1.2} & 80.6\\
 		&$p(k|o)$ & \textcolor{myred}{2.6} & \textcolor{myred}{16.8} & \textcolor{mygreen}{13.5} & 67.0 & \textcolor{myred}{2.7} & \textcolor{myred}{31.0} & \textcolor{mygreen}{15.4} & 50.7 & \textcolor{myred}{2.5} & \textcolor{myred}{12.3} & \textcolor{mygreen}{13.0} & 72.1\\
 		&$p(k|u)$ & 0.6 & 3.6 & 1.7 & 94.1 & - & - & - & - & 0.6 & 3.5 & 1.7 & 94.1\\
-		\hline
-		\multicolumn{13}{c}{}\\
 		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{SoftNet}}}}&$p(k|d)$ & \textcolor{mygreen}{52.4} & \textcolor{myred}{21.8} & \textcolor{myred}{12.0} & 13.7 & \textcolor{mygreen}{54.6} & \textcolor{myred}{25.2} & \textcolor{myred}{12.7} & 7.6 & \textcolor{mygreen}{51.9} & \textcolor{myred}{20.6} & \textcolor{myred}{11.3} & 16.2\\
 		&$p(k|f)$ & \textcolor{myred}{21.6} & \textcolor{mygreen}{64.1} & \textcolor{myred}{2.0} & 12.2 & \textcolor{myred}{19.5} & \textcolor{mygreen}{72.0} & \textcolor{myred}{1.6} & 6.9 & \textcolor{myred}{28.1} & \textcolor{mygreen}{42.6} & \textcolor{myred}{3.3} & 26.0\\
 		&$p(k|o)$ & \textcolor{myred}{36.2} & \textcolor{myred}{12.9} & \textcolor{mygreen}{22.8} & 28.1 & \textcolor{myred}{43.2} & \textcolor{myred}{15.3} & \textcolor{mygreen}{25.8} & 15.6 & \textcolor{myred}{33.9} & \textcolor{myred}{12.2} & \textcolor{mygreen}{21.9} & 32.0\\
 		&$p(k|u)$ & 19.2 & 9.9 & 4.6 & 66.3 & - & - & - & - & 19.1 & 9.8 & 4.6 & 66.5\\
 		\hline
-		\multicolumn{13}{c}{}\\
-		\hline
+%		\multicolumn{13}{c}{}\\
+%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{DirNet}}}}&$p(k|d)$ & \textcolor{mygreen}{37.1} & \textcolor{myred}{22.7} & \textcolor{myred}{17.4} & 22.8 & \textcolor{mygreen}{39.6} & \textcolor{myred}{29.2} & \textcolor{myred}{18.3} & 12.8 & \textcolor{mygreen}{36.2} & \textcolor{myred}{20.2} & \textcolor{myred}{16.5} & 27.1\\
 		&$p(k|f)$ & \textcolor{myred}{10.9} & \textcolor{mygreen}{61.5} & \textcolor{myred}{5.1} & 22.4 & \textcolor{myred}{11.3} & \textcolor{mygreen}{71.4} & \textcolor{myred}{3.9} & 13.5 & \textcolor{myred}{10.6} & \textcolor{mygreen}{35.4} & \textcolor{myred}{8.3} & 45.7\\
 		&$p(k|o)$ & \textcolor{myred}{15.2} & \textcolor{myred}{10.5} & \textcolor{mygreen}{31.8} & 42.6 & \textcolor{myred}{25.0} & \textcolor{myred}{15.1} & \textcolor{mygreen}{35.2} & 24.6 & \textcolor{myred}{12.0} & \textcolor{myred}{9.1} & \textcolor{mygreen}{30.7} & 48.2\\
 		&$p(k|u)$ & 3.0 & 5.4 & 12.7 & 78.9 & - & - & - & - & 3.0 & 5.4 & 12.6 & 79.0\\
 		\hline
-		\multicolumn{13}{c}{}\\
-		\hline
+%		\multicolumn{13}{c}{}\\
+%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{ShiftNet}}}}&$p(k|d)$ & \textcolor{mygreen}{38.5} & \textcolor{myred}{18.1} & \textcolor{myred}{12.7} & 30.7 & \textcolor{mygreen}{35.3} & \textcolor{myred}{22.9} & \textcolor{myred}{13.7} & 28.1 & \textcolor{mygreen}{40.9} & \textcolor{myred}{15.9} & \textcolor{myred}{12.0} & 31.2\\
 		&$p(k|f)$ & \textcolor{myred}{4.7} & \textcolor{mygreen}{62.9} & \textcolor{myred}{3.2} & 29.2 & \textcolor{myred}{4.3} & \textcolor{mygreen}{71.1} & \textcolor{myred}{2.4} & 22.1 & \textcolor{myred}{6.1} & \textcolor{mygreen}{40.8} & \textcolor{myred}{5.3} & 47.8\\
 		&$p(k|o)$ & \textcolor{myred}{6.0} & \textcolor{myred}{13.6} & \textcolor{mygreen}{28.5} & 51.8 & \textcolor{myred}{7.4} & \textcolor{myred}{17.6} & \textcolor{mygreen}{30.9} & 44.1 & \textcolor{myred}{5.7} & \textcolor{myred}{12.4} & \textcolor{mygreen}{27.8} & 54.1\\
@@ -246,6 +246,12 @@ For the R$_{20}$ scores, an overall improvement of all models can be observed as
 	\end{tabular}
 	\caption{\label{tab:deep_ism_r20_results}Results of deep \gls{ism} variants trained on R$_1$ and R$_{20}$ images for visible, occluded and overall areas. Here, the visible area is defined as the area which is not unknown in the geometric \gls{ilm} used to create the ground-truth maps. Thus, only a stochastically insignificant portion of unknown labels remains in the visible area, which is why these scores are excluded from consideration. The scores are given in the form of a confusion matrix for each model where each row shows the probabilities in percentage of estimates given the true class. Values in green correspond to true positives, red shows the percentages of false predictions. The unknown class predictions (black) are treated as the safe state and, as such, do not add to the false rates. Additionally, since the network is permitted to extrapolate the state in unknown areas, all predictions deviating from the unknown class given unknown labels should also not be treated as false.}
 \end{figure} 
+\begin{figure}[H]
+	\begin{center}
+		\import{imgs/07_deep_ism_exp/aleat_uncert}{irm_qual_comp.pdf_tex}
+		\caption{\label{fig:irm_qual_comp}Qualitative results of the different compared \gls{irm}s (column-wise) for three validation scenes showing the predictions based on R$_1$ and R$_{20}$ in the respective rows with the corresponding label. Scene A illustrates the models capabilities to predict moving objects of any shape (e.g. upper box encloses a moving bus and car). Additionally, the lower box encloses an example of small distinct objects being situated close to each other. Scene B shows an effect of a bias in the radar data (marked in the box). Most of the time, moving objects only occlude parts of the scene temporarily leading to detections of the occluded areas at other times. Thus, if a wall is erroneously detected as moving and no further detections are provided behind it, the models predicts the area behind the wall as free. Finally, scene C illustrates the capacity of the methods to predict the occupancy state in a general parking space, which is one of the main application scenarios of the proposed system.}
+	\end{center}
+\end{figure}
 %==========================================================================%
 %
 %==========================================================================%
@@ -327,3 +333,12 @@ For the R$_{20}$ scores, an overall improvement of all models can be observed as
 	\item more surprisingly, lidar is capable to distinguish between dynamic and occupied objects from mere context and achieves better performance than all other inputs for ShiftNet. 
 	\item when fused with R$_{20}$, the overall performance further increases over all classes both in positive and false rates.
 \end{itemize}
+%==========================================================================%
+%
+%==========================================================================%
+\section{Discussion}
+\label{sec:deep_ism_discussion}
+\begin{enumerate}
+	\item geo \gls{irm} least false rates but also least positive rates $\rightarrow$ initialize with deep \gls{ism} model and use geo \gls{irm} to converge to secure estimates
+	\item DirNet not properly capable to model dynamic objects. maybe due to the fact that only few samples are provided filtered out by the uncertainty mechanism
+\end{enumerate}
