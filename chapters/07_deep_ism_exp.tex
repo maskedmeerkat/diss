@@ -158,9 +158,7 @@ To fine tune the capacity of the network, $C_0$ is fixed to 32 while an upper li
 %======================================%
 \subsection{Experimental Setup}
 \label{subsec:exp_setup_aleat_uncert}
-To investigate how to best learn and shift the aleatoric uncertainty as described in RQ\ref{requ:how_to_sep_uncertainty}, the basic UNet architecture as tuned in Sec. \ref{sec:choice_of_unet_arch} is modified and trained in the SoftNet, ShiftNet and DirNet configuration as described in Sec. \ref{subsec:method_al_uncert_in_deep_isms}. These configurations are trained using radar inputs and occupancy map targets as described in Sec. \ref{subsec:def_of_targets_n_inputs}. To better investigate the effect of data uncertainty, radar inputs based on a single timestep's information $R_1$ and based on accumulation of 20 timesteps $R_20$ is compared. Additionally, the geo \gls{irm}'s performance for both radar inputs is evaluated to provide a reference.
-\\
-The metric used to quantify the results is a confusion matrix where the count of predictions in each row is averaged by the amount of true pixels for the row. This makes it possible to handle the huge amount of class predictions by using a running average as an update scheme. The confusion matrix variant is preferred over the mIoU score since it provides a more detailed means of analysis. 
+To investigate how to best learn and shift the aleatoric uncertainty as described in RQ\ref{requ:how_to_sep_uncertainty}, the basic UNet architecture as tuned in Sec. \ref{sec:choice_of_unet_arch} is modified and trained in the SoftNet, ShiftNet and DirNet configuration as described in Sec. \ref{subsec:method_al_uncert_in_deep_isms}. These configurations are trained using radar inputs and occupancy map targets as described in Sec. \ref{subsec:def_of_targets_n_inputs}. To better investigate the effect of data uncertainty, radar inputs based on a single timestep's information $R_1$ and based on accumulation of 20 timesteps $R_20$ is compared. Additionally, the geo \gls{irm}'s performance for both radar inputs is evaluated to provide a reference. The evaluation is based on the confusion matrix variant as explained in Sec. \ref{subsec:confusion_matrix}.
 %======================================%
 %
 %======================================%
@@ -271,23 +269,17 @@ For the R$_{20}$ scores, an expected overall improvement of all models can be ob
 	&$p(k|o)$ & \textcolor{myred}{4.1} & \textcolor{myred}{14.6} & \textcolor{mygreen}{11.0} & 70.3 & \textcolor{myred}{4.3} & \textcolor{myred}{22.6} & \textcolor{mygreen}{12.2} & 60.8 & \textcolor{myred}{4.1} & \textcolor{myred}{12.2} & \textcolor{mygreen}{10.6} & 73.1\\
 	&$p(k|u)$ & 3.2 & 4.7 & 5.0 & 87.2 & - & - & - & - & 3.2 & 4.6 & 4.9 & 87.3\\
 	\hline
-	\multicolumn{13}{c}{}\\	
-	\hline
 	\parbox[t]{2mm}{\multirow{4}{*}{
 \rotatebox[origin=c]{90}{\scriptsize{Homog. SemSeg}}}}&$p(k|d)$ & \textcolor{mygreen}{38.1} & \textcolor{myred}{22.3} & \textcolor{myred}{4.6} & 35.0 & \textcolor{mygreen}{34.6} & \textcolor{myred}{30.2} & \textcolor{myred}{4.8} & 30.5 & \textcolor{mygreen}{40.9} & \textcolor{myred}{18.6} & \textcolor{myred}{4.2} & 36.2\\
 	&$p(k|f)$ & \textcolor{myred}{4.0} & \textcolor{mygreen}{62.4} & \textcolor{myred}{2.5} & 31.2 & \textcolor{myred}{3.2} & \textcolor{mygreen}{73.9} & \textcolor{myred}{1.8} & 21.1 & \textcolor{myred}{6.3} & \textcolor{mygreen}{32.2} & \textcolor{myred}{4.2} & 57.3\\
 	&$p(k|o)$ & \textcolor{myred}{4.8} & \textcolor{myred}{15.9} & \textcolor{mygreen}{11.2} & 68.1 & \textcolor{myred}{5.7} & \textcolor{myred}{23.7} & \textcolor{mygreen}{11.6} & 58.9 & \textcolor{myred}{4.6} & \textcolor{myred}{13.6} & \textcolor{mygreen}{11.0} & 70.8\\
 	&$p(k|u)$ & 2.6 & 6.5 & 5.4 & 85.5 & - & - & - & - & 2.6 & 6.4 & 5.4 & 85.6\\
 	\hline
-	\multicolumn{13}{c}{}\\	
-	\hline
 	\parbox[t]{2mm}{\multirow{4}{*}{
 \rotatebox[origin=c]{90}{\scriptsize{MonoDepth}}}}&$p(k|d)$ & \textcolor{mygreen}{40.8} & \textcolor{myred}{16.8} & \textcolor{myred}{7.0} & 35.3 & \textcolor{mygreen}{36.1} & \textcolor{myred}{25.5} & \textcolor{myred}{6.6} & 31.7 & \textcolor{mygreen}{44.3} & \textcolor{myred}{12.0} & \textcolor{myred}{7.1} & 36.6\\
 	&$p(k|f)$ & \textcolor{myred}{3.4} & \textcolor{mygreen}{69.3} & \textcolor{myred}{2.4} & 25.0 & \textcolor{myred}{2.3} & \textcolor{mygreen}{81.4} & \textcolor{myred}{1.5} & 14.9 & \textcolor{myred}{6.4} & \textcolor{mygreen}{38.3} & \textcolor{myred}{4.7} & 50.5\\
 	&$p(k|o)$ & \textcolor{myred}{6.9} & \textcolor{myred}{16.2} & \textcolor{mygreen}{16.0} & 60.9 & \textcolor{myred}{8.2} & \textcolor{myred}{25.2} & \textcolor{mygreen}{15.5} & 51.2 & \textcolor{myred}{6.6} & \textcolor{myred}{13.5} & \textcolor{mygreen}{16.1} & 63.7\\
 	&$p(k|u)$ & 3.3 & 6.5 & 8.0 & 82.1 & - & - & - & - & 3.3 & 6.4 & 8.0 & 82.2\\
-	\hline
-	\multicolumn{13}{c}{}\\		
 	\hline
 	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{MonoDepth \& R$_{20}$}}}}&$p(k|d)$ & \textcolor{mygreen}{42.4} & \textcolor{myred}{14.3} & \textcolor{myred}{12.6} & 30.7 & \textcolor{mygreen}{38.0} & \textcolor{myred}{20.6} & \textcolor{myred}{13.0} & 28.5 & \textcolor{mygreen}{45.7} & \textcolor{myred}{11.3} & \textcolor{myred}{12.3} & 30.7\\
 	&$p(k|f)$ & \textcolor{myred}{2.9} & \textcolor{mygreen}{69.6} & \textcolor{myred}{2.5} & 25.0 & \textcolor{myred}{2.2} & \textcolor{mygreen}{80.0} & \textcolor{myred}{1.6} & 16.1 & \textcolor{myred}{4.9} & \textcolor{mygreen}{42.3} & \textcolor{myred}{4.9} & 47.9\\
@@ -315,19 +307,23 @@ For the R$_{20}$ scores, an expected overall improvement of all models can be ob
 %
 %======================================%
 \subsection{Experimental Results}
-\todo{need scores for geo ilm}
 \label{subsec:exp_results_sensor_fusion}
 \begin{tabular}{c|c|cccc|cccc|cccc}
 	&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
 	\hline
-	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{Lidar}}}}&$p(k|d)$ & \textcolor{mygreen}{47.3} & \textcolor{myred}{10.5} & \textcolor{myred}{16.3} & 25.8 & \textcolor{mygreen}{42.0} & \textcolor{myred}{15.1} & \textcolor{myred}{17.9} & 25.1 & \textcolor{mygreen}{51.1} & \textcolor{myred}{7.5} & \textcolor{myred}{16.4} & 25.0\\
+	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{geo ILM}}}}&$p(k|d)$ & \textcolor{mygreen}{4.5} & \textcolor{myred}{27.6} & \textcolor{myred}{1.7} & 66.0 & \textcolor{mygreen}{19.8} & \textcolor{myred}{73.2} & \textcolor{myred}{3.6} & 3.0 & \textcolor{mygreen}{0.0} & \textcolor{myred}{1.3} & \textcolor{myred}{0.0} & 98.6\\
+	&$p(k|f)$ & \textcolor{myred}{0.0} & \textcolor{mygreen}{72.0} & \textcolor{myred}{0.2} & 27.5 & \textcolor{myred}{0.0} & \textcolor{mygreen}{98.7} & \textcolor{myred}{0.3} & 0.6 & \textcolor{myred}{0.0} & \textcolor{mygreen}{1.1} & \textcolor{myred}{0.0} & 98.9\\
+	&$p(k|o)$ & \textcolor{myred}{0.1} & \textcolor{myred}{15.4} & \textcolor{mygreen}{7.7} & 76.7 & \textcolor{myred}{0.3} & \textcolor{myred}{60.6} & \textcolor{mygreen}{32.6} & 6.1 & \textcolor{myred}{0.0} & \textcolor{myred}{0.9} & \textcolor{mygreen}{0.0} & 99.1\\
+	&$p(k|u)$ & 0.0 & 0.7 & 0.1 & 99.2 & - & - & - & - & 0.0 & 0.1 & 0.0 & 99.9\\
+	\hline
+%	\multicolumn{13}{c}{}\\	
+%	\hline
+	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{deep ILM}}}}&$p(k|d)$ & \textcolor{mygreen}{47.3} & \textcolor{myred}{10.5} & \textcolor{myred}{16.3} & 25.8 & \textcolor{mygreen}{42.0} & \textcolor{myred}{15.1} & \textcolor{myred}{17.9} & 25.1 & \textcolor{mygreen}{51.1} & \textcolor{myred}{7.5} & \textcolor{myred}{16.4} & 25.0\\
 	&$p(k|f)$ & \textcolor{myred}{2.4} & \textcolor{mygreen}{78.8} & \textcolor{myred}{1.9} & 16.9 & \textcolor{myred}{1.6} & \textcolor{mygreen}{89.3} & \textcolor{myred}{0.9} & 8.1 & \textcolor{myred}{4.5} & \textcolor{mygreen}{51.1} & \textcolor{myred}{4.6} & 39.8\\
 	&$p(k|o)$ & \textcolor{myred}{8.7} & \textcolor{myred}{8.4} & \textcolor{mygreen}{43.6} & 39.3 & \textcolor{myred}{11.0} & \textcolor{myred}{10.8} & \textcolor{mygreen}{46.5} & 31.7 & \textcolor{myred}{8.1} & \textcolor{myred}{7.5} & \textcolor{mygreen}{42.9} & 41.6\\
 	&$p(k|u)$ & 3.0 & 8.2 & 8.7 & 80.1 & - & - & - & - & 3.0 & 8.0 & 8.7 & 80.3\\
 	\hline
-	\multicolumn{13}{c}{}\\
-	\hline
-	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{Lidar \& R$_{20}$}}}}&$p(k|d)$ & \textcolor{mygreen}{47.3} & \textcolor{myred}{9.7} & \textcolor{myred}{18.3} & 24.8 & \textcolor{mygreen}{43.5} & \textcolor{myred}{13.6} & \textcolor{myred}{20.6} & 22.2 & \textcolor{mygreen}{50.6} & \textcolor{myred}{7.4} & \textcolor{myred}{17.4} & 24.6\\
+	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{\scriptsize{deep ILRM}}}}&$p(k|d)$ & \textcolor{mygreen}{47.3} & \textcolor{myred}{9.7} & \textcolor{myred}{18.3} & 24.8 & \textcolor{mygreen}{43.5} & \textcolor{myred}{13.6} & \textcolor{myred}{20.6} & 22.2 & \textcolor{mygreen}{50.6} & \textcolor{myred}{7.4} & \textcolor{myred}{17.4} & 24.6\\
 	&$p(k|f)$ & \textcolor{myred}{1.8} & \textcolor{mygreen}{80.8} & \textcolor{myred}{1.9} & 15.5 & \textcolor{myred}{1.2} & \textcolor{mygreen}{89.8} & \textcolor{myred}{1.1} & 7.9 & \textcolor{myred}{3.6} & \textcolor{mygreen}{56.8} & \textcolor{myred}{4.1} & 35.4\\
 	&$p(k|o)$ & \textcolor{myred}{6.0} & \textcolor{myred}{7.6} & \textcolor{mygreen}{46.8} & 39.5 & \textcolor{myred}{8.1} & \textcolor{myred}{9.6} & \textcolor{mygreen}{52.8} & 29.4 & \textcolor{myred}{5.5} & \textcolor{myred}{6.8} & \textcolor{mygreen}{45.2} & 42.5\\
 	&$p(k|u)$ & 1.6 & 7.6 & 7.4 & 83.3 & - & - & - & - & 1.6 & 7.5 & 7.3 & 83.5\\
@@ -339,6 +335,12 @@ For the R$_{20}$ scores, an expected overall improvement of all models can be ob
 	\item more surprisingly, lidar is capable to distinguish between dynamic and occupied objects from mere context and achieves better performance than all other inputs for ShiftNet. 
 	\item when fused with R$_{20}$, the overall performance further increases over all classes both in positive and false rates.
 \end{itemize}
+\begin{figure}[H]
+	\begin{center}
+		\import{imgs/07_deep_ism_exp/aleat_uncert}{ilm_qual_comp.pdf_tex}
+		\caption{\label{fig:ilm_qual_comp}}
+	\end{center}
+\end{figure}
 %==========================================================================%
 %
 %==========================================================================%

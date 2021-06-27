@@ -492,6 +492,22 @@ To account for the class imbalance in all of the above mentioned deep \gls{ism} 
 %======================================%
 %
 %======================================%
+\subsection{Metric to evaluate the \gls{ism} Variants}
+\label{subsec:confusion_matrix}
+To quantify the \gls{ism} results in Sec. \ref{sec:al_uncert_in_deep_isms}, \ref{sec:cam_radar_fusion_in_deep_isms} and \ref{sec:lidar_radar_fusion_in_deep_isms}, a confusion matrix variant is deployed since it provides a more detailed means of analysis as compared to the mIoU score. The confusion matrix variant is constructed in the following steps  
+\begin{enumerate}
+	\item obtain the current lidar occupancy map patch together with the current model's estimates
+	\item define the ground-truth pixels by assigning each pixel to the class with the highest mass in the lidar occupancy map patch 
+	\item for each class, obtain all ground-truth pixels 
+	\item for these ground-truth pixels sum up how much weight has been estimated to belong to each class
+	\item divide the sum of estimated mass for each class by the amount of ground-truth pixels for the current class 
+	\item to cope with the amount of pixels per class over the whole dataset, the above is done on an image basis and averaged over all test samples
+	\item[$\rightarrow$] this leads to the probability $p(\tilde{k}|\hat{k})$ to estimate class $\tilde{k}$ for a pixel given the pixel belongs to the actual class $\hat{k}$ with $k \in [d, f, o, u]$
+\end{enumerate}
+Since all of the investigated models behave severely different in the visible and occluded area, it is necessary to provide independent metrics for these two cases. Thus, the metrics are additionally computed for visible and occluded areas, while the occluded area is defined as the pixels where the geo \gls{ilm}'s unknown mass surpasses the other class' masses.
+%======================================%
+%
+%======================================%
 \subsection{Methodology to use deep \gls{ism}s in Occupancy Mapping}
 \label{subsec:method_to_use_deep_isms_in_occmaps}
 In order to investigate H\ref{hyp:temporal_dependence}, an alternative to the standard combination rules for evidential occupancy mapping will be proposed in this section. The problem addressed in H\ref{hyp:temporal_dependence} revolves around accumulation of redundant information over time. This, directly leads to the question of how to measure the information content in deep \gls{ism}s in the first place, as formulated in RQ\ref{requ:how_to_meas_info}. As stated in Sec. \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}, the commonly used entropy and specificity measure cannot be used to quantify the information in evidential occupancy mapping. However, since the deep \gls{ism}s in this work are constructed in a way to suffice R\ref{subreq:unknown_mass}, the unknown mass can be directly utilized to quantify the information content instead.\\
