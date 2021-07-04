@@ -130,11 +130,11 @@ Based on these results, $C_0 = 32$ is chosen and further used to fine tune $D$ f
 \end{tabular}
 \captionof{table}{\label{tab:networking_tuning_exp_setup}Hyperparameter setting for all network tuning experiments}
 \end{center}
-To fine tune the capacity of the network, $C_0$ is fixed to 32 while an upper limited on the number of filters is set to $C_{\max}=128$. Given this setup, $D$ is halved, starting from 0.5 up to the point where the performance collapses. It can be seen that this is the case after the second reduction as shown by the blue dots in the left plot of Fig. \ref{fig:network_tuning}. The parameter settings for the two experiments labeled 7 and 8 are shown in the lower part of \ref{tab:networking_tuning_exp_setup}. The experimental results show that a reduction of $D$ from 0.5 to 0.25 brings the network about $6\%$ closer to the goal of 100 Hz while roughly keeping its performance. Also, the interpolation capability seems to deteriorate only after the second reduction step, as shown qualitatively in Fig. \ref{fig:gt_exp_qual_results}. At the same time, the first reduction more than halves the training time.  
+To fine tune the capacity of the network, $C_0$ is fixed to 32 while an upper limited on the number of filters is set to $C_{\max}=128$. Given this setup, $D$ is halved, starting from 0.5 up to the point where the performance collapses. It can be seen that this is the case after the second reduction as shown by the blue dots in the left plot of Fig. \ref{fig:network_tuning}. The parameter settings for the two experiments labeled 7 and 8 are shown in the lower part of \ref{tab:networking_tuning_exp_setup}. The experimental results show that a reduction of $D$ from 0.5 to 0.25 brings the network about $6\%$ closer to the goal of 100 Hz while roughly keeping its performance. Also, the interpolation capability seems to deteriorate only after the second reduction step, as shown qualitatively in Fig. \ref{fig:gt_exp_qual_results}. At the same time, the first reduction more than halves the training time.
 \begin{figure}[H]
 	\begin{center}
 		\import{imgs/07_deep_ism_exp/choice_of_gt}{qualitative_comparison.pdf_tex}
-		\caption{\label{fig:gt_exp_qual_results}Qualitative results of the different models trained in the experiments as numbered in Fig. \ref{tab:networking_tuning_exp_setup} with the radar input shown on the right. It can be seen that up to $C_0=32$ in experiments $\#5$ only little interpolation of occupied space is provided by the models. A prominent example the interpolated edge marked by the white box. Increasing $C_0$ further provides even clearer edges. Also, shrinking the bottle neck $D$ seems to keep the interpolation capability in $\#7$ while loosing it in experiment $\#8$.}
+		\caption{\label{fig:gt_exp_qual_results}Qualitative results of the different models trained in the experiments as numbered in Fig. \ref{tab:networking_tuning_exp_setup} with the radar input shown on the right. It can be seen that up to $C_0=32$ in experiments $\#5$ only little interpolation of occupied space is provided by the models. A prominent example the interpolated edge marked by the white box. Increasing $C_0$ further provides even clearer edges. Also, shrinking the bottle neck $D$ seems to keep the interpolation capability in $\#7$ while loosing it in experiment $\#8$.\textcolor{red}{put target image}}
 	\end{center}
 \end{figure}
 \begin{center}
@@ -148,6 +148,16 @@ To fine tune the capacity of the network, $C_0$ is fixed to 32 while an upper li
 \end{minipage}
 	\captionof{figure}{\label{fig:network_tuning}Experimental results of the network tuning experiments. On the left-hand-side, the mIoU over the CPU inference time is shown while on the right-hand-side, the training time is plotted for each experiment. Here, orange marks the first part of the experiments in which the downsamlping rate $D$ is fixed and the initial amount of filters $C_0$ is searched. On the other hand, blue marks the second stage of the parameter search in which $D$ is finetuned.}
 \end{center}
+%======================================%
+%
+%======================================%
+\subsection{Discussion}
+\label{subsec:discussion_unet_arch}
+The experiments to fine-tune the architecture for this work clearly verify the results as stated in the state-of-the-art. It can be seen that the UNet architecture is capable to learn geometric interpolations (see interpolated corner in white box in Fig. \ref{fig:gt_exp_qual_results}). Also, the choice of network depth, and with it the network's receptive field, suffice to learn the concept of occluded areas. This can be seen in Fig. \ref{fig:gt_exp_qual_results} by the unknown areas (blue) behind occluded areas (green) given the reference point is the image center. Therefore, the model can clearly utilize the spatial coherence in huge amounts of data and, thus, suffices R\ref{subreq:input_output} and \ref{subreq:big_data}.
+\\
+Moreover, it has been shown that the reduction in the ResNet layer's bottleneck can be done up to factor of $0.25$ while almost keeping the performance, which validates the results reported in the state-of-the-art. A further reduction leads to serious performance degradation. Here, the variant $\#7$ is still able to predict geometric interpolations while providing an inference speed close enough to suffice R\ref{subreq:resource_efficient_inference}.   
+\\
+Thus, the architecture as parameterized in experiment $\#7$ will be used as a baseline for the following experiments.
 %==========================================================================%
 %
 %==========================================================================%
@@ -250,6 +260,11 @@ For the R$_{20}$ scores, an expected overall improvement of all models can be ob
 		\caption{\label{fig:irm_qual_comp}Qualitative results of the different compared \gls{irm}s (column-wise) for three validation scenes showing the predictions based on R$_1$ and R$_{20}$ in the respective rows with the corresponding label. Scene A illustrates the models capabilities to predict moving objects of any shape (e.g. two cars, one bus and a cyclist). Additionally, the lower box encloses an example of small distinct objects being situated close to each other. Scene B shows an effect of a bias in the radar data (marked in the box). Most of the time, moving objects only occlude parts of the scene temporarily leading to detections of the occluded areas at other times (e.g. upper box in scene A). Thus, if a wall is erroneously detected as moving and no further detections are provided behind it, the models predicts the area behind the wall as free. Finally, scene C illustrates the capacity of the methods to predict the occupancy state in a general parking space, which is one of the main application scenarios of the proposed system.}
 	\end{center}
 \end{figure}
+%======================================%
+%
+%======================================%
+\subsection{Discussion}
+\label{subsec:discussion_aleat_uncert}
 %==========================================================================%
 %
 %==========================================================================%
