@@ -252,7 +252,7 @@ For the R$_{20}$ scores, an expected overall improvement of all models can be ob
 		\hline
 		\multicolumn{2}{c|}{\textbf{R$_{20}$ Scores}} & \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
 	\end{tabular}
-	\caption{\label{tab:deep_ism_r20_results}Results of deep \gls{ism} variants trained on R$_1$ and R$_{20}$ images for visible, occluded and overall areas. Here, the visible area is defined as the area which is not unknown in the geometric \gls{ilm} used to create the ground-truth maps. Thus, only a stochastically insignificant portion of unknown labels remains in the visible area, which is why these scores are excluded from consideration. The scores are given in the form of a confusion matrix for each model where each row shows the probabilities in percentage of estimates given the true class. Values in green correspond to true positives, red shows the percentages of false predictions. The unknown class predictions (black) are treated as the safe state and, as such, do not add to the false rates. Additionally, since the network is permitted to extrapolate the state in unknown areas, all predictions deviating from the unknown class given unknown labels should also not be treated as false.}
+	\caption{\label{tab:deep_ism_r20_results}Results of deep \gls{ism} variants trained on R$_1$ and R$_{20}$ images for visible, occluded and overall areas. Here, the visible area is defined as the area which is not unknown in the geometric \gls{ilm}. Thus, only a stochastically insignificant portion of unknown labels remains in the visible area, which is why these scores are excluded from consideration. The scores are given in the form of a confusion matrix for each model where each row shows the probabilities in percentage of estimates given the true class. Values in green correspond to true positives, red shows the percentages of false predictions. The unknown class predictions (black) are treated as the safe state and, as such, do not add to the false rates. Additionally, since the network is permitted to extrapolate the state in unknown areas, all predictions deviating from the unknown class given unknown labels should also not be treated as false.}
 \end{figure} 
 \begin{figure}[H]
 	\begin{center}
@@ -275,6 +275,12 @@ The disentanglement of the uncertainty and the dynamic class directly leads to b
 %==========================================================================%
 \section{Camera-Radar Fusion in deep ISMs}
 \label{sec:cam_radar_fusion_in_deep_isms}
+%======================================%
+%
+%======================================%
+\subsection{Experimental Setup}
+\label{subsec:exp_setup_cam_inputs}
+To analyze the performance and occurring effects using a deep \gls{icm}, the homography projection into \gls{bev} of all camera images, their semantics and monocular depth estimates are considered as inputs (details on the chosen inputs are described in Sec. \ref{subsec:def_of_targets_n_inputs}). For reasons discussed in Sec. \ref{subsec:discussion_aleat_uncert}, the ShiftNet configuration is chosen for the experiments. Additionally, the fusion of camera and radar modalities shall be investigated to analyze the capability of the approach to enrich camera information with measurements of a depth sensor and to make use of the dynamic information in the radar signal. Here, only the monocular depth projection is used for the experiments since it is shown in Sec. \ref{subsec:exp_results_cam_inputs} to provide the best performance among the investigated camera input encodings. Since both signals are provided in the same projection, the fusion can be performed by concatenating the inputs to form a new one. 
 %======================================%
 %
 %======================================%
@@ -308,8 +314,9 @@ The disentanglement of the uncertainty and the dynamic class directly leads to b
 	\hline
 	\multicolumn{2}{c|}{\textbf{ShiftNet}} & \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
 \end{tabular}
+Based on the false rates, the monocular depth input model slightly outperforms its purely camera-based counterparts with an accumulated overall false rate of 52.7 as compared to 54.1, both for the RGB and semantic projections. Looking at the true rates, this distinction becomes even clearer with the RGB-based providing the worst true rates in all categories (true rate sum of 103.1), followed by the semantic model (true rate sum 111.7) and, finally, with the mono depth model as the best purely camera-based model (true rate sum 126.1).  
 \begin{itemize}
-	\item homography rgb has worst overall performance, followed by homography of semantic segmentation. Monodepth \gls{bev} projection surpasses both the rgb and semantic inputs in all categories. While it should be noted that it has slightly increased false rates in the occupancy category. Thus, monopdeth inputs are chosen for further experiments
+	\item less mass unknown and better distinction from free BUT only marginal improvement of true positives while almost doubeling the false rate in occupied class. Thus, providing additional radar information in the proposed way makes it clearer that there is indeed an object but not in which motion state the object is.  
 	\item monodepth fusion with radar R$_{20}$ images shows that the radar information mainly benefits in distinguishing dynamic and occupied cells. Free overall performance remains as is.
 \end{itemize}
 \begin{figure}[H]
