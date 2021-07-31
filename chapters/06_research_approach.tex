@@ -601,15 +601,46 @@ For the geo \gls{ism}, a combination rule has to be chosen that integrates the e
 		m_{u1}m_{u2}\\
 	\end{bmatrix}
 \end{align}
-This combination rule shall be referred to as YaDer's rule since it combines the properties of Yager's rule to  
-\\
-The combination approaches for each phase together with a comparison against the two baseline combination rules is provided in Sec. \ref{sec:exp_choice_comb_rule}. Furthermore, sec. \textcolor{red}{todo} shows the experimental results of applying this procedure for occupancy mapping.
+This combination rule shall be referred to as YaDer's rule since it combines the properties of Yager's rule to model conflicting mass and of Dempster's rule to strictly reduce unknown mass. 
+
+An overview of the desired combination rule properties in each phase is provided in Fig. \ref{tab:desired_comb_rule_properties}. For a qualitative evaluation of the combination approaches for each phase together with a comparison against the two baseline combination rules, please be referred to Sec. \ref{sec:exp_choice_comb_rule}. Furthermore, sec. \textcolor{red}{todo} shows the experimental results of applying this procedure for occupancy mapping.
 \begin{figure}
 	\begin{center}
 		\import{imgs/06_research_approach/method/}{three_phased_approach.pdf_tex}
 		\caption{\label{fig:three_phased_approach}Illustration of the three phases of a grid cell's occupancy state. Beginning with the start phase where the evidential mass is set to be all unknown. Afterwards, in the initialization phase, the unknown mass can be shifted into the free and occupied class and be recuperated using the deep and geometric \gls{ism}'s predictions. Finally, in the convergence phase, the geometric \gls{ism}'s estimates are used to strictly reduce the unknown mass while the deep \gls{ism} is being disabled.}
 	\end{center}
 \end{figure}  
+\begin{center}
+	\begin{tabular}{c|c|l|l}
+		\multicolumn{1}{c|}{\bfseries Phase} & 
+		\multicolumn{1}{c|}{\bfseries Model} &  	
+		\multicolumn{1}{c|}{\bfseries No Conflict} &  	
+		\multicolumn{1}{c}{\bfseries Conflict}\\
+\hline
+		\parbox[t]{5mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{init.}}}
+		& geo \gls{ism}
+		& $\bullet$ fully converge & $\bullet$ fully converge \\
+		&
+		& $\bullet$ strictly reduce $m_u$& $\bullet$ recuperate $m_u$ \\
+\cline{2-4}
+		& deep \gls{ism}
+		& $\bullet$ converge up to $\Delta m_u = 0$ & $\bullet$ converge up to $\Delta m_u = 0$ \\
+		&
+		& $\bullet$ strictly reduce $m_u$ & $\bullet$ recuperate $m_u$ \\
+\hline
+\hline
+	\parbox[t]{5mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{converg.}}} 
+	& geo \gls{ism}
+	& $\bullet$ fully converge & $\bullet$ fully converge \\
+	& 
+	& $\bullet$ strictly reduce $m_u$ & $\bullet$ strictly reduce $m_u$ \\
+\cline{2-4}
+	&deep \gls{ism}
+	& $\bullet$ unchanged & $\bullet$ unchanged \\
+	&&&
+	\end{tabular}
+	\captionof{table}{\label{tab:desired_comb_rule_properties}Overview of the desired combination rules' properties in each mapping phase.}
+\end{center} 
 
 
 
