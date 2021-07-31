@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import rc
+rc('text', usetex=True)
 from pathlib import Path
 
 plt.close('all')
@@ -7,9 +9,9 @@ plt.close('all')
 
 def plot_ds_over_time(m, title, plot_x_axis=True):
     time = range(m.shape[1])
-    plt.plot(time, m[0, :], "r")
-    plt.plot(time, m[1, :], "g")
-    plt.plot(time, m[2, :], "b")
+    plt.plot(time, m[0, :], "r", label=r'free')
+    plt.plot(time, m[1, :], "g", label=r'occupied')
+    plt.plot(time, m[2, :], "b", label=r'unknown')
 
     plt.ylim([-0.1, 1.1])
     plt.xlim([0., m.shape[1]])
@@ -30,7 +32,7 @@ def limit_certainty(m, u_min):
     return m
 
 
-def fuse_masses(m1, m2, comb_rule=0, u_min=0.0, entropy_scaling=False, eps=1e-8, converg_factor=1.):
+def fuse_masses(m1, m2, comb_rule=0, u_min=0.0, entropy_scaling=False, eps=1e-10, converg_factor=1.):
     """
     Fuses two masses defined as m = [{fr},{oc},{fr,oc}] according to the
     Dempster's Rule of Combination.
@@ -103,53 +105,51 @@ def fuse_masses(m1, m2, comb_rule=0, u_min=0.0, entropy_scaling=False, eps=1e-8,
 uMin = 0.2
 ampFactor = 10.0
 
-# define masses as m = [{fr},{oc},{fr,oc}] 
-numMeas = 500
-numMeasPart = int(numMeas // 10)
+# define masses as m = [{fr},{oc},{fr,oc}]
+numMeasPart = 20
+numMeas = numMeasPart * 8
 mMeas = np.zeros((3, numMeas))
-mMeas[0, 0 * numMeasPart:1 * numMeasPart] = 0.0
-mMeas[1, 0 * numMeasPart:1 * numMeasPart] = 0.4
-mMeas[2, 0 * numMeasPart:1 * numMeasPart] = 0.6
+step = -1
 
-mMeas[0, 1 * numMeasPart:2 * numMeasPart] = 0.0
-mMeas[1, 1 * numMeasPart:2 * numMeasPart] = 0.7
-mMeas[2, 1 * numMeasPart:2 * numMeasPart] = 0.3
+step += 1
+mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
+mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 0.4
+mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.6
 
-mMeas[0, 2 * numMeasPart:3 * numMeasPart] = 1.0
-mMeas[1, 2 * numMeasPart:3 * numMeasPart] = 0.0
-mMeas[2, 2 * numMeasPart:3 * numMeasPart] = 0.0
+step += 1
+mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
+mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 0.5
+mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.5
 
-mMeas[0, 3 * numMeasPart:4 * numMeasPart] = 0.1
-mMeas[1, 3 * numMeasPart:4 * numMeasPart] = 0.5
-mMeas[2, 3 * numMeasPart:4 * numMeasPart] = 0.4
+step += 1
+mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.6
+mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
+mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.4
 
-mMeas[0, 4 * numMeasPart:5 * numMeasPart] = 0.9
-mMeas[1, 4 * numMeasPart:5 * numMeasPart] = 0.0
-mMeas[2, 4 * numMeasPart:5 * numMeasPart] = 0.1
+step += 1
+mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.8
+mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
+mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.2
 
-mMeas[0, 5 * numMeasPart:6 * numMeasPart] = 0.0
-mMeas[1, 5 * numMeasPart:6 * numMeasPart] = 0.9
-mMeas[2, 5 * numMeasPart:6 * numMeasPart] = 0.1
+step += 1
+mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.6
+mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 0.4
+mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
 
-mMeas[0, 6 * numMeasPart:] = 0.5
-mMeas[1, 6 * numMeasPart:] = 0.5
-mMeas[2, 6 * numMeasPart:] = 0.0
+step += 1
+mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 1.0
+mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
+mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
 
-# mMeas[0,6*numMeasPart:7*numMeasPart] = 0.5
-# mMeas[1,6*numMeasPart:7*numMeasPart] = 0.5
-# mMeas[2,6*numMeasPart:7*numMeasPart] = 0.0
-#
-# mMeas[0,7*numMeasPart:8*numMeasPart] = 0.9
-# mMeas[1,7*numMeasPart:8*numMeasPart] = 0.0
-# mMeas[2,7*numMeasPart:8*numMeasPart] = 0.1
-#
-# mMeas[0,8*numMeasPart:9*numMeasPart] = 0.0
-# mMeas[1,8*numMeasPart:9*numMeasPart] = 0.9
-# mMeas[2,8*numMeasPart:9*numMeasPart] = 0.1
-#
-# mMeas[0,9*numMeasPart:10*numMeasPart] = 0.9
-# mMeas[1,9*numMeasPart:10*numMeasPart] = 0.0
-# mMeas[2,9*numMeasPart:10*numMeasPart] = 0.1
+step += 1
+mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
+mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 1.0
+mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
+
+step += 1
+mMeas[0, step * numMeasPart:] = 0.5
+mMeas[1, step * numMeasPart:] = 0.5
+mMeas[2, step * numMeasPart:] = 0.0
 
 mUnDiff = np.zeros((3, numMeas))
 mYager_ = np.zeros((3, numMeas))
@@ -183,30 +183,37 @@ fig = plt.figure()
 subPltIdx += 1
 plt.subplot(numSubPlts, 1, subPltIdx)
 plot_ds_over_time(mMeas, "Input Masses", plot_x_axis=False)
-plt.plot([0, numMeas], [uMin, uMin], "b--")
-plt.legend(["free", "occupied", "unknown", "uMin"],
-           loc="center", bbox_to_anchor=(0.5, 1.15), ncol=4)
+plt.plot([0, numMeas], [uMin, uMin], "b--", label=r"$\underline{m}_u$")
+# plt.plot([0, numMeas], [uMin, uMin], "b--", label="m_u")
+plt.legend(loc="center", bbox_to_anchor=(0.5, 1.15), ncol=4)
 
 subPltIdx += 1
 plt.subplot(numSubPlts, 1, subPltIdx)
-plot_ds_over_time(mUnDiff, "Unknown Diff", plot_x_axis=False)
-plt.plot([0, numMeas], [uMin, uMin], "b--")
-
-subPltIdx += 1
-plt.subplot(numSubPlts, 1, subPltIdx)
-plot_ds_over_time(mYager_, "with modified Yager", plot_x_axis=False)
+plot_ds_over_time(mDempster, "Dempster", plot_x_axis=False)
 plt.plot([0, numMeas], [uMin, uMin], "b--")
 
 subPltIdx += 1
 plt.subplot(numSubPlts, 1, subPltIdx)
-plot_ds_over_time(mYager, "with Yager", plot_x_axis=False)
+plot_ds_over_time(mYager, "Yager", plot_x_axis=False)
 plt.plot([0, numMeas], [uMin, uMin], "b--")
 
 subPltIdx += 1
 plt.subplot(numSubPlts, 1, subPltIdx)
-plot_ds_over_time(mDempster, "with Dempster", plot_x_axis=True)
+plot_ds_over_time(mYager_, "YaDer", plot_x_axis=False)
 plt.plot([0, numMeas], [uMin, uMin], "b--")
+
+subPltIdx += 1
+last_ax = fig.add_subplot(numSubPlts, 1, subPltIdx)
+plot_ds_over_time(mUnDiff, "lower-bounded Yager", plot_x_axis=True)
+plt.plot([0, numMeas], [uMin, uMin], "b--")
+
+# label the time axis
+time = range(mUnDiff.shape[1])
+last_ax.set_xticks(np.arange(9) * numMeasPart)
 plt.xlabel("timestep")
+
+# remove white space margin around figure
+plt.tight_layout()
 
 storage_dir = Path("./").absolute().parents[1] / "imgs/08_occ_mapping_exp/choice_of_comb_rule/"
 storage_dir = storage_dir / "ds_comb_rule_comparison.pgf"

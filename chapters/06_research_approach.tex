@@ -558,7 +558,7 @@ The restricted deep \gls{ism} certainty together with the discounting of non-red
 	\vec{m}^{0:T} &= \vec{m}^{0:T-1} \oplus (\gamma \otimes \tilde{\vec{m}}^{0:T})\\
 	\underline{m}_u &\leq m^{0:T}_{u}
 \end{align} 
-Here, the adaption of $\gamma$ in a way that the fusion respects the lower bound $\underline{m}_{u}$, depends on the choice of combination rule. Since the combination requires the possibility to recuperate unknown mass, Yager's rule is chosen over Dempster's (for details on the properties of evidential combination rules see sec. \ref{subsec:combination_of_independent_evidence}). Given Yager's combination rule, $\gamma$ shall be chosen as follows
+Here, the adaption of $\gamma$ in a way that the fusion respects the lower bound $\underline{m}_{u}$, depends on the choice of combination rule. Since the combination requires the possibility to recuperate unknown mass, Yager's rule is chosen over Dempster's (for details on the properties of evidential combination rules see Sec. \ref{subsec:combination_of_independent_evidence} and Sec. \ref{sec:exp_choice_comb_rule}). Given Yager's combination rule, $\gamma$ shall be chosen as follows
 \begin{align}
 	\underline{m}_u &\leq m^{0:T}_{u} \underbrace{=}_{\eqref{eq:yagers_rule}} m_{u}^{0:T-1}\tilde{m}_{u}^{T}+K \\
 %
@@ -567,7 +567,7 @@ Here, the adaption of $\gamma$ in a way that the fusion respects the lower bound
 	\underline{m}_u &\leq m_{u}^{0:T-1} + \gamma (\underbrace{m_{u}^{0:T-1}\tilde{m}_{u}^{0:T} - m_{u}^{0:T-1} + m_{o}^{0:T-1}\tilde{m}_{f}^{0:T} + m_{f}^{0:T-1}\tilde{m}_{o}^{0:T}}_{=: \xi}) \quad|-m_{u}^{0:T-1} |\div\xi
 \end{align}
 Since the above derivation is made for the case of combination in the initialization phase, both the map cell's and deep \gls{ism} estimate's unknown masses are in the interval $[\underline{m}_u,1]$. Thus, given $K=1$ and $\underline{m}_u = 0$, no solution for $\gamma$ can be found to suffice the requirement above. This setting, however, would be pointless since by setting $\underline{m}_u = 0$, the function of the lower bound $\underline{m}_u$ as a distinction between the initialization and convergence phase would be disabled.
-Thus, given $\underline{m}_u > 0$, $|\xi| \in (0,1]$ and the two following solutions can be found 
+Thus, given $\underline{m}_u > 0$ it follows that $|\xi| \in (0,1]$ and the two following solutions can be found 
 \begin{align}
 	\text{case: } \xi > 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\leq \gamma\\
 	\text{case: } \xi < 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\geq \gamma 
@@ -579,16 +579,19 @@ Therefore, the final discount factor to both reduce the informational redundancy
 %
 	\text{case: } \xi < 0 \rightarrow \tilde{\gamma} &= \min \left(\gamma, \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} \right)
 \end{align}
-To fuse the geo \gls{ism} estimates into the map during the initialization phase, it is again proposed to use Yager's combination rule. The reason is the same as for the deep \gls{ism} fusion and revolves around the fact that Yager's rule is better suited to cope with changes in the true occupancy state.\\
-In the center of Fig. \ref{fig:three_phased_approach}, the main properties of the initialization phase to alter the map's state up the the lower bound $\underline{m}_{u}$ are depicted. It also shows the capability to move mass between free and occupied while recuperating unknown mass. 
+This modified Yager rule shall be referred to as lower bounded Yager rule. A qualitative verification, showing that the unknown mass after fusing two masses using this rule never falls below $\underline{m}_u$, is provided in Sec. \ref{sec:exp_choice_comb_rule}.
+\\
+To fuse the geo \gls{ism} estimates into the map during the initialization phase, it is again proposed to use Yager's combination rule. The reason is the same as for the deep \gls{ism} fusion and revolves around the fact that Yager's rule is better suited to cope with changes in the true occupancy state.
+\\
+In the center of Fig. \ref{fig:three_phased_approach}, the main properties of the initialization phase to alter the map's state up the the lower bound $\underline{m}_{u}$ are depicted. It also shows the capability to move mass between free and occupied while recuperating unknown mass.
 \\
 \\
 \textbf{Convergence Phase}\\
 Once the unknown mass has fallen below the threshold $\underline{m}_u$, the convergence phase starts. Here, the geometric \gls{ism} should still be integrated into the map while the influence of the deep \gls{ism} should be disabled, guaranteeing a convergence towards the geometric \gls{ism}.
 \\
-Here, the combination rule for the deep \gls{ism} as defined for the initialization phase already makes sure that the influence of the deep \gls{ism} is being disabled in the convergence phase. 
+The combination rule for the deep \gls{ism} as defined for the initialization phase already makes sure that the influence of the deep \gls{ism} is being disabled in the convergence phase. 
 \\
-For the geo \gls{ism}, a combination rule has to be chosen that integrates the estimates in a way to strictly reduce the unknown mass but at the same time is capable to shift mass between the free and occupied class to, again, account for changes in the occupancy state or for correction purposes. To suffice these requirements, the usage of an adapted Yager's rule is proposed. The adaption seeks to disable the capability to recuperate unknown mass to ensure that the unknown mass always remain below $\underline{m}_{u}$. To do so, it is proposed to assign the conflict $K$ in equal portions to the free and occupied mass instead of assigning it to the unknown mass. This can be written as follows
+For the geo \gls{ism}, a combination rule has to be chosen that integrates the estimates in a way to strictly reduce the unknown mass but at the same time is capable to shift mass between the free and occupied class to, again, account for changes in the occupancy state or for correction purposes. To suffice these requirements, the usage of an adapted Yager's rule is proposed. The adaptation seeks to disable the capability to recuperate unknown mass to ensure that the unknown mass always remains below $\underline{m}_{u}$. To do so, it is proposed to assign the conflict $K$ in equal portions to the free and occupied mass instead of assigning it to the unknown mass. This can be written as follows
 \begin{align}
 	\label{eq:bauers_rule}
 	\vec{m}_1 \oplus_B \vec{m}_2 &=  
@@ -598,9 +601,9 @@ For the geo \gls{ism}, a combination rule has to be chosen that integrates the e
 		m_{u1}m_{u2}\\
 	\end{bmatrix}
 \end{align}
-To underline the modesty of the author, this rule shall be unknown as Bauer's combination rule.
+This combination rule shall be referred to as YaDer's rule since it combines the properties of Yager's rule to  
 \\
-The combination approaches for each phase together with a comparison against the two baseline combination rules is provided in sec. \textcolor{red}{todo}. Furthermore, sec. \textcolor{red}{todo} shows the experimental results of applying this procedure for occupancy mapping.
+The combination approaches for each phase together with a comparison against the two baseline combination rules is provided in Sec. \ref{sec:exp_choice_comb_rule}. Furthermore, sec. \textcolor{red}{todo} shows the experimental results of applying this procedure for occupancy mapping.
 \begin{figure}
 	\begin{center}
 		\import{imgs/06_research_approach/method/}{three_phased_approach.pdf_tex}
