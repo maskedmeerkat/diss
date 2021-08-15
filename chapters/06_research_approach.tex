@@ -510,27 +510,35 @@ Since all of the investigated models behave severely different in the visible an
 %======================================%
 \subsection{Methodology to use deep \gls{ism}s in Occupancy Mapping}
 \label{subsec:method_to_use_deep_isms_in_occmaps}
-In order to investigate H\ref{hyp:temporal_dependence}, an alternative to the standard combination rules for evidential occupancy mapping will be proposed in this section. The problem addressed in H\ref{hyp:temporal_dependence} revolves around accumulation of redundant information over time. This, directly leads to the question of how to measure the information content in deep \gls{ism}s in the first place, as formulated in RQ\ref{requ:how_to_meas_info}. As stated in Sec. \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}, the commonly used entropy and specificity measure cannot be used to quantify the information in evidential occupancy mapping. However, since the deep \gls{ism}s in this work are constructed in a way to suffice R\ref{subreq:unknown_mass}, the unknown mass can be directly utilized to quantify the information content instead.\\
-Given the unknown mass as a measure for information, the problem of how to quantify the temporal redundancy shall be tackled (RQ\ref{requ:how_to_meas_redund}). In this work, the redundancy shall be assessed through mutual information, for reasons explained in Sec. \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}. Alternatives will be discussed in Sec. \textcolor{red}{ToDo disscussion section}. To obtain the mutual information, this work proposes to use temporally accumulated measurement signals as inputs for the deep \gls{ism}s. In doing so, the deep \gls{ism} learns to directly approximate the occupancy state $\vec{m}_{0:T}$ given the information $I_{0:T}$ of time step zero up to the current step $T$. On the other hand, before fusion, the map provides a successively obtained estimate of the environment state $\vec{m}_{0:T-1}$ of all previous measurements. Ideally, this means that the deep \gls{ism} prediction contains all of the information stored in the occupancy map around the current ego vehicle's location with the addition of the information captured in the current time step. Thus, using the unknown mass as an inverse measure for information, the non-redundant part of the information can be defined as follows
+In order to investigate H\ref{hyp:temporal_dependence}, an alternative to the standard combination rules for evidential occupancy mapping will be proposed in this section. The problem addressed in H\ref{hyp:temporal_dependence} revolves around accumulation of redundant information over time. This, directly leads to the question of how to measure the information content in deep \gls{ism}s in the first place, as formulated in RQ\ref{requ:how_to_meas_info}. As stated in Sec. \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}, the commonly used entropy and specificity measure cannot be used to quantify the information in evidential occupancy mapping. However, since the deep \gls{ism}s in this work are constructed in a way to suffice R\ref{subreq:unknown_mass}, the unknown mass can be utilized to quantify the information content instead.
+
+Given the unknown mass as a measure for information, the problem of how to quantify the temporal redundancy shall be tackled (RQ\ref{requ:how_to_meas_redund}). In this work, the redundancy shall be assessed through mutual information, for reasons explained in Sec. \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}. Alternatives will be discussed in Sec. \todo{discussion section, e.g. use current map state and measurement as inputs to net and directly estimate the next map state}. To obtain the mutual information, this work proposes to use temporally accumulated measurement signals as inputs for the deep \gls{ism}s. In doing so, the deep \gls{ism} learns to directly approximate the occupancy state $\vec{m}_{0:T}$ given the information $I_{0:T}$ of time step zero up to the current step $T$. On the other hand, before fusion, the map provides a successively obtained estimate of the environment state $\vec{m}_{0:T-1}$ of all previous measurements. Ideally, this means that the deep \gls{ism} prediction contains all of the information stored in the occupancy map around the current ego vehicle's location with the addition of the information captured in the current time step. Thus, using the unknown mass as an inverse measure for information, the non-redundant part of the information can be approximated as follows
+\begin{align}
+	\label{eq:non_redund_info_}
+	I_{T|0:T} &= I_{0:T} - I_{0:T-1} \approx \underbrace{m_{u,0:T-1} - m_{u,0:T}}_{\equiv\Delta m_{u}}
+\end{align}
+However, a problem arises in case the static environment assumption of occupancy mapping is violated. When solely using $\Delta m_u$ as a measure for information, a shift between free and occupied can only be achieved if the new signal is more certain. To allow for class shifts even if measurement signals are equally certain, it is proposed to add the conflict $K$ as defined in \eqref{eq:conflict} to the difference in unknown mass leading to the following improved approximation of novel information 
 \begin{align}
 	\label{eq:non_redund_info}
-	I_{T|0:T} &= I_{0:T} - I_{0:T-1} = \underbrace{m_{u,0:T-1} - m_{u,0:T}}_{\equiv\Delta m_{u}}
+	I_{T|0:T} &\approx \Delta m_{u} + K \in [-1,1]
 \end{align}
-At this point, it should be mentioned that the map region around the vehicle could simply be updated by replacing the old map state with the new deep \gls{ism} estimate. This, however, would remove all of the geometric \gls{ism}'s influences. Therefore, it is rather proposed to discount the deep \gls{ism} estimate according to the amount of non-redundant information $\Delta m_{u}$ and combine it with the current map state.\\
+In case a new measurement contains conflicting information $K$ but is also less certain than the current map state, $Delta m_u$ will become negative and reduce the amount of novelty in the update. This effect is desired to reduce the influence of outliers. The qualitative evaluation in the bottom plot of Fig. \ref{fig:ds_comb_rule_comparison} shows the approximated amount of novel information in several fusion constellations.
+
+At this point, it should be mentioned that the map region around the vehicle could simply be updated by replacing the old map state with the new deep \gls{ism} estimate. This, however, would remove all of the geometric \gls{ism}'s influences. Therefore, it is rather proposed to discount the deep \gls{ism} estimate according to the amount of non-redundant information and combine it with the current map state.\\
 To do so, RQ\ref{requ:how_to_define_discount_fact} has to be answered to obtain a discount factor for the discount operation defined in Eq. \ref{eq:discount_op}. The requirements for the discount factor $\gamma$ can be formulated as follows
 \begin{align}
 	\label{eq:discount_factor_behavior}
 	\gamma &= 
 	\begin{cases}
-		0, \Delta m_{u} < 0\\
-		0, \lim\limits_{\Delta m_{u} \rightarrow 0}\\
-		1, \lim\limits_{\Delta m_{u} \rightarrow 1}\\
+		0, I_{T|0:T} < 0\\
+		0, \lim\limits_{I_{T|0:T} \rightarrow 0}\\
+		1, \lim\limits_{I_{T|0:T} \rightarrow 1}\\
 	\end{cases}
 \end{align}
-It should be noted that, ideally, $\Delta m_{u} < 0$ never occurs since the next time step's estimate is based on at least the same amount of information as the previous one. Since $\Delta m_u$ lies within the interval $[-1,1]$, the behavior defined in Eq. \ref{eq:discount_factor_behavior} can e.g. be achieved in a linear way as follows
+It should be noted that, ideally, $I_{T|0:T} < 0$ never occurs since the next time step's estimate is based on at least the same amount of information as the previous one. Since the proposed approximation of $I_{T|0:T}$ in \eqref{eq:non_redund_info} lies within the interval $[-1,1]$, the behavior defined in Eq. \ref{eq:discount_factor_behavior} can e.g. be achieved in a linear way as follows
 \begin{align}
 	\label{eq:relu_discount_factor}
-	\gamma &= \mathrm{ReLU}(\Delta m_u)
+	\gamma &= \mathrm{ReLU}(\Delta m_u + K)
 \end{align}
 However, alternatives like a scaled hyperbolic tangent non-linearity can also be applied to e.g. dampen the influence of highly certain and highly redundant estimates. Since no clear preference is given, this work will focus on the discount factor as defined in Eq. \ref{eq:relu_discount_factor}. Finally, the decision of which combination rule to chose to combine the deep \gls{ism} estimate after discounting the redundancy will be postponed to Sec. \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
 %======================================%
@@ -552,7 +560,7 @@ First, restrict the certainty of the deep \gls{ism} estimates to $\underline{m}_
 \begin{align}
 	\tilde{\vec{m}}' &= (1-\underline{m}_u) \otimes \tilde{\vec{m}}
 \end{align}
-This restriction of certainty, however, does not influence the amount of redundancy in the deep \gls{ism} estimates. Thus, the next step consists of removing the redundancy as proposed in sec. \ref{subsec:method_to_use_deep_isms_in_occmaps} by an additional discounting operation.\\
+This restriction of certainty, however, does not influence the amount of redundancy in the deep \gls{ism} estimates. Thus, the next step consists in removing the redundancy as proposed in sec. \ref{subsec:method_to_use_deep_isms_in_occmaps} by an additional discounting operation.\\
 The restricted deep \gls{ism} certainty together with the discounting of non-redundant information makes sure that once a map cell's unknown mass has fallen beneath $\underline{m}_u$, all further deep \gls{ism} estimates are ignored. However, it is still possible for the deep \gls{ism} to reduce the unknown mass below the lower limit in the combination step as long as it has not been reached. Therefore, the discount factor to remove the redundancy has to be adapted to suffice the following condition
 \begin{align}
 	\vec{m}^{0:T} &= \vec{m}^{0:T-1} \oplus (\gamma \otimes \tilde{\vec{m}}^{0:T})\\

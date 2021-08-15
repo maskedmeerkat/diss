@@ -13,7 +13,7 @@ def plot_ds_over_time(m, title, plot_x_axis=True):
     plt.plot(time, m[1, :], "g", label=r'occupied')
     plt.plot(time, m[2, :], "b", label=r'unknown')
 
-    plt.ylim([-0.1, 1.1])
+    plt.ylim([-0.02, 1.02])
     plt.xlim([0., m.shape[1]])
     plt.ylabel(title)
     if not plot_x_axis:
@@ -42,6 +42,7 @@ def fuse_masses(m1, m2, comb_rule=0, u_min=0.0, entropy_scaling=False, eps=1e-10
         1 = Yager with konflict being assigned to free and occ equally
         2 = Dempster
     """
+    h1_2 = 0
     if entropy_scaling:
         # FIRST: rescale mass to have at least uMin unknown mass        
         m = limit_certainty(m1, u_min)
@@ -50,7 +51,11 @@ def fuse_masses(m1, m2, comb_rule=0, u_min=0.0, entropy_scaling=False, eps=1e-10
         # current conflict 
         k = m1[0] * m2[1] + m1[1] * m2[0]
         # difference in information 
-        h1_2 = np.clip(converg_factor * (m2[2] - m1[2]), 0., 1.)
+        # h1_2 = np.clip(converg_factor * (m2[2] - m1[2]), 0., 1.)
+        du = m2[2] - m1[2]
+        # dk = k * m1[2]/m2[2]
+        dk = k
+        h1_2 = np.clip(converg_factor * (du + dk), 0., 1.)
 
         # limit the difference in information
         h1_2_max = np.clip((u_min - m2[2]) / (m2[2] * m1[2] - m2[2] + k), 0., 1.)
@@ -97,13 +102,13 @@ def fuse_masses(m1, m2, comb_rule=0, u_min=0.0, entropy_scaling=False, eps=1e-10
     m[1] = np.clip(m[1], 0., 1.)
     m[2] = 1 - m[0] - m[1]
 
-    return m
+    return m, h1_2
 
 
 # ============================MAIN=============================================#
 # parameters
 uMin = 0.2
-ampFactor = 10.0
+ampFactor = 3.0
 
 # define masses as m = [{fr},{oc},{fr,oc}]
 numMeasPart = 20
@@ -118,13 +123,13 @@ mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.6
 
 step += 1
 mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
-mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 0.5
-mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.5
+mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 0.6
+mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.4
 
 step += 1
-mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.6
+mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.5
 mMeas[1, step * numMeasPart:(step + 1) * numMeasPart] = 0.0
-mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.4
+mMeas[2, step * numMeasPart:(step + 1) * numMeasPart] = 0.5
 
 step += 1
 mMeas[0, step * numMeasPart:(step + 1) * numMeasPart] = 0.8
@@ -152,6 +157,7 @@ mMeas[1, step * numMeasPart:] = 0.5
 mMeas[2, step * numMeasPart:] = 0.0
 
 mUnDiff = np.zeros((3, numMeas))
+h1_2 = np.zeros(numMeas)
 mYager_ = np.zeros((3, numMeas))
 mYager = np.zeros((3, numMeas))
 mDempster = np.zeros((3, numMeas))
@@ -169,11 +175,11 @@ for it in range(numMeas):
         mYager[:, [it]] = m0
         mDempster[:, [it]] = m0
     else:
-        mUnDiff[:, [it]] = fuse_masses(mMeas[:, [it]].copy(), mUnDiff[:, it - 1], comb_rule=0, u_min=uMin,
+        mUnDiff[:, [it]], h1_2[it] = fuse_masses(mMeas[:, [it]].copy(), mUnDiff[:, it - 1], comb_rule=0, u_min=uMin,
                                        entropy_scaling=True, converg_factor=ampFactor)
-        mYager_[:, [it]] = fuse_masses(mMeas[:, [it]].copy(), mYager_[:, it - 1], comb_rule=1)
-        mYager[:, [it]] = fuse_masses(mMeas[:, [it]].copy(), mYager[:, it - 1], comb_rule=0)
-        mDempster[:, [it]] = fuse_masses(mMeas[:, [it]].copy(), mDempster[:, it - 1], comb_rule=2)
+        mYager_[:, [it]], _ = fuse_masses(mMeas[:, [it]].copy(), mYager_[:, it - 1], comb_rule=1)
+        mYager[:, [it]], _ = fuse_masses(mMeas[:, [it]].copy(), mYager[:, it - 1], comb_rule=0)
+        mDempster[:, [it]], _ = fuse_masses(mMeas[:, [it]].copy(), mDempster[:, it - 1], comb_rule=2)
 
 print("")
 
@@ -185,7 +191,9 @@ plt.subplot(numSubPlts, 1, subPltIdx)
 plot_ds_over_time(mMeas, "Input Masses", plot_x_axis=False)
 plt.plot([0, numMeas], [uMin, uMin], "b--", label=r"$\underline{m}_u$")
 # plt.plot([0, numMeas], [uMin, uMin], "b--", label="m_u")
-plt.legend(loc="center", bbox_to_anchor=(0.5, 1.15), ncol=4)
+# plt.plot([0, numMeas], [-1, -1], "m", label=r"$~I_{T|0:T}$")
+plt.plot([0, numMeas], [-1, -1], "m", label="novel information")
+plt.legend(loc="center", bbox_to_anchor=(0.5, 1.25), ncol=5)
 
 subPltIdx += 1
 plt.subplot(numSubPlts, 1, subPltIdx)
@@ -205,6 +213,7 @@ plt.plot([0, numMeas], [uMin, uMin], "b--")
 subPltIdx += 1
 last_ax = fig.add_subplot(numSubPlts, 1, subPltIdx)
 plot_ds_over_time(mUnDiff, "lower-bounded Yager", plot_x_axis=True)
+plt.plot(np.arange(h1_2.shape[0]), h1_2, "m")
 plt.plot([0, numMeas], [uMin, uMin], "b--")
 
 # label the time axis
