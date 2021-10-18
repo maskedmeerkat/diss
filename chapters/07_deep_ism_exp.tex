@@ -134,7 +134,7 @@ To fine tune the capacity of the network, $C_0$ is fixed to 32 while an upper li
 \begin{figure}[H]
 	\begin{center}
 		\import{imgs/07_deep_ism_exp/choice_of_gt}{qualitative_comparison.pdf_tex}
-		\caption{\label{fig:gt_exp_qual_results}Qualitative results of the different models trained in the experiments as numbered in Fig. \ref{tab:networking_tuning_exp_setup} with the radar input shown on the right. It can be seen that up to $C_0=32$ in experiments $\#5$ only little interpolation of occupied space is provided by the models. A prominent example the interpolated edge marked by the white box. Increasing $C_0$ further provides even clearer edges. Also, shrinking the bottle neck $D$ seems to keep the interpolation capability in $\#7$ while loosing it in experiment $\#8$.\textcolor{red}{put target image}}
+		\caption{\label{fig:gt_exp_qual_results}Qualitative results of the different models trained in the experiments as numbered in Fig. \ref{tab:networking_tuning_exp_setup} with the radar input shown on the right. It can be seen that up to $C_0=32$ in experiments $\#5$ only little interpolation of occupied space is provided by the models. A prominent example is the interpolated edge marked by the white box. Increasing $C_0$ further provides even clearer edges. Also, shrinking the bottle neck $D$ seems to keep the interpolation capability in $\#7$ while loosing it in experiment $\#8$.}
 	\end{center}
 \end{figure}
 \begin{center}
@@ -186,7 +186,7 @@ In contrast to SoftNet, DirNet is capable of shifting the aleatoric uncertainty 
 \\\\
 Finally, ShiftNet demonstrates even better capabilities in shifting the aleatoric uncertainties to the unknown class as compared to DirNet which is indicated by the highest unknown mass rates of all model variants. This uncertainty-awareness can again also be observed by higher unknown mass rates for the occluded as compared to the visible areas. The effect of shifted uncertainty is so dominant that it can even be seen in the qualitative results in Fig. \ref{fig:irm_qual_comp} by unknown space (blue) around all occupied boundaries. Regarding the occupied and free space, ShiftNet provides the least false rates and best free space predictions for all classes compared to all learned \gls{irm}s. However, it lacks the capability to properly model the occupied space.  
 \\\\
-For the R$_{20}$ scores, an expected overall improvement of all models can be observed. Here, the free space predictions of SoftNet even improve to the point of surpassing the other variants. With regards to aleatoric uncertainty, the unknown mass portions for the DirNet and ShiftNet decrease compared to the R$_1$ scores as is desired in the light of more input information. Additionally, similar to the R$_1$ scores, an increase in unknown mass can be observed in occluded as compared to visible areas. Another notable change is the improvement in occupied predictions given by ShiftNet, now surpassing SoftNet and almost closing the gap to DirNet. The geo IRM is also capable of improving the dynamic true rate by about seven times and the occupied rate by about 13 times while reducing the respective overall false rates. This is as expected since it can leverage the information of 20 times as many timesteps. Also, the free space true rate reaches about 50$\%$ while only minimally increasing the false rates. These general improvements over the R$_1$-based predictions are also clearly visible in Fig. \ref{fig:irm_qual_comp}. \todo{Write that you take ShiftNet from here on and why you decided to do so}
+For the R$_{20}$ scores, an expected overall improvement of all models can be observed. Here, the free space predictions of SoftNet even improve to the point of surpassing the other variants. With regards to aleatoric uncertainty, the unknown mass portions for the DirNet and ShiftNet decrease compared to the R$_1$ scores as is desired in the light of more input information. Additionally, similar to the R$_1$ scores, an increase in unknown mass can be observed in occluded as compared to visible areas. Another notable change is the improvement in occupied predictions given by ShiftNet, now surpassing SoftNet and almost closing the gap to DirNet. The geo IRM is also capable of improving the dynamic true rate by about seven times and the occupied rate by about 13 times while reducing the respective overall false rates. This is as expected since it can leverage the information of 20 times as many timesteps. Also, the free space true rate reaches about 50$\%$ while only minimally increasing the false rates. These general improvements over the R$_1$-based predictions are also clearly visible in Fig. \ref{fig:irm_qual_comp}.
 %==========================%
 % R01
 %==========================%
@@ -288,6 +288,7 @@ To analyze the performance and occurring effects using a deep \gls{icm}, the hom
 %======================================%
 \subsection{Experimental Results}
 \label{subsec:exp_results_cam_inputs}
+\begin{figure}
 \begin{tabular}{c|c|cccc|cccc|cccc}
 	&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
 	\hline
@@ -316,17 +317,32 @@ To analyze the performance and occurring effects using a deep \gls{icm}, the hom
 	\hline
 	\multicolumn{2}{c|}{\textbf{ShiftNet}} & \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
 \end{tabular}
-Based on the false rates, the monocular depth input model slightly outperforms its purely camera-based counterparts with an accumulated overall false rate of 52.7 as compared to 54.1, both for the RGB and semantic projections. Looking at the true rates, this distinction becomes even clearer with the RGB-based providing the worst true rates in all categories (true rate sum of 103.1), followed by the semantic model (true rate sum 111.7) and, finally, with the mono depth model as the best purely camera-based model (true rate sum 126.1).  
-\begin{itemize}
-	\item less mass unknown and better distinction from free BUT only marginal improvement of true positives while almost doubeling the false rate in occupied class. Thus, providing additional radar information in the proposed way makes it clearer that there is indeed an object but not in which motion state the object is.  
-	\item monodepth fusion with radar R$_{20}$ images shows that the radar information mainly benefits in distinguishing dynamic and occupied cells. Free overall performance remains as is.
-\end{itemize}
+\caption{\label{tab:deep_icm_results} For a detailed explanation of the table format kindly refer to \ref{tab:deep_ism_r20_results}.}
+\end{figure}
+Based on the false rates, the monocular depth input model slightly outperforms the remaining purely camera-based counterparts with an accumulated overall false rate of 52.7 as compared to 54.1, both for the RGB and semantic projections. Looking at the true rates, this distinction becomes even clearer with the RGB-based model providing the worst true rates in all categories (true rate sum of 103.1), followed by the semantic model (true rate sum 111.7) and, finally, with the mono depth model as the best purely camera-based model (true rate sum 126.1). This overall better performance of the MonoDepth \gls{ism} is also reflected in the overall decreased unknown mass compared to the other purely camera-based \gls{ism}s. This is also reflected in the qualitative results in Fig. \ref{fig:icm_qual_comp} by the more strongly highlighted occupied space and the increased correctness of free space shape of the MonoDepth model compared to the remaining purely camera-based models. 
+
+The only prominent deficit of the MonoDepth \gls{ism} lies in its increased false rates for $p(d|o)$ and $p(o|d)$. Therefore, MonoDepth is used as a camera input representation for the further fusion experiments with radar.
+
+These experiments show that, compared with the MonoDepth \gls{ism}, the additional radar information leads to less unknown mass and an overall improvement of positive and false rates throughout all classes. While this improvement is only marginal for the free class, the occupied true positive rate is increased by $12.8\%$ while also reducing the false rates. The only worsening is observed with regards to false occupied predictions in the dynamic class. Here, the false rate is almost doubled compared to the other camera \gls{ism}s. Comparing to the purely radar-based \gls{ism}, the MonoDepth-radar fusion provides better performance in each of the overall scores without exception. A qualitative example for the improvement of the fused over the pure radar \gls{ism} can be seen in the white box in the second example in Fig. \ref{fig:icm_qual_comp}. Here, the MonoDepth provides the additional information that the wall proceeds around the corner, leading the model to assign the area behind the wall as unknown rather than free.
 \begin{figure}[H]
 \begin{center}
 	\import{imgs/07_deep_ism_exp/aleat_uncert}{icm_qual_comp.pdf_tex}
 	\caption{\label{fig:icm_qual_comp}}
 \end{center}
 \end{figure}
+%======================================%
+%
+%======================================%
+\subsection{Discussion}
+\label{subsec:discussion_icm}
+These problems of the purely camera-based \gls{ism}s to distinguish between occupied and dynamic objects can also be qualitatively observed in the upper white box of the first example in Fig. \ref{fig:icm_qual_comp}. There, the shape of a moving bus shall be predicted
+\begin{itemize}
+	\item bus is not correctly classified in semseg and therefore there is no chance of the bev semseg ism to correctly classify it
+	\item monodepth overall better representation
+	\item monodepth lacks info of what is moving and what is occupied
+	\item monodepth fusion with radar R$_{20}$ images shows that the radar information mainly benefits in distinguishing dynamic and occupied cells. Free overall performance remains as is.
+	\item Thus, providing additional radar information in the proposed way makes it clearer that there is indeed an object but not in which motion state the object is. 
+\end{itemize}
 %==========================================================================%
 %
 %==========================================================================%
