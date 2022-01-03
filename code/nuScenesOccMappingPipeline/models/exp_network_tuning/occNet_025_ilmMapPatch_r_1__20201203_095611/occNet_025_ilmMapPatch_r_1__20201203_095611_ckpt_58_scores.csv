@@ -1,0 +1,29 @@
+gpu time [sec],0.0037
+cpu time [sec],0.0099
+model size [MB],0.58
+ 
+observableScores
+mIoU dy,nan
+mIoU fr,57.64
+mIoU oc,3.82
+mIoU fr&oc,30.73
+[%],dy_est,fr_est , oc_est , un_est 
+ dy_true ,nan,nan,nan,nan
+ fr_true ,0.0,71.02,13.19,15.8
+ oc_true ,0.0,48.52,30.0,21.48
+ 
+hiddenScores
+mIoU dy,nan
+mIoU fr,30.58
+mIoU oc,14.06
+mIoU un,58.21
+[%],dy_est, fr_est , oc_est , un_est 
+ dy_true ,nan,nan,nan,nan
+ fr_true ,0.0,45.27,17.37,37.35
+ oc_true ,0.0,100.0,0.0,0.0
+ un_true ,0.0,26.31,17.71,55.98
+overall
+mIoU dy,nan
+mIoU fr,63.59
+mIoU oc,14.8
+mIoU un,53.87

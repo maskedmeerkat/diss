@@ -1,0 +1,23 @@
+mIoU    ,[ 0.29 17.51  1.23 46.92]
+mIoU_obs,[ 0.   15.49  0.8   0.55]
+mIoU_hid,[ 0.62  8.11  1.32 46.39]
+p(un|not un),77.83
+p(dy|not dy),0.08
+overallScores
+[%],dy_est, fr_est , oc_est , un_est 
+ dy_true ,0.06,17.51,1.06,81.26
+ fr_true ,0.0,14.51,0.02,85.39
+ oc_true ,0.09,17.91,1.17,80.73
+ un_true ,0.03,10.71,0.15,89.04
+observableScores
+[%],dy_est, fr_est , oc_est , un_est 
+ dy_true ,0.0,9.71,5.61,84.6
+ fr_true ,0.0,13.84,0.01,86.07
+ oc_true ,0.07,22.24,0.79,76.76
+ un_true ,-1.0,-1.0,-1.0,-1.0
+hiddenScores
+[%],dy_est, fr_est , oc_est , un_est 
+ dy_true ,0.15,22.89,0.7,76.13
+ fr_true ,0.0,17.09,0.08,82.73
+ oc_true ,0.09,16.31,1.27,82.23
+ un_true ,0.03,10.68,0.15,89.08

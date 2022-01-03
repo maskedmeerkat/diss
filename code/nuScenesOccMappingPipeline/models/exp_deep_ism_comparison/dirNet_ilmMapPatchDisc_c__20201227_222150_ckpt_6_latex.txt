@@ -1,0 +1,10 @@
+\begin{tabular}{c|c|cccc|cccc|cccc}
+&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
+\hline
+\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{ShiftNet}}}&$p(k|d)$ & \textcolor{mygreen}{0.0} & \textcolor{myred}{0.0} & \textcolor{myred}{0.0} & 0.0 & \textcolor{mygreen}{0.0} & \textcolor{myred}{0.0} & \textcolor{myred}{0.0} & 0.0 & \textcolor{mygreen}{0.0} & \textcolor{myred}{0.0} & \textcolor{myred}{0.0} & 0.0\\
+&$p(k|f)$ & \textcolor{myred}{0.0} & \textcolor{mygreen}{0.0} & \textcolor{myred}{0.0} & 0.0 & \textcolor{myred}{0.0} & \textcolor{mygreen}{0.0} & \textcolor{myred}{0.0} & 0.0 & \textcolor{myred}{0.0} & \textcolor{mygreen}{0.0} & \textcolor{myred}{0.0} & 0.0\\
+&$p(k|o)$ & \textcolor{myred}{0.0} & \textcolor{myred}{0.0} & \textcolor{mygreen}{0.0} & 0.0 & \textcolor{myred}{0.0} & \textcolor{myred}{0.0} & \textcolor{mygreen}{0.0} & 0.0 & \textcolor{myred}{0.0} & \textcolor{myred}{0.0} & \textcolor{mygreen}{0.0} & 0.0\\
+&$p(k|u)$ & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0 & 0.0\\
+\hline
+&& \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
+\end{tabular}

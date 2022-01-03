@@ -1,0 +1,10 @@
+\begin{tabular}{c|c|cccc|cccc|cccc}
+&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
+\hline
+\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{ShiftNet}}}&$p(k|d)$ & \textcolor{mygreen}{4.5} & \textcolor{myred}{27.6} & \textcolor{myred}{1.7} & 66.0 & \textcolor{mygreen}{19.8} & \textcolor{myred}{73.2} & \textcolor{myred}{3.6} & 3.0 & \textcolor{mygreen}{0.0} & \textcolor{myred}{1.3} & \textcolor{myred}{0.0} & 98.6\\
+&$p(k|f)$ & \textcolor{myred}{0.0} & \textcolor{mygreen}{72.0} & \textcolor{myred}{0.2} & 27.5 & \textcolor{myred}{0.0} & \textcolor{mygreen}{98.7} & \textcolor{myred}{0.3} & 0.6 & \textcolor{myred}{0.0} & \textcolor{mygreen}{1.1} & \textcolor{myred}{0.0} & 98.9\\
+&$p(k|o)$ & \textcolor{myred}{0.1} & \textcolor{myred}{15.4} & \textcolor{mygreen}{7.7} & 76.7 & \textcolor{myred}{0.3} & \textcolor{myred}{60.6} & \textcolor{mygreen}{32.6} & 6.1 & \textcolor{myred}{0.0} & \textcolor{myred}{0.9} & \textcolor{mygreen}{0.0} & 99.1\\
+&$p(k|u)$ & 0.0 & 0.7 & 0.1 & 99.2 & - & - & - & - & 0.0 & 0.1 & 0.0 & 99.9\\
+\hline
+&& \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
+\end{tabular}

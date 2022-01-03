@@ -1,0 +1,92 @@
+% This file was created by tikzplotlib v0.9.8.
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+
+\begin{axis}[
+height=3.0in,
+minor xtick={},
+minor ytick={},
+scaled ticks=false,
+tick align=outside,
+tick label style={/pgf/number format/fixed},
+tick pos=left,
+width=3.in,
+x grid style={white!69.0196078431373!black},
+xlabel={mean CPU inference time [Hz]},
+xmin=84.7535697835099, xmax=100.516914888172,
+xtick style={color=black},
+xtick={84,86,88,90,92,94,96,98,100,102},
+y grid style={white!69.0196078431373!black},
+ylabel={mIoU [\%]},
+ymin=44.9021666666667, ymax=47.6411666666667,
+ytick style={color=black},
+ytick={44.5,45,45.5,46,46.5,47,47.5,48}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=3, mark options={solid}]
+table {%
+89.6057347670251 47.21
+95.389507154213 47.1066666666667
+95.4198473282443 45.6766666666667
+};
+\addplot [line width=1.5pt, color1, mark=*, mark size=3, mark options={solid}]
+table {%
+99.8003992015968 45.0266666666667
+99.8003992015968 45.3433333333333
+99.403578528827 45.85
+95.7854406130268 46.48
+89.6057347670251 47.21
+85.4700854700855 47.5166666666667
+};
+\draw (axis cs:100.000399201597,45.0266666666667) node[
+  scale=0.5,
+  anchor=base west,
+  text=black,
+  rotate=0.0
+]{0};
+\draw (axis cs:100.000399201597,45.3433333333333) node[
+  scale=0.5,
+  anchor=base west,
+  text=black,
+  rotate=0.0
+]{1};
+\draw (axis cs:99.603578528827,45.85) node[
+  scale=0.5,
+  anchor=base west,
+  text=black,
+  rotate=0.0
+]{2};
+\draw (axis cs:95.9854406130268,46.48) node[
+  scale=0.5,
+  anchor=base west,
+  text=black,
+  rotate=0.0
+]{3};
+\draw (axis cs:89.8057347670251,47.21) node[
+  scale=0.5,
+  anchor=base west,
+  text=black,
+  rotate=0.0
+]{4};
+\draw (axis cs:85.6700854700855,47.5166666666667) node[
+  scale=0.5,
+  anchor=base west,
+  text=black,
+  rotate=0.0
+]{5};
+\draw (axis cs:95.589507154213,47.1066666666667) node[
+  scale=0.5,
+  anchor=base west,
+  text=black,
+  rotate=0.0
+]{6};
+\draw (axis cs:95.6198473282443,45.6766666666667) node[
+  scale=0.5,
+  anchor=base west,
+  text=black,
+  rotate=0.0
+]{7};
+\end{axis}
+
+\end{tikzpicture}
