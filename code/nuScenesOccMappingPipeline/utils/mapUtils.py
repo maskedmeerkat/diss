@@ -5,90 +5,102 @@ from pyquaternion import Quaternion
 import cv2
 
 
-# ===========================#
-def fuseMasses(m1, m2, useYagerRule=True, eps=1e-4):
-    '''
-    Fuses two masses defined as m = [{fr},{oc},{fr,oc}] according to the
-    Dempster's Rule of Combination.
-    '''
-    # compute the conflict
-    k1 = m1[0] * m2[1]
-    k2 = m1[1] * m2[0]
-    k = k1 + k2
-
-    # compute the masses of each class
-    m = np.zeros(3)
-
-    if (useYagerRule):
-        m[0] = (m1[0] * m2[0] + m1[0] * m2[2] + m1[2] * m2[0])
-        m[1] = (m1[1] * m2[1] + m1[1] * m2[2] + m1[2] * m2[1])
-        m[2] = m1[2] * m2[2] + k
-    else:
-        m[0] = (m1[0] * m2[0] + m1[0] * m2[2] + m1[2] * m2[0]) / (1 - k)
-        m[1] = (m1[1] * m2[1] + m1[1] * m2[2] + m1[2] * m2[1]) / (1 - k)
-        m[2] = (m1[2] * m2[2]) / (1 - k)
-
-    #
-    # limit certainty
-    if (m[2] < eps):
-        m[0:2] = np.clip((1 - eps) * m[0:2], 0, 1)
-        m[2] = 1 - m[0] - m[1]
-
+def limit_certainty(m, u_min):
+    # unknown mass cannot fall beneath u_min
+    m[:, :, :-1] = (1 - u_min) * m[:, :, :-1]
+    m[:, :, 2] = 1 - m[:, :, 0] - m[:, :, 1]
     return m
 
 
-# ===========================#
-def fuseImgs(m1, m2, useYagerRule=True, entropyScaling=False, uMin=0.3, eps=1e-4):
-    '''
+def compute_ev_conflict(m1, m2):
+    return m1[:, :, [0]] * m2[:, :, [1]] + m1[:, :, [1]] * m2[:, :, [0]]
+
+
+def yager_rule(m1, m2):
+    # init the fused mass
+    m = np.zeros_like(m1)
+    # compute the conflict
+    k = compute_ev_conflict(m1, m2)[:, :, 0]
+    # fuse the masses using Yager's rule
+    m[:, :, 0] = m1[:, :, 0] * m2[:, :, 0] + m1[:, :, 0] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 0]
+    m[:, :, 1] = m1[:, :, 1] * m2[:, :, 1] + m1[:, :, 1] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 1]
+    m[:, :, 2] = m1[:, :, 2] * m2[:, :, 2] + k
+    return m
+
+
+def yader_rule(m1, m2):
+    # init the fused mass
+    m = np.zeros_like(m1)
+    # compute the conflict
+    k = compute_ev_conflict(m1, m2)[:, :, 0]
+    # fuse the masses using Yager's rule
+    m[:, :, 0] = m1[:, :, 0] * m2[:, :, 0] + m1[:, :, 0] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 0] + k / 2
+    m[:, :, 1] = m1[:, :, 1] * m2[:, :, 1] + m1[:, :, 1] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 1] + k / 2
+    m[:, :, 2] = m1[:, :, 2] * m2[:, :, 2]
+    return m
+
+
+def dempster_rule(m1, m2):
+    # init the fused mass
+    m = np.zeros_like(m1)
+    # compute the conflict
+    k = compute_ev_conflict(m1, m2)[:, :, 0]
+    # fuse the masses using Yager's rule
+    m[:, :, 0] = (m1[:, :, 0] * m2[:, :, 0] + m1[:, :, 0] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 0]) / (1 - k)
+    m[:, :, 1] = (m1[:, :, 1] * m2[:, :, 1] + m1[:, :, 1] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 1]) / (1 - k)
+    m[:, :, 2] = (m1[:, :, 2] * m2[:, :, 2]) / (1 - k)
+    return m
+
+
+def fuseImgs(m1, m2, comb_rule=0, entropy_scaling=False, u_min=0.3, eps=1e-4):
+    """
     Fuses two masses defined as m = [{fr},{oc},{fr,oc}] according to the
     Dempster's Rule of Combination.
-    '''
-    if (entropyScaling):
+    """
+    if entropy_scaling:
         # FIRST: rescale mass to have at least uMin unknown mass
-        # max allowed information content
-        du = uMin - m1[:, :, [2]]
-        du[du < 0.] = 0.
-        # obtain the mass not associated with unknown
-        notUnMass = np.sum(m1[:, :, :-1], axis=2, keepdims=True)
-        # resale the free and occ masses 
-        m1[:, :, :-1] -= du * m1[:, :, :-1] / notUnMass
-        m1[:, :, 2] = 1. - np.sum(m1[:, :, :-1], axis=2)
+        m1 = limit_certainty(m1, u_min)
 
         # SECOND: rescale mass to account for redundant information
-        # difference in information 
-        h1_2 = m2[:, :, [2]] - m1[:, :, [2]]
-        h1_2[h1_2 < 0.] = 0.
-        # current conflict 
-        k = m1[:, :, [0]] * m2[:, :, [1]] + m1[:, :, [1]] * m2[:, :, [0]]
+        # current conflict
+        k = compute_ev_conflict(m1, m2)
+        # difference in certainty
+        du = m2[:, :, [2]] - m1[:, :, [2]]
+        du[du < 0.] = 0.
+        # difference in information
+        h1_2 = np.clip(du + k, 0., 1.)
+
         # limit the difference in information
-        h1_2_max = (m2[:, :, [2]] + k - uMin) / (m2[:, :, [2]] * (1 - m1[:, :, [2]]))
-        h1_2 = np.min(np.append(h1_2, h1_2_max, axis=2), axis=2, keepdims=True)
-        h1_2 = np.clip(h1_2, 0., 1.)
-        # scale fr and occ masses
+        h1_2_max = np.clip((u_min - m2[:, :, [2]]) / (m2[:, :, [2]] * m1[:, :, [2]] - m2[:, :, [2]] + k), 0., 1.)
+        limit_condition = (m2[:, :, [2]] * m1[:, :, [2]] - m2[:, :, [2]] + k) < 0
+        h1_2[limit_condition] = np.minimum(h1_2[limit_condition], h1_2_max[limit_condition])
+        h1_2[h1_2 < 0.001] = 0
+
+        # move redundant info from fr & oc to unknown
         m1[:, :, :-1] *= h1_2
         m1[:, :, 2] = 1. - np.sum(m1[:, :, :-1], axis=2)
 
-        # compute the conflict
-    k = m1[:, :, 0] * m2[:, :, 1] + m1[:, :, 1] * m2[:, :, 0]
-
-    # compute the masses of each class
+    # Yager
     m = np.zeros_like(m1)
-
-    if (useYagerRule):
-        m[:, :, 0] = m1[:, :, 0] * m2[:, :, 0] + m1[:, :, 0] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 0]
-        m[:, :, 1] = m1[:, :, 1] * m2[:, :, 1] + m1[:, :, 1] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 1]
-        m[:, :, 2] = m1[:, :, 2] * m2[:, :, 2] + k
+    if comb_rule == 0:
+        m = yager_rule(m1, m2)
+    # YaDer (conflict equally assigned to fr & occ classes)
+    elif comb_rule == 1:
+        m = yader_rule(m1, m2)
+    # use Yager or YaDer depending on unknown mass
+    elif comb_rule == 2:
+        # compute both yager & yader rule (i know, inefficient...so what. sue me!)
+        m_yager = yager_rule(m1, m2)
+        m_yader = yader_rule(m1, m2)
+        # take yager for mu > u_min and yader elsewise
+        m = m_yager
+        m[m2[:, :, 2] <= u_min, :] = m_yader[m2[:, :, 2] <= u_min, :]
+    # Dempster
     else:
-        m[:, :, 0] = (m1[:, :, 0] * m2[:, :, 0] + m1[:, :, 0] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 0]) / (1 - k)
-        m[:, :, 1] = (m1[:, :, 1] * m2[:, :, 1] + m1[:, :, 1] * m2[:, :, 2] + m1[:, :, 2] * m2[:, :, 1]) / (1 - k)
-        m[:, :, 2] = (m1[:, :, 2] * m2[:, :, 2]) / (1 - k)
+        m = dempster_rule(m1, m2)
 
     # norm masses 
     m /= np.sum(m, axis=2, keepdims=True)
-
-    # limit certainty    
-    m[:, :, :2] = (1 - eps) * m[:, :, :2]
-    m[:, :, 2] = np.ones_like(m1[:, :, 2]) - np.sum(m[:, :, :2], axis=2)
 
     return m
 
@@ -412,7 +424,7 @@ def rayCastingBev(buffers, pDim, mDim, aDim, pF, pO, pD, numColsPerCone, vPose_r
         # trafo polar to cartesian
         cartImg_ = polar2cartImg(polarRayIsmImg_, mDim, pDim, aDim, offset=sPosit + vPose - vPose_ref[:2, np.newaxis])
         # fuse current sensors ism into accumulated ism
-        cartImg = fuseImgs(cartImg_, cartImg, useYagerRule=False)
+        cartImg = fuseImgs(cartImg_, cartImg)
     # flip car image
     cartImg = np.flip(cartImg, axis=0)
     cartImg = np.flip(cartImg, axis=1)

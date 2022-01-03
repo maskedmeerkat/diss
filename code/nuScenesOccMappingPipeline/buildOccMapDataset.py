@@ -3,6 +3,7 @@ from nuscenes.utils.data_classes import LidarPointCloud, RadarPointCloud
 import numpy as np
 import csv
 import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 import os.path as osp
 from tqdm import tqdm
 from pyquaternion import Quaternion
@@ -677,7 +678,7 @@ def processSweepOfPcSensor(nusc, sample, scene, sweepNames, vPoses01, t01, senso
             # fuse new ism into each global map
             ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
                 mapUtils.fuseImgs(ismImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
-                                  ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :], useYagerRule=False)
+                                  ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :])
 
     return buffers, detMap, ismMap
 
@@ -799,26 +800,29 @@ def processSweepOfDeepIsm(nusc, sample, scene, sweepNames, vPoses01, t01, sensor
             deepIsmImg_ = deepIsmImg.copy()
             deep_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
                 mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
-                                  deep_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :], useYagerRule=False)
+                                  deep_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=0, entropy_scaling=False, u_min=0.)
 
             # deep ism map with entropy rescaling
+            # comb_rule 0:Yager, 1:YaDer, 2:Yager mu>uMin & YaDer mu<=uMinelse, else:Dempster
             deepIsmImg_ = deepIsmImg.copy()
             deep_ismMap_rescaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
                 mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
                                   deep_ismMap_rescaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
-                                  useYagerRule=True, entropyScaling=True, uMin=0.)
+                                  comb_rule=0, entropy_scaling=True, u_min=0.)
 
             # deep ism map with entropy rescaling and lower threshold on u
             deepIsmImg_ = deepIsmImg.copy()
             deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
                 mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
                                   deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
-                                  useYagerRule=True, entropyScaling=True, uMin=uMin)
+                                  comb_rule=0, entropy_scaling=True, u_min=uMin)
 
             # geo ism
             deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
                 mapUtils.fuseImgs(geoIsmImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
-                                  deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :], useYagerRule=False)
+                                  deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=2, entropy_scaling=False, u_min=0.)
 
     return buffers, [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap]
 
@@ -1009,7 +1013,8 @@ def processSampleOfMonodepth(nusc, scene, sample, imgStorDir,
 
 
 # ===========================#
-def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ismMap, ismMapScaled, t_r2i, vPose_ref):
+def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ismMap, ismMapScaled, t_r2i, vPose_ref,
+                           storeDeepIsm, storeProgress):
     x_ = np.array(Image.open(sceneDir + inputName + "/" + inputName + "__{:}.png".format(t_ref)))
 
     # trafo inputs from [0,255] -> [0,1]
@@ -1054,15 +1059,13 @@ def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ism
 
     # fuse new ism into global map
     ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
-        mapUtils.fuseImgs(ismImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :], ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
-                          useYagerRule=True)
+        mapUtils.fuseImgs(ismImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :], ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :])
 
     # perform entropy scaling on ism
     ismImg_scaled = ismImg.copy()
     ismMapScaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
         mapUtils.fuseImgs(ismImg_scaled[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
-                          ismMapScaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
-                          useYagerRule=True, entropyScaling=True, uMin=0.)
+                          ismMapScaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :], entropy_scaling=True, u_min=0.)
 
     # split the channels
     # ismImg_ = np.append(ismImg[...,0],ismImg[...,1],axis=1)
@@ -1156,7 +1159,7 @@ def saveImg(img, dirPath):
     img_.save(dirPath)
 
 
-# ========================== MAIN =============================================#
+# ================================================= MAIN ==============================================================#
 # flags to toggle visualization
 storeProgress = False
 # radar
@@ -1187,7 +1190,7 @@ modelName = "shiftNet_ilmMapPatchDisc_r_20__20201223_215231_ckpt_321.pb"
 # modelName = "softNet_ilmMapPatchDisc_r_1__20201223_215415_ckpt_688.pb"
 deepIsmInputName = modelName[modelName.find("_") + 17:modelName.find("__")]
 storeDeepIsm = False
-storeDeepIsmMap = False
+storeDeepIsmMap = True
 uMin = 0.3
 if (storeDeepIsm or storeDeepIsmMap):
     tf.reset_default_graph()
@@ -1208,8 +1211,8 @@ DATA_DIR = 'C:/Users/Daniel/Documents/_uni/PhD/code/_DATASETS_/NuScenes/'
 STORAGE_DIR = 'C:/Users/Daniel/Documents/_uni/PhD/code/_DATASETS_/occMapDataset_/'
 if not os.path.exists(STORAGE_DIR):
     os.makedirs(STORAGE_DIR)
-nuscVersion = "v1.0-mini"
-# nuscVersion = "v1.0-trainval"
+# nuscVersion = "v1.0-mini"
+nuscVersion = "v1.0-trainval"
 if not ('nusc' in locals()):
     nusc = NuScenes(version=nuscVersion, dataroot=DATA_DIR, verbose=True)
 
@@ -1407,7 +1410,7 @@ def main(iScene):
 
                     if (storeRadarImg):
                         # pc2Bev(buff_r_, pDim, mDim, vPose_ref, t_ref, r_storDirs[iBuffSize])
-                        pc2Bev(buff_r_, pDim, mDim, vPose_ref, t_ref, r_storDirs[iBuffSize], wholeTempInfo=True)
+                        pc2Bev(buff_r_, pDim, mDim, vPose_ref, t_ref, r_storDirs[iBuffSize], wholeTempInfo=False)
                     if (storeIrmImg):
                         mapUtils.rayCastingBev(buff_r_, pDim, mDim, aDim, pF_irm, pO_irm, pD_irm,
                                                numColsPerCone_r, vPose_ref, t_ref, irm_storDirs[iBuffSize],
@@ -1427,11 +1430,12 @@ def main(iScene):
             if (store360MonoDepthImg):
                 processSampleOfMonodepth(nusc, scene, sample, d_storDir, refCamName, camNames, pDim, mDim)
 
-                # process deep ism
-            # if (storeDeepIsm or storeDeepIsmMap):
-            #     sceneDir = STORAGE_DIR + setName + "scene{:04}".format(iScene) + "/"
-            #     deep_ismMap, deep_ismMap_rescaled = processSampleOfDeepIsm(t_ref, deepIsmInputName, modelName[:modelName.find("__")], sceneDir,
-            #                                                                y_fake, x, deep_ismMap, deep_ismMap_rescaled, t_r2i, vPose_ref)
+            # process deep ism
+            if (storeDeepIsm or storeDeepIsmMap):
+                sceneDir = STORAGE_DIR + setName + "scene{:04}".format(iScene) + "/"
+                deep_ismMap, deep_ismMap_rescaled = processSampleOfDeepIsm(t_ref, deepIsmInputName, modelName[:modelName.find("__")], sceneDir,
+                                                                           y_fake, x, deep_ismMap, deep_ismMap_rescaled, t_r2i, vPose_ref,
+                                                                           storeDeepIsm, storeProgress)
 
         # get next sample
         sample = nusc.get('sample', sample['next'])
@@ -1518,10 +1522,10 @@ trainNames, valNames, trainIdxs, valIdxs = sceneAttribUtils.getTrainValTestSplit
 # sceneIdxs = trainIdxs
 
 # val scenes
-# sceneIdxs = valIdxs
+sceneIdxs = valIdxs
 
 # specific scenes
-sceneIdxs = [0]
+# sceneIdxs = [0]
 
 t0 = time.time()
 for iScene, sceneIdx in enumerate(sceneIdxs):

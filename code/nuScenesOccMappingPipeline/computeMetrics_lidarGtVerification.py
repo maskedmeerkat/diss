@@ -675,7 +675,8 @@ def processSweepOfPcSensor(nusc, sample, scene, sweepNames, vPoses01, t01, senso
             
             # fuse new ism into global map
             ismMap[xLim[0]:xLim[1],yLim[0]:yLim[1],:] = \
-                mapUtils.fuseImgs(ismImg[xLim_[0]:xLim_[1],yLim_[0]:yLim_[1],:], ismMap[xLim[0]:xLim[1],yLim[0]:yLim[1],:], useYagerRule=False)
+                mapUtils.fuseImgs(ismImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                                  ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :])
         
             if (sensorName == 'LIDAR_TOP'):
                 return buffers, detMap, ismMap
