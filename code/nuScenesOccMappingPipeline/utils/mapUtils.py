@@ -68,7 +68,7 @@ def fuseImgs(m1, m2, comb_rule=0, entropy_scaling=False, u_min=0.3, eps=1e-4):
         du = m2[:, :, [2]] - m1[:, :, [2]]
         du[du < 0.] = 0.
         # difference in information
-        h1_2 = np.clip(du + k, 0., 1.)
+        h1_2 = np.clip(1. * (du + k), 0., 1.)
 
         # limit the difference in information
         h1_2_max = np.clip((u_min - m2[:, :, [2]]) / (m2[:, :, [2]] * m1[:, :, [2]] - m2[:, :, [2]] + k), 0., 1.)

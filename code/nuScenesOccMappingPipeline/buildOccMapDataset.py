@@ -1013,7 +1013,7 @@ def processSampleOfMonodepth(nusc, scene, sample, imgStorDir,
 
 
 # ===========================#
-def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ismMap, ismMapScaled, t_r2i, vPose_ref,
+def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ismMap, ismMapScaled, deepGeo_ismMap, t_r2i, vPose_ref,
                            storeDeepIsm, storeProgress):
     x_ = np.array(Image.open(sceneDir + inputName + "/" + inputName + "__{:}.png".format(t_ref)))
 
@@ -1059,13 +1059,32 @@ def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ism
 
     # fuse new ism into global map
     ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
-        mapUtils.fuseImgs(ismImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :], ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :])
+        mapUtils.fuseImgs(ismImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :], ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                          comb_rule=0, entropy_scaling=False, u_min=0.)
 
     # perform entropy scaling on ism
     ismImg_scaled = ismImg.copy()
     ismMapScaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
         mapUtils.fuseImgs(ismImg_scaled[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
-                          ismMapScaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :], entropy_scaling=True, u_min=0.)
+                          ismMapScaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                          comb_rule=0, entropy_scaling=True, u_min=0.)
+
+    # deep ism map with entropy rescaling and lower threshold on u
+    deepIsmImg_ = ismImg.copy()
+    # deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+    #     mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+    #                       deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+    #                       comb_rule=0, entropy_scaling=True, u_min=uMin)
+
+    # geo ism
+    geoIsmImg = np.array(Image.open(sceneDir + "/irm_20/irm_20__{:}.png".format(t_ref)))/255
+    if geoIsmImg.shape[-1] == 4:
+        geoIsmImg = geoIsmImg[:, :, :-1]
+
+    deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+        mapUtils.fuseImgs(geoIsmImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                          deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                          comb_rule=2, entropy_scaling=False, u_min=0.)
 
     # split the channels
     # ismImg_ = np.append(ismImg[...,0],ismImg[...,1],axis=1)
@@ -1078,7 +1097,7 @@ def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ism
         ismImg_scaled = Image.fromarray((ismImg_scaled * 255).astype(np.uint8))
         ismImg_scaled.save(sceneDir + modelName + "/" + modelName + "_scaled__{:}.png".format(t_ref))
 
-    return ismMap, ismMapScaled
+    return ismMap, ismMapScaled, deepGeo_ismMap
 
 
 # ===========================#
@@ -1171,7 +1190,7 @@ storeIrmMap = False
 storeLidarImg = False
 storeLidarMap = False
 storeIlmImg = False
-storeIlmMap = True
+storeIlmMap = False
 storeIlmMapPatches = False
 # camera
 store360CamImg = False
@@ -1179,14 +1198,21 @@ store360SemSegImg = False
 store360MonoDepthImg = False
 # deep ism
 modelDir = "./models/exp_deep_ism_comparison/"
+# DirNet
 # modelName = "dirNet_ilmMapPatchDisc_r_1__20201223_215714_ckpt_180.pb"
 # modelName = "dirNet_ilmMapPatchDisc_r_20__20201223_215858_ckpt_683.pb"
 # modelName = "dirNet_ilmMapPatchDisc_l__20201226_082638_ckpt_723.pb"
 # modelName = "dirNet_ilmMapPatchDisc_lr20__20201227_222824_ckpt_318.pb"
 # modelName = "dirNet_ilmMapPatchDisc_d__20201226_082043_ckpt_402.pb"
 # modelName = "dirNet_ilmMapPatchDisc_dr20__20201227_222639_ckpt_244.pb"
+# ShiftNet
 # modelName = "shiftNet_ilmMapPatchDisc_r_1__20201223_215050_ckpt_198.pb"
 modelName = "shiftNet_ilmMapPatchDisc_r_20__20201223_215231_ckpt_321.pb"
+# modelName = "shiftNet_ilmMapPatchDisc_l__20201227_075245_ckpt_607.pb"
+# modelName = "shiftNet_ilmMapPatchDisc_lr20__20201227_222040_ckpt_322.pb"
+# modelName = "shiftNet_ilmMapPatchDisc_d__20201227_075037_ckpt_418.pb"
+# modelName = "shiftNet_ilmMapPatchDisc_dr20__20201227_221957_ckpt_604.pb"
+# SoftNet
 # modelName = "softNet_ilmMapPatchDisc_r_1__20201223_215415_ckpt_688.pb"
 deepIsmInputName = modelName[modelName.find("_") + 17:modelName.find("__")]
 storeDeepIsm = False
@@ -1256,13 +1282,13 @@ numColsPerCone_l = (angleResCone_l / aRes_deg / 2).astype(int) * 2
 # numColsPerCone_r = (angleResCone_r/aRes_deg/2).astype(int)*2
 buffSizes_r = [20]  # from smallest to biggest number, always!!!
 maxBuffSize_r = int(np.max(buffSizes_r))
-pF_rMap = [0.1]
+pF_rMap = [0.1, 0.1]
 pO_rMap = 0.3
 pD_rMap = 0.3
 pF_irm = [0.9, 0.9]
 pO_irm = 0.9
 pD_irm = 0.5
-angleResCone_r = np.array([5])  # [deg]
+angleResCone_r = np.array([5., 30.])  # [deg]
 numColsPerCone_r = (angleResCone_r / aRes_deg / 2).astype(int) * 2
 
 
@@ -1373,8 +1399,8 @@ def main(iScene):
     # Process Samples  
     # ================#
     sample = nusc.get('sample', scene['first_sample_token'])
-    # for iSample in tqdm(range(scene['nbr_samples'] - 1)):
-    for iSample in tqdm(range(5)):
+    for iSample in tqdm(range(scene['nbr_samples'] - 1)):
+    # for iSample in tqdm(range(10)):
         #     get sensor and vehicle pose and timestamp info
         _, vPose_ref, t_ref = getPoseAndTimeFromSample(nusc, scene, sample, refCamName)
         if (iSample > 0):
@@ -1433,9 +1459,10 @@ def main(iScene):
             # process deep ism
             if (storeDeepIsm or storeDeepIsmMap):
                 sceneDir = STORAGE_DIR + setName + "scene{:04}".format(iScene) + "/"
-                deep_ismMap, deep_ismMap_rescaled = processSampleOfDeepIsm(t_ref, deepIsmInputName, modelName[:modelName.find("__")], sceneDir,
-                                                                           y_fake, x, deep_ismMap, deep_ismMap_rescaled, t_r2i, vPose_ref,
-                                                                           storeDeepIsm, storeProgress)
+                ismMaps = processSampleOfDeepIsm(t_ref, deepIsmInputName, modelName[:modelName.find("__")], sceneDir,
+                                                 y_fake, x, deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap,
+                                                 t_r2i, vPose_ref, storeDeepIsm, storeProgress)
+                [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap] = ismMaps
 
         # get next sample
         sample = nusc.get('sample', sample['next'])
@@ -1461,13 +1488,23 @@ def main(iScene):
                                                                 radarNames, buff_r, r_detMap, r_ismMap, t_r2i,
                                                                 pF_rMap, pO_rMap, pD_rMap, pDim, mDim, aDim,
                                                                 numColsPerCone_r, storeIrmMap)
-        if (storeDeepIsmMap):
-            buff_r, ismMaps = processSweepOfDeepIsm(nusc, sample, scene, r_sweepNames, vPoses01, t01,
-                                                    radarNames, buff_r,
-                                                    [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap], t_r2i,
-                                                    pF_rMap, pO_rMap, pD_rMap, pDim, mDim, aDim, numColsPerCone_r,
-                                                    y_fake, uMin)
-            [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap] = ismMaps
+        # if (storeDeepIsmMap):
+        #     # radar and lidar sensors have a higher sample frequency. thus, also their sweeps can be used
+        #     # during mapping to provide smoother maps
+        #     ismMaps = [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap]
+        #     if deepIsmInputName.startswith("r_"):
+        #         buff_r, ismMaps = processSweepOfDeepIsm(nusc, sample, scene, r_sweepNames, vPoses01, t01,
+        #                                                 radarNames, buff_r,
+        #                                                 ismMaps, t_r2i,
+        #                                                 pF_rMap, pO_rMap, pD_rMap, pDim, mDim, aDim, numColsPerCone_r,
+        #                                                 y_fake, uMin)
+        #     elif deepIsmInputName == "l":
+        #         buff_r, ismMaps = processSweepOfDeepIsm(nusc, sample, scene, l_sweepNames, vPoses01, t01,
+        #                                                 lidarNames, buff_l,
+        #                                                 ismMaps, t_r2i,
+        #                                                 pF_lMap, pO_lMap, pD_lMap, pDim, mDim, aDim, numColsPerCone_l,
+        #                                                 y_fake, uMin)
+        #     [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap] = ismMaps
 
         # store mapping progress
         if (storeLidarMap) and (storeProgress):
@@ -1522,10 +1559,10 @@ trainNames, valNames, trainIdxs, valIdxs = sceneAttribUtils.getTrainValTestSplit
 # sceneIdxs = trainIdxs
 
 # val scenes
-sceneIdxs = valIdxs
+# sceneIdxs = valIdxs
 
 # specific scenes
-# sceneIdxs = [0]
+sceneIdxs = [486]
 
 t0 = time.time()
 for iScene, sceneIdx in enumerate(sceneIdxs):

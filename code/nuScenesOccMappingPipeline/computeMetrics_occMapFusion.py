@@ -85,11 +85,16 @@ yEstDirName = "irmMap"
 yEstFileName = yEstDirName
 
 # yEstDirName = "dirNet_ilmMapPatchDisc_r_20"
-yEstDirName = "shiftNet_ilmMapPatchDisc_r_20"
+# yEstDirName = "shiftNet_ilmMapPatchDisc_r_20"
 # yEstDirName = "shiftNet_ilmMapPatchDisc_dr20"
-# yEstFileName = yEstDirName + "_map"
-# yEstFileName = yEstDirName + "_mapScaled"
-yEstFileName = yEstDirName + "_mapFused"
+# yEstFileName = yEstDirName + "_mapFused"
+
+
+# map based on fusion of deep & geo ism
+# areas in this map with mu >= uMin are only allocated by deep ism
+# areas with mu < uMin should be verified by geo ism
+yFusedDirName = "shiftNet_ilmMapPatchDisc_r_20"
+yFusedFileName = yFusedDirName + "_mapFused"
 
 print("\n# Compute Metrics for each Scene")
 # get all directory names of scene data
@@ -97,7 +102,8 @@ sceneNames = [sceneName for sceneName in os.listdir(DATA_DIR) if sceneName.start
 sceneNames.sort()
 
 # initialize the matrices to store accumulated masses and number of data points
-confusionMat = np.zeros((3,3), dtype=np.double)
+confusionMat_uncertain = np.zeros((3,3), dtype=np.double)
+confusionMat_certain = np.zeros((3,3), dtype=np.double)
 interPx = np.zeros(3)
 unionPx = np.zeros(3)
 mIoU = np.zeros(3)
@@ -115,6 +121,9 @@ for sceneName in tqdm(sceneNames):
     
     # load estimates
     y_est = np.array(Image.open(DATA_DIR + sceneName + "/" + yEstDirName + "/" + yEstFileName + ".png"))/255
+
+    # load fused map
+    y_fused = np.array(Image.open(DATA_DIR + sceneName + "/" + yFusedDirName + "/" + yFusedFileName + ".png"))/255
     
     # classification results of labels and predictions
     l_occ_disc = np.argmax(l_occ, axis=2)
@@ -133,9 +142,17 @@ for sceneName in tqdm(sceneNames):
     # remove all labels outside the mapped area
     labels = l_occ_disc.copy()
     labels[mappedArea == 0] = -1
+    labels_certain = labels.copy()
+    labels_uncertain = labels.copy()
+
+    # REMOVE THIS LATER
+    # ignore areas where mu >= uMin
+    labels_certain[y_fused[:, :, -1] >= 0.3] = -1
+    labels_uncertain[y_est[:, :, -1] < 0.3] = -1
     
     # update confusion matrix
-    confusionMat = computeConfusionMatrix(y_est, labels, confusionMat, numSamples)
+    confusionMat_uncertain = computeConfusionMatrix(y_est, labels_uncertain, confusionMat_uncertain, numSamples)
+    confusionMat_certain = computeConfusionMatrix(y_est, labels_certain, confusionMat_certain, numSamples)
     
     # update number of samples
     numSamples += 1
@@ -147,8 +164,11 @@ print("\n# IoU")
 mIoU = mIoU.round(1)
 print(mIoU, mIoU.mean().round(1))
 
-print("\n# Confusion Matrices")
-printConfusionMat(confusionMat)
+print("\n# Confusion Matrices UNCERTAIN")
+printConfusionMat(confusionMat_uncertain)
+
+print("\n# Confusion Matrices CERTAIN")
+printConfusionMat(confusionMat_certain)
 
 print("\n# SSIM")
 ssim = ssim.round(2)
