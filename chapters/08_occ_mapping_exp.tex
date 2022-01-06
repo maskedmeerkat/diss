@@ -20,4 +20,90 @@ Similar to Dempster's rule, Yager's rule, in absence of conflict, converges full
 To solve the biased conflict state in the convergence phase, the YaDer rule has been proposed. It can be seen that by equally distributing the conflict into the conflicting classes instead of shifting it to the unknown class, the fused mass converges to the input's conflict state (see YaDer graph in the time interval $[80, 100]$ and $[140, 160]$). Also, in case of absent conflict, YaDer rule, like Yager and Dempster, fully converges to the dominating class (see YaDer graph e.g. in the time interval $[0,20]$). Thus, the YaDer rule combines both the Yager rule's property to represent conflict and Dempster rule's property to strictly reduce the unknown mass, giving it its name. These properties makes YaDer rule an ideal candidate to be used in the convergence phase.
 
 Eventually, the lower-bounded (lb) Yager rule's property to only converge to the input signal until the same unknown mass is reached is shown in the last graph (e.g. in time interval $[0, 30]$). It can be seen that there is a discrepancy between the converged fused state and the input mass. This is due to the fact that the input is assumed to originate from a deep \gls{ism} with limited certainty. Therefore, the input is first rescaled into the interval $m_u \in [\underline{m}_u, 1]$ before fed into the lb Yager rule. Moreover, it can be seen when comparing the time intervals $[35, 45]$ and $[45, 55]$ that a state switch between free and occupied can only be realized if the conflicting signal has high enough certainty relative to the current state. This is desired in order not to overwrite a highly certain estimate, potentially predicted close to data, with lower certain ones, potentially based on extrapolations. Problematic, however, is that the state change is not fully completed letting the fused mass converge to a conflicting state. This is due to increasingly discounting the input signal when reducing the difference in unknown mass between input and fused signal. This property ensures that once $\underline{m}_u$ is reached, the deep \gls{ism} can not further influence the fused mass (see lower-bounded Yager graph in the time interval $[100, 160]$). Here, it shall argued that the benefit of reducing the influence of outliers and the property of deactivating the deep \gls{ism}'s influence outweigh the shortcoming of incomplete state change for the initialization phase. 
+%==========================================================================%
+%
+%==========================================================================%
+\section{Analysis of redundant Information in Deep ISMs}
+\label{sec:exp_analyze_redundant_info}
+\textbf{Setup}
 
+\textbf{Experiment Qualitative Results}
+\begin{itemize}
+	\item show alleys for both mapping methods
+	\item show mapping progress that illustrates the overwriting of correct assignments 
+\end{itemize}
+
+\textbf{Experiment Quantitative Results}
+\begin{itemize}
+	\item show confusion mat
+		-> deep ISM is statistically more correct then wrong. thus, accumulation of redundant info leads to converging on average to the correct result (see high true positive rates)
+		-> limiting the influence of the deep ISM to only converge to the max certainty leads to overall lower probabilities (see lower true positive rates and higher unknown rates)
+		-> however, the false rates of the accumulation method are also consistently higher. Here, the accumulation of bias can be seen most prominently at the large occupied masses assigned to unknown regions.
+		-> these effects are dampened for the redundancy removed mapping method.
+	\item show mIoU 
+		-> "cleanliness" of redundancy-removed maps
+\end{itemize}
+\begin{figure}
+	\begin{tabular}{c|c|ccc|ccc|ccc}
+		& \backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
+		\hline
+		\parbox[t]{2mm}{\multirow{3}{*}{
+				\rotatebox[origin=c]{90}{\scriptsize{R$_{20}$}}}} &$p(k|f)$ & \textcolor{mygreen}{80.1} & \textcolor{myred}{12.3} & 7.6 & \textcolor{mygreen}{80.4} & \textcolor{myred}{11.7} & 7.9 & \textcolor{mygreen}{76.7} & \textcolor{myred}{4.9} & 18.4\\
+		&$p(k|o)$ & \textcolor{myred}{31.2} & \textcolor{mygreen}{55.9} & 12.9 & \textcolor{myred}{31.6} & \textcolor{mygreen}{54.6} & 13.8 & \textcolor{myred}{28.4} & \textcolor{mygreen}{40.4} & 31.2\\
+		&$p(k|u)$ & 30.0 & 31.8 & 38.2 & 31.2 & 26.9 & 41.9 & 23.0 & 8.2 & 68.8\\
+		\hline
+		\parbox[t]{2mm}{\multirow{3}{*}{
+				\rotatebox[origin=c]{90}{\scriptsize{MD}}}} &$p(k|f)$ & \textcolor{mygreen}{81.0} & \textcolor{myred}{12.1} & 6.9 & \textcolor{mygreen}{81.2} & \textcolor{myred}{11.5} & 7.3 & \textcolor{mygreen}{78.5} & \textcolor{myred}{2.4} & 19.2\\
+		&$p(k|o)$ & \textcolor{myred}{38.4} & \textcolor{mygreen}{47.5} & 14.1 & \textcolor{myred}{38.7} & \textcolor{mygreen}{45.6} & 15.7 & \textcolor{myred}{31.1} & \textcolor{mygreen}{21.9} & 47.0\\
+		&$p(k|u)$ & 17.2 & 47.3 & 35.5 & 17.7 & 40.2 & 42.1 & 12.6 & 6.6 & 80.8\\
+		\hline
+		\parbox[t]{2mm}{\multirow{3}{*}{
+				\rotatebox[origin=c]{90}{\scriptsize{MD \& R$_{20}$}}}} &$p(k|f)$ & \textcolor{mygreen}{80.8} & \textcolor{myred}{12.5} & 6.7 & \textcolor{mygreen}{80.9} & \textcolor{myred}{12.1} & 7.0 & \textcolor{mygreen}{76.9} & \textcolor{myred}{5.0} & 18.1\\
+		&$p(k|o)$ & \textcolor{myred}{24.1} & \textcolor{mygreen}{64.8} & 11.1 & \textcolor{myred}{24.2} & \textcolor{mygreen}{63.9} & 11.9 & \textcolor{myred}{18.2} & \textcolor{mygreen}{47.3} & 34.5\\
+		&$p(k|u)$ & 19.5 & 41.7 & 38.8 & 19.9 & 36.5 & 43.6 & 12.5 & 10.3 & 77.2\\
+		\hline
+		\parbox[t]{2mm}{\multirow{3}{*}{
+				\rotatebox[origin=c]{90}{\scriptsize{L}}}} &$p(k|f)$ & \textcolor{mygreen}{87.7} & \textcolor{myred}{7.4} & 4.9 & \textcolor{mygreen}{87.7} & \textcolor{myred}{7.3} & 5.0 & \textcolor{mygreen}{86.7} & \textcolor{myred}{4.3} & 9.0\\
+		&$p(k|o)$ & \textcolor{myred}{16.5} & \textcolor{mygreen}{74.4} & 9.1 & \textcolor{myred}{16.5} & \textcolor{mygreen}{74.1} & 9.4 & \textcolor{myred}{12.1} & \textcolor{mygreen}{70.3} & 17.6\\
+		&$p(k|u)$ & 21.2 & 42.7 & 36.1 & 21.0 & 39.1 & 39.9 & 14.6 & 16.5 & 68.9\\
+		\hline
+		\parbox[t]{2mm}{\multirow{3}{*}{
+				\rotatebox[origin=c]{90}{\scriptsize{L \& R$_{20}$}}}} &$p(k|f)$ & \textcolor{mygreen}{88.5} & \textcolor{myred}{7.3} & 4.2 & \textcolor{mygreen}{88.4} & \textcolor{myred}{7.2} & 4.4 & \textcolor{mygreen}{87.2} & \textcolor{myred}{4.8} & 8.0\\
+		&$p(k|o)$ & \textcolor{myred}{14.8} & \textcolor{mygreen}{77.4} & 7.8 & \textcolor{myred}{14.7} & \textcolor{mygreen}{77.1} & 8.2 & \textcolor{myred}{10.7} & \textcolor{mygreen}{72.6} & 16.7\\
+		&$p(k|u)$ & 18.1 & 37.2 & 44.7 & 17.9 & 33.9 & 48.2 & 12.1 & 14.4 & 73.5\\
+		\hline
+		\multicolumn{2}{c|}{\textbf{ShiftNet}} & \multicolumn{3}{c|}{\scriptsize{accumulated}} & \multicolumn{3}{c|}{\scriptsize{accumulated with bias cutoff}} & \multicolumn{3}{c}{\scriptsize{redundancy removal}}
+	\end{tabular}
+	\caption{\label{tab:conf_mat_redunt_info}Here, MD stands for MonoDepth, L for LiDAR and R$_{20}$ for an accumulated Radar point cloud of the latest 20 timesteps.}
+\end{figure}
+
+\begin{figure}
+	\begin{tabular}{c|ccc|ccc|ccc}
+		\backslashbox{\scriptsize{Sensor}}{\scriptsize{mIoU}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
+		\hline
+		\scriptsize{R$_{20}$} & 26.8 & 19.0 & 12.9 & 26.7 & 20.7 & 14.1 & 27.9 & 24.9 & 20.4\\
+		\hline
+		\scriptsize{MD} & 30.4 & 12.4 & 11.6 & 30.4 & 13.9 & 13.5 & 31.8 & 13.4 & 22.9\\
+		\hline
+		\scriptsize{MD \& R$_{20}$} & 30.0 & 19.3 & 12.6 & 30.0 & 20.9 & 14.0 & 30.5 & 28.2 & 22.3\\
+		\hline
+		\scriptsize{L} & 32.7 & 23.8 & 11.8 & 32.8 & 25.4 & 13.0 & 34.2 & 37.9 & 21.1\\
+		\hline
+		\scriptsize{L \& R$_{20}$} & 33.4 & 27.6 & 14.5 & 33.4 & 29.2 & 15.7 & 34.6 & 40.7 & 22.8\\
+		\hline
+		\textbf{ShiftNet} & \multicolumn{3}{c|}{\scriptsize{accumulated}} & \multicolumn{3}{c|}{\scriptsize{accumulated with bias cutoff}} & \multicolumn{3}{c}{\scriptsize{redundancy removal}}
+	\end{tabular}
+	\caption{\label{tab:miou_redunt_info}Here, MD stands for MonoDepth, L for LiDAR and R$_{20}$ for an accumulated Radar point cloud of the latest 20 timesteps.}
+\end{figure}
+
+\textbf{Discussion}
+%==========================================================================%
+%
+%==========================================================================%
+\section{Analysis of Deep ISM Priors for Occupancy Mapping}
+\label{sec:exp_analyze_prior_properties}
+\textbf{Setup}
+
+\textbf{Experiment}
+
+\textbf{Discussion}

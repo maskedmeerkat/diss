@@ -75,7 +75,7 @@ def printConfusionMat(meanConfusionMat):
 #=============================================================================#
 print("\n# Define Parameters")
 # data directory
-DATA_DIR = "C:/Users/Daniel/Documents/_uni/PhD/code//_DATASETS_/occMapDataset_/val/_scenes/"
+DATA_DIR = "C:/Users/Daniel/Documents/_uni/PhD/code//_DATASETS_/occMapDataset/val/_scenes/"
 LOG_DIR = "./"
 RESULT_FILE_NAME = "evNet_occMap_scores.csv"
 
@@ -86,15 +86,17 @@ yEstFileName = yEstDirName
 
 # yEstDirName = "dirNet_ilmMapPatchDisc_r_20"
 # yEstDirName = "shiftNet_ilmMapPatchDisc_r_20"
-# yEstDirName = "shiftNet_ilmMapPatchDisc_dr20"
-# yEstFileName = yEstDirName + "_mapFused"
+yEstDirName = "shiftNet_ilmMapPatchDisc_dr20"
+yEstFileName = yEstDirName + "_mapFused"
 
 
 # map based on fusion of deep & geo ism
 # areas in this map with mu >= uMin are only allocated by deep ism
 # areas with mu < uMin should be verified by geo ism
-yFusedDirName = "shiftNet_ilmMapPatchDisc_r_20"
-yFusedFileName = yFusedDirName + "_mapFused"
+# yFusedDirName = "shiftNet_ilmMapPatchDisc_dr20"
+# yFusedFileName = yFusedDirName + "_mapFused"
+yFusedDirName = "irmMap"
+yFusedFileName = yFusedDirName
 
 print("\n# Compute Metrics for each Scene")
 # get all directory names of scene data
@@ -109,6 +111,7 @@ unionPx = np.zeros(3)
 mIoU = np.zeros(3)
 ssim = 0
 numSamples = 0
+numViolations = 0
 
 # loop thru all scenes and compute metrics
 for sceneName in tqdm(sceneNames):
@@ -147,8 +150,12 @@ for sceneName in tqdm(sceneNames):
 
     # REMOVE THIS LATER
     # ignore areas where mu >= uMin
-    labels_certain[y_fused[:, :, -1] >= 0.3] = -1
-    labels_uncertain[y_est[:, :, -1] < 0.3] = -1
+    # labels_certain[y_fused[:, :, -1] >= 0.3] = -1
+    # labels_uncertain[y_fused[:, :, -1] < 0.3] = -1
+    labels_certain[y_fused[:, :, -1] >= 1.0] = -1
+    labels_uncertain[y_fused[:, :, -1] < 1.0] = -1
+
+    numViolations += np.sum(np.logical_and(y_est[:, :, 2] < 0.2, y_fused[:, :, -1] == 1.))
     
     # update confusion matrix
     confusionMat_uncertain = computeConfusionMatrix(y_est, labels_uncertain, confusionMat_uncertain, numSamples)
@@ -159,6 +166,7 @@ for sceneName in tqdm(sceneNames):
         
         
 print(yEstDirName)
+print(f"VIOLATIONS = {numViolations}")
 
 print("\n# IoU")
 mIoU = mIoU.round(1)
