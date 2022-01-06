@@ -1216,11 +1216,11 @@ modelDir = "./models/exp_deep_ism_comparison/"
 # modelName = "dirNet_ilmMapPatchDisc_dr20__20201227_222639_ckpt_244.pb"
 # ShiftNet
 # modelName = "shiftNet_ilmMapPatchDisc_r_1__20201223_215050_ckpt_198.pb"
-# modelName = "shiftNet_ilmMapPatchDisc_r_20__20201223_215231_ckpt_321.pb"
+modelName = "shiftNet_ilmMapPatchDisc_r_20__20201223_215231_ckpt_321.pb"
 # modelName = "shiftNet_ilmMapPatchDisc_l__20201227_075245_ckpt_607.pb"
 # modelName = "shiftNet_ilmMapPatchDisc_lr20__20201227_222040_ckpt_322.pb"
 # modelName = "shiftNet_ilmMapPatchDisc_d__20201227_075037_ckpt_418.pb"
-modelName = "shiftNet_ilmMapPatchDisc_dr20__20201227_221957_ckpt_604.pb"
+# modelName = "shiftNet_ilmMapPatchDisc_dr20__20201227_221957_ckpt_604.pb"
 # SoftNet
 # modelName = "softNet_ilmMapPatchDisc_r_1__20201223_215415_ckpt_688.pb"
 deepIsmInputName = modelName[modelName.find("_") + 17:modelName.find("__")]
