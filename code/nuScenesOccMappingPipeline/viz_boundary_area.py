@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 
-DATA_DIR = "C:/Users/Daniel/Documents/_uni/PhD/diss/imgs/08_occ_mapping_exp/analysis_of_redundant_info/scene0084/"
+DATA_DIR = "C:/Users/Daniel/Documents/_uni/PhD/diss/imgs/08_occ_mapping_exp/analysis_of_redundant_info/scene0260/ilmMap/"
 
 ilmMap = np.array(Image.open(DATA_DIR + "ilmMap.png"))/255
 occArea = ilmMap[:, :, 1]
@@ -28,7 +28,7 @@ cnts = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 
 for c in cnts:
-    cv2.drawContours(mask, [c], -1, 255, thickness=15)
+    cv2.drawContours(mask, [c], -1, 255, thickness=10)
 
 plt.imshow(mask)
 

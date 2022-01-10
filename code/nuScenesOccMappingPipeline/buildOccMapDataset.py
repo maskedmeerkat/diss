@@ -686,7 +686,7 @@ def processSweepOfPcSensor(nusc, sample, scene, sweepNames, vPoses01, t01, senso
 # ===========================#
 def processSweepOfDeepIsm(nusc, sample, scene, sweepNames, vPoses01, t01, sensorNames, buffers, ismMaps, t_r2i,
                           pF, pO, pD, pDim, mDim, aDim, numColsPerCone, y_fake, uMin):
-    [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap] = ismMaps
+    [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap, deepGeo_ismMap_prior, deepGeo_ismMap_overwrite, deep_ismMap_rmBias] = ismMaps
 
     # get the sensor poses
     sPoses = []
@@ -760,8 +760,8 @@ def processSweepOfDeepIsm(nusc, sample, scene, sweepNames, vPoses01, t01, sensor
             vPose = buffers[0][-1]["vPose"]
 
             # perform inference            
-            # x_ = pc2Bev(buffers, pDim, mDim, vPose, 0, None)[np.newaxis, :, :, np.newaxis] / 255
-            # deepIsmImg = sess.run(y_fake, feed_dict={x: x_})[0, ...]
+            x_ = pc2Bev(buffers, pDim, mDim, vPose, 0, None)[np.newaxis, :, :, np.newaxis] / 255
+            deepIsmImg = sess.run(y_fake, feed_dict={x: x_})[0, ...]
             geoIsmImg = mapUtils.rayCastingBev(buffers, pDim, mDim, aDim, pF, pO, pD,
                                                numColsPerCone, vPose, 0, "",
                                                lidarFlag=(sensorName == 'LIDAR_TOP'), noDynFlag=True)
@@ -796,35 +796,72 @@ def processSweepOfDeepIsm(nusc, sample, scene, sweepNames, vPoses01, t01, sensor
                 yLim[1] += dy
                 yLim_[1] += dy
 
-            # # deep ism map
-            # deepIsmImg_ = deepIsmImg.copy()
-            # deep_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
-            #     mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
-            #                       deep_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
-            #                       comb_rule=0, entropy_scaling=False, u_min=0.)
-            #
-            # # deep ism map with entropy rescaling
-            # # comb_rule 0:Yager, 1:YaDer, 2:Yager mu>uMin & YaDer mu<=uMinelse, else:Dempster
-            # deepIsmImg_ = deepIsmImg.copy()
-            # deep_ismMap_rescaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
-            #     mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
-            #                       deep_ismMap_rescaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
-            #                       comb_rule=0, entropy_scaling=True, u_min=0.)
-            #
-            # # deep ism map with entropy rescaling and lower threshold on u
-            # deepIsmImg_ = deepIsmImg.copy()
-            # deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
-            #     mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
-            #                       deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
-            #                       comb_rule=0, entropy_scaling=True, u_min=uMin)
+            # deep ism map
+            deepIsmImg_ = deepIsmImg.copy()
+            deep_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+                mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                                  deep_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=0, entropy_scaling=False, u_min=0.)
 
-            # geo ism
+            # naive removal of bias
+            deepIsmImg_ = deepIsmImg.copy()
+            deepIsmImg_[deepIsmImg_[:, :, -1] >= 0.9, :-1] = 0.
+            deepIsmImg_[deepIsmImg_[:, :, -1] >= 0.9, -1] = 1.
+            deep_ismMap_rmBias[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+                mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                                  deep_ismMap_rmBias[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=0, entropy_scaling=False, u_min=0.)
+
+            # deep ism map with entropy rescaling
+            # comb_rule 0:Yager, 1:YaDer, 2:Yager mu>uMin & YaDer mu<=uMinelse, else:Dempster
+            deepIsmImg_ = deepIsmImg.copy()
+            deep_ismMap_rescaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+                mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                                  deep_ismMap_rescaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=0, entropy_scaling=True, u_min=0., storeRescaledPth=f"./{t}.png")
+
+            # naive fusion both with yager accumulation
+            deepIsmImg_ = deepIsmImg.copy()
+            deepGeo_ismMap_overwrite[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+                mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                                  deepGeo_ismMap_overwrite[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=0, entropy_scaling=False, u_min=0)
+            geoIsmImg_ = geoIsmImg.copy()
+            deepGeo_ismMap_overwrite[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+                mapUtils.fuseImgs(geoIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                                  deepGeo_ismMap_overwrite[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=0, entropy_scaling=False, u_min=0.)
+
+            # fusion while deep ism is redundancy removed
+            deepIsmImg_ = deepIsmImg.copy()
             deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
-                mapUtils.fuseImgs(geoIsmImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
                                   deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=0, entropy_scaling=True, u_min=0)
+            geoIsmImg_ = geoIsmImg.copy()
+            deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+                mapUtils.fuseImgs(geoIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                                  deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=0, entropy_scaling=False, u_min=0.)
+
+            # fusion with
+            # deep ism: redundancy removal & restriction to uMin
+            # geo ism : using yader rule
+            deepIsmImg_ = deepIsmImg.copy()
+            deepGeo_ismMap_prior[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+                mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                                  deepGeo_ismMap_prior[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
+                                  comb_rule=0, entropy_scaling=True, u_min=uMin)
+            geoIsmImg_ = geoIsmImg.copy()
+            deepGeo_ismMap_prior[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
+                mapUtils.fuseImgs(geoIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
+                                  deepGeo_ismMap_prior[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
                                   comb_rule=2, entropy_scaling=False, u_min=0.)
 
-    return buffers, [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap]
+
+
+
+    return buffers, [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap, deepGeo_ismMap_prior, deepGeo_ismMap_overwrite, deep_ismMap_rmBias]
 
 
 # ===========================#
@@ -1013,7 +1050,7 @@ def processSampleOfMonodepth(nusc, scene, sample, imgStorDir,
 
 
 # ===========================#
-def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ismMap, ismMapRmBias, ismMapScaled,
+def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ismMap, ismMapScaled,
                            deepGeo_ismMap, t_r2i, vPose_ref,
                            storeDeepIsm, storeProgress):
     x_ = np.array(Image.open(sceneDir + inputName + "/" + inputName + "__{:}.png".format(t_ref)))
@@ -1063,14 +1100,6 @@ def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ism
         mapUtils.fuseImgs(ismImg[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :], ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
                           comb_rule=0, entropy_scaling=False, u_min=0.)
 
-    # fuse new ism where all small probabilities are removed
-    ismImg_rmBias = ismImg.copy()
-    ismImg_rmBias[ismImg[:, :, 2] >= .9, :-1] = 0
-    ismImg_rmBias[ismImg[:, :, 2] >= .9, -1] = 1
-    ismMapRmBias[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
-        mapUtils.fuseImgs(ismImg_rmBias[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :], ismMapRmBias[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
-                          comb_rule=0, entropy_scaling=False, u_min=0.)
-
     # perform entropy scaling on ism
     ismImg_scaled = ismImg.copy()
     ismMapScaled[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
@@ -1083,7 +1112,8 @@ def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ism
     deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :] = \
         mapUtils.fuseImgs(deepIsmImg_[xLim_[0]:xLim_[1], yLim_[0]:yLim_[1], :],
                           deepGeo_ismMap[xLim[0]:xLim[1], yLim[0]:yLim[1], :],
-                          comb_rule=0, entropy_scaling=True, u_min=uMin)
+                          comb_rule=0, entropy_scaling=False, u_min=0.)
+                        # comb_rule = 0, entropy_scaling = True, u_min = uMin)
 
     # geo ism
     # geoIsmImg = np.array(Image.open(sceneDir + "/irm_20/irm_20__{:}.png".format(t_ref)))/255
@@ -1106,7 +1136,7 @@ def processSampleOfDeepIsm(t_ref, inputName, modelName, sceneDir, y_fake, x, ism
         ismImg_scaled = Image.fromarray((ismImg_scaled * 255).astype(np.uint8))
         ismImg_scaled.save(sceneDir + modelName + "/" + modelName + "_scaled__{:}.png".format(t_ref))
 
-    return ismMap, ismMapRmBias, ismMapScaled, deepGeo_ismMap
+    return ismMap, ismMapScaled, deepGeo_ismMap
 
 
 # ===========================#
@@ -1399,6 +1429,8 @@ def main(iScene):
     deep_ismMap_rmBias = ismMap.copy()
     deep_ismMap_rescaled = ismMap.copy()
     deepGeo_ismMap = ismMap.copy()
+    deepGeo_ismMap_prior = ismMap.copy()
+    deepGeo_ismMap_overwrite = ismMap.copy()
     mappedArea = detMap.copy()
 
     # all ref vehicle positions
@@ -1467,13 +1499,14 @@ def main(iScene):
             if (store360MonoDepthImg):
                 processSampleOfMonodepth(nusc, scene, sample, d_storDir, refCamName, camNames, pDim, mDim)
 
-            # process deep ism
-            if (storeDeepIsm or storeDeepIsmMap):
-                sceneDir = STORAGE_DIR + setName + "scene{:04}".format(iScene) + "/"
-                ismMaps = processSampleOfDeepIsm(t_ref, deepIsmInputName, modelName[:modelName.find("__")], sceneDir,
-                                                 y_fake, x, deep_ismMap, deep_ismMap_rmBias, deep_ismMap_rescaled, deepGeo_ismMap,
-                                                 t_r2i, vPose_ref, storeDeepIsm, storeProgress)
-                [deep_ismMap, deep_ismMap_rmBias, deep_ismMap_rescaled, deepGeo_ismMap] = ismMaps
+            # # process deep ism
+            # if (storeDeepIsm or storeDeepIsmMap):
+            #     sceneDir = STORAGE_DIR + setName + "scene{:04}".format(iScene) + "/"
+            #     ismMaps = [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap, deepGeo_ismMap_prior, deepGeo_ismMap_overwrite, deep_ismMap_rmBias]
+            #     ismMaps = processSampleOfDeepIsm(t_ref, deepIsmInputName, modelName[:modelName.find("__")], sceneDir,
+            #                                      y_fake, x, ismMaps,
+            #                                      t_r2i, vPose_ref, storeDeepIsm, storeProgress)
+            #     [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap, deepGeo_ismMap_prior, deepGeo_ismMap_overwrite, deep_ismMap_rmBias] = ismMaps
 
         # get next sample
         sample = nusc.get('sample', sample['next'])
@@ -1500,13 +1533,13 @@ def main(iScene):
                                                                 pF_rMap, pO_rMap, pD_rMap, pDim, mDim, aDim,
                                                                 numColsPerCone_r, storeIrmMap)
         if (storeDeepIsmMap):
-            ismMaps = [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap]
+            ismMaps = [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap, deepGeo_ismMap_prior, deepGeo_ismMap_overwrite, deep_ismMap_rmBias]
             buff_r, ismMaps = processSweepOfDeepIsm(nusc, sample, scene, r_sweepNames, vPoses01, t01,
                                                     radarNames, buff_r,
                                                     ismMaps, t_r2i,
                                                     pF_rMap, pO_rMap, pD_rMap, pDim, mDim, aDim, numColsPerCone_r,
                                                     y_fake, uMin)
-            [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap] = ismMaps
+            [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap, deepGeo_ismMap_prior, deepGeo_ismMap_overwrite, deep_ismMap_rmBias] = ismMaps
 
         # store mapping progress
         if (storeLidarMap) and (storeProgress):
@@ -1517,14 +1550,12 @@ def main(iScene):
             saveImg(r_detMap, r_storDirs[0] + r_storDirs[0].split("/")[-2] + "_map__{0:}.png".format(t_ref))
         if (storeIrmMap) and (storeProgress):
             saveImg(r_ismMap, irmMap_storDir + irmMap_storDir.split("/")[-2] + "__{0:}.png".format(t_ref))
-        if (storeDeepIsmMap) and (storeProgress):
-            saveImg(deep_ismMap, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_map__{0:}.png".format(t_ref))
-            saveImg(deep_ismMap_rmBias,
-                    deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapRmBias__{0:}.png".format(t_ref))
-            saveImg(deep_ismMap_rescaled,
-                    deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapScaled__{0:}.png".format(t_ref))
-            saveImg(deepGeo_ismMap,
-                    deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapFused__{0:}.png".format(t_ref))
+        # if (storeDeepIsmMap) and (storeProgress):
+        #     saveImg(deep_ismMap, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_map__{0:}.png".format(t_ref))
+        #     saveImg(deep_ismMap_rescaled,
+        #             deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapScaled__{0:}.png".format(t_ref))
+        #     saveImg(deepGeo_ismMap,
+        #             deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapFused__{0:}.png".format(t_ref))
 
     # store map images
     if (storeLidarMap):
@@ -1538,9 +1569,11 @@ def main(iScene):
         saveImg(r_ismMap, irmMap_storDir + irmMap_storDir.split("/")[-2] + ".png")
     if (storeDeepIsmMap):
         saveImg(deep_ismMap, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_map.png")
-        saveImg(deep_ismMap_rmBias, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapRmBias.png")
         saveImg(deep_ismMap_rescaled, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapScaled.png")
+        saveImg(deep_ismMap_rmBias, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapRmBias.png")
         saveImg(deepGeo_ismMap, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapFused.png")
+        saveImg(deepGeo_ismMap_prior, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapFused_prior.png")
+        saveImg(deepGeo_ismMap_overwrite, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapFused_overwriteGeo.png")
 
     # observed area map
     if (storeIlmMap):
@@ -1567,7 +1600,7 @@ trainNames, valNames, trainIdxs, valIdxs = sceneAttribUtils.getTrainValTestSplit
 sceneIdxs = valIdxs
 
 # specific scenes
-# sceneIdxs = [486]
+sceneIdxs = [84]
 
 t0 = time.time()
 for iScene, sceneIdx in enumerate(sceneIdxs):

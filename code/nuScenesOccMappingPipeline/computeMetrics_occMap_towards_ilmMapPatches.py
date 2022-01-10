@@ -89,20 +89,22 @@ RESULT_FILE_NAME = "evNet_occMap_scores.csv"
 yEstDirName = "irmMap"
 yEstFileName = yEstDirName
 
-# yEstDirName = "shiftNet_ilmMapPatchDisc_r_20"
+yEstDirName = "shiftNet_ilmMapPatchDisc_r_20"
 # yEstDirName = "shiftNet_ilmMapPatchDisc_d"
 # yEstDirName = "shiftNet_ilmMapPatchDisc_dr20"
 # yEstDirName = "shiftNet_ilmMapPatchDisc_l"
-yEstDirName = "shiftNet_ilmMapPatchDisc_lr20"
+# yEstDirName = "shiftNet_ilmMapPatchDisc_lr20"
 yEstFileName = yEstDirName + "_map"
 yEstFileName = yEstDirName + "_mapRmBias"
 yEstFileName = yEstDirName + "_mapScaled"
+yEstFileName = yEstDirName + "_mapFused_overwriteGeo"
+
 # yEstFileName = yEstDirName + "_mapFused"
+# yEstFileName = yEstDirName + "_mapFused_prior"
 
 # toggles either the evaluation of the occ maps inside the mapped area (True)
 # OR the evaluation only within the boundary areas arounds occupied space (False)
-USE_MAPPED_AREA_NOT_BOUNDARY_AREA = False
-boundary_thickness = 15  # in case boundary evaluation is used [pixels]
+boundary_thickness = 10  # in case boundary evaluation is used [pixels]
 
 print("\n# Compute Metrics for each Scene")
 # get all directory names of scene data
@@ -111,10 +113,17 @@ sceneNames.sort()
 
 # initialize the matrices to store accumulated masses and number of data points
 confusionMat = np.zeros((3, 3), dtype=np.double)
+confusionMat_border = np.zeros((3, 3), dtype=np.double)
+
 interPx = np.zeros(3)
 unionPx = np.zeros(3)
 mIoU = np.zeros(3)
+interPx_border = np.zeros(3)
+unionPx_border = np.zeros(3)
+mIoU_border = np.zeros(3)
+
 ssim = 0
+
 numSamples = 0
 
 # loop thru all scenes and compute metrics
@@ -126,18 +135,18 @@ for sceneName in tqdm(sceneNames):
     l_occ = discretizeDs(l_occ)
 
     # define the area where the map shall be evaluated
-    # mappedArea = np.array(Image.open(DATA_DIR + sceneName + "/ilmMap/mappedArea.png")) / 255
+    mappedArea = np.array(Image.open(DATA_DIR + sceneName + "/ilmMap/mappedArea.png")) / 255
 
     # use an enlarged boundary area as mapped area
-    mappedArea = l_occ[:, :, 1]
-    mappedArea[l_occ[:, :, 1] >= 0.8] = 255
-    mappedArea[l_occ[:, :, 1] < 0.8] = 0
-    mappedArea = mappedArea.astype(np.uint8)
-    cnts = cv2.findContours(mappedArea, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    mappedArea_border = l_occ[:, :, 1]
+    mappedArea_border[l_occ[:, :, 1] >= 0.8] = 255
+    mappedArea_border[l_occ[:, :, 1] < 0.8] = 0
+    mappedArea_border = mappedArea_border.astype(np.uint8)
+    cnts = cv2.findContours(mappedArea_border, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if len(cnts) == 2 else cnts[1]
     for c in cnts:
-        cv2.drawContours(mappedArea, [c], -1, 255, thickness=boundary_thickness)
-    mappedArea = mappedArea/255
+        cv2.drawContours(mappedArea_border, [c], -1, 255, thickness=boundary_thickness)
+    mappedArea_border = mappedArea_border/255
     # import matplotlib.pyplot as plt
     # plt.figure()
     # plt.imshow(mappedArea)
@@ -157,39 +166,76 @@ for sceneName in tqdm(sceneNames):
              / np.sum(np.sum(np.logical_or(y_est_disc, l_occ_), axis=0), axis=0)) * 100
     mIoU = updateMean(mIoU, mIoU_, numSamples)
 
+    l_occ_ = l_occ.copy()
+    l_occ_[mappedArea_border == 0, :] = 0
+    mIoU_ = (np.sum(np.sum(np.logical_and(y_est_disc, l_occ_), axis=0), axis=0)
+             / np.sum(np.sum(np.logical_or(y_est_disc, l_occ_), axis=0), axis=0)) * 100
+    mIoU_border = updateMean(mIoU_border, mIoU_, numSamples)
+
     # update structural similarity scores
     ssim_ = sk_ssim(y_est_disc, l_occ, data_range=y_est.max() - y_est.min(), multichannel=True)
     ssim = updateMean(ssim, ssim_, numSamples)
 
     # remove all labels outside the mapped area
     labels = l_occ_disc.copy()
+    labels_border = l_occ_disc.copy()
     labels[mappedArea == 0] = -1
+    labels_border[mappedArea_border == 0] = -1
 
     # update confusion matrix
     confusionMat = computeConfusionMatrix(y_est_disc, labels, confusionMat, numSamples)
+    confusionMat_border = computeConfusionMatrix(y_est_disc, labels_border, confusionMat_border, numSamples)
 
     # update number of samples
     numSamples += 1
 
 print(yEstDirName)
 
-print("\n# IoU")
+print("\n# IoU (mapped area | border area)")
 mIoU = mIoU.round(1)
+mIoU_border = mIoU_border.round(1)
 print(mIoU, mIoU.mean().round(1))
+print(mIoU_border, mIoU_border.mean().round(1))
 
-print("\n# Confusion Matrices")
+print("\n# Confusion Matrices (mapped area)")
 printConfusionMat(confusionMat)
+
+print("\n# Confusion Matrices (border area)")
+printConfusionMat(confusionMat_border)
 
 print("\n# SSIM")
 ssim = ssim.round(2)
 print(ssim)
 
-# # write hidden scores to csv
-# f = open(LOG_DIR + RESULT_FILE_NAME, 'w')
-# writer = csv.writer(f)
-# writer.writerow(["hiddenScores"])
-# writer.writerow(["[%]", " fr_est ", " oc_est ", " un_est "])
-# writer.writerow([" fr_true ", confusionMat[0,0], confusionMat[0,1], confusionMat[0,2]])
-# writer.writerow([" oc_true ", confusionMat[1,0], confusionMat[1,1], confusionMat[1,2]])
-# writer.writerow([" un_true ", confusionMat[2,0], confusionMat[2,1], confusionMat[2,2]])
-# f.close()
+# write hidden scores to csv
+confusionMat = np.round(confusionMat, 1)
+confusionMat[0, -1] = np.round(100 - np.sum(confusionMat[0, :-1]), 2)
+confusionMat[1, -1] = np.round(100 - np.sum(confusionMat[1, :-1]), 2)
+confusionMat[2, -1] = np.round(100 - np.sum(confusionMat[2, :-1]), 2)
+confusionMat = confusionMat.astype(str)
+confusionMat_border = np.round(confusionMat_border, 1)
+confusionMat_border[0, -1] = np.round(100 - np.sum(confusionMat_border[0, :-1]), 2)
+confusionMat_border[1, -1] = np.round(100 - np.sum(confusionMat_border[1, :-1]), 2)
+confusionMat_border[2, -1] = np.round(100 - np.sum(confusionMat_border[2, :-1]), 2)
+confusionMat_border = confusionMat_border.astype(str)
+
+mIoU = mIoU.astype(str)
+mIoU_border = mIoU_border.astype(str)
+with open(LOG_DIR + "redundancyAnalysis__" + yEstFileName + ".txt", 'w') as txt_file:
+    txt_file.write('\\begin{tabular}{c|c|ccc|ccc}\n')
+    # needs package \usepackage{slashbox}
+    txt_file.write("&\\backslashbox{}{\\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\\\\n")
+    txt_file.write("\\hline\n")
+    txt_file.write("\\parbox[t]{2mm}{\\multirow{3}{*}{\\rotatebox[origin=c]{90}{\\scriptsize{R$_{20}$}}}} &$p(k|f)$ "
+                   "& \\textcolor{mygreen}{"+confusionMat[0, 0]+"} & \\textcolor{myred}{"+confusionMat[0, 1]+"} & "+confusionMat[0, 2] +
+                   "& \\textcolor{mygreen}{"+confusionMat_border[0, 0]+"} & \\textcolor{myred}{"+confusionMat_border[0, 1]+"} & "+confusionMat_border[0, 2]+" \\\\\n")
+    txt_file.write("&$p(k|o)$ "
+                   "& \\textcolor{myred}{"+confusionMat[1, 0]+"} & \\textcolor{mygreen}{"+confusionMat[1, 1]+"} & "+confusionMat[1, 2] +
+                   "& \\textcolor{myred}{"+confusionMat_border[1, 0]+"} & \\textcolor{mygreen}{"+confusionMat_border[1, 1]+"} & "+confusionMat_border[1, 2]+" \\\\\n")
+    txt_file.write("&$p(k|u)$ "
+                   "& "+confusionMat[2, 0]+" & "+confusionMat[2, 1]+" & "+confusionMat[2, 2] +
+                   "& "+confusionMat_border[2, 0]+" & "+confusionMat_border[2, 1]+" & "+confusionMat_border[2, 2]+" \\\\\n")
+    txt_file.write("& mIoU &"
+                   + mIoU[0] + "&" + mIoU[1] + "&" + mIoU[2] + "&"
+                   + mIoU_border[0] + "&" + mIoU_border[1] + "&" + mIoU_border[2]+" \\\\\n")
+    txt_file.write("\\end{tabular}")

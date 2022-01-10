@@ -25,81 +25,72 @@ Eventually, the lower-bounded (lb) Yager rule's property to only converge to the
 %==========================================================================%
 \section{Analysis of redundant Information in Deep ISMs}
 \label{sec:exp_analyze_redundant_info}
-\textbf{Setup}
-
-\textbf{Experiment Qualitative Results}
+%=================================%
+%
+%=================================%
+\subsection{Setup of Redundancy Analysis in Deep ISMs}
+\label{subsec:setup_of_red_analy}
+To verify \todo{Hypothesis bla}, occupancy maps are created in four ways. The baseline is the direct accumulation using Yager's rule, abbreviated as "accum.". This is evaluated for the deep as well as the geo ISM. Second, a naive solution is evaluated which moves all free and occupied mass to unknown for predictions with $m_u>=0.9$ to hinder small predictions to accumulate over time ("accum. with cutoff"). Third, the method as proposed in \todo{section or equation} is used to reduce the redundancy ("accum. with redundancy reduction"). Eventually, the fusion using the deep and geo ISMs by directly accumulating the predictions with Yager's rule is evaluated ("accum. fusion"). Here, the fusion is investigated to analyze whether the deep ISM indeed overwrites most of the geo ISM's predictions as proposed in \todo{Hypothesis bla}.
+%
+The evaluation is performed using only the accumulated radar detections of the recent 20 timesteps (R$_{20}$) since the focus of this work lies on radar occupancy mapping. Additionally, it is assumed that the effects are similar using other sensor modalities. The geo ISM method is used as described in \todo{ref to geo ISM} and ShiftNet, as described \todo{ref to ShiftNet}, is used as a deep ISM.
+%
+The metrics used are the normed confusion matrix \todo{ref to conf matrix definition} and the mIoU \todo{ref to mIoU definition}. Here, the metrics are evaluated separately in all of the area in a 20m vicinity around the ego vehicle trajectory ("whole mapped area") and in an area of 15 pixels around occupied ground truth pixels in the reference occupancy maps. Here, the mIoU is only evaluated around the occupied borders to quantify the cleanliness. The reference maps are created by accumulating the geo ILM. Two examples of the evaluation areas can be found in \ref{fig:qual_analysis_of_redundant_info}. The scenes mapped are solely taken from the test set which was not used during training.
+%=================================%
+%
+%=================================%
+\subsection{Results of Redundancy Analysis in Deep ISMs}
+\label{subsec:results_of_red_analy}
 \begin{itemize}
 	\item show alleys for both mapping methods
 	\item show mapping progress that illustrates the overwriting of correct assignments 
 \end{itemize}
-
-\textbf{Experiment Quantitative Results}
-\begin{itemize}
-	\item show confusion mat
-		-> deep ISM is statistically more correct then wrong. thus, accumulation of redundant info leads to converging on average to the correct result (see high true positive rates)
-		-> limiting the influence of the deep ISM to only converge to the max certainty leads to overall lower probabilities (see lower true positive rates and higher unknown rates)
-		-> however, the false rates of the accumulation method are also consistently higher. Here, the accumulation of bias can be seen most prominently at the large occupied masses assigned to unknown regions.
-		-> these effects are dampened for the redundancy removed mapping method.
-	\item show mIoU 
-		-> "cleanliness" of redundancy-removed maps
-\end{itemize}
-\begin{figure}
-	\begin{tabular}{c|c|ccc|ccc|ccc}
-		& \backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
-		\hline
-		\parbox[t]{2mm}{\multirow{3}{*}{
-				\rotatebox[origin=c]{90}{\scriptsize{R$_{20}$}}}} &$p(k|f)$ & \textcolor{mygreen}{80.1} & \textcolor{myred}{12.3} & 7.6 & \textcolor{mygreen}{80.4} & \textcolor{myred}{11.7} & 7.9 & \textcolor{mygreen}{76.7} & \textcolor{myred}{4.9} & 18.4\\
-		&$p(k|o)$ & \textcolor{myred}{31.2} & \textcolor{mygreen}{55.9} & 12.9 & \textcolor{myred}{31.6} & \textcolor{mygreen}{54.6} & 13.8 & \textcolor{myred}{28.4} & \textcolor{mygreen}{40.4} & 31.2\\
-		&$p(k|u)$ & 30.0 & 31.8 & 38.2 & 31.2 & 26.9 & 41.9 & 23.0 & 8.2 & 68.8\\
-		\hline
-		\parbox[t]{2mm}{\multirow{3}{*}{
-				\rotatebox[origin=c]{90}{\scriptsize{MD}}}} &$p(k|f)$ & \textcolor{mygreen}{81.0} & \textcolor{myred}{12.1} & 6.9 & \textcolor{mygreen}{81.2} & \textcolor{myred}{11.5} & 7.3 & \textcolor{mygreen}{78.5} & \textcolor{myred}{2.4} & 19.2\\
-		&$p(k|o)$ & \textcolor{myred}{38.4} & \textcolor{mygreen}{47.5} & 14.1 & \textcolor{myred}{38.7} & \textcolor{mygreen}{45.6} & 15.7 & \textcolor{myred}{31.1} & \textcolor{mygreen}{21.9} & 47.0\\
-		&$p(k|u)$ & 17.2 & 47.3 & 35.5 & 17.7 & 40.2 & 42.1 & 12.6 & 6.6 & 80.8\\
-		\hline
-		\parbox[t]{2mm}{\multirow{3}{*}{
-				\rotatebox[origin=c]{90}{\scriptsize{MD \& R$_{20}$}}}} &$p(k|f)$ & \textcolor{mygreen}{80.8} & \textcolor{myred}{12.5} & 6.7 & \textcolor{mygreen}{80.9} & \textcolor{myred}{12.1} & 7.0 & \textcolor{mygreen}{76.9} & \textcolor{myred}{5.0} & 18.1\\
-		&$p(k|o)$ & \textcolor{myred}{24.1} & \textcolor{mygreen}{64.8} & 11.1 & \textcolor{myred}{24.2} & \textcolor{mygreen}{63.9} & 11.9 & \textcolor{myred}{18.2} & \textcolor{mygreen}{47.3} & 34.5\\
-		&$p(k|u)$ & 19.5 & 41.7 & 38.8 & 19.9 & 36.5 & 43.6 & 12.5 & 10.3 & 77.2\\
-		\hline
-		\parbox[t]{2mm}{\multirow{3}{*}{
-				\rotatebox[origin=c]{90}{\scriptsize{L}}}} &$p(k|f)$ & \textcolor{mygreen}{87.7} & \textcolor{myred}{7.4} & 4.9 & \textcolor{mygreen}{87.7} & \textcolor{myred}{7.3} & 5.0 & \textcolor{mygreen}{86.7} & \textcolor{myred}{4.3} & 9.0\\
-		&$p(k|o)$ & \textcolor{myred}{16.5} & \textcolor{mygreen}{74.4} & 9.1 & \textcolor{myred}{16.5} & \textcolor{mygreen}{74.1} & 9.4 & \textcolor{myred}{12.1} & \textcolor{mygreen}{70.3} & 17.6\\
-		&$p(k|u)$ & 21.2 & 42.7 & 36.1 & 21.0 & 39.1 & 39.9 & 14.6 & 16.5 & 68.9\\
-		\hline
-		\parbox[t]{2mm}{\multirow{3}{*}{
-				\rotatebox[origin=c]{90}{\scriptsize{L \& R$_{20}$}}}} &$p(k|f)$ & \textcolor{mygreen}{88.5} & \textcolor{myred}{7.3} & 4.2 & \textcolor{mygreen}{88.4} & \textcolor{myred}{7.2} & 4.4 & \textcolor{mygreen}{87.2} & \textcolor{myred}{4.8} & 8.0\\
-		&$p(k|o)$ & \textcolor{myred}{14.8} & \textcolor{mygreen}{77.4} & 7.8 & \textcolor{myred}{14.7} & \textcolor{mygreen}{77.1} & 8.2 & \textcolor{myred}{10.7} & \textcolor{mygreen}{72.6} & 16.7\\
-		&$p(k|u)$ & 18.1 & 37.2 & 44.7 & 17.9 & 33.9 & 48.2 & 12.1 & 14.4 & 73.5\\
-		\hline
-		\multicolumn{2}{c|}{\textbf{ShiftNet}} & \multicolumn{3}{c|}{\scriptsize{accumulated}} & \multicolumn{3}{c|}{\scriptsize{accumulated with bias cutoff}} & \multicolumn{3}{c}{\scriptsize{redundancy removal}}
-	\end{tabular}
-	\caption{\label{tab:conf_mat_redunt_info}Here, MD stands for MonoDepth, L for LiDAR and R$_{20}$ for an accumulated Radar point cloud of the latest 20 timesteps.}
+\begin{figure}[H]
+	\begin{center}
+		\begin{tabular}{c|c|ccc|ccc}
+			& \backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
+			\hline
+			geo IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{57.9} & \textcolor{myred}{2.3} & 39.8& \textcolor{mygreen}{44.3} & \textcolor{myred}{5.9} & 49.8 \\
+			accumulated &$p(k|o)$ & \textcolor{myred}{16.1} & \textcolor{mygreen}{36.3} & 47.6& \textcolor{myred}{15.9} & \textcolor{mygreen}{36.0} & 48.1 \\
+			&$p(k|u)$ & 2.8 & 5.7 & 91.5& 4.0 & 9.7 & 86.3 \\
+			& mIoU & - & - & - &16.8&24.6&14.2 \\
+			\hline	
+			deep IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{86.6} & \textcolor{myred}{11.7} & 1.7& \textcolor{mygreen}{68.2} & \textcolor{myred}{28.4} & 3.4 \\
+			accumulated &$p(k|o)$ & \textcolor{myred}{27.2} & \textcolor{mygreen}{69.6} & 3.2& \textcolor{myred}{27.3} & \textcolor{mygreen}{69.4} & 3.3 \\
+			&$p(k|u)$ & 28.9 & 57.5 & 13.6& 27.2 & 64.5 & 8.3 \\
+			& mIoU & - & - & - &15.3&12.4&2.8 \\
+			\hline
+			deep IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{87.4} & \textcolor{myred}{10.5} & 2.1& \textcolor{mygreen}{69.4} & \textcolor{myred}{26.7} & 3.9 \\
+			accumulated with&$p(k|o)$ & \textcolor{myred}{28.3} & \textcolor{mygreen}{67.0} & 4.7& \textcolor{myred}{28.4} & \textcolor{mygreen}{66.8} & 4.8 \\
+			cutoff &$p(k|u)$ & 33.7 & 34.7 & 31.6& 30.4 & 51.9 & 17.7 \\
+			& mIoU & - & - & - &15.1&16.5&5.2 \\
+			\hline
+			deep \& geo IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{86.7} & \textcolor{myred}{11.6} & 1.7& \textcolor{mygreen}{68.4} & \textcolor{myred}{28.3} & 3.3 \\
+			accumulated &$p(k|o)$ & \textcolor{myred}{27.3} & \textcolor{mygreen}{69.5} & 3.2& \textcolor{myred}{27.4} & \textcolor{mygreen}{69.3} & 3.3 \\
+			fusion&$p(k|u)$ & 29.0 & 57.4 & 13.6& 27.3 & 64.4 & 8.3 \\
+			& mIoU & - & - & - &15.3&12.4&2.7 \\
+			\hline
+			deep IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{88.5} & \textcolor{myred}{5.9} & 5.6& \textcolor{mygreen}{71.6} & \textcolor{myred}{16.7} & 11.7 \\
+			accumulated with &$p(k|o)$ & \textcolor{myred}{29.0} & \textcolor{mygreen}{55.7} & 15.3& \textcolor{myred}{29.0} & \textcolor{mygreen}{55.4} & 15.6 \\
+			redundancy reduction &$p(k|u)$ & 26.3 & 12.9 & 60.8& 26.3 & 23.4 & 50.3 \\
+			& mIoU & - & - & - &16.8&23.4&11.8 \\
+			\hline
+			& & \multicolumn{3}{c|}{\scriptsize{whole mapped area}} & \multicolumn{3}{c}{\scriptsize{boundary area}}
+		\end{tabular}
+		\caption{\label{tab:conf_mat_redunt_info}Normed confusion matrix for the three mapping variants using deep ISMs based on ShiftNet applied on different sensor modalities. See \ref{subsec:setup_of_red_analy} for further information on the methods and abbreviations used.}
+	\end{center}
 \end{figure}
+Fig. \ref{tab:conf_mat_redunt_info} shows that, even though, the geo IR$_{20}$M's occupancy map has the least true positive rates overall, it also has by far the least false rates. This is most significant when comparing its occupied false rate with the deep IR$_{20}$M maps. Here, the deep IR$_{20}$Ms without redundancy reduction produce about five times and the one with the reduction about twice the amount of false occupied predictions in the whole mapped area.
 
-\begin{figure}
-	\begin{tabular}{c|ccc|ccc|ccc}
-		\backslashbox{\scriptsize{Sensor}}{\scriptsize{mIoU}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
-		\hline
-		\scriptsize{R$_{20}$} & 26.8 & 19.0 & 12.9 & 26.7 & 20.7 & 14.1 & 27.9 & 24.9 & 20.4\\
-		\hline
-		\scriptsize{MD} & 30.4 & 12.4 & 11.6 & 30.4 & 13.9 & 13.5 & 31.8 & 13.4 & 22.9\\
-		\hline
-		\scriptsize{MD \& R$_{20}$} & 30.0 & 19.3 & 12.6 & 30.0 & 20.9 & 14.0 & 30.5 & 28.2 & 22.3\\
-		\hline
-		\scriptsize{L} & 32.7 & 23.8 & 11.8 & 32.8 & 25.4 & 13.0 & 34.2 & 37.9 & 21.1\\
-		\hline
-		\scriptsize{L \& R$_{20}$} & 33.4 & 27.6 & 14.5 & 33.4 & 29.2 & 15.7 & 34.6 & 40.7 & 22.8\\
-		\hline
-		\textbf{ShiftNet} & \multicolumn{3}{c|}{\scriptsize{accumulated}} & \multicolumn{3}{c|}{\scriptsize{accumulated with bias cutoff}} & \multicolumn{3}{c}{\scriptsize{redundancy removal}}
-	\end{tabular}
-	\caption{\label{tab:miou_redunt_info}Here, MD stands for MonoDepth, L for LiDAR and R$_{20}$ for an accumulated Radar point cloud of the latest 20 timesteps.}
-\end{figure}
+%When comparing the results in Fig. \ref{tab:conf_mat_redunt_info} it can be seen that in general, the metrics improve from top to bottom based on their respective inputs. Comparing the methods used to map, accumulating the predictions with Yager's rule leads overall to the highest true positive and false negative rates and, thus, lowest unknown distribution. 
 
+%Looking at the variant with cutoff, it can be seen that overall more unknown mass is being kept in comparison to the standard accumulation, due to shifting small predictions to unknown. This approach overall reduces both false and true occupancy rates in about equal portions compared to the standard accumulation. At the same time, it increases the rates for free space also at about the same level. However, when looking at the false rates of free and occupied in unknown areas, both are overall being reduced with the reduction in occupied rate being more significant. This shows two things. First, there are in general more low probability predictions for the occupied class. This is why the influence of occupied predictions is overall reduced while free predictions become more prominent. Second, in areas marked as unknown in the ground truth, which are most likely occluded, both free and occupied predictions are overall smaller.
+
+%Next, for the redundancy reduced accumulation, the overall occupied and free rates, both true and false, are significantly smaller compared to both afore analyzed methods. This is to be expected since the accumulation of predictions is thresholded by the certainty of the predictions themselves. To be more specific, the reduction in absolute numbers is overall about equal for free predictions compared to the standard accumulation method. For occupied predictions, the absolute reduction in true rate is bigger than the false rate reduction. In relative terms, however, the positive rates are less influenced than the false rates making the occupied predictions more reliable as compared to the standard accumulation. This improvement is shown more clearly when looking at the resulting mIoU scores for the three methods in Fig. \ref{tab:miou_redunt_info}. It can be seen that the redundancy reduced accumulation consistently outperforms the other mapping variants. 
+%
 \begin{figure}[H]
 	\begin{center}
 		\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{analysis_of_redundant_info_scenes_84_n_260.pdf_tex}
-		\caption{\label{fig:qual_analysis_of_redundant_info}}
+		\caption{\label{fig:qual_analysis_of_redundant_info}Qualitative results of the three mapping approaches using different sensor modalities for two scenes. Here, the first row shows the ground truth map created by accumulating the geo ILM with the evaluation area overlayed in white around the occupied pixels. The other maps are created using deep ISMs based on ShiftNet with there respective sensor inputs (see Sec. \ref{subsec:setup_of_red_analy}).}
 	\end{center}
 \end{figure}
 
@@ -112,5 +103,52 @@ Eventually, the lower-bounded (lb) Yager rule's property to only converge to the
 \textbf{Setup}
 
 \textbf{Experiment}
+\begin{figure}[H]
+\begin{center}
+\begin{tabular}{c|c|ccc|ccc|ccc}
+	&\backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
+\hline
+	geo IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{59.9} & \textcolor{myred}{8.1} & 32.0& \textcolor{mygreen}{100.0} & \textcolor{myred}{0.0} & 0.0& \textcolor{mygreen}{0.0} & \textcolor{myred}{20.9} & 79.1 \\
+	accumulated &$p(k|o)$ & \textcolor{myred}{21.7} & \textcolor{mygreen}{50.1} & 28.2& \textcolor{myred}{0.0} & \textcolor{mygreen}{100.0} & 0.0& \textcolor{myred}{42.7} & \textcolor{mygreen}{0.0} & 57.3 \\
+	&$p(k|u)$ & 11.1 & 33.7 & 55.2& 0.0 & 0.0 & 100.0& 25.6 & 74.4 & 0.0 \\
+\hline
+	deep \& geo IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{78.3} & \textcolor{myred}{16.7} & 5.0& \textcolor{mygreen}{88.1} & \textcolor{myred}{9.3} & 2.6& \textcolor{mygreen}{63.1} & \textcolor{myred}{28.4} & 8.5 \\
+	accumulated &$p(k|o)$ & \textcolor{myred}{29.2} & \textcolor{mygreen}{65.1} & 5.7& \textcolor{myred}{8.3} & \textcolor{mygreen}{89.8} & 1.9& \textcolor{myred}{47.9} & \textcolor{mygreen}{42.4} & 9.7 \\
+	fusion &$p(k|u)$ & 33.4 & 48.9 & 17.7& 41.0 & 29.8 & 29.2& 23.6 & 73.2 & 3.2 \\
+\hline
+	deep \& geo IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{77.8} & \textcolor{myred}{13.0} & 9.2& \textcolor{mygreen}{91.4} & \textcolor{myred}{6.0} & 2.6& \textcolor{mygreen}{57.0} & \textcolor{myred}{24.1} & 18.9 \\
+	accumulated &$p(k|o)$ & \textcolor{myred}{26.2} & \textcolor{mygreen}{63.5} & 10.3& \textcolor{myred}{5.2} & \textcolor{mygreen}{92.5} & 2.3& \textcolor{myred}{47.8} & \textcolor{mygreen}{33.2} & 19.0 \\
+	...&$p(k|u)$ & 27.8 & 43.0 & 29.2& 31.5 & 18.8 & 49.7& 23.2 & 73.2 & 3.6 \\
+\hline
+	\multicolumn{2}{c|}{\textbf{ShiftNet}} & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$}} & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \& correct}} & \multicolumn{3}{c}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \& false}} 
+\end{tabular}
+\caption{\label{fig:quant_analysis_of_prior}}
+\end{center}
+\end{figure}
+The table distinguishes between areas touched and untouched ($m_u = 1$) by the original geo IRM which where still inside an area of 20m around the ego vehicles trajectory (see \todo{Fig} for an example of the mapped area). Thus, the majority of the so called untouched areas lies at the borders of the mapped area. 
+\begin{figure}[H]
+	\begin{center}
+	\begin{tabular}{c|ccc}
+		& \scriptsize{deep IR$_{20}$M} & \scriptsize{deep IDM} & \scriptsize{deep IDR$_{20}$M}\\
+		\hline
+		\scriptsize{p(fused Map(m$_u$ < 0.300) | geo IRM Map(m$_u$ = 1), $\underline{m}_u$=0.3)} & \scriptsize{0.00023\%} & \scriptsize{0.00026\%} & \scriptsize{0.00043\%}\\
+		\scriptsize{\#(fused Map(m$_u$ < 0.300) | geo IRM Map(m$_u$ = 1), $\underline{m}_u$=0.3)} & \scriptsize{2476} & \scriptsize{2735} & \scriptsize{4613}\\
+		\scriptsize{\#(fused Map(m$_u$ < 0.298) | geo IRM Map(m$_u$ = 1), $\underline{m}_u$=0.3)} & \scriptsize{0} & \scriptsize{0} & \scriptsize{0}
+	\end{tabular}
+	\caption{\label{fig:prior_violations}Analysis of how often the lower bound on the unknown mass $\underline{m}_u$ has been violated in the fused map in areas where the geo IRM has not been active. The violations are given in percentage and absolute. Also, the amount of violations given some slack on the condition are provided.}
+	\end{center}
+\end{figure}
 
+\begin{figure}[H]
+	\begin{center}
+		\import{imgs/08_occ_mapping_exp/analysis_of_prior}{analysis_of_prior_scenes_442_n_488.pdf_tex}
+		\caption{\label{fig:qual_analysis_of_prior}Qualitative results of the three mapping approaches using different sensor modalities for two scenes. Here, the first row shows the ground truth map created by accumulating the geo ILM with the evaluation area overlayed in white around the occupied pixels. The other maps are created using deep ISMs based on ShiftNet with there respective sensor inputs (see Sec. \ref{subsec:setup_of_red_analy}).}
+	\end{center}
+\end{figure}
+Qualitative results
+\begin{itemize}
+	\item upper white box in scene A: wrong extrapolation
+	\item lower white box in scene A: shortcoming of geo IR$_{20}$M can be compensated by initializing those areas using the deep IR$_{20}$M
+	\item both white boxes in scene B: errors in deep IR$_{20}$M don't converge to certainty (see image of initialized areas). Geo IR$_{20}$M keeps them in check... or something like that. 
+\end{itemize}
 \textbf{Discussion}

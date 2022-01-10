@@ -52,7 +52,7 @@ def dempster_rule(m1, m2):
     return m
 
 
-def fuseImgs(m1, m2, comb_rule=0, entropy_scaling=False, u_min=0.3, eps=1e-4):
+def fuseImgs(m1, m2, comb_rule=0, entropy_scaling=False, u_min=0.3, eps=1e-4, storeRescaledPth=None):
     """
     Fuses two masses defined as m = [{fr},{oc},{fr,oc}] according to the
     Dempster's Rule of Combination.
@@ -71,7 +71,7 @@ def fuseImgs(m1, m2, comb_rule=0, entropy_scaling=False, u_min=0.3, eps=1e-4):
         h1_2 = np.clip(1. * (du + k), 0., 1.)
 
         # limit the difference in information
-        h1_2_max = np.clip((u_min - m2[:, :, [2]]) / (m2[:, :, [2]] * m1[:, :, [2]] - m2[:, :, [2]] + k), 0., 1.)
+        h1_2_max = np.clip((u_min - m2[:, :, [2]]) / (m2[:, :, [2]] * m1[:, :, [2]] - m2[:, :, [2]] + k + eps), 0., 1.)
         limit_condition = (m2[:, :, [2]] * m1[:, :, [2]] - m2[:, :, [2]] + k) < 0
         h1_2[limit_condition] = np.minimum(h1_2[limit_condition], h1_2_max[limit_condition])
         h1_2[h1_2 < 0.001] = 0
@@ -79,6 +79,9 @@ def fuseImgs(m1, m2, comb_rule=0, entropy_scaling=False, u_min=0.3, eps=1e-4):
         # move redundant info from fr & oc to unknown
         m1[:, :, :-1] *= h1_2
         m1[:, :, 2] = 1. - np.sum(m1[:, :, :-1], axis=2)
+
+        if not(storeRescaledPth is None):
+            Image.fromarray( (m1*255).astype(np.uint8) ).save(storeRescaledPth)
 
     # Yager
     m = np.zeros_like(m1)

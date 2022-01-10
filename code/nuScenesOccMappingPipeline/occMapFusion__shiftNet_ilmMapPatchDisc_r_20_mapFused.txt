@@ -1,0 +1,9 @@
+\begin{tabular}{c|c|ccc|ccc|ccc}
+&\backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
+\hline
+\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{\scriptsize{R$_{20}$}}}} &$p(k|f)$ & \textcolor{mygreen}{78.3} & \textcolor{myred}{16.7} & 5.0& \textcolor{mygreen}{88.1} & \textcolor{myred}{9.3} & 2.6& \textcolor{mygreen}{63.1} & \textcolor{myred}{28.4} & 8.5 \\
+&$p(k|o)$ & \textcolor{myred}{29.2} & \textcolor{mygreen}{65.1} & 5.7& \textcolor{myred}{8.3} & \textcolor{mygreen}{89.8} & 1.9& \textcolor{myred}{47.9} & \textcolor{mygreen}{42.4} & 9.7 \\
+&$p(k|u)$ & 33.4 & 48.9 & 17.7& 41.0 & 29.8 & 29.2& 23.6 & 73.2 & 3.2 \\
+\hline
+\multicolumn{2}{c|}{\textbf{ShiftNet}} & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$}} & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \& correct}} & \multicolumn{3}{c}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \& false}} 
+\end{tabular}
