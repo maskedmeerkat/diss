@@ -181,10 +181,12 @@ for sceneName in tqdm(sceneNames):
 
     # REMOVE THIS LATER
     # ignore areas where mu >= uMin
-    # labels_certain[y_fused[:, :, -1] >= 0.3] = -1
-    # labels_uncertain[y_fused[:, :, -1] < 0.3] = -1
-    labels_certain[y_fused[:, :, -1] >= 1.0] = -1
-    labels_uncertain[y_fused[:, :, -1] < 1.0] = -1
+    if yEstFileName.split("_")[-1] == "prior":
+        labels_certain[y_fused[:, :, -1] < 0.3] = -1
+        labels_uncertain[y_fused[:, :, -1] >= 0.3] = -1
+    else:
+        labels_certain[y_fused[:, :, -1] >= 1.0] = -1
+        labels_uncertain[y_fused[:, :, -1] < 1.0] = -1
 
     numViolations += np.sum(np.logical_and(y_est[:, :, 2] < 0.298, y_fused[:, :, -1] == 1.))
 
@@ -233,45 +235,45 @@ print("\n# SSIM")
 ssim = ssim.round(2)
 print(ssim)
 
-# write hidden scores to csv
-confusionMat_certain = np.round(confusionMat_certain, 1)
-confusionMat_certain[0, -1] = np.round(100 - np.sum(confusionMat_certain[0, :-1]), 2)
-confusionMat_certain[1, -1] = np.round(100 - np.sum(confusionMat_certain[1, :-1]), 2)
-confusionMat_certain[2, -1] = np.round(100 - np.sum(confusionMat_certain[2, :-1]), 2)
-confusionMat_certain = confusionMat_certain.astype(str)
-confusionMat_certain_irm_false = np.round(confusionMat_certain_irm_false, 1)
-confusionMat_certain_irm_false[0, -1] = np.round(100 - np.sum(confusionMat_certain_irm_false[0, :-1]), 2)
-confusionMat_certain_irm_false[1, -1] = np.round(100 - np.sum(confusionMat_certain_irm_false[1, :-1]), 2)
-confusionMat_certain_irm_false[2, -1] = np.round(100 - np.sum(confusionMat_certain_irm_false[2, :-1]), 2)
-confusionMat_certain_irm_false = confusionMat_certain_irm_false.astype(str)
-confusionMat_certain_irm_correct = np.round(confusionMat_certain_irm_correct, 1)
-confusionMat_certain_irm_correct[0, -1] = np.round(100 - np.sum(confusionMat_certain_irm_correct[0, :-1]), 2)
-confusionMat_certain_irm_correct[1, -1] = np.round(100 - np.sum(confusionMat_certain_irm_correct[1, :-1]), 2)
-confusionMat_certain_irm_correct[2, -1] = np.round(100 - np.sum(confusionMat_certain_irm_correct[2, :-1]), 2)
-confusionMat_certain_irm_correct = confusionMat_certain_irm_correct.astype(str)
-with open(LOG_DIR + "occMapFusion__" + yEstFileName + ".txt", 'w') as txt_file:
-    txt_file.write('\\begin{tabular}{c|c|ccc|ccc|ccc}\n')
-    # needs package \usepackage{slashbox}
-    txt_file.write("&\\backslashbox{}{\\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\\\\n")
-    txt_file.write("\\hline\n")
-    txt_file.write("\\parbox[t]{2mm}{\\multirow{3}{*}{\\rotatebox[origin=c]{90}{\\scriptsize{R$_{20}$}}}} &$p(k|f)$ "
-                   "& \\textcolor{mygreen}{"+confusionMat_certain[0, 0]+"} & \\textcolor{myred}{"+confusionMat_certain[0, 1]+"} & "+confusionMat_certain[0, 2] +
-                   "& \\textcolor{mygreen}{" + confusionMat_certain_irm_correct[0, 0] + "} & \\textcolor{myred}{" + confusionMat_certain_irm_correct[0, 1] + "} & " + confusionMat_certain_irm_correct[0, 2] +
-                   "& \\textcolor{mygreen}{"+confusionMat_certain_irm_false[0, 0]+"} & \\textcolor{myred}{"+confusionMat_certain_irm_false[0, 1]+"} & "+confusionMat_certain_irm_false[0, 2]+" \\\\\n")
-    txt_file.write("&$p(k|o)$ "
-                   "& \\textcolor{myred}{"+confusionMat_certain[1, 0]+"} & \\textcolor{mygreen}{"+confusionMat_certain[1, 1]+"} & "+confusionMat_certain[1, 2] +
-                   "& \\textcolor{myred}{" + confusionMat_certain_irm_correct[1, 0] + "} & \\textcolor{mygreen}{" + confusionMat_certain_irm_correct[1, 1] + "} & " + confusionMat_certain_irm_correct[1, 2] +
-                   "& \\textcolor{myred}{"+confusionMat_certain_irm_false[1, 0]+"} & \\textcolor{mygreen}{"+confusionMat_certain_irm_false[1, 1]+"} & "+confusionMat_certain_irm_false[1, 2]+" \\\\\n")
-    txt_file.write("&$p(k|u)$ "
-                   "& "+confusionMat_certain[2, 0]+" & "+confusionMat_certain[2, 1]+" & "+confusionMat_certain[2, 2] +
-                   "& " + confusionMat_certain_irm_correct[2, 0] + " & " + confusionMat_certain_irm_correct[2, 1] + " & " + confusionMat_certain_irm_correct[2, 2] +
-                   "& "+confusionMat_certain_irm_false[2, 0]+" & "+confusionMat_certain_irm_false[2, 1]+" & "+confusionMat_certain_irm_false[2, 2]+" \\\\\n")
-    txt_file.write("\\hline\n")
-    txt_file.write("\\multicolumn{2}{c|}{\\textbf{ShiftNet}} "
-                   "& \\multicolumn{3}{c|}{\\scriptsize{geo IR$_{20}$M$(m_u) < 1$}} "
-                   "& \\multicolumn{3}{c|}{\\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \\& correct}} "
-                   "& \\multicolumn{3}{c}{\\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \\& false}} \n")
-    txt_file.write("\\end{tabular}")
+# # write hidden scores to csv
+# confusionMat_certain = np.round(confusionMat_certain, 1)
+# confusionMat_certain[0, -1] = np.round(100 - np.sum(confusionMat_certain[0, :-1]), 2)
+# confusionMat_certain[1, -1] = np.round(100 - np.sum(confusionMat_certain[1, :-1]), 2)
+# confusionMat_certain[2, -1] = np.round(100 - np.sum(confusionMat_certain[2, :-1]), 2)
+# confusionMat_certain = confusionMat_certain.astype(str)
+# confusionMat_certain_irm_false = np.round(confusionMat_certain_irm_false, 1)
+# confusionMat_certain_irm_false[0, -1] = np.round(100 - np.sum(confusionMat_certain_irm_false[0, :-1]), 2)
+# confusionMat_certain_irm_false[1, -1] = np.round(100 - np.sum(confusionMat_certain_irm_false[1, :-1]), 2)
+# confusionMat_certain_irm_false[2, -1] = np.round(100 - np.sum(confusionMat_certain_irm_false[2, :-1]), 2)
+# confusionMat_certain_irm_false = confusionMat_certain_irm_false.astype(str)
+# confusionMat_certain_irm_correct = np.round(confusionMat_certain_irm_correct, 1)
+# confusionMat_certain_irm_correct[0, -1] = np.round(100 - np.sum(confusionMat_certain_irm_correct[0, :-1]), 2)
+# confusionMat_certain_irm_correct[1, -1] = np.round(100 - np.sum(confusionMat_certain_irm_correct[1, :-1]), 2)
+# confusionMat_certain_irm_correct[2, -1] = np.round(100 - np.sum(confusionMat_certain_irm_correct[2, :-1]), 2)
+# confusionMat_certain_irm_correct = confusionMat_certain_irm_correct.astype(str)
+# with open(LOG_DIR + "occMapFusion__" + yEstFileName + ".txt", 'w') as txt_file:
+#     txt_file.write('\\begin{tabular}{c|c|ccc|ccc|ccc}\n')
+#     # needs package \usepackage{slashbox}
+#     txt_file.write("&\\backslashbox{}{\\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\\\\n")
+#     txt_file.write("\\hline\n")
+#     txt_file.write("\\parbox[t]{2mm}{\\multirow{3}{*}{\\rotatebox[origin=c]{90}{\\scriptsize{R$_{20}$}}}} &$p(k|f)$ "
+#                    "& \\textcolor{mygreen}{"+confusionMat_certain[0, 0]+"} & \\textcolor{myred}{"+confusionMat_certain[0, 1]+"} & "+confusionMat_certain[0, 2] +
+#                    "& \\textcolor{mygreen}{" + confusionMat_certain_irm_correct[0, 0] + "} & \\textcolor{myred}{" + confusionMat_certain_irm_correct[0, 1] + "} & " + confusionMat_certain_irm_correct[0, 2] +
+#                    "& \\textcolor{mygreen}{"+confusionMat_certain_irm_false[0, 0]+"} & \\textcolor{myred}{"+confusionMat_certain_irm_false[0, 1]+"} & "+confusionMat_certain_irm_false[0, 2]+" \\\\\n")
+#     txt_file.write("&$p(k|o)$ "
+#                    "& \\textcolor{myred}{"+confusionMat_certain[1, 0]+"} & \\textcolor{mygreen}{"+confusionMat_certain[1, 1]+"} & "+confusionMat_certain[1, 2] +
+#                    "& \\textcolor{myred}{" + confusionMat_certain_irm_correct[1, 0] + "} & \\textcolor{mygreen}{" + confusionMat_certain_irm_correct[1, 1] + "} & " + confusionMat_certain_irm_correct[1, 2] +
+#                    "& \\textcolor{myred}{"+confusionMat_certain_irm_false[1, 0]+"} & \\textcolor{mygreen}{"+confusionMat_certain_irm_false[1, 1]+"} & "+confusionMat_certain_irm_false[1, 2]+" \\\\\n")
+#     txt_file.write("&$p(k|u)$ "
+#                    "& "+confusionMat_certain[2, 0]+" & "+confusionMat_certain[2, 1]+" & "+confusionMat_certain[2, 2] +
+#                    "& " + confusionMat_certain_irm_correct[2, 0] + " & " + confusionMat_certain_irm_correct[2, 1] + " & " + confusionMat_certain_irm_correct[2, 2] +
+#                    "& "+confusionMat_certain_irm_false[2, 0]+" & "+confusionMat_certain_irm_false[2, 1]+" & "+confusionMat_certain_irm_false[2, 2]+" \\\\\n")
+#     txt_file.write("\\hline\n")
+#     txt_file.write("\\multicolumn{2}{c|}{\\textbf{ShiftNet}} "
+#                    "& \\multicolumn{3}{c|}{\\scriptsize{geo IR$_{20}$M$(m_u) < 1$}} "
+#                    "& \\multicolumn{3}{c|}{\\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \\& correct}} "
+#                    "& \\multicolumn{3}{c}{\\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \\& false}} \n")
+#     txt_file.write("\\end{tabular}")
         
         
         

@@ -90,15 +90,15 @@ yEstDirName = "irmMap"
 yEstFileName = yEstDirName
 
 yEstDirName = "shiftNet_ilmMapPatchDisc_r_20"
-# yEstDirName = "shiftNet_ilmMapPatchDisc_d"
-# yEstDirName = "shiftNet_ilmMapPatchDisc_dr20"
-# yEstDirName = "shiftNet_ilmMapPatchDisc_l"
-# yEstDirName = "shiftNet_ilmMapPatchDisc_lr20"
-yEstFileName = yEstDirName + "_map"
-yEstFileName = yEstDirName + "_mapRmBias"
+yEstDirName = "shiftNet_ilmMapPatchDisc_d"
+yEstDirName = "shiftNet_ilmMapPatchDisc_dr20"
+yEstDirName = "shiftNet_ilmMapPatchDisc_l"
+yEstDirName = "shiftNet_ilmMapPatchDisc_lr20"
+# yEstFileName = yEstDirName + "_map"
+# yEstFileName = yEstDirName + "_mapRmBias"
 yEstFileName = yEstDirName + "_mapScaled"
-yEstFileName = yEstDirName + "_mapFused_overwriteGeo"
 
+# yEstFileName = yEstDirName + "_mapFused_overwriteGeo"
 # yEstFileName = yEstDirName + "_mapFused"
 # yEstFileName = yEstDirName + "_mapFused_prior"
 

@@ -1,0 +1,8 @@
+\begin{tabular}{c|c|ccc|ccc}
+&\backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
+\hline
+\parbox[t]{2mm}{\multirow{3}{*}{\rotatebox[origin=c]{90}{\scriptsize{R$_{20}$}}}} &$p(k|f)$ & \textcolor{mygreen}{88.4} & \textcolor{myred}{2.3} & 9.3& \textcolor{mygreen}{69.2} & \textcolor{myred}{7.2} & 23.6 \\
+&$p(k|o)$ & \textcolor{myred}{20.3} & \textcolor{mygreen}{45.7} & 34.0& \textcolor{myred}{20.2} & \textcolor{mygreen}{45.3} & 34.5 \\
+&$p(k|u)$ & 12.8 & 7.0 & 80.2& 12.9 & 13.8 & 73.3 \\
+& mIoU &78.0&28.3&33.4&18.6&28.2&15.2 \\
+\end{tabular}

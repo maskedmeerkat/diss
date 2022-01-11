@@ -12,8 +12,8 @@ ismMap = np.array(Image.open(DATA_DIR + yEstDirName + "/" + yEstFileName+".png")
 
 # only keep soley initialized area
 ismMap_init = ismMap.copy()
-ismMap_init[ismMap_init[:, :, -1] <= 0.29, :-1] = 0
-ismMap_init[ismMap_init[:, :, -1] <= 0.29, -1] = 1
+ismMap_init[np.logical_and(ismMap_init[:, :, -1] > 0.29, ismMap_init[:, :, -1] < 1), :-1] = 0
+ismMap_init[np.logical_and(ismMap_init[:, :, -1] > 0.29, ismMap_init[:, :, -1] < 1), -1] = 1
 
 # plt.figure()
 # N = 3

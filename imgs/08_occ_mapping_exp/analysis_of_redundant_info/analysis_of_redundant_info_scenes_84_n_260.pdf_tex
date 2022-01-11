@@ -65,15 +65,17 @@
     \put(0,0){\includegraphics[width=\unitlength,page=4]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
     \put(0.22102484,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{geo IR$_{20}$M}\end{tabular}}}}%
     \put(0.21435413,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated}\end{tabular}}}}%
-    \put(0.54121916,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IR$_{20}$M}\end{tabular}}}}%
-    \put(0.52120701,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated with}\end{tabular}}}}%
-    \put(0.56790203,0.00185008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{cutoff}\end{tabular}}}}%
-    \put(0.67796885,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep \& geo IR$_{20}$M}\end{tabular}}}}%
-    \put(0.70465172,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated}\end{tabular}}}}%
-    \put(0.73466995,0.00185008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{fusion}\end{tabular}}}}%
-    \put(0.86474885,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IR$_{20}$M}\end{tabular}}}}%
-    \put(0.84140138,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated with}\end{tabular}}}}%
-    \put(0.82472454,0.00185008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{redundancy reduction}\end{tabular}}}}%
+    \put(0.86474883,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IR$_{20}$M}\end{tabular}}}}%
+    \put(0.84140136,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated with}\end{tabular}}}}%
+    \put(0.82472452,0.00185008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{redundancy reduction}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=5]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
+    \put(0.70343131,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IR$_{20}$M}\end{tabular}}}}%
+    \put(0.68341916,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated with}\end{tabular}}}}%
+    \put(0.73011418,0.00185008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{cutoff}\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
+    \put(0.51576074,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep \& geo IR$_{20}$M}\end{tabular}}}}%
+    \put(0.54244362,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated}\end{tabular}}}}%
+    \put(0.57246184,0.00185008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{fusion}\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
   \end{picture}%
 \endgroup%
