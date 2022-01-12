@@ -1419,6 +1419,129 @@
   url          = {https://velodynelidar.com/products/hdl-32e/},
 }
 
+@Article{thrun2006stanley,
+  author    = {Thrun, Sebastian and Montemerlo, Mike and Dahlkamp, Hendrik and Stavens, David and Aron, Andrei and Diebel, James and Fong, Philip and Gale, John and Halpenny, Morgan and Hoffmann, Gabriel and others},
+  journal   = {Journal of field Robotics},
+  title     = {Stanley: The robot that won the DARPA Grand Challenge},
+  year      = {2006},
+  number    = {9},
+  pages     = {661--692},
+  volume    = {23},
+  groups    = {Introduction},
+  publisher = {Wiley Online Library},
+}
+
+@TechReport{Urmson-2007-9708,
+  author      = {Christopher Urmson and Joshua Anhalt and J. Andrew (Drew) Bagnell and Christopher R. Baker and Robert E. Bittner and John M. Dolan and David Duggins and David Ferguson and Tugrul Galatali and Hartmut Geyer and Michele Gittleman and Sam Harbaugh and Martial Hebert and Thomas Howard and Alonzo Kelly and David Kohanbash and Maxim Likhachev and Nick Miller and Kevin Peterson and Raj Rajkumar and Paul Rybski and Bryan Salesky and Sebastian Scherer and Young-Woo Seo and Reid Simmons and Sanjiv Singh and Jarrod M. Snider and Anthony (Tony) Stentz and William (Red) L. Whittaker and Jason Ziglar},
+  institution = {Carnegie Mellon University},
+  title       = {Tartan Racing: A Multi-Modal Approach to the DARPA Urban Challenge},
+  year        = {2007},
+  address     = {Pittsburgh, PA},
+  month       = {April},
+  groups      = {Introduction},
+  keywords    = {urban challenge, grand challenge, tartan racing, autonomous car},
+}
+
+@TechReport{world2018global,
+  author      = {World Health Organization and others},
+  institution = {World Health Organization},
+  title       = {Global status report on road safety 2018: summary},
+  year        = {2018},
+  groups      = {Introduction},
+}
+
+@TechReport{zhang2020impacts,
+  author      = {Zhang, Michael and Chai, Huajun and Song, Jeffery and Jaller, Miguel and Rodier, Caroline},
+  institution = {University of California, Davis},
+  title       = {The Impacts of Automated Vehicles on Center City Parking Demand},
+  year        = {2020},
+  groups      = {Introduction},
+}
+
+@Article{severino2021autonomous,
+  author    = {Severino, Alessandro and Curto, Salvatore and Barberi, Salvatore and Arena, Fabio and Pau, Giovanni},
+  journal   = {Applied Sciences},
+  title     = {Autonomous Vehicles: An Analysis Both on Their Distinctiveness and the Potential Impact on Urban Transport Systems},
+  year      = {2021},
+  number    = {8},
+  pages     = {3604},
+  volume    = {11},
+  groups    = {Introduction},
+  publisher = {Multidisciplinary Digital Publishing Institute},
+}
+
+@InProceedings{sun2020scalability,
+  author    = {Sun, Pei and Kretzschmar, Henrik and Dotiwalla, Xerxes and Chouard, Aurelien and Patnaik, Vijaysai and Tsui, Paul and Guo, James and Zhou, Yin and Chai, Yuning and Caine, Benjamin and others},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  title     = {Scalability in perception for autonomous driving: Waymo open dataset},
+  year      = {2020},
+  pages     = {2446--2454},
+  groups    = {Introduction},
+}
+
+@InProceedings{chang2019argoverse,
+  author    = {Chang, Ming-Fang and Lambert, John and Sangkloy, Patsorn and Singh, Jagjeet and Bak, Slawomir and Hartnett, Andrew and Wang, De and Carr, Peter and Lucey, Simon and Ramanan, Deva and others},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  title     = {Argoverse: 3d tracking and forecasting with rich maps},
+  year      = {2019},
+  pages     = {8748--8757},
+}
+
+@Misc{fordargovw2020,
+  author = {{Ford Media Center}},
+  title  = {What Volkswagen’s Investment in Argo AI Means for Ford’s Self-Driving Vehicle Business},
+  year   = {2020},
+  groups = {Introduction},
+  url    = {https://media.ford.com/content/fordmedia/fna/us/en/news/2020/06/02/volkswagen-investment-argo-ai-ford-self-driving.html},
+}
+
+@Misc{fordvaletparking2021,
+  author = {{Ford Media Center}},
+  title  = {Ford Takes Parking to the Next Level, with an Automated Valet that Does the Work for You},
+  year   = {2021},
+  groups = {Introduction},
+  url    = {https://media.ford.com/content/fordmedia/feu/en/news/2021/09/02/ford-takes-parking-to-the-next-level--with-an-automated-valet-th.html},
+}
+
+@Misc{fordlanekeeping2021,
+  author = {{Ford}},
+  title  = {Lane-Keeping System},
+  year   = {2021},
+  groups = {Introduction},
+  url    = {https://www.ford.com/technology/driver-assist-technology/lane-keeping-system/},
+}
+
+@Misc{cnet2018,
+  author = {{CNet}},
+  title  = {Velodyne just made self-driving cars a bit less expensive},
+  year   = {2018},
+  groups = {Introduction},
+  url    = {https://www.cnet.com/roadshow/news/velodyne-just-made-self-driving-cars-a-bit-less-expensive-hopefully/},
+}
+
+@Misc{velodyne2018,
+  author = {{Velodyne Lidar}},
+  title  = {Velodyne Slashes the Price in Half of Its Most Popular LiDAR Sensor},
+  year   = {2018},
+  groups = {Introduction},
+  url    = {https://velodynelidar.com/press-release/velodyne-slashes-the-price-in-half-of-its-most-popular-lidar-sensor/},
+}
+
+@Misc{boschultrasonic2022,
+  author = {{Bosch Mobility Solutions}},
+  title  = {Ultrasonic Sensor},
+  year   = {2022},
+  groups = {Introduction},
+  url    = {https://www.bosch-mobility-solutions.com/en/solutions/sensors/ultrasonic-sensor/},
+}
+
+@Article{,
+  author  = {{Aptiv, Audi, Baidu, BMW, Continental, Daimler, Fiat Chrysler Automob., Here,Infineon, Intel, Volkswagen}},
+  journal = {White Paper},
+  title   = {Safety First for Automated Driving},
+  year    = {2019},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
 
 @Comment{jabref-meta: grouping:
@@ -1442,4 +1565,5 @@
 2 StaticGroup:deep Fusion\;0\;1\;0x8a8a8aff\;\;\;;
 1 StaticGroup:Datasets\;0\;0\;0x8a8a8aff\;\;\;;
 1 StaticGroup:Hardware\;0\;1\;0x8a8a8aff\;\;\;;
+1 StaticGroup:Introduction\;0\;1\;0x8a8a8aff\;\;\;;
 }
