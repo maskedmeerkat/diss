@@ -52,7 +52,7 @@ def dempster_rule(m1, m2):
     return m
 
 
-def fuseImgs(m1, m2, comb_rule=0, entropy_scaling=False, u_min=0.3, eps=1e-4, storeRescaledPth=None):
+def fuseImgs(m1, m2, comb_rule=0, entropy_scaling=False, u_min=0.3, eps=1e-4, storeRescaled=False):
     """
     Fuses two masses defined as m = [{fr},{oc},{fr,oc}] according to the
     Dempster's Rule of Combination.
@@ -80,8 +80,8 @@ def fuseImgs(m1, m2, comb_rule=0, entropy_scaling=False, u_min=0.3, eps=1e-4, st
         m1[:, :, :-1] *= h1_2
         m1[:, :, 2] = 1. - np.sum(m1[:, :, :-1], axis=2)
 
-        if not(storeRescaledPth is None):
-            Image.fromarray( (m1*255).astype(np.uint8) ).save(storeRescaledPth)
+        if storeRescaled:
+            return m1
 
     # Yager
     m = np.zeros_like(m1)
