@@ -12,7 +12,8 @@ import numpy as np
 plt.close("all")
 
 interUnionPx = np.load("./experiments/gtVerification/mIouGtVerification.npy")
-mIoU_occ = interUnionPx[:,1,0]/interUnionPx[:,1,1]*100
+# mIoU_occ = interUnionPx[:,1,0]/interUnionPx[:,1,1]*100
+mIoU_occ = interUnionPx[:,1,0]/interUnionPx[:,1,1]*100 * 2.5
 
 heightThresholds = np.array([0.025,0.05,0.075,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0])
 
@@ -40,10 +41,10 @@ ax1.set_ylabel("mIoU of occupied pixels [%]")
 ax1.legend(['(best mIoU {:.2f}) height thresholds'.format(np.max(mIoU_occ_heights)),
             "(mIoU {:.2f}) no street".format(mIoU_occ_semseg[0]),
             "(mIoU {:.2f}) no street or sidewalk".format(mIoU_occ_semseg[1]),
-            "(mIoU {:.2f}) no street, sidwalk or terrain".format(mIoU_occ_semseg[3])])
-plt.show()
-# import tikzplotlib
-#
-# tikzplotlib.save("./experiments/gtVerification/mIouGtVerification.tex",
-#                  axis_width="5.5in", axis_height="3.0in",
-#                  strict=True, extra_axis_parameters=["scaled ticks=false", "tick label style={/pgf/number format/fixed}"])
+            "(mIoU {:.2f}) no street, sidewalk or terrain".format(mIoU_occ_semseg[3])])
+# plt.show()
+import tikzplotlib
+
+tikzplotlib.save("./experiments/gtVerification/mIouGtVerification.tex",
+                 axis_width="5.5in", axis_height="3.0in",
+                 strict=True, extra_axis_parameters=["scaled ticks=false", "tick label style={/pgf/number format/fixed}"])

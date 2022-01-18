@@ -1234,12 +1234,12 @@ def saveImg(img, dirPath):
 
 # ================================================= MAIN ==============================================================#
 # flags to toggle visualization
-storeProgress = True
+storeProgress = False
 # radar
-storeRadarImg = True
+storeRadarImg = False
 storeRadarMap = False
 storeIrmImg = False
-storeIrmMap = False
+storeIrmMap = True
 # lidar
 storeLidarImg = False
 storeLidarMap = False
@@ -1270,7 +1270,7 @@ modelName = "shiftNet_ilmMapPatchDisc_r_20__20201223_215231_ckpt_321.pb"
 # modelName = "softNet_ilmMapPatchDisc_r_1__20201223_215415_ckpt_688.pb"
 deepIsmInputName = modelName[modelName.find("_") + 17:modelName.find("__")]
 storeDeepIsm = False
-storeDeepIsmMap = True
+storeDeepIsmMap = False
 uMin = 0.3
 if storeDeepIsm or storeDeepIsmMap:
     tf.reset_default_graph()
@@ -1335,16 +1335,17 @@ numColsPerCone_l = (angleResCone_l / aRes_deg / 2).astype(int) * 2
 # pD_irm = 0.5
 # angleResCone_r = np.array([5,30.]) # [deg]
 # numColsPerCone_r = (angleResCone_r/aRes_deg/2).astype(int)*2
-buffSizes_r = [20]  # from smallest to biggest number, always!!!
+
+buffSizes_r = [1] # from smallest to biggest number, always!!!
 maxBuffSize_r = int(np.max(buffSizes_r))
-pF_rMap = [0.1, 0.1]
-pO_rMap = 0.3
+pF_rMap = [0.1,0.0]
+pO_rMap = 0.9
 pD_rMap = 0.3
-pF_irm = [0.9, 0.9]
+pF_irm = [0.9,0.9]
 pO_irm = 0.9
 pD_irm = 0.5
-angleResCone_r = np.array([5., 30.])  # [deg]
-numColsPerCone_r = (angleResCone_r / aRes_deg / 2).astype(int) * 2
+angleResCone_r = np.array([5,30.]) # [deg]
+numColsPerCone_r = (angleResCone_r/aRes_deg/2).astype(int)*2
 
 
 # ================#
@@ -1523,7 +1524,7 @@ def main(iScene):
                                                  y_fake, x, ismMaps,
                                                  t_r2i, vPose_ref, storeDeepIsm, storeProgress)
                 # [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap] = ismMaps
-            [deep_ismMap_rescaled, deep_ismMap_rescaled_prog] = ismMaps
+                [deep_ismMap_rescaled, deep_ismMap_rescaled_prog] = ismMaps
 
         # get next sample
         sample = nusc.get('sample', sample['next'])
@@ -1612,16 +1613,16 @@ def main(iScene):
 trainNames, valNames, trainIdxs, valIdxs = sceneAttribUtils.getTrainValTestSplitNames()
 
 # all scenes
-# sceneIdxs = np.arange(len(nusc.scene))
+sceneIdxs = np.arange(len(nusc.scene))
 
 # train scenes
 # sceneIdxs = trainIdxs
 
 # val scenes
-sceneIdxs = valIdxs
+# sceneIdxs = valIdxs
 
 # specific scenes
-# sceneIdxs = [0]
+sceneIdxs = [92]
 
 t0 = time.time()
 for iScene, sceneIdx in enumerate(sceneIdxs):

@@ -22,7 +22,7 @@ def rayCastingImg(X):
     
     # compute the scale factors according to the angular cummulative distribution
     dPhi = 0.5 # [deg]
-    varPhi = 2 # [deg]
+    varPhi = 20 # [deg]
     phiMax = 5 # [deg]
     Phi = np.arange(-phiMax-dPhi/2,phiMax+dPhi/2,dPhi) # [deg]
     cdf = norm.cdf(Phi,scale=varPhi)
@@ -31,7 +31,7 @@ def rayCastingImg(X):
     Phi = np.arange(-phiMax,phiMax,dPhi)/180*np.pi # [rad]
     
     # parameters of the normal distribution around the detection
-    var = 0.1 # [m]
+    var = .1 # [m]
     pO = 1.0
     pF = -1.0
     
@@ -161,11 +161,12 @@ plt.subplot(1,2,1)
 plt.imshow(radar_detections[0,:,:,0])
 plt.subplot(1,2,2)
 plt.imshow(radar_ism,cmap="gray")
+plt.show()
 
-im = Image.fromarray((radar_ism*255).astype(np.uint8))
-im.save("radar_ism_{0:}.png".format(iThOccPx))
-im = Image.fromarray((radar_detections[0,:,:,0]*255).astype(np.uint8))
-im.save("radar_det_{0:}.png".format(iThOccPx))
+# im = Image.fromarray((radar_ism*255).astype(np.uint8))
+# im.save("radar_ism_{0:}.png".format(iThOccPx))
+# im = Image.fromarray((radar_detections[0,:,:,0]*255).astype(np.uint8))
+# im.save("radar_det_{0:}.png".format(iThOccPx))
     
 # scipy.misc.toimage(radar_ism, cmin=0.0, cmax=1.0).save('radar_ism.png')   
     
