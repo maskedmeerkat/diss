@@ -8,8 +8,8 @@ from tqdm import tqdm
 
 # get all csv files
 logDir = "./models/exp_deep_ism_comparison/"
-csvFileNames = [csvFileName for csvFileName in os.listdir(logDir) if csvFileName.endswith(".csv")]
-csvFileNames = ["ilm_scores.csv"]
+# csvFileNames = [csvFileName for csvFileName in os.listdir(logDir) if csvFileName.endswith(".csv")]
+csvFileNames = ["shiftNet_ilmMapPatchDisc_r_20_t1__20211010_004353_ckpt_250_scores.csv"]
 
 # read each csv file
 for csvFileName in tqdm(csvFileNames):

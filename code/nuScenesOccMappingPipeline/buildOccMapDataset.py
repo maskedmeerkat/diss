@@ -1261,15 +1261,16 @@ modelDir = "./models/exp_deep_ism_comparison/"
 # modelName = "dirNet_ilmMapPatchDisc_dr20__20201227_222639_ckpt_244.pb"
 # ShiftNet
 # modelName = "shiftNet_ilmMapPatchDisc_r_1__20201223_215050_ckpt_198.pb"
-modelName = "shiftNet_ilmMapPatchDisc_r_20__20201223_215231_ckpt_321.pb"
+# modelName = "shiftNet_ilmMapPatchDisc_r_20__20201223_215231_ckpt_321.pb"
 # modelName = "shiftNet_ilmMapPatchDisc_l__20201227_075245_ckpt_607.pb"
 # modelName = "shiftNet_ilmMapPatchDisc_lr20__20201227_222040_ckpt_322.pb"
 # modelName = "shiftNet_ilmMapPatchDisc_d__20201227_075037_ckpt_418.pb"
 # modelName = "shiftNet_ilmMapPatchDisc_dr20__20201227_221957_ckpt_604.pb"
+modelName = "shiftNet_ilmMapPatchDisc_r_20_t1__20211010_004353_ckpt_250.pb"
 # SoftNet
 # modelName = "softNet_ilmMapPatchDisc_r_1__20201223_215415_ckpt_688.pb"
 deepIsmInputName = modelName[modelName.find("_") + 17:modelName.find("__")]
-storeDeepIsm = False
+storeDeepIsm = True
 storeDeepIsmMap = False
 uMin = 0.3
 if storeDeepIsm or storeDeepIsmMap:
@@ -1289,7 +1290,7 @@ minVisThres = 3
 
 # load data set
 DATA_DIR = 'C:/Users/Daniel/Documents/_uni/PhD/code/_DATASETS_/NuScenes/'
-STORAGE_DIR = 'C:/Users/Daniel/Documents/_uni/PhD/code/_DATASETS_/occMapDataset_/'
+STORAGE_DIR = 'C:/Users/Daniel/Documents/_uni/PhD/code/_DATASETS_/occMapDataset/'
 if not os.path.exists(STORAGE_DIR):
     os.makedirs(STORAGE_DIR)
 # nuscVersion = "v1.0-mini"
@@ -1325,21 +1326,10 @@ angleResCone_l = np.array([3])  # [deg]
 numColsPerCone_l = (angleResCone_l / aRes_deg / 2).astype(int) * 2
 
 # radar params
-# buffSizes_r = [1,5,20] # from smallest to biggest number, always!!!
-# maxBuffSize_r = int(np.max(buffSizes_r))
-# pF_rMap = [0.1,0.1]
-# pO_rMap = 0.3
-# pD_rMap = 0.3
-# pF_irm = [0.9,0.9]
-# pO_irm = 0.9
-# pD_irm = 0.5
-# angleResCone_r = np.array([5,30.]) # [deg]
-# numColsPerCone_r = (angleResCone_r/aRes_deg/2).astype(int)*2
-
-buffSizes_r = [1] # from smallest to biggest number, always!!!
+buffSizes_r = [1,5,20] # from smallest to biggest number, always!!!
 maxBuffSize_r = int(np.max(buffSizes_r))
-pF_rMap = [0.1,0.0]
-pO_rMap = 0.9
+pF_rMap = [0.1,0.1]
+pO_rMap = 0.3
 pD_rMap = 0.3
 pF_irm = [0.9,0.9]
 pO_irm = 0.9
@@ -1619,10 +1609,10 @@ sceneIdxs = np.arange(len(nusc.scene))
 # sceneIdxs = trainIdxs
 
 # val scenes
-# sceneIdxs = valIdxs
+sceneIdxs = valIdxs
 
 # specific scenes
-sceneIdxs = [92]
+# sceneIdxs = [0]
 
 t0 = time.time()
 for iScene, sceneIdx in enumerate(sceneIdxs):

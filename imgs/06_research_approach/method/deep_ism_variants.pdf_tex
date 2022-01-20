@@ -58,7 +58,7 @@
     \put(0.56525807,0.38276175){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{m}}$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{deep_ism_variants.pdf}}%
     \put(0.42241163,0.23393362){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{z}}$\end{tabular}}}}%
-    \put(0.56525807,0.23393362){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\vec{m}}'$\end{tabular}}}}%
+    \put(0.56525807,0.23393362){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{\mathring{\vec{m}}}$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{deep_ism_variants.pdf}}%
     \put(0.4586209,0.05075573){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize $1$\end{tabular}}}}%
     \put(0.67592564,0.03656551){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\footnotesize$p_o$\end{tabular}}}}%
@@ -116,22 +116,21 @@
     \put(0.91128521,0.03136581){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}}%
     \put(0.96750702,0.03102283){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=21]{deep_ism_variants.pdf}}%
-    \put(0.6697092,0.17987932){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_o$\end{tabular}}}}}%
+    \put(0.6697092,0.17987932){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\mathring{m}_o$\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=22]{deep_ism_variants.pdf}}%
-    \put(0.64624352,0.18019393){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}}%
+    \put(0.64624352,0.18019393){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\mathring{m}_f$\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=23]{deep_ism_variants.pdf}}%
-    \put(0.69288859,0.17985094){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}}%
+    \put(0.69288859,0.17985094){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\mathring{m}_u$\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=24]{deep_ism_variants.pdf}}%
-    \put(0.6230925,0.18019393){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_d$\end{tabular}}}}}%
+    \put(0.6230925,0.18019393){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\mathring{m}_d$\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=25]{deep_ism_variants.pdf}}%
-    \put(0.78378729,0.19929604){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\looparrowright$\end{tabular}}}}%
-    \put(0.75071439,0.23898357){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize compress\end{tabular}}}}%
-    \put(0.77055816,0.2191398){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize shift\end{tabular}}}}%
+    \put(0.74079251,0.21583251){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize compression\end{tabular}}}}%
     \put(0.20288738,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Input\end{tabular}}}}%
     \put(0.34403071,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize UNet\end{tabular}}}}%
     \put(0.48225135,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Output\end{tabular}}}}%
     \put(0.46240758,0.43958765){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Nonlinearity\end{tabular}}}}%
     \put(0.61755137,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Training\end{tabular}}}}%
     \put(0.90290327,0.45612411){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize Testing\end{tabular}}}}%
+    \put(0.77055816,0.23567628){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize shift\end{tabular}}}}%
   \end{picture}%
 \endgroup%

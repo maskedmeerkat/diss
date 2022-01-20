@@ -74,5 +74,6 @@
     \put(0.33655791,1.13130651){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Lidar\end{tabular}}}}%
     \put(0.48684534,1.13130651){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Lidar \& R$_{20}$\end{tabular}}}}%
     \put(0.69587871,1.13130651){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}R$_{20}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{ilm_qual_comp.pdf}}%
   \end{picture}%
 \endgroup%
