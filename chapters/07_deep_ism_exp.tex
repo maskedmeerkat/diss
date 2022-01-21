@@ -288,7 +288,8 @@ Since ShiftNet provides the least false rates per class over all classes for the
 Regarding the \gls{ism}s capability to estimate dynamic objects, the qualitative results in Fig. \ref{fig:irm_qual_comp} Scene A shall be analyzed. These show that the $R_1$ inputs contain sometimes only a single detection belonging to a dynamic object. This leads the networks to predict a dynamic object prior with size and shape of a car oriented in the direction of the road (compare lower right dynamic object in upper marked box in input and ShiftNet prediction of Scene A in Fig. \ref{fig:irm_qual_comp}). For $R_{20}$, all of the dynamic object's detections over time are available leading to an overall improvement in dynamic class true rates. However, the false occupied predictions in the dynamic class are also consistently increased and in case of ShiftNet almost doubled. This might hint that the networks can decide that there is an object but are uncertain about its motion state. This problem might be due to the choice of encoding the dynamic detection or due to errors in the dynamic flags of the radar detections.\\
 Additionally, the approach to decay the dynamic detections over time to encode the motion direction seems to work for some vehicles (see ShiftNet prediction and label of car in lower left for Scene A) while other objects are elongated (see ShiftNet prediction bicycle in the lower right of the upper marked box in Scene A). Thus, further improvement needs to be done in the future to find better ways of encoding the dynamic detections over time.
 \\
-The above analysis and experimental results provide a partial answer to RQ\ref{requ:comparison_of_isms}, by analyzing only the deep \gls{ism}'s capability to estimate evidential masses for radar inputs. The remaining analysis is provided in the following Sec. \ref{sec:analysis_dyn_encoding}. \\
+The above analysis and experimental results provide a partial answer to RQ\ref{requ:comparison_of_isms}, by analyzing only the deep \gls{ism}'s capability to estimate evidential masses for radar inputs. The remaining analysis is provided in the following Sec. \ref{sec:analysis_dyn_encoding}.\\
+Moreover, two of the three possible radar encodings have been analyzed providing a partial answer to RQ\ref{requ:radar_dyn_encoding}. The analysis of the remaining variant is provided in Sec. \ref{sec:analysis_dyn_encoding} to provide the full answer.\\
 Regarding RQ\ref{requ:how_to_meas_info}, it can be seen that the unknown mass, as proposed in Sec. \ref{subsec:method_to_use_deep_isms_in_occmaps} indeed correlates with the information content in the ShiftNet inputs. To further verify the validity to use the unknown estimated by the ShiftNet, the correlation is additionally analyzed for camera, lidar and the fused inputs in Sec. \ref{subsec:discussion_deep_icm_ilm}.
 %==========================================================================%
 %
@@ -299,11 +300,16 @@ Regarding RQ\ref{requ:how_to_meas_info}, it can be seen that the unknown mass, a
 %
 %======================================%
 \subsection{Experimental Setup}
+In this section, the investigation of the effect of radar input encodings on the deep \gls{ism} performance is finalized. The first two variants, namely the radar \gls{bev} projection of a single timestep $R_1$ and the temporally accumulated radar projection with decay on the dynamic detections' intensity $R_{20}$ are already discussed in Sec. \ref{sec:al_uncert_in_deep_isms}. Thus, this section focuses on encoding temporally accumulated radar detections while only marking the latest dynamic detections, abbreviated as $R_{20|1}$. The three variants are explained in more detail in Sec. \ref{subsec:def_of_targets_n_inputs}.\\
+For the analysis, the ShiftNet deep \gls{ism} is trained until convergence as marked by the validation set defined in NuScenes. The qualitative and quantitative results are purely based on the test set.
 %======================================%
 %
 %======================================%
 \subsection{Experimental Results}
-\begin{tabular}{c|c|cccc|cccc|cccc}
+First, the scores shown in Fig. \ref{tab:deep_ism_r20_results} for the inputs $R_1$ and $R_{20}$ are compared with the scores for $R_{20|1}$, shown in Fig. \ref{tab:deep_ism_r20_1_results}. Here, deep \gls{ism}s trained on $R_{20}$ show an overall increased performance for the dynamic class over $R_{20|1}$. This shows that the encoding of dynamic detections with decay is beneficial over only including the latest dynamic detection for moving object prediction. Qualitatively, the improvement of the estimated dynamic object shapes is clearly visible in the white box in scene A and the left white box in scene B of Fig. \ref{fig:qual_comp_radar_encoding}. More specifically, it is shown that the deep \gls{ism} is capable of producing reasonable shape, position and orientation predictions of the dynamic objects based on a single detection point and the scene layout for $R_1$ and $R_{20|1}$ compared to the cloud of dynamic detections for $R_{20}$. Therefore, the improvement for dynamic objects is to be expected. Nevertheless, accumulation of dynamic detections in $R_{20}$ also leads to failure cases. Here, the right white box in scene B of Fig. \ref{fig:qual_comp_radar_encoding} shows a predicted dynamic object for $R_{20}$ which is already outside the \gls{ism}'s \gls{fov}. This is caused by the trailing dynamic predictions which does not occur for the other deep \gls{irm} variants.
+\begin{figure}[H]
+\begin{center}
+	\begin{tabular}{c|c|cccc|cccc|cccc}
 	&$k$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$ & $d$ & $f$ & $o$ & $u$\\
 	\hline
 	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{ShiftNet}}}&$p(k|d)$ & \textcolor{mygreen}{29.2} & \textcolor{myred}{21.7} & \textcolor{myred}{14.4} & 34.6 & \textcolor{mygreen}{27.8} & \textcolor{myred}{26.3} & \textcolor{myred}{15.4} & 30.6 & \textcolor{mygreen}{31.0} & \textcolor{myred}{20.3} & \textcolor{myred}{13.2} & 35.5\\
@@ -313,10 +319,26 @@ Regarding RQ\ref{requ:how_to_meas_info}, it can be seen that the unknown mass, a
 	\hline
 	&& \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
 \end{tabular}
+\caption{\label{tab:deep_ism_r20_1_results}}
+\end{center}
+\end{figure}
+On the other hand, the overall occupied class performance is slightly but consistently improved by only taking the latest dynamic detection for $R_{20|1}$. One potential cause can be seen in the lower white box in scene B of Fig \ref{fig:qual_comp_radar_encoding}. Here, static detections are missing in $R_{20}$ which are present in $R_{20|1}$. This is cause by some detections almost outside of the time horizon that have been falsely identified as dynamic and are being overlayed over the static predictions. Hence, the accumulation of dynamic detections can cause outliers to deteriorate static detections.\\
+Eventually, the free scores are mainly the same, showing that the changes only affect the occupied and dynamic class.
+\begin{figure}[H]
+	\begin{center}
+		\import{imgs/07_deep_ism_exp/radar_dyn_encoding}{qual_comp_radar_encoding.pdf_tex}
+		\caption{\label{fig:qual_comp_radar_encoding}Qualitative comparison of ShiftNets trained on different inputs shown for three scenes with the respective lidar occupancy map patch as ground-truth to the right. The two channeled fused camera \& R$_{20}$ input is, for visualization purposes, split into three channels, one for camera, static radar and dynamic radar detections. These channels are colored with RGB leading to a mixture of colors wherever they coincide.}
+	\end{center}
+\end{figure}
+Finally, comparing $R_{20|1}$ and $R_{20}$ with $R_1$ it can be seen that the problem of decrease in dynamic prediction performance, indicated by the quantitative results while the qualitative results seem to be sharper, remains.
 %======================================%
 %
 %======================================%
 \subsection{Discussion}
+The above results show that the radar encoding $R_{20|1}$ significantly decreases the capability to estimate dynamic objects, slightly increases the occupied area predictions while maintaining about constant for free areas. Here, the decrease for the dynamic class is to be expected, since in some cases only a single detection point is assigned to a dynamic object. Therefore, the $R_{20|1}$, similar to the $R_1$, based deep \gls{ism}s need to rely on scene understanding and prior knowledge from the dataset to estimate the dynamic object shapes.\\
+Considering the occupied class, the qualitative results indicated one of the causes to be the increased influence of detections being falsely marked as dynamic. Through the temporal accumulation in $R_{20}$, the outliers influence can persist over time and cause static boundaries to deteriorate through the temporal decay.\\
+Also, the quantitative results both for $R_{20|1}$ and $R_{20}$ show decreased quantitative performance over the $R_1$ inputs while the qualitative results seem to get sharper. This might be caused by overall more occupied mass being estimated that might leak into dynamic predictions. Here, deep \gls{ism} based on $R_{20|1}$ and $R_{20}$ increase their occupied true rates by more than double the amount that is predicted for $R_1$ inputs.\\
+Overall, the quantitative scores for $R_{20}$ exceed the ones for $R_{20|1}$ and $R_1$ or are in a similar range. Also, the qualitative results show the arguably best edge accuracy for occupied and shape estimation for dynamic objects. Thus, the $R_{20}$ encoding will be used for further comparisons and experiments, concluding the answer to RQ\ref{requ:radar_dyn_encoding}.
 %==========================================================================%
 %
 %==========================================================================%

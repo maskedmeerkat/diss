@@ -119,15 +119,22 @@ Regarding the resource efficiency during inference, the literature only disclose
 \end{requ}
 Additionally, the majority of deep \gls{ism}s in the literature model the problem in the probabilistic framework which does not suffice R\ref{subreq:ev_rep}. On the evidential side, the problem is either modeled as a three class classification or a regression task, both of which suffice R\ref{subreq:ev_rep}. However, to the best of the authors knowledge, non of the published methods model dynamic objects by distributing mass equally to the free and occupied class. Training on dynamic object targets disqualifies the standard classification approach, since the dynamic object targets are not represented as a one-hot encoding. On the other hand, regression problems can cope with continuous targets. Thus, the training of deep \gls{ism}s will be defined as a regression problem in this work.\\ 
 However, no prior work has provided a thorough comparison of deep \gls{ism}'s capabilities to estimate evidential masses given different sensor inputs. Which is especially true for the dynamic class which is in most of the literature not modeled for occupancy mapping. Thus, the following research questions arise\\
-%\begin{requ}[RQ\ref{requ:dyn_objects}] \label{requ:dyn_objects}
 \begin{requ}[RQ\ref{requ:comparison_of_isms}] \label{requ:comparison_of_isms}
 	To which extend, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), are the proposed deep \gls{ism}s capable to estimate the position of dynamic, free and occupied areas given radar, camera and lidar data respectively?
 \end{requ}
-%\begin{requ}[RQ\ref{requ:dyn_objects_with_radar}] \label{requ:dyn_objects_with_radar}
 \begin{requ}[RQ\ref{requ:comparison_of_isms_fusion}] \label{requ:comparison_of_isms_fusion}
 	To which extend, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), does the capability of the proposed deep \gls{ism}s to estimate the position of dynamic, free and occupied areas given camera and lidar data respectively change, when radar information is added? 
 \end{requ}
-Additionally, neither the classification nor the regression approaches for deep evidential \gls{ism}s do explicitly handle occurring aleatoric uncertainties, letting us arrive at the following hypothesis.
+Regarding the encoding of radar detections for deep \gls{ism}s, the literature proposes to either encode the positions of a single timestep or use the temporally accumulated point cloud respectively projected into \gls{bev}. However, to the best of the author's knowledge, no investigation on how to encode the motion information of the detections has been conducted. Therefore, a rough investigation distinguishing three approaches shall be conducted which is formulated in the following research question\\
+\begin{requ}[RQ\ref{requ:radar_dyn_encoding}] \label{requ:radar_dyn_encoding}
+	To which extend, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), does the capability of the proposed deep \gls{ism}s to estimate the position of dynamic, free and occupied areas change choosing the input to be \gls{bev} projected radar detections...
+	\begin{itemize}
+		\item ...of a single timestep encoding the dynamic detections with half intensity?
+		\item ...accumulated over a certain time horizon only encoding the dynamic detections with half intensity of the latest timestep?
+		\item ...accumulated over a certain time horizon linearly reducing the intensity of dynamic detections over time starting at half intensity?
+	\end{itemize} 
+\end{requ}
+Looking at the uncertainty estimation, neither the classification nor the regression approaches for deep evidential \gls{ism}s do explicitly handle occurring aleatoric uncertainties, letting us arrive at the following hypothesis.
 \\
 \begin{hyp}[H\ref{hyp:sota_not_model_unc}] \label{hyp:sota_not_model_unc}
 	In case of occurring aleatoric uncertainty, the current state of the art deep \gls{ism}s distribute the mass evenly into the free and occupied class rather than shifting it to the unknown class. 
@@ -170,7 +177,10 @@ Eventually, to utilize the deep \gls{ism} estimates as priors according to R\ref
 \begin{requ}[RQ\ref{requ:disable_deep_ism_influence}] \label{requ:disable_deep_ism_influence}
 	How can the influence of the deep \gls{ism} be disabled in case a definable amount of data has been collected, as defined in R\ref{subreq:initialize_with_deep_ism} and \ref{subreq:converge_to_geo_ism}?
 \end{requ}
-
+Finally, since the evidential occupancy mapping using deep \gls{ism}s has not been discussed in the literature so far, the resulting evidential maps given different sensor modalities shall be analyzed and compared. This can be formulated as follows\\
+\begin{requ}[RQ\ref{requ:comp_deep_occ_maps}] \label{requ:comp_deep_occ_maps}
+	To which extend, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), does the capability of evidential occupancy maps to capture the ground-truth change using the proposed deep \gls{ism} with different sensor modalities?
+\end{requ}
 %======================================%
 %
 %======================================%
@@ -335,7 +345,8 @@ After the evaluation of the geo \gls{irm}, the best performing variant is fixed 
 \label{subsec:def_of_targets_n_inputs}
 To generate lidar \gls{bev} detection images, first, the ground-plane removal as investigated in Sec. \ref{sec:choice_of_gt} is applied. Afterwards, the detection positions are discretized into the coordinates of a gray-scale image and marked with value $1.0$ as opposed to the default value of $0.0$ (see Fig. \ref{fig:ilm_qual_comp}).
 \\
-For the radar images, the sweeps information of all corner and the front radar are used. All of the static detections are then marked as $1.0$ as opposed to the default pixel value $0.0$. For the dynamic detections, distinguishable through a flag provided in the NuScenes dataset, it is proposed to mark them as $0.5(1-\dfrac{t}{N})$ (see Fig. \ref{fig:irm_qual_comp}). This indicates the transition state of moving objects between free and occupied by marking the most recent detections as $0.5$ and linearly decreasing their influence over time.
+For the radar images, the sweeps information of all corner and the front radar are used. All of the static detections, distinguishable through a flag provided in the NuScenes dataset, are then marked as $1.0$ as opposed to the default pixel value $0.0$. To analyze RQ\ref{requ:radar_dyn_encoding}, three encoding variants will be investigated.\\
+First, only the detection information of a single timestep shall be encoded marking the dynamic detections with half intensity ($0.5$), which is shown in Fig. \ref{fig:irm_qual_comp}. Next, radar detections shall be accumulated over $N$ timesteps, marking the dynamic detections as $0.5(1-\dfrac{t}{N})$ (see Fig. \ref{fig:irm_qual_comp}). This indicates the transition state of moving objects between free and occupied by marking the most recent detections as $0.5$ and linearly decreasing their influence over time (see Fig. \ref{fig:qual_comp_radar_encoding}). Here, the time horizon $N$ is chosen by performing a grid search as shown in Sec. \ref{sec:choice_of_gt}.
 \\
 In case of the camera \gls{bev} images, the homography projection as well as the monodepth projection are considered. To obtain the homography-based \gls{bev} images, lidar points are identified which are only $5$cm away from the ideal flat ground-plane. These lidar detections are then transformed both to the \gls{bev} and the camera image. Afterwards, the corresponding pixel coordinates in both representations are identified and used to compute the homography matrix using a RANSAC-based filter. After identifying the homography for each camera, the images are projected into the \gls{bev} image where overlapping areas are being replaced and areas with no detections remain black. Additionally, a variant is considered where the semantic annotations are transformed using the homography transformation. Here, the semantic labels are being obtained by applying DeepLab V3+ \cite{deeplabv3plus2018} using the Xceptin network \cite{chollet2017xception} as a backbone trained on the Cityscapes dataset without further finetuning. Examples of the SemSeg and RGB homography \gls{bev} projections are shown in Fig. \ref{fig:icm_qual_comp}.
 \\
