@@ -3,7 +3,7 @@
 \label{ch:research_approach}
 The main objective of this thesis is to answer the question of how to extend an already verified \gls{ism} with the predictions of an unverified one. More specifically, the scenario of a given geometric \gls{irm} is considered. It is assumed that this \gls{irm} is verified but produces sparse occupancy estimates since it relies on sparse radar detections. This leads to reduced coverage and slow convergence during occupancy mapping. To increase the coverage and convergence speed, the dense interpolations of a learned \gls{irm} shall be utilized.\\ 
 To achieve this, the objective can be divided into the following three goals. First, a model shall be learned from data which is capable of estimating the evidential occupancy state in the close vicinity of the ego vehicle. Here, the focus will lie on measurements in the form of sparse radar detections. However, to showcase the generalizability of the approach, the model will also be applied on two other sensors typically deployed for automated driving, namely camera and lidar data. Next, the learned \gls{irm}s estimates shall be fused over time into an evidential occupancy map. Finally, a fusion approach shall be defined to combine the data-driven model's predictions with a geometric \gls{ism}.\\
-The consequent sections elaborate the requirements for each of the three afore mentioned tasks which is followed by an analysis of the research gap and concluded by the method to solve the problem. 
+The consequent sections elaborate the requirements for each of the three aforementioned tasks which is followed by an analysis of the research gap and concluded by the method to solve the problem. 
 %==========================================================================%
 %
 %==========================================================================%
@@ -74,7 +74,7 @@ Additionally, trained \gls{ism}s do also provide predictions in regions further 
 Eventually, as mentioned above, the geometric \gls{ism} is considered to be a verified, production-ready model which shall solely be enhanced by the trained \gls{ism} estimates to increase convergence speed and spatial coverage of the occupancy maps. Thus, given enough measurements, the geometric \gls{ism} should be trusted over the trained \gls{ism} resulting in the following requirement
 \\
 \begin{subreq}[R\ref{subreq:initialize_with_deep_ism}] \label{subreq:initialize_with_deep_ism}
-	The occupancy map shall be initialized with the trained \gls{ism}'s estimates up to the point when a definable amount of measurement information is collected.
+	The occupancy map shall be initialized with the trained \gls{ism}'s estimates up to the point when a definable amount of measurement information has been collected.
 \end{subreq}
 \begin{subreq}[R\ref{subreq:converge_to_geo_ism}] \label{subreq:converge_to_geo_ism}
 	The occupancy map shall converge to the geometric \gls{ism} with increasing amount of measurements.
@@ -84,7 +84,7 @@ Eventually, as mentioned above, the geometric \gls{ism} is considered to be a ve
 %==========================================================================%
 \section{Review of the State-of-the-Art and Research Needs}
 \label{sec:research_needs}
-In this section, the \gls{sota} defined in chapter \ref{ch:state_of_the_art} is analyzed with respect to the requirements defined in Sec. \ref{sec:requirements}.
+In this section, the \gls{sota} defined in Ch. \ref{ch:state_of_the_art} is analyzed with respect to the requirements defined in Sec. \ref{sec:requirements}.
 
 %======================================%
 %
@@ -93,7 +93,7 @@ In this section, the \gls{sota} defined in chapter \ref{ch:state_of_the_art} is 
 \label{subsec:research_needs_for_geo_ilms_n_irms}
 The first step in order to analyze trained \gls{ism}s is the definition of a reference and baseline model. To generate \gls{bev} occupancy targets resource efficiently, as demanded in R\ref{subreq:min_requirements}, the \gls{sota} in all cases relies on automatic label generation using geo \gls{ilm}s from 360$^\circ$ spinning lidars. For most automated driving test vehicles, these types of lidars are already deployed for verification, making lidar data easily accessible. Moreover, after once manually defining the geometric \gls{ilm}, no additional manual labor is required. Therefore, the automatic generation of \gls{bev} occupancy target via geometric \gls{ilm}s suffices R\ref{subreq:min_requirements}.
 \\
-To generate geo \gls{ilm}s, the \gls{sota} procedure only contains one problem which revolves around the fact that the radar sensors used in this work have reduced perception capabilities when compared to the lidars. More specifically, the deployed radars can detect objects in 3D but, due to their antenna configuration, can only distinguish the 2D position and velocity. These measurements are additionally filtered and broken down to only a few detections, e.g. 64 detections for the radars in this work. Based on this, the question arises which lidar detections should be filtered out to obtain the best overlap between the two sensor modalities. So far in the literature, only threshold-based ground plane removal has been proposed to adapt the lidar detections and only for specific datasets not including NuScenes. Since a proper overlap between target and input information is important to reduce potential outliers and because the specific sensor orientation might have an influence on the perceptive capabilities, a more thorough investigation based on the NuScenes setup shall be performed. To narrow the methods down, the often applied threshold-based method shall be compared with different semantic segmentation-based ground plane removal results. This can be formulated as follows
+To generate geo \gls{ilm}s, the \gls{sota} procedure only contains one problem which revolves around the fact that the radar sensors used in this work have reduced perception capabilities when compared to the lidars. More specifically, the deployed radars can detect objects in 3D but, due to their antenna configuration, can only distinguish the 2D position and velocity. These measurements are additionally filtered and broken down to only a few detections, e.g. 64 detections for the radars in this work. Based on this, the question arises which lidar detections should be filtered out to obtain the best overlap between the two sensor modalities. So far in the literature, only threshold-based ground plane removal has been proposed to adapt the lidar detections and only for specific datasets not including NuScenes. Since a proper overlap between target and input information is important to reduce potential outliers and because the specific sensor orientation might have an influence on the perceptive capabilities, a more thorough investigation based on the sensor setup given in NuScenes shall be performed. To narrow the methods down, the often applied threshold-based method shall be compared with different semantic segmentation-based ground plane removal results. This can be formulated as follows
 \\
 \begin{requ}[RQ\ref{requ:what_is_best_gt}] \label{requ:what_is_best_gt}
 	Which of the following methods results in the best overlap with respect to \gls{iou} between accumulated lidar and radar \gls{ism}s: threshold-based or semantic segmentation-based ground plane removal?
@@ -123,11 +123,11 @@ However, no prior work has provided a thorough comparison of deep \gls{ism}'s ca
 	To which extend, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), are the proposed deep \gls{ism}s capable to estimate the position of dynamic, free and occupied areas given radar, camera and lidar data respectively?
 \end{requ}
 \begin{requ}[RQ\ref{requ:comparison_of_isms_fusion}] \label{requ:comparison_of_isms_fusion}
-	To which extend, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), does the capability of the proposed deep \gls{ism}s to estimate the position of dynamic, free and occupied areas given camera and lidar data respectively change, when radar information is added? 
+	To which extent, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), does the capability of the proposed deep \gls{ism}s to estimate the position of dynamic, free and occupied areas given camera and lidar data respectively change, when radar information is added? 
 \end{requ}
 Regarding the encoding of radar detections for deep \gls{ism}s, the literature proposes to either encode the positions of a single timestep or use the temporally accumulated point cloud respectively projected into \gls{bev}. However, to the best of the author's knowledge, no investigation on how to encode the motion information of the detections has been conducted. Therefore, a rough investigation distinguishing three approaches shall be conducted which is formulated in the following research question\\
 \begin{requ}[RQ\ref{requ:radar_dyn_encoding}] \label{requ:radar_dyn_encoding}
-	To which extend, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), does the capability of the proposed deep \gls{ism}s to estimate the position of dynamic, free and occupied areas change choosing the input to be \gls{bev} projected radar detections...
+	To which extent, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), does the capability of the proposed deep \gls{ism}s to estimate the position of dynamic, free and occupied areas change choosing the input to be \gls{bev} projected radar detections...
 	\begin{itemize}
 		\item ...of a single timestep encoding the dynamic detections with half intensity?
 		\item ...accumulated over a certain time horizon only encoding the dynamic detections with half intensity of the latest timestep?
@@ -179,7 +179,7 @@ Eventually, to utilize the deep \gls{ism} estimates as priors according to R\ref
 \end{requ}
 Finally, since the evidential occupancy mapping using deep \gls{ism}s has not been discussed in the literature so far, the resulting evidential maps given different sensor modalities shall be analyzed and compared. This can be formulated as follows\\
 \begin{requ}[RQ\ref{requ:comp_deep_occ_maps}] \label{requ:comp_deep_occ_maps}
-	To which extend, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), does the capability of evidential occupancy maps to capture the ground-truth change using the proposed deep \gls{ism} with different sensor modalities?
+	To which extent, as measured by the normed confusion matrix (see Sec. \ref{subsec:confusion_matrix}), does the capability of evidential occupancy maps to capture the ground-truth change using the proposed deep \gls{ism} with different sensor modalities?
 \end{requ}
 %======================================%
 %
@@ -231,7 +231,7 @@ To finally obtain the interpolated bounding box pose, the way along the interpol
 \label{subsec:method_geo_ilm}
 Both lidar and radar sensors use a radial measurement principal which is why it makes sense to model them using the ray casting \gls{ism} as explained in Sec. \ref{subsec:ray_casting}, however in a modified way. In case of the \gls{ilm}, first the ground detections have to be removed. To do so, either a height-threshold or a semantic segmentation based approach can be chosen. The specific choice used in this work is detailed in Sec. \ref{sec:choice_of_gt}.
 \\
-Afterwards, free space rays with opening angle $\varphi_\sphericalangle$ are cast for each angle in increments of $\varphi_\sphericalangle$ in the range $[0^\circ, 360^\circ]$ around the sensor center either up to a maximum distance $r_\text{max}$ or until colliding with a detection. All \gls{bev} grid cells affected by the free space ray are set to $[M_F,0,1-M_F]^\top$ using the tunable free space weight $M_F \in [0,1]$. On the other hand, position of collided detections are either set to $[0,M_O,1-M_O]^\top$ for static detections with the occupied space weight $M_O \in [0,1]$ or to $[M_D, M_D, 1-2M_D]^\top$ for dynamic detections with the dynamic object weight $M_D \in [0,0.5]$. Here, the information about the motion state is not provided by the lidar itself but by external sources like additional labels in the dataset. The additional motion information will only be used to generate labels to train the deep \gls{ism} variants but not, to generate deep \gls{ism} inputs! This procedure has the effect that detections occluded in the \gls{bev} projection are filtered out which better matches the radar's sensing capability. An algorithmic summary of the geometric \gls{ilm} in pseudo code is shown in Alg. \ref{alg:geo_ilm}.\\
+Afterwards, free space rays with opening angle $\varphi_\sphericalangle$ are cast for each angle in increments of $\varphi_\sphericalangle$ in the range $[0^\circ, 360^\circ]$ around the sensor center either up to a maximum distance $r_\text{max}$ or until intersecting with a detection. All \gls{bev} grid cells affected by the free space ray are set to $[M_F,0,1-M_F]^\top$ using the tunable free space weight $M_F \in [0,1]$. On the other hand, position of collided detections are either set to $[0,M_O,1-M_O]^\top$ for static detections with the occupied space weight $M_O \in [0,1]$ or to $[M_D, M_D, 1-2M_D]^\top$ for dynamic detections with the dynamic object weight $M_D \in [0,0.5]$. Here, the information about the motion state is not provided by the lidar itself but by external sources like additional labels in the dataset. The additional motion information will only be used to generate labels to train the deep \gls{ism} variants but not to generate deep \gls{ism} inputs! This procedure has the effect that detections occluded in the \gls{bev} projection are filtered out which better matches the radar's sensing capability. An algorithmic summary of the geometric \gls{ilm} in pseudo code is shown in Alg. \ref{alg:geo_ilm}.\\
 \begin{algorithm}[H]
 	\caption{\label{alg:geo_ilm}Geo ILM}
 	\textbf{Hyperparameters:} $M_F, M_O, M_D, \varphi_\sphericalangle, N$\;
@@ -240,7 +240,7 @@ Afterwards, free space rays with opening angle $\varphi_\sphericalangle$ are cas
 	}
 	remove ground-plane detections\;
 	initialize all cells in the \gls{ilm} image to $m_u=1$\;
-	\For{$\varphi_{\text{center}}$ \text{in} discretizedAnlges360}{
+	\For{$\varphi_{\text{center}}$ \text{in} discretizedAngles360}{
 		\If{(at least one detection in current cone area)}{
 			$(r_{\text{det}}, \varphi_{\text{det}})$ = \FuncCall{getClosestDetectionInsideConeArea}{$\varphi_{\text{center}}$, $\varphi_\sphericalangle$, $r_{\text{max}}$}\;
 			\FuncCall{castFreeSpaceRay}{$\varphi_{\text{center}}$, $r_{\text{det}}$, $\varphi_\sphericalangle$, $M_F$}\;
