@@ -48,18 +48,54 @@
 
 \newglossaryentry{sym:m_dyn}{
 	name={\ensuremath{m_{dyn}}},
-	description={portion of the evidence mass with equal amounts belonging to free and occupied is defined as dynamic mass},
+	description={Dynamic evidence mass consisting to equal portions of free and occupied mass.},%portion of the evidence mass with equal amounts belonging to free and occupied is defined as dynamic mass},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:m_stat}{
 	name={\ensuremath{m_{stat}}},
-	description={portion of the evidence mass which remains after removing the dynamic mass is defined as static mass},
+	description={static evidence mass: mass which remains after removing the dynamic mass},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:vec_alpha}{
 	name={\ensuremath{\vec{\alpha}}},
 	description={vector containing positive shape parameters of a Dirichlet distribution},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:r}{
+	name={\ensuremath{\text{R}}},
+	description={\gls{bev} projection of all radars' detections of the most recent timestep.},% Empty is marked as $0.0$, static as $1.0$ and dynamic as $0.5$.},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:r_n}{
+	name={\ensuremath{\text{R}_{N}}},
+	description={\gls{bev} projection of all radars' dynamic and static detections of the recent $N$ timesteps.},% Empty is marked as $0.0$, static as $1.0$ and dynamic as $0.5(1-\dfrac{t}{N})$.},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:r_n_1}{
+	name={\ensuremath{\text{R}_{N|1}}},
+	description={Same as \gls{sym:r_n} but only projecting the most recent dynamic detection.},%\gls{bev} projection of all radars' static detections of the $N$ most recent timesteps. For the dynamic detetctions, only the most recent timestemp's detections are used. Empty is marked as $0.0$, static as $1.0$ and dynamic as $0.5$.},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:i_rgb}{
+	name={\ensuremath{\text{I}_{\text{RGB}}}},
+	description={Homography \gls{bev} projection of the RGB values for each camera.},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:i_seg}{
+	name={\ensuremath{\text{I}_{\text{Seg}}}},
+	description={Homography \gls{bev} projection of the semantic segmentation for each camera.},% For color coding, please refer to the Cityscapes dataset \cite{cordts2016cityscapes}.},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:i_depth}{
+	name={\ensuremath{\text{I}_{\text{Depth}}}},
+	description={\gls{bev} projection of \gls{monodepth} prediction for each camera.},% The predictions are clipped to $[-0.5,1.0]$m and scaled to the intensity interval $[0,1]$.},
 	sort=vcar,
 	type=symbolslist}

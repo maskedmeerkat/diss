@@ -20,7 +20,8 @@ In this section, a simulated verification of the combination rules' properties d
 Beginning with Dempster's rule, it can be seen that the fused mass always fully converges to the class of the signal with the highest portion (see Dempster graph e.g. in the time interval $[0, 20]$). Given temporal independent information and no conflict, this behavior would be desired since each time step provides new evidence of the state. However, in presence of conflict, the fused mass should converge to a state representing the portion of conflict to represent cells being dynamic. Since Dempster's rule lacks the ability to do so, it is disqualified for usage in this work.
 \begin{figure}[H]
 	\begin{center}
-		\import{imgs/08_occ_mapping_exp/choice_of_comb_rule}{ds_comb_rule_comparison.pgf}
+		\resizebox{\textwidth}{!}{
+		\import{imgs/08_occ_mapping_exp/choice_of_comb_rule}{ds_comb_rule_comparison.pgf}}
 		\caption{\label{fig:ds_comb_rule_comparison}This figure shows the qualitative evaluation of the different evidential combination rules given input signals for free, occupied and unknown mass (first subplot) over time with an exemplary lower unknown threshold $\underline{m}_u$ overlayed.}
 	\end{center}
 \end{figure} 
