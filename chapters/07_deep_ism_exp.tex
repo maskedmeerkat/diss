@@ -41,7 +41,7 @@ In order to obtain lidar occupancy maps closer resembling the ground-truth occup
 \subsection{Experimental Results for Geo ILM and IRM Parameter Tuning}
 \label{subsec:exp_results_params_ilm_irm}
 In order to parameterize the temporary geo \gls{ilm}, the height-threshold will be defined first. Here, the parameter is increased up to the point where additional structure besides street is being removed. Using the so found height threshold of 0.6 cm, the free and occupied weight $M_F, M_O, M_D$ and the opening angle $\varphi_\sphericalangle$ of Alg. \ref{alg:geo_ilm} are balanced in a way that 
-\begin{itemize}
+\begin{itemize}[noitemsep,nolistsep]
 	\item remaining ground points and dynamic object artifacts are being filtered out
 	\item \gls{idm} rays don't cut through object boundaries
 	\item object boundaries are as dense as possible

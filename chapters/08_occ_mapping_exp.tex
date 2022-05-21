@@ -205,7 +205,7 @@ The analysis in this section provides a quantitative as well as qualitative comp
 In this section it shall be analyzed how the high accuracy of geo \gls{ism} around edges can be combined with the inter- \& extrapolation properties of Deep ISMs by initializing the map using the deep and finetuning it with the geo \gls{ism}. These experiments are performed using the same sensor inputs, test sets and ground truth as described in Section \ref{subsec:setup_of_red_analy} for the same reasons. 
 \\\\
 The methods compared create maps by accumulating
-\begin{itemize}[noitemsep,topsep=0pt,nolistsep]
+\begin{itemize}[noitemsep,nolistsep]
 	\item the geo \gls{irm} using Yager's rule,
 	\item the redundancy reduced deep and geo \gls{irm} combined with Yager's rule and $\underline{m}_u = 0$ for the deep \gls{irm} and
 	\item the fusion of the reduced deep \gls{irm} with $\underline{m}_u = 0.3$ using Yager while the geo \gls{irm} is fused using Yager for all cells with $\underline{m}_u < 0.3$ and YaDer elsewhere

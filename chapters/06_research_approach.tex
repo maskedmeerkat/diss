@@ -129,7 +129,7 @@ Additionally, the majority of deep \gls{ism}s in the literature model the proble
 Regarding the encoding of radar detections for deep \gls{ism}s, the literature proposes to either encode the positions of a single timestep or use the temporally accumulated point cloud respectively projected into \gls{bev}. However, to the best of the author's knowledge, no investigation on how to encode the motion information of the detections has been conducted. Therefore, a rough investigation distinguishing three approaches shall be conducted which is formulated in the following research question\\
 \begin{requ}[RQ\ref{requ:radar_dyn_encoding}] \label{requ:radar_dyn_encoding}
 	To which extent, as measured by the normed confusion matrix (see Section \ref{subsec:confusion_matrix}), does the capability of the proposed deep \gls{ism}s to estimate the position of dynamic, free and occupied areas change choosing the input to be \gls{bev} projected radar detections...
-	\begin{itemize}
+	\begin{itemize}[noitemsep,nolistsep]
 		\item ...of a single timestep encoding the dynamic detections with half intensity?
 		\item ...accumulated over a certain time horizon only encoding the dynamic detections with half intensity of the latest timestep?
 		\item ...accumulated over a certain time horizon linearly reducing the intensity of dynamic detections over time starting at half intensity?
@@ -527,7 +527,7 @@ To account for the class imbalance in all of the above mentioned deep \gls{ism} 
 \subsection{Metric to evaluate the ISM Variants}
 \label{subsec:confusion_matrix}
 To quantify the \gls{ism} and occupancy mapping results, a confusion matrix variant is deployed since it provides a more detailed means of analysis as compared to the mIoU score. The confusion matrix variant is constructed in the following steps  
-\begin{enumerate}
+\begin{enumerate}[noitemsep,nolistsep]
 	\item obtain the current lidar occupancy map patch together with the current model's estimates
 	\item define the ground-truth pixels by assigning each pixel to the class with the highest mass in the lidar occupancy map patch 
 	\item for each ground-truth pixels belonging to a class, sum up how much weight has been estimated to belong to each class (e.g. for all ground-truth occupied pixels, how much mass is estimated to be free, how much occupied, ...)
