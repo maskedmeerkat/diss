@@ -64,6 +64,18 @@
 	sort=vcar,
 	type=symbolslist}
 
+\newglossaryentry{sym:l}{
+	name={\ensuremath{\text{L}}},
+	description={\gls{bev} projection of lidar detections without ground-plane.},% Empty is marked as $0.0$, static as $1.0$ and dynamic as $0.5$.},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:gt}{
+	name={\ensuremath{\text{GT}}},
+	description={Ground-truth occupancy map patch used as labels to train the deep inverse sensor models.},
+	sort=vcar,
+	type=symbolslist}
+
 \newglossaryentry{sym:r}{
 	name={\ensuremath{\text{R}}},
 	description={\gls{bev} projection of all radars' detections of the most recent timestep.},% Empty is marked as $0.0$, static as $1.0$ and dynamic as $0.5$.},
