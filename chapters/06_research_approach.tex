@@ -153,13 +153,10 @@ In case H\ref{hyp:sota_not_model_unc} holds, these models would, thus, lack the 
 With regards to occupancy mapping with deep \gls{ism}s, not much literature is available. To the best of the authors knowledge, the only instances of occupancy mapping with deep \gls{ism}s use the standard Bayes filtering approach which does not cover evidential models. Thus, the first step consists in analyzing the characteristics and identifying short comings when applying the proposed evidential, deep \gls{ism}s for occupancy mapping.
 \\\\
 First, in contrast to geometric \gls{ism}s which only provide estimates in regions directly affected by data, deep \gls{ism}s additionally perform interpolations in intermediate regions and even extrapolations in regions further away from data. To illustrate the issue arising from this behavior, consider the example depicted in Fig. \ref{fig:info_dependence}. Here, a scenario is shown in which the ego vehicle only partially observes a wall to its left-hand side for the first two time steps. Based on the majority of observations captured in the training dataset, the network might tend to extrapolate the wall as rectangular. In the standard occupancy formulation, this information is treated as independent and, thus, accumulated. When the vehicle finally obtains measurements of the wall's contour in the former occluded area, the extrapolation might have already be accumulated to high certainty. Therefore, many estimates based on measurements of this area would have to be accumulated to correct the assigned training data bias. In a similar way, this effect can also lead to overwriting area with predictions close to data with later occurring extrapolations. This thought experiment leads to the following hypothesis.
-\begin{figure}
-	\begin{center}
-		\import{imgs/06_research_approach}{info_dependence.pdf_tex}
-		\caption{\label{fig:info_dependence}Illustration of informational dependence between deep \gls{ism} predictions over time on the example of dataset bias. Here, the ego vehicle (black) drives along a wall and obtains radar measurements (orange) over three time steps. In each time step, the contour of the wall is estimated (blue).}
-	\end{center}
-\end{figure}  
-\\
+\begin{center}
+	\import{imgs/06_research_approach}{info_dependence.pdf_tex}
+	\captionof{figure}{\label{fig:info_dependence}Illustration of informational dependence between deep \gls{ism} predictions over time on the example of dataset bias. Here, the ego vehicle (black) drives along a wall and obtains radar measurements (orange) over three time steps. In each time step, the contour of the wall is estimated (blue).}
+\end{center}
 \begin{hyp}[H\ref{hyp:temporal_dependence}] \label{hyp:temporal_dependence}
 	Due to inter- and extrapolation in areas not directly measured, deep \gls{ism}s contain informational dependence between time steps. This leads to accumulation of bias and or falsification of previously correct assigned areas when their estimates are fused into the occupancy maps using a combination rule that assumes informational independence.  
 \end{hyp} 
@@ -201,13 +198,10 @@ Regarding the sensor setup, six cameras three of which face front left, center, 
 \section{Overview of Methodology}
 \label{sec:framework_overview}
 In this section, a framework is presented to address the research questions defined in Section \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}. The framework extends the standard evidential occupancy mapping pipeline \cite{pagac1996evidential} to incorporate estimates of a data-driven \gls{ism}, as shown in Fig. \ref{fig:illustrative_system_overview}. The incorporation of the deep \gls{ism}s information is realized by fusing the estimates directly into the map rather than first fusing it with the geo \gls{ism}'s estimate. This is done, in order to enable an asynchronous fusion of information into the map, which allows for differing execution times of the \gls{ism}s. In order to tackle the problem of temporal redundancy, as mentioned in H\ref{hyp:temporal_dependence}, a specific fusion approach is defined for the deep \gls{ism}. This general procedure is detailed in the subsequent subsections as follows.
-%
-\begin{figure}[H]
-	\begin{center}
-		\import{imgs/06_research_approach/}{illustrative_system_overview.pdf_tex}
-		\caption{\label{fig:illustrative_system_overview}Structural overview of the proposed framework, showing how the \gls{bev} input is transformed both by the deep and geometric \gls{ism} into occupancy estimates. These estimates are then fused into the occupancy map using a specialized method to fuse the deep \gls{ism} that accounts for the temporal redundancy.}
-	\end{center}
-\end{figure} 
+\begin{center}
+	\import{imgs/06_research_approach/}{illustrative_system_overview.pdf_tex}
+	\captionof{figure}{\label{fig:illustrative_system_overview}Structural overview of the proposed framework, showing how the \gls{bev} input is transformed both by the deep and geometric \gls{ism} into occupancy estimates. These estimates are then fused into the occupancy map using a specialized method to fuse the deep \gls{ism} that accounts for the temporal redundancy.}
+\end{center}
 First, the creation of ground-truth lidar and baseline radar occupancy maps is discussed. Here, a method is shown in Section \ref{subsec:method_dyn_info_for_lidar} to interpolate the annotations of dynamic objects for the higher frequency intermediate lidar detections. This is followed by the definition of the geo \gls{ilm} and \gls{irm} used in this work in Section \ref{subsec:method_geo_ilm} and \ref{subsec:method_geo_irm}. Eventually, a method is described in \ref{subsec:method_choice_of_gt} to maximize the overlap between the ground-truth lidar and baseline radar occupancy maps.
 \\\\
 The definition of baseline and ground-truth data is followed by defining the deep \gls{ism}. Starting with the description of the different inputs and the target inspected in this work in Section \ref{subsec:def_of_targets_n_inputs}, followed by the architecture search in Section \ref{subsec:method_deep_ism_architecture}, the investigated methods to account for aleatoric uncertainty in Section \ref{subsec:method_al_uncert_in_deep_isms} and concluded by a description of the used metric in Section \ref{subsec:confusion_matrix}. The specific choice of the fusion methods for both geometric and deep \gls{ism}s are detailed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps} and \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
@@ -219,12 +213,10 @@ The definition of baseline and ground-truth data is followed by defining the dee
 To obtain the dynamic information for lidar sweeps, the sample's bounding boxes of dynamic objects are interpolated for intermediate sweeps and all lidar detections intersecting with the boxes are marked as dynamic. Here, the interpolations are obtained as follows. First, corresponding bounding boxes of dynamic objects are identified by their track ids for two subsequent samples. To avoid singularities, the bounding box poses of each identified pair are first transformed into the temporally first bounding box's coordinate frame. Next, a third degree polynomial is used to interpolate the poses. The polynomial is defined to intersects with the positions of the provided poses. Also, the polynomial's derivative at the interpolation points has to equal the tangents of the pose's angle. Thus intermediate poses should have  positions coinciding with the polynomial with orientations given by the arc-tangent of the polynomial's derivative.
 \\\\
 To finally obtain the interpolated bounding box pose, the way along the interpolated trajectory is numerically integrated and divided into equidistant segments. Under the assumption that the tracked, dynamic object travels with a constant velocity between the two samples, the interpolated pose is given at the point when the relative traveled distance between the first and second sample's pose is closest to the relative time of the sweep between the two samples. The so identified pose can then be transformed into the coordinate frame of the currently interpolated sweep. The interpolation procedure and the overlay of the resulting interpolated bounding boxes over a lidar sweep's detection image are illustrated in Fig. \ref{fig:dyn_objs_interpolation}.
-\begin{figure}[H]
-	\begin{center}
-		\import{imgs/07_deep_ism_exp/dataset}{dyn_objs_interpolation.pdf_tex}
-		\caption{\label{fig:dyn_objs_interpolation}Illustration of the three steps to obtain interpolations of the 2d bounding box poses on the left hand side together with an example of resulting interpolated bounding boxes (yellow) overlayed on a lidar sweep's \gls{bev} detection image on the right. The three interpolation stages from left to right show the original bounding box poses of two consecutive samples, the poses transformed into the first poses coordinates together with the interpolated poses (gray) and finally the poses back in the original coordinate frame with the interpolations.}
-	\end{center}
-\end{figure} 
+\begin{center}
+	\import{imgs/07_deep_ism_exp/dataset}{dyn_objs_interpolation.pdf_tex}
+	\captionof{figure}{\label{fig:dyn_objs_interpolation}Illustration of the three steps to obtain interpolations of the 2d bounding box poses on the left hand side together with an example of resulting interpolated bounding boxes (yellow) overlayed on a lidar sweep's \gls{bev} detection image on the right. The three interpolation stages from left to right show the original bounding box poses of two consecutive samples, the poses transformed into the first poses coordinates together with the interpolated poses (gray) and finally the poses back in the original coordinate frame with the interpolations.}
+\end{center}
 %======================================%
 %
 %======================================%
@@ -282,12 +274,10 @@ In angular direction, it is proposed to linearly approximate the influence of th
 With $r$ and $\varphi$ being the cylindrical coordinates measured in the radar's sensor coordinate frame, $\mu_r$ and $\mu_{\varphi}$ being the cylindrical  coordinates of the detection and $d$ the Boolean flag indicating the dynamic state of the detection. However, for reasons detailed in Section \ref{subsec:geo_ism_radar}, \gls{idm}$_{radar}$ can not be directly applied on each detection to obtain the \gls{irm}. Here, the main problem is the assumption that only objects in line of sight are detected. This assumption is violated for the radar since objects can be detected in occluded areas due to multi-path reflections. This leads to big amounts of free space being assigned to occupied areas by \gls{idm} rays cast towards detections in occluded areas. 
 \\\\
 In this work, the occlusion problem is addressed similar to \cite{werber2015automotive} with the alteration that the free space part of the \gls{idm} is not only ignored in occupied regions of other rays, but ends at it. In case the contours of all objects are densely detected, this would suffice to solve the problem. However, radar detections are also sparse which is why measurements of preceding time steps are additionally used to densify object boundaries. In contrast to the \gls{ilm}, detections occluded in the \gls{bev} projection shall still be marked as occupied in the \gls{irm} in order not to further increase the sparseness. The time horizon, in which detections are accumulated, shall be set to a finite value to dampen the influence of potential outliers. This procedure only introduces the time horizon as hyperparameter and, thus, proposes a good candidate to answer RQ\ref{requ:fr_space_enrichment}.
-\begin{figure}
-	\begin{center}
-		\import{imgs/06_research_approach/method/}{idm_radar.pdf_tex}
-		\caption{\label{idm_radar}Illustration of the proposed \gls{idm}'s contours being applied on two detections. It shows the big and thing \gls{idm}s being cast for each detection. Also, it shows that the big \gls{idm} cone's range for detection two (stripped blue) is limited by the first detection. On the other hand, the thin \gls{idm} of the second detection is, for the given scenario, able to assign free space up to the second detection.}
-	\end{center}
-\end{figure}
+\begin{center}
+	\import{imgs/06_research_approach/method/}{idm_radar.pdf_tex}
+	\captionof{figure}{\label{idm_radar}Illustration of the proposed \gls{idm}'s contours being applied on two detections. It shows the big and thing \gls{idm}s being cast for each detection. Also, it shows that the big \gls{idm} cone's range for detection two (stripped blue) is limited by the first detection. On the other hand, the thin \gls{idm} of the second detection is, for the given scenario, able to assign free space up to the second detection.}
+\end{center}
 Another problem connected with the sparsity is the low coverage of free space. In this work, the method proposed in \cite{prophet2018adaptions} is altered to find an answer for RQ\ref{requ:fr_space_enrichment} by instead casting the original rays again but with a much wider opening angle. This assumes that the manufacturer's prefiltering of the raw radar signal is done in away to preserve detections belonging to the object closest to the sensor. The justification for this assumption is based on the fact that radars are applied in safety critical collision avoidance systems. The second iteration of wider \gls{idm} rays shall only be used to enrich the free space and, thus, use $M_O = 0$. Additionally, it shall be fused with the first iterations \gls{irm} using Dempster's combination rule. An algorithmic summary of the geometric \gls{irm} in pseudo code is shown in Alg. \ref{alg:geo_irm}.
 \\\\
 \begin{algorithm}[H]
@@ -319,8 +309,7 @@ Another problem connected with the sparsity is the low coverage of free space. I
 \label{subsec:method_choice_of_gt}
 The analysis of which method to chose as a baseline and which as ground truth, according to RQ\ref{requ:what_is_best_gt} and RQ\ref{requ:fr_space_enrichment}, is a chicken and egg problem since one has to be kept fixed to analyze the other. Hence, it is proposed to initially manually define and fix the geo \gls{ilm} using the threshold-based ground-plane removal as normally applied in the literature. This preliminary geo \gls{ilm} will act as reference to analyze the free space enrichment (see RQ\ref{requ:fr_space_enrichment}) of the geo \gls{irm}. 
 \\\\
-To do so, three variants of the geo \gls{irm} (as defined in Alg.\ref{alg:geo_irm}), are compared which subsequently add more of the proposed algorithm's components. First, the \gls{idm}$_\text{radar}$ shall only be applied without accumulation of radar detections over time and only as a thin cone. This corresponds to fixing the parameters in Alg. \ref{alg:geo_irm} as shown for the first variant in Fig. \ref{tab:geo_irm_variants}. Next, the additional influence of using accumulated detections is analyzed (see Fig. \ref{tab:geo_irm_variants} \#2), followed by the additional application of cones with big opening angles (see Fig. \ref{tab:geo_irm_variants} \#3). These variants are used to create occupancy maps which are compared with maps created from the fixed geo \gls{ilm}. Here, the maps are created using Yager's rule of combination and the metric for comparison is the m\gls{iou}, evaluated within the area reached by the \gls{ism}s. To obtain best competitive results for each method, the parameters labeled as "?" for each respective variant in Fig. \ref{tab:geo_irm_variants} are chosen via a grid search. 
-\begin{figure}
+To do so, three variants of the geo \gls{irm} (as defined in Alg.\ref{alg:geo_irm}), are compared which subsequently add more of the proposed algorithm's components. First, the \gls{idm}$_\text{radar}$ shall only be applied without accumulation of radar detections over time and only as a thin cone. This corresponds to fixing the parameters in Alg. \ref{alg:geo_irm} as shown for the first variant in Fig. \ref{tab:geo_irm_variants}. Next, the additional influence of using accumulated detections is analyzed (see Fig. \ref{tab:geo_irm_variants} \#2), followed by the additional application of cones with big opening angles (see Fig. \ref{tab:geo_irm_variants} \#3). These variants are used to create occupancy maps which are compared with maps created from the fixed geo \gls{ilm}. Here, the maps are created using Yager's rule of combination and the metric for comparison is the m\gls{iou}, evaluated within the area reached by the \gls{ism}s. To obtain best competitive results for each method, the parameters labeled as "?" for each respective variant in Fig. \ref{tab:geo_irm_variants} are chosen via a grid search.
 \begin{center}
 	\begin{tabular}{cl|c|c|c|c|c|c|c}
 		& geo \gls{irm} Variant & $M_F^{(\text{thin})}$ & $M_F^{(\text{big})}$ & $\varphi_\sphericalangle^{(\text{\scriptsize thin})}$ & $\varphi_\sphericalangle^{(\text{\scriptsize big})}$ & $M_O$ & $M_D$ & $N$ \\
@@ -329,9 +318,8 @@ To do so, three variants of the geo \gls{irm} (as defined in Alg.\ref{alg:geo_ir
 		\#2 &... + Accumulation & ? & \textcolor{myred}{0} & ? & \textcolor{myred}{0} & ? & ? & ? \\
 		\#3 &... + big Cones & ? & ? & ? & ? & ? & ? & ?
 	\end{tabular}
-\end{center}
-\caption{\label{tab:geo_irm_variants}Three investigated variants of the geo \gls{irm} that subsequently add more features of Alg. \ref{alg:geo_irm}. The respective parameters marked as "?" are chosen through a grid search. This search is based on m\gls{iou} comparison between occupancy maps created with the respective variants and the fixed geo \gls{ilm} maps.}
-\end{figure} 
+	\captionof{table}{\label{tab:geo_irm_variants}Three investigated variants of the geo \gls{irm} that subsequently add more features of Alg. \ref{alg:geo_irm}. The respective parameters marked as "?" are chosen through a grid search. This search is based on m\gls{iou} comparison between occupancy maps created with the respective variants and the fixed geo \gls{ilm} maps.}
+\end{center} 
 After the evaluation of the geo \gls{irm}, the best performing variant is fixed and used as reference to analyze the effect of different ground-plane removal methods in the creation of lidar-based occupancy maps. Here, a dataset with semantic labels for the lidar detections shall be used to cover the semantic ground-plane filtering approaches. As an alternative, threshold-based filtering shall be considered by removing all lidar detections beneath a certain height threshold. The sensor specifics, considered semantic labels and specification of height thresholds are detailed in Section \ref{sec:choice_of_gt}. 
 %======================================%
 %
@@ -360,7 +348,7 @@ Finally, the occupancy map patches used as targets to train the deep \gls{ism}s 
 \subsection{Methodology to define the deep ISM Architecture}
 \label{subsec:method_deep_ism_architecture}
 Next, the network architecture has to be analyzed to suffice RQ\ref{requ:network_search}. To restrict the search space to a feasible subset, the architecture as illustrated in Fig. \ref{fig:std_unet} is considered. Here, the initial grid dimension is halved after each of the four encoder steps using strided $3\times 3$ convolutions while the number of channels is doubled up to a maximum. This is inverted in the decoder using bilinear upsampling. All convolution layers are structured as suggested in the literature (see Section \ref{subsec:architecture} and Fig. \ref{fig:conv_n_resnet_layer}). Whenever the grid's height and width remain constant, ResNet layers, as shown in Fig. \ref{fig:conv_n_resnet_layer}, are deployed to increase efficiency. The last three layers consist of two additional convolution layers without Dropout and the output layer, specifically designed for the applied loss. A detailed description of the hyperparameters and the choices made for the architecture search are elaborated in Section \ref{sec:choice_of_unet_arch}. The layer depth of the network is chosen in a way that a receptive field of 125 is reached which almost covers the whole image (for receptive field computation please refer to \eqref{eq:receptive_field}). This receptive field is chosen to enable the network to learn the principle of occluded areas based on the ego vehicle positioned in the center. It shall be mentioned that a receptive field covering half the input image size might already suffice for the task at hand. However, since the computation cost shrinks quadratically when downsampling the feature size, adding the additional layers to arrive at the full input image's receptive field is almost negligible. 
-\begin{figure}[H]
+\begin{center}
 	\begin{minipage}{0.5\textwidth}
 		\centering
 		\begin{tabular}{c|c|c}
@@ -483,8 +471,8 @@ Next, the network architecture has to be analyzed to suffice RQ\ref{requ:network
 			\multicolumn{3}{c}{\textbf{Decoder Architecture}} \\
 		\end{tabular}
 	\end{minipage}
-\caption{\label{fig:std_unet}Illustration of the UNet variant's architecture used in this work. The skip connections between encoder and decoder are realized with a convolution, compressing the amount of features to 4 channels and, afterwards, concatenating them with the features of a subsequent layer. Convolution and ResNet layers are structured as shown in Fig. \ref{fig:conv_n_resnet_layer}. The skip connection in the ResNet layer is realized by adding the input to the ResNet layers output before applying the non-linearity.}
-\end{figure}
+\captionof{figure}{\label{fig:std_unet}Illustration of the UNet variant's architecture used in this work. The skip connections between encoder and decoder are realized with a convolution, compressing the amount of features to 4 channels and, afterwards, concatenating them with the features of a subsequent layer. Convolution and ResNet layers are structured as shown in Fig. \ref{fig:conv_n_resnet_layer}. The skip connection in the ResNet layer is realized by adding the input to the ResNet layers output before applying the non-linearity.}
+\end{center}
 %======================================%
 %
 %======================================%
@@ -625,12 +613,10 @@ Here, the case of $\xi > 0$, can be further simplified. Since $\underline{m}_u -
 This modified Yager rule shall be referred to as lower bounded Yager rule. To fuse the geo \gls{ism} estimates into the map during the initialization phase, it is again proposed to use Yager's combination rule. The reason is the same as for the deep \gls{ism} fusion and revolves around the fact that Yager's rule is better suited to cope with changes in the true occupancy state.
 \\\\
 In the center of Fig. \ref{fig:three_phased_approach}, the main properties of the initialization phase to alter the map's state up the the lower bound $\underline{m}_{u}$ are depicted. It also shows the capability to move mass between free and occupied while recuperating unknown mass. Furthermore, a summary of the combination rule's desired properties both for the deep and geo \gls{ism} in the initialization phase are listed in Fig. \ref{tab:desired_comb_rule_properties}.
-\begin{figure}[H]
-	\begin{center}
-		\import{imgs/06_research_approach/method/}{three_phased_approach.pdf_tex}
-		\caption{\label{fig:three_phased_approach}Illustration of the three phases of a grid cell's occupancy state. Beginning with the start phase where the evidential mass is set to be all unknown. Afterwards, in the initialization phase, the unknown mass can be shifted into the free and occupied class and be recuperated using the deep and geometric \gls{ism}'s predictions. Finally, in the convergence phase, the geometric \gls{ism}'s estimates are used to strictly reduce the unknown mass while the deep \gls{ism} is being disabled.}
-	\end{center}
-\end{figure} 
+\begin{center}
+	\import{imgs/06_research_approach/method/}{three_phased_approach.pdf_tex}
+	\captionof{figure}{\label{fig:three_phased_approach}Illustration of the three phases of a grid cell's occupancy state. Beginning with the start phase where the evidential mass is set to be all unknown. Afterwards, in the initialization phase, the unknown mass can be shifted into the free and occupied class and be recuperated using the deep and geometric \gls{ism}'s predictions. Finally, in the convergence phase, the geometric \gls{ism}'s estimates are used to strictly reduce the unknown mass while the deep \gls{ism} is being disabled.}
+\end{center}
 \textbf{Convergence Phase}\\
 Once the unknown mass has fallen below the threshold $\underline{m}_u$, the convergence phase starts. Here, the geo \gls{ism} should still be integrated into the map while the influence of the deep \gls{ism} should be disabled, guaranteeing a convergence towards the geo \gls{ism}. The combination rule for the deep \gls{ism} as defined for the initialization phase already makes sure that the influence of the deep \gls{ism} is being disabled in the convergence phase. 
 \\\\
@@ -647,7 +633,6 @@ For the geo \gls{ism}, a combination rule has to be chosen that integrates the e
 This combination rule shall be referred to as \textbf{YaDer}'s rule since it combines the properties of Yager's rule to model conflicting mass and of Dempster's rule to strictly reduce unknown mass. 
 \\\\
 An overview of the desired combination rule properties in each phase is provided in Fig. \ref{tab:desired_comb_rule_properties}. For a qualitative evaluation of the combination approaches for each phase together with a comparison against the two baseline combination rules, please be referred to Section \ref{sec:exp_choice_comb_rule}. Furthermore, Section \ref{sec:exp_analyze_prior_properties} shows the experimental results of applying this procedure for occupancy mapping on real world data. 
-\begin{figure}
 \begin{center}
 	\begin{tabular}{c|c|l|l}
 		\multicolumn{1}{c|}{\bfseries Phase} & 
@@ -677,6 +662,5 @@ An overview of the desired combination rule properties in each phase is provided
 	& $\bullet$ unchanged & $\bullet$ unchanged \\
 	&&&
 	\end{tabular}
+	\captionof{table}{\label{tab:desired_comb_rule_properties}Overview of the desired combination rules' properties in each mapping phase.}
 \end{center} 
-	\caption{\label{tab:desired_comb_rule_properties}Overview of the desired combination rules' properties in each mapping phase.}
-\end{figure}

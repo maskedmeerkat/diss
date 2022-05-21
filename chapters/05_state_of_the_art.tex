@@ -56,24 +56,20 @@ To model a radial sensor, Elfes \cite{elfes1989using} proposed in his seminal wo
 	\end{cases}
 \end{align}
 Next, since the radial measurement $z = (\tilde{\mu}_r, \tilde{\mu}_{\varphi})$ is in fact not ideal but contains uncertainty, the ideal \gls{idm} is convoluted with a radial and angular Gaussian noise model. Here, Elfes argues that this model can only be evaluated in closed form for special sensor models and, thus, instead provides visualizations of the numerical results. These steps to obtain a 2D probabilistic \gls{idm} are visualized in Fig. \ref{fig:idm}.
-\begin{figure}
-	\begin{center}
-		\import{imgs/05_state_of_the_art/geo_isms/}{idm.pdf_tex}
-		\caption{\label{fig:idm} Visualization of a) the ideal \gls{idm} with the sensor at position $(0,0)$ and the detection at $(4,0)$, b) the influence of radial Gaussian noise and c) radial and angular Gaussian noise on the ideal \gls{idm}.}
-	\end{center}
-\end{figure}  
+\begin{center}
+	\import{imgs/05_state_of_the_art/geo_isms/}{idm.pdf_tex}
+	\captionof{figure}{\label{fig:idm} Visualization of a) the ideal \gls{idm} with the sensor at position $(0,0)$ and the detection at $(4,0)$, b) the influence of radial Gaussian noise and c) radial and angular Gaussian noise on the ideal \gls{idm}.}
+\end{center}
 In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s radial component along $\mu_\varphi$ using the error function $\text{Erf}(x) = \dfrac{2}{\pi} \int_{0}^{x}e^{-t^2}dt$ as follows 
 \begin{align}
 	\label{eq:gauss_idm}
 	\text{\gls{idm}}_{\text{Gauss}}(r,\tilde{\mu}_r, \sigma_r, \varphi = \mu_\varphi) = P(p_o(r, \varphi = \mu_\varphi) = 1 |\tilde{\mu}_r)  =& \dfrac{1}{2}\text{Erf}\left(\dfrac{\tilde{\mu}_r-r}{\sqrt{2}\sigma_r}\right)\\
 	&- \dfrac{1}{4}\text{Erf}\left(\dfrac{\tilde{\mu}_r - r - 3\sigma_r}{\sqrt{2}\sigma_r}\right) + \dfrac{1}{4} \notag
 \end{align}
-\begin{figure}
-	\begin{center}
-		\import{imgs/05_state_of_the_art/geo_isms/}{radial_geo_idm.pgf}
-		\caption{\label{fig:radial_geo_idm}Example of the ideal \gls{idm} with $\mu_r = 2$ and an object thickness $\tau = 0.3$, together with the \gls{idm}$_{\text{Gauss}}$ with $\sigma_r = 0.1$ and \gls{idm}$_{\text{B-Spline}}$ with the same variance. The left side shows a zoom of the right side around the border between free and occupied space.}
-	\end{center}
-\end{figure} 
+\begin{center}
+	\import{imgs/05_state_of_the_art/geo_isms/}{radial_geo_idm.pgf}
+	\captionof{figure}{\label{fig:radial_geo_idm}Example of the ideal \gls{idm} with $\mu_r = 2$ and an object thickness $\tau = 0.3$, together with the \gls{idm}$_{\text{Gauss}}$ with $\sigma_r = 0.1$ and \gls{idm}$_{\text{B-Spline}}$ with the same variance. The left side shows a zoom of the right side around the border between free and occupied space.}
+\end{center}
 They continue to show that the application of a Gaussian noise model always leads to a slightly shifted decision boundary between free and occupied space with regards to the ideal \gls{idm}'s. This effect is illustrated in the zoomed region left in Fig. \ref{fig:radial_geo_idm}. Therefore, they propose a quadratic b-spline as an alternative noise model designed in a way to always deliver the same free-occupied-border as the \gls{idm}$_{\text{ideal}}$ while approximately maintaining the shape of the \gls{idm}$_{\text{Gauss}}$ (see Fig. \ref{fig:radial_geo_idm}). The quadratic b-spline and the corresponding radial \gls{idm}, after convolving the proposed b-spline with the ideal \gls{idm}, can be written as follows
 \begin{align}
 	\label{eq:bspline}
@@ -116,12 +112,10 @@ After distinguishing the ground plane detections, several possibilities to adapt
 Another alternative is to remove the ground points and only apply the \gls{idm} for object detections. However, by removing the ground plane detections, the information about free space gets lost for areas not affected by the object detection's rays, as illustrated in the left sector in Fig. \ref{fig:geo_ilm_drawn} b). To solve this problem under the assumption of dense detections, \gls{idm} rays are cast for each angle up to a maximum distance within the lidars \gls{fov} instead of only for angles with detections. In doing so, the \gls{idm} can still be applied for all detections hit by rays and all the rays ending at maximum distance are altered to only model the free space. This variant is favored by the majority of works \cite{thrun2006stanley,narksri2018slope,fischler1981random,hough1962method,oliveira2016scene,tian2020fast}.
 \\\\
 In case the density assumption is violated, this approach, however, might lead to casting free space rays in between object detections assigning actually occupied space as partially free (see Fig. \ref{fig:geo_ilm_drawn} b) right sector). To counteract this effect, it is possible to adapt the \gls{bev} discretization according to the point clouds density to close the gaps between detections or to increase the opening angle of the \gls{idm} rays to adapt for increased point cloud sparsity with increasing distance. The effects of counteracting the density violation are illustrated in Fig. \ref{fig:geo_ilm_drawn} c).  
-\begin{figure}
-	\begin{center}
-		\import{imgs/05_state_of_the_art/geo_isms/}{geo_ilm_drawn.pdf_tex}
-		\caption{\label{fig:geo_ilm_drawn}Illustration of the \gls{ilm} stages based on a scene with the ego vehicle and its mounted lidar sensor in the center, two building on its left and two parked vehicles in front of a building on its right side. The phases consist of detecting and removing the ground-plane as shown in a) with ground detections in blue and object detections in orange, followed by the application of the \gls{idm}. Here, three different variants are illustrated. The left sector in b) shows the result of only applying the \gls{idm} for angles with object detections with resulting sparse free space. On the right side in b), the application of an \gls{idm} with a small opening for all 360$^\circ$ angles using small angular increments is shown, illustrating the effect of rays between detections cutting through objects. Finally, in c), the \gls{idm} applied for all angles but this time with a larger opening angle and bigger angular increments is shown, which largely eliminates the problematic effects illustrated in b).}
-	\end{center}
-\end{figure} 
+\begin{center}
+	\import{imgs/05_state_of_the_art/geo_isms/}{geo_ilm_drawn.pdf_tex}
+	\captionof{figure}{\label{fig:geo_ilm_drawn}Illustration of the \gls{ilm} stages based on a scene with the ego vehicle and its mounted lidar sensor in the center, two building on its left and two parked vehicles in front of a building on its right side. The phases consist of detecting and removing the ground-plane as shown in a) with ground detections in blue and object detections in orange, followed by the application of the \gls{idm}. Here, three different variants are illustrated. The left sector in b) shows the result of only applying the \gls{idm} for angles with object detections with resulting sparse free space. On the right side in b), the application of an \gls{idm} with a small opening for all 360$^\circ$ angles using small angular increments is shown, illustrating the effect of rays between detections cutting through objects. Finally, in c), the \gls{idm} applied for all angles but this time with a larger opening angle and bigger angular increments is shown, which largely eliminates the problematic effects illustrated in b).}
+\end{center}
 %======================================%
 %
 %======================================%
@@ -155,12 +149,10 @@ Another problem connected to the detection sparsity is the lack of assigned free
 	\item in case another radar provides detections falling inside the first's \gls{fov}, identify the detection $D_2$ closest to $D_1$ and restrict the free space cone's angle by $D_2$   
 \end{enumerate}
 which also leads to free space in regions without detections, as shown in Fig. \ref{fig:geo_irm_drawn} c).
-\begin{figure}[htb!]
-	\begin{center}
-		\import{imgs/05_state_of_the_art/geo_isms/}{geo_irm_drawn.pdf_tex}
-		\caption{\label{fig:geo_irm_drawn}Illustration geometric \gls{irm} for an ego vehicle (center) being equipped with four corner radars in a scene with two buildings on its left and two parked vehicles in front of a wall to its right. The detections, sensor centers and corresponding \gls{fov}s are shown in a) in different colors for each sensor. Additionally, two outliers (red circles) and two detections due to multi-path reflections (red squares) are shown. The direct application of an \gls{idm} on each detection is shown in b), illustrating the effects of sparse free space, the unfiltered application of the \gls{idm} for outliers and free space being assigned to actually occupied areas due to the rays for multi-path reflection detections. Eventually, c) the enrichment of free space and filtering of outlier and multi-path reflection effects as described in Section \ref{subsec:geo_ism_radar}.}
-	\end{center}
-\end{figure} 
+\begin{center}
+	\import{imgs/05_state_of_the_art/geo_isms/}{geo_irm_drawn.pdf_tex}
+	\captionof{figure}{\label{fig:geo_irm_drawn}Illustration geometric \gls{irm} for an ego vehicle (center) being equipped with four corner radars in a scene with two buildings on its left and two parked vehicles in front of a wall to its right. The detections, sensor centers and corresponding \gls{fov}s are shown in a) in different colors for each sensor. Additionally, two outliers (red circles) and two detections due to multi-path reflections (red squares) are shown. The direct application of an \gls{idm} on each detection is shown in b), illustrating the effects of sparse free space, the unfiltered application of the \gls{idm} for outliers and free space being assigned to actually occupied areas due to the rays for multi-path reflection detections. Eventually, c) the enrichment of free space and filtering of outlier and multi-path reflection effects as described in Section \ref{subsec:geo_ism_radar}.}
+\end{center}
 For completion it shall be mentioned that in case of denser radar point clouds, e.g. as provided by imaging radars, similar methods as for the lidar point cloud after ground-plane removal can be applied \cite{slutsky2019dual}.
 %==========================================================================%
 %
@@ -179,12 +171,10 @@ Architecture-wise, the majority of works utilize UNets \cite{ronneberger2015u} c
 	r_{i+1} &= r_i + (k_i-1)\prod_{j=0}^{i}s_j
 \end{align}
 The decoder is the inverse of the encoder using a bilinear upsampling \cite{odena2016deconvolution} to replace the subsampling layers. The skip connections either add or concatenate information of the encoder to corresponding decoding layers. This is done in order to regain the information lost in or during encoding. These skip connections can include additional convolutions which are mostly used to compress the amount of features before concatenation. While the feature dimension is successively halved in the encoder, the amount of features is commonly doubled after each subsampling. This introduces the initial amount of features as an architectural hyperparameter and, in some cases, a maximal number of features. The architecture search is being standardized in \cite{radosavovic2020designing} for a generalized UNet architecture with ResNet layers by successively evaluating the influence and ranges of each parameter. An example of such a standard UNet architecture is depicted in Fig. \ref{fig:std_unet}.
-\begin{figure}
-	\begin{center}
-		\import{imgs/05_state_of_the_art/deep_ism/}{conv_n_resnet_layer.pdf_tex}
-		\caption{\label{fig:conv_n_resnet_layer}Structure of convolution (left) and ResNet layer (right) as commonly used in the literature with the kernel size $K$, stride $s$, amount of channels $C$ and channel reduction factor $D$. The green blocks in the ResNet layer are convolutions as depicted on the left-hand side.}
-	\end{center}
-\end{figure} 
+\begin{center}
+	\import{imgs/05_state_of_the_art/deep_ism/}{conv_n_resnet_layer.pdf_tex}
+	\captionof{figure}{\label{fig:conv_n_resnet_layer}Structure of convolution (left) and ResNet layer (right) as commonly used in the literature with the kernel size $K$, stride $s$, amount of channels $C$ and channel reduction factor $D$. The green blocks in the ResNet layer are convolutions as depicted on the left-hand side.}
+\end{center}
 The convolution layers normally consist of $3 \times 3$ convolutions with Dropout, followed by leaky ReLU activations and batch normalization, which is depicted on the left-hand side in Fig. \ref{fig:conv_n_resnet_layer}. Some of the variations to UNets include exchanging the encoder with backbone networks like VGG19 \cite{simonyan2014very,wulff2018early} or EfficientNet \cite{tan2019efficientnet,philion2020lift}. However, most commonly, the standard convolution layer is replaced by a ResNet layer \cite{he2016deep,wirges2018evidential,reiher2020sim2real,roddick2020predicting,philion2020lift}. Here, the $3 \times 3$ convolution is replaced by a miniature UNet first compressing the feature channels with a $1\times 1$ convolution, followed by the actual $3 \times 3$ convolution and, finally, decompressing it back to the original channel dimension, again, using a $1 \times 1$ convolution. Additionally, before applying the final output non-linearity, the input features are added to the outputs. The sum of \gls{mac} over the ResNet layer's three convolutions can be written as follows
 \begin{align}
 	1\cdot 1\cdot WHC_{\text{in}}\dfrac{C_{\text{in}}}{D} + 3\cdot 3\cdot WH\dfrac{C_{\text{in}}^2}{D^2} +1\cdot 1\cdot WH\dfrac{C_{\text{in}}}{D}C_{\text{out}}
@@ -359,12 +349,10 @@ This allows to model the aleatoric uncertainties for evidential masses with a ne
 %Another way to reduce \gls{mac} while still convolving spatially and channel-wise is used in ResNet \cite{he2016deep}. Here, a bottleneck \gls{conv} is proposed where the input is first convolved using a $1 \times 1$ \gls{conv} to compress the $N$ input to $\tilde{M}=\alpha N$ output channels with $\alpha \in [0,1]$. This is followed by the actual $3 \times 3$ \gls{conv}. Finally, a $1 \times 1$ \gls{conv} is applied to upsample the amount of channels again from $\tilde{M}$ to $M>\tilde{M}$. This results in $WH\alpha N(N+K^2\alpha N+M)$ \gls{mac}. In case of a one-to-one operation where $M=N$ with $K=3$, this results in less \gls{mac} for channel compressions of $\alpha < 0.8$ as compared to standard \gls{conv}. While it has been shown, that for minor compressions, the accuracy of standard \gls{conv} can be maintained, it is also possible to compress up to the point where accuracy is lost. On another note, the application of the bottleneck as compared to standard \gls{conv} increases the depth of networks by a factor of three. This makes the back-propagation of gradients numerically less stable. To counteract, skip connections can be introduced for a one-to-one connection which add the inputs channel-wise with to the outputs. It has been shown that this makes it in general possible to train deeper networks.
 %Similarly to ResNet, ResNeXt \cite{xie2017aggregated} also uses the bottleneck \gls{conv}. However, the standard $3 \times 3$ \gls{conv} is replaced by a grouped $3\times 3$ \gls{conv} to obtain a further parameter to tune computation speed against accuracy.
 %This has been further improved upon in MobileNetV2 \cite{sandler2018mobilenetv2}, by using inverted bottleneck \gls{conv}. Here, they argue that the compressed feature representation contains all information needed and, thus, use the compressed feature space as inputs to layers. These features are then expanded via a $1\times 1$ \gls{conv} to a higher dimensional space, followed by a $3 \times 3$ depthwise \gls{conv} and concluded by a $1\times 1$ \gls{conv} to again compress the feature space. They also apply residual connections directly between the low dimensional input and output features. This, similarly to ResNet results in $WH\beta N(N+K^2\beta N+M)$ computations, while $\beta \in [1,\infty)$.
-%\begin{figure}
 %	\begin{center}
 %		\import{imgs/05_state_of_the_art/nn_layers/}{all_convs.pdf_tex}
-%		\caption{\label{fig:conv_layers} \gls{conv} layer}
-%	\end{center}
-%\end{figure}  
+%		\captionof{figure}{\label{fig:conv_layers} \gls{conv} layer}
+%	\end{center} 
 %\begin{center}
 %	\begin{tabular}{c|c|c}
 %		\gls{conv} type & \gls{mac} & examples of networks \\
