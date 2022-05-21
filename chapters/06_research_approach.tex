@@ -35,15 +35,15 @@ Third, the trained \gls{ism} should be obtained as resource efficient as possibl
 \begin{subreq}[R\ref{subreq:min_requirements}] \label{subreq:min_requirements}
 	Minimize the amount of manpower, work hours and equipment needed to create the trained \gls{ism}.
 \end{subreq}
-Also, the data-driven \gls{ism} should be able to run in parallel with the already existing geometric \gls{ism} on the hardware of production-ready vehicles in real-time. The sensor with the highest capture frequency in the NuScenes dataset is the lidar sensor with 20Hz. To provide some room to perform other computations, it is proposed to aim for a 100Hz inference time of the trained \gls{ism}. To emulate these hardware restrictions, the requirement can be formulated as follows
+Also, the data-driven \gls{ism} should be able to run in parallel with the already existing geometric \gls{ism} on the hardware of production-ready vehicles in real-time. The sensor with the highest capture frequency in the NuScenes dataset is the lidar sensor with 20 Hz. To provide some room to perform other computations, it is proposed to aim for a 100 Hz inference time of the trained \gls{ism}. To emulate these hardware restrictions, the requirement can be formulated as follows
 \\
 \begin{subreq}[R\ref{subreq:resource_efficient_inference}] \label{subreq:resource_efficient_inference}
-	The trained \gls{ism} shall be executable with 100Hz on a single core of a CPU (Intel Core Processor i7-10750H).
+	The trained \gls{ism} shall be executable with 100 Hz on a single core of a CPU (Intel Core Processor i7-10750H).
 \end{subreq}
-For this work, the width and height of input and output grid maps shall be $128\times 128$ cells for an area of $40m \times 40m$. This is an acceptable range for low speed scenarios like parking. Additionally, the resolution of $31,25 cm$ per cell is satisfactory for the trained \gls{ism}, as it is mainly used to enhance the geometric \gls{ism}. Thus, leading to the following requirement
+For this work, the width and height of input and output grid maps shall be $128 \times 128$ cells for an area of $40$ m $\times$ $40$ m. This is an acceptable range for low speed scenarios like parking. Additionally, the resolution of $31.25$ cm per cell is satisfactory for the trained \gls{ism}, as it is mainly used to enhance the geometric \gls{ism}. Thus, leading to the following requirement
 \\
 \begin{subreq}[R\ref{subreq:grid_map_size}] \label{subreq:grid_map_size}
-	The input and output grid maps shall cover an area of $40m \times 40m$ with $128 \times 128$ cells.
+	The input and output grid maps shall cover an area of $40$ m $\times$ $40$ m with $128 \times 128$ cells.
 \end{subreq}
 Finally, on the theoretical side, the model shall estimate the evidential classes as defined in \ref{sec:occupancy_mapping}, leading to the following requirements
 \\
@@ -195,7 +195,7 @@ In order to answer the above posed research questions, a dataset containing big 
 \\\\
 The dataset is separated into $1000$ so called scenes each containing the data of roughly a $20$ second drive during which data from each modality is recorded, which is referred to as sensor sweeps. Additionally, so called samples are defined every $0.5$ seconds containing annotations like bounding boxes and semantics for all sensor modalities. To enable comparability, the train-val-test split is predefined by the NuScenes creators.
 \\\\
-Regarding the sensor setup, six cameras three of which face front left, center, right and three of which face back left, center, right are installed. Each camera captures 1.4MP images at a rate of 12Hz. Additionally, five 77GHz \gls{fmcw} radars are mounted to the car's front left, center, right and back left and right. To obtain ground-truth depth information, a 32 beam spinning lidar is mounted to the roofs center that captures frames with 20Hz. The pose information is based on a fusion of lidar odometry, \gls{gps} and \gls{imu}.  For more details, the reader is referred to Table 2 in the paper.
+Regarding the sensor setup, six cameras three of which face front left, center, right and three of which face back left, center, right are installed. Each camera captures 1.4MP images at a rate of 12 Hz. Additionally, five 77 GHz \gls{fmcw} radars are mounted to the car's front left, center, right and back left and right. To obtain ground-truth depth information, a 32 beam spinning lidar is mounted to the roofs center that captures frames with 20 Hz. The pose information is based on a fusion of lidar odometry, \gls{gps} and \gls{imu}.  For more details, the reader is referred to Table 2 in the paper.
 %==========================================================================%
 %
 %==========================================================================%
