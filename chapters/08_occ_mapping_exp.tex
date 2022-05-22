@@ -19,8 +19,7 @@ In this section, a simulated verification of the combination rules' properties d
 \label{subsec:results_choice_comb_rule}
 Beginning with Dempster's rule, it can be seen that the fused mass always fully converges to the class of the signal with the highest portion (see Dempster graph e.g. in the time interval $[0, 20]$). Given temporal independent information and no conflict, this behavior would be desired since each time step provides new evidence of the state. However, in presence of conflict, the fused mass should converge to a state representing the portion of conflict to represent cells being dynamic. Since Dempster's rule lacks the ability to do so, it is disqualified for usage in this work.
 \begin{center}
-	\resizebox{\textwidth}{!}{
-	\import{imgs/08_occ_mapping_exp/choice_of_comb_rule}{ds_comb_rule_comparison.pgf}}
+	\import{imgs/08_occ_mapping_exp/choice_of_comb_rule}{ds_comb_rule_comparison.pgf}
 	\captionof{figure}{\label{fig:ds_comb_rule_comparison}This figure shows the qualitative evaluation of the different evidential combination rules given input signals for free, occupied and unknown mass (first subplot) over time with an exemplary lower unknown threshold $\underline{m}_u$ overlayed.}
 \end{center}
 Similar to Dempster's rule, Yager's rule, in absence of conflict, converges fully to the dominating class (see Yager graph e.g. in the time interval $[0, 20]$). In presence of conflicting mass, Yager's rule recuperates unknown mass (see e.g. time interval $[35, 45]$) and allows to directly switch the state, as opposed to Dempster's rule (compare Dempster and Yager graph in time interval $[35, 45]$). The recuperation capability is useful in the initialization phase to correct for state changes without falling below $\underline{m}_u$. Also, while Yager's rule is capable of representing the conflict state of a signal (see Yager graph in the time interval $[80, 100]$ and $[140, 160]$) it never reaches the original input conflict due to the recuperated unknown mass. It shall be argued that the property of recuperating unknown mass outweighs the deficit of biased conflict representation for the purpose of initializing the occupancy state.  
@@ -56,7 +55,6 @@ The metrics used are the normed confusion matrix (see Section \ref{subsec:confus
 \label{subsec:results_of_red_analy}
 The findings in Fig. \ref{tab:conf_mat_redunt_info} show that, even though, the geo IR$_{20}$M's occupancy map has the least true positive rates overall, it also has by far the least false rates. More specifically, the deep IR$_{20}$Ms without redundancy reduction produce about four times and the one with the reduction about twice the amount of false occupied predictions in the whole mapped area. Around the boundaries, this ratio even goes up slightly. For free false rates, the ratio of geo IR$_{20}$M maps is about half of the other variants. On the other hand, the geo IR$_{20}$M maps only reach about half the true occupied and about two third of the free positive rates. Also, the sparse nature of the geo IR$_{20}$M can be seen for the unknown class where the accumulation of the deep IR$_{20}$M results in ten times the false rates both for free and occupied. This is also reflected by the "cleanliness" of boundaries as measured by the mIoU where this variant reaches the best score in the occupied and unknown classes and is clearly shown in Fig. \ref{fig:qual_analysis_of_redundant_info} for both scenes.
 \begin{center}
-\resizebox{\textwidth}{!}{
 	\begin{tabular}{c|c|ccc|ccc}
 		& \backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
 		\hline
@@ -91,7 +89,7 @@ The findings in Fig. \ref{tab:conf_mat_redunt_info} show that, even though, the 
 		& mIoU &69.1&24.0&27.0&17.0&24.1&11.4 \\
 		\hline
 		& & \multicolumn{3}{c|}{\scriptsize{whole mapped area}} & \multicolumn{3}{c}{\scriptsize{boundary area}}
-	\end{tabular}}
+	\end{tabular}
 	\captionof{table}{\label{tab:conf_mat_redunt_info}Normed confusion matrix for the three mapping variants using deep ISMs based on ShiftNet applied on different sensor modalities. See \ref{subsec:setup_of_red_analy} for further information on the methods and abbreviations used.}
 \end{center}
 Next, scores of the accumulated deep IR$_{20}$M reach the highest true and false rates for occupied predictions especially in the unknown regions which can be seen in all of the marked boxes in Fig. \ref{fig:qual_analysis_of_redundant_info}. This also leads to the lowest mIoU scores in the boundary region. When fusing the predictions with the geo IR$_{20}$Ms, the scores do only minimally change hinting to a domination of the deep IR$_{20}$M over the geometric one. The qualitative results verify this domination by barely showing any signs of the geo IR$_{20}$Ms influence. By looking closely in the upper white box in scene B some occupied detections of the geo IR$_{20}$M can be found.
@@ -102,14 +100,12 @@ Applying redundancy reduction before accumulation has a similar effect than cuto
 \\\\
 Finally, the fusion of the reduced deep \gls{irm} with the geometric further shows the benefit of the proposed method. Here, all but the free false rate improve while the free false rate only slightly worsens. In the boundary area, the overall improvement leads to reaching the best score for free space and a close performance in the other classes compared to the geo \gls{irm} map. These findings are also qualitatively verified in Fig. \ref{fig:qual_analysis_of_prior} in Section \ref{subsec:exp_of_prior_analy}.
 \begin{center}
-	\resizebox{\textwidth}{!}{
-	\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{analysis_of_redundant_info_scenes_84_n_260.pdf_tex}}
+	\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{analysis_of_redundant_info_scenes_84_n_260.pdf_tex}
 	\captionof{figure}{\label{fig:qual_analysis_of_redundant_info}Qualitative results of the three mapping approaches using different sensor modalities for two scenes. Here, the first row shows the ground truth map created by accumulating the geo \gls{ilm} with the evaluation area overlayed in white around the occupied pixels. The other maps are created using deep ISMs based on ShiftNet with their respective sensor inputs (see Section \ref{subsec:setup_of_red_analy}).}
 \end{center}
 To further verify the workings of the redundancy reduction update, three steps of the mapping procedure are visualized in Fig. \ref{fig:viz_mapping_progress}. It can be seen that in the first step, when all map cells are initialized to unknown, the complete prediction of the deep \gls{irm} is used to update the map. Afterwards, the majority of new information comes from areas that just entered the deep \gls{irm}'s \gls{fov}. In the depicted case, the ego vehicle is moving from left to right and, thus, the majority of new information is at the right border (see e.g. white box on the right for $t=10$). Besides from areas entering the \gls{ism}'s \gls{fov}, formerly occluded that become visible are also identified to provide new information (see white box for $t=12$). Finally, the redundancy reduction is formulated to treat regions of conflict as rich in new information. This is done to allow the map to react to changes in the environment e.g. a parked vehicles starting to move. Thus, dynamic objects are also treated as new information and remain in the update (see left white box for $t=10$).
 \begin{center}
-	\resizebox{\textwidth}{!}{
-		\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{viz_progress_scene_446.pdf_tex}}
+		\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{viz_progress_scene_446.pdf_tex}
 	\captionof{figure}{\label{fig:viz_mapping_progress}Mapping process given redundancy reduced deep \gls{irm} updates. Left, the geo \gls{ilm} and \gls{irm} map are shown for reference. Right, the first row shows the map state before the update, the second the redundancy reduced deep \gls{irm} update based on the first row's state and, finally, the updated map in the last row.}
 \end{center}
 %=================================%
@@ -144,7 +140,6 @@ In this section, RQ\ref{requ:comp_deep_occ_maps} shall be tackled concerning the
 \label{subsec:results_analyze_deep_ism_maps_diff_sensors}
 The quantitative results show a similar line of improvement as shown for the ISM comparison in Section \ref{sec:cam_lidar_fusion_in_deep_isms} and are overall consistent in the whole as well as the boundary area. More specifically, the \gls{monodepth} input lacks behind the lidar input in all classes. While, the false occupied rate is doubled for the lidar resulting in a $1\%$ increase, the true occupied rate is more than three times higher providing an increase of almost $50\%$. This improvement can be clearly verified qualitatively comparing the sharpness of occupied boundaries between \gls{monodepth} and lidar maps. Moreover, adding radar information provides a further improvement in true rates. This is especially true for the \gls{monodepth} case, showing that providing measured depth over estimated depth improves the occupancy predictions. For the false rates, radar provides consistent improvement for the free class while slightly decreasing the performance for the occupied case.
 \begin{center}
-	\resizebox{\textwidth}{!}{
 		\begin{tabular}{c|c|ccc|ccc}
 			& \backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
 			\hline
@@ -169,13 +164,12 @@ The quantitative results show a similar line of improvement as shown for the ISM
 			& mIoU &83.3&40.7&34.8&21.9&40.7&15.2 \\
 			\hline
 			& & \multicolumn{3}{c|}{\scriptsize{whole mapped area}} & \multicolumn{3}{c}{\scriptsize{boundary area}}
-	\end{tabular}}
+	\end{tabular}
 	\captionof{table}{\label{tab:conf_mat_deep_ism_map_comparison}Normed confusion matrix for deep ISMs based on ShiftNet applied on different sensor modalities. See \ref{subsec:setup_analyze_deep_ism_maps_diff_sensors} for further information on the methods and abbreviations used.}
 \end{center}
 The findings of Fig. \ref{tab:conf_mat_deep_ism_map_comparison} are further qualitatively verified in Fig. \ref{fig:comparison_of_maps_diff_sens}. It can again be seen that the overall quality improves from radar, over \gls{monodepth} to lidar and again when fusing the sensor inputs. More specifically, looking at the upper white box in scene A, the falsely extrapolated free space of the deep \gls{irm} map behind the row of parked cars can be corrected in the fusion with \gls{monodepth}. Additionally, the gaps between the two cars parked in the middle of the upper and lower four is barely visible in the \gls{monodepth} map while it is well defined in the fusion with radar. This shows that inaccuracies of the radar as well as the \gls{monodepth} map can be corrected through the fusion. Furthermore, the lidar map shows the gaps and contours with more precision which is even improved providing additional radar information. This again shows that the deep \gls{ism} is capable of utilizing the improved accuracy of the sensor and further translate this improvement into the mapping process. These effects can again be seen in the left white box in scene B where both the radar and \gls{monodepth} maps fail to properly capture the opening of the alley. However, the fused map can capture it properly.
 \begin{center}
-	\resizebox{\textwidth}{!}{
-		\import{imgs/08_occ_mapping_exp/comparison_of_maps}{comparison_of_maps_scenes_488_n_490.pdf_tex}}
+		\import{imgs/08_occ_mapping_exp/comparison_of_maps}{comparison_of_maps_scenes_488_n_490.pdf_tex}
 	\captionof{figure}{\label{fig:comparison_of_maps_diff_sens}Qualitative results of the occupancy maps created using different ISMs. The abbreviations are explained in Section \ref{subsec:setup_analyze_deep_ism_maps_diff_sensors}.}
 \end{center}
 The analysis in this section provides a quantitative as well as qualitative comparison of the occupancy maps created the proposed deep \gls{ism} using different sensor input, thus, answering RQ\ref{requ:comp_deep_occ_maps}.
@@ -208,13 +202,12 @@ The metrics for the comparison are normed confusion matrices as described in Sec
 First, the redundancy reduction's property to suffice a lower bound $\underline{m}_u$ during fusion, which is proven on simulated data in Section \ref{sec:exp_choice_comb_rule}, shall be additionally verified using the real world sensor inputs. Fig. \ref{tab:prior_violations} shows the violations of the lower bound in percentage and absolute number. It can be seen that, given a lower bound of $\underline{m}_u = 0.3$, a small percentage of cells violate the lower bound. Provided a grace interval of $0.002$, these violations, however, vanish.
 
 \begin{center}
-\resizebox{\textwidth}{!}{
 	\begin{tabular}{c|ccc}
 		& \scriptsize{percentage} & \scriptsize{total amount} \\
 		\hline
 		\scriptsize{fused Map(m$_u$ < 0.300) | geo \gls{irm} Map(m$_u$ = 1), $\underline{m}_u$=0.3} & \scriptsize{0.00023\%} & \scriptsize{2476}\\
 		\scriptsize{fused Map(m$_u$ < 0.298) | geo \gls{irm} Map(m$_u$ = 1), $\underline{m}_u$=0.3} & \scriptsize{0.0\%} & \scriptsize{0}
-	\end{tabular}}
+	\end{tabular}
 	\captionof{figure}{\label{tab:prior_violations}Analysis of how often the lower bound on the unknown mass $\underline{m}_u$ has been violated in the fused map in areas where the geo \gls{irm} has not been active. The violations are given in percentage and absolute. Also, the amount of violations given some slack on the condition are provided.}
 \end{center}
 Next, the falsification and correction properties of the fusion approaches are analyzed. Starting with deep \& geo \gls{irm} map with $\underline{m}_u=0$, the unknown mass is the lowest of all variants showing the dense properties of the deep \gls{irm}. However, this also causes an increase in false rates. Here, the lower bounded fusion overall decreases the rates. But, the decrease in false rates is higher compared to the decrease in true rates resulting in an overall better ratio of false to true classification. 
@@ -223,7 +216,6 @@ For the areas, where the geo \gls{irm} map is correct, it can be seen that the l
 \\\\
 In the areas, where the geo \gls{irm} map is wrong, the lower bounded deep \gls{irm} leads to worsening the false rates which, however, is still increased given no lower bound. Nevertheless, the lower bounded deep \gls{ism} also leads to a great portion of improvement transforming unknown mass to correct assignments. For the unrestricted fusion, however, the true rates exceed the ones of the restricted fusion. 
 \begin{center}
-\resizebox{\textwidth}{!}{
 \begin{tabular}{c|c|ccc|ccc|ccc}
 	&\backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
 \hline
@@ -240,13 +232,12 @@ In the areas, where the geo \gls{irm} map is wrong, the lower bounded deep \gls{
 	\scriptsize{$\underline{m}_u = 0.3$}&$p(k|u)$ & 27.8 & 43.0 & 29.2& 31.5 & 18.8 & 49.7& 23.2 & 73.2 & 3.6 \\
 \hline
 	& & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$}} & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \& correct}} & \multicolumn{3}{c}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \& false}} 
-\end{tabular}}
+\end{tabular}
 \captionof{table}{\label{tab:quant_analysis_of_prior}Normed confusion matrices evaluated for the geo \gls{irm} map, the fusion of the reduced deep \& geo \gls{irm} and the fusion of the lower bounded, reduced deep \& geo \gls{irm}. The confusion matrices are evaluated in the area influenced by the geo \gls{irm} (left), the correctly influenced area (middle) and the falsely influenced area (right). Additionally, the lower bounded method is only evaluated for cells in the convergence phase ($m_u < \underline{m}_u$). Examples of areas in the convergence phase are depicted in right Fig. \ref{fig:qual_analysis_of_prior}.}
 \end{center}
 Looking at the qualitative results in Fig. \ref{fig:qual_analysis_of_prior}, the property of the deep \gls{irm} to inter- \& extrapolate can be seen between radar detections and in areas lacking information. One notable example of extrapolation is marked in the lower white box of scene A where the area is assigned/initialized by the deep \gls{irm} variants while the geo \gls{irm} lacks to provide this information. However, in some cases (e.g. upper white box in scene A), the extrapolation might be false leading to mass that has to be reassigned later. Additionally, wrong interpolations (e.g. white box on the upper right in scene B) or even direct errors in presence of detections (e.g. white box on the upper left of scene B) can occur in the deep \gls{irm}. In these cases, using the deep \gls{irm} purely for initialization leads the areas to remain in a distinguishable state in contrast to the verified cells in the convergence phase (compare with right most images). Also, the influence of a dynamic object following the ego vehicle (e.g. bottom white box in scene B) can be dampened and distinguished using the deep \gls{irm} as a prior.
 \begin{center}
-	\resizebox{\textwidth}{!}{
-	\import{imgs/08_occ_mapping_exp/analysis_of_prior}{analysis_of_prior_scenes_442_n_488.pdf_tex}}
+	\import{imgs/08_occ_mapping_exp/analysis_of_prior}{analysis_of_prior_scenes_442_n_488.pdf_tex}
 	\captionof{figure}{\label{fig:qual_analysis_of_prior}Qualitative results of three mapping approaches (column 1-4) for two scenes with the geo \gls{ilm} ground-truth map in the first column. Additionally, the 4th column shows the result of filtering out all non-converged pixels of the 3rd column's map. This is done by setting all pixels with $m_u > \underline{m}_u = 0.3$ to $m_u = 1$.}
 \end{center}
 %=================================%

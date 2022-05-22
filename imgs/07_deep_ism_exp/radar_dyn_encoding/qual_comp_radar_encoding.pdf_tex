@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{460.03609725bp}%
+    \setlength{\unitlength}{413.58789159bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,21 +50,20 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.50509747)%
+  \begin{picture}(1,0.55308677)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{qual_comp_radar_encoding.pdf}}%
-    \put(0.37951272,0.40959391){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene A\end{tabular}}}}%
-    \put(0.87015187,0.40959391){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene B\end{tabular}}}}%
-    \put(0.10318365,0.0020506){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{$R_{1}$}\end{tabular}}}}%
-    \put(0.25650598,0.00205061){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{$R_{20}$}\end{tabular}}}}%
-    \put(0.42043646,0.00205061){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{$R_{20|1}$}\end{tabular}}}}%
-    \put(0.02640195,0.08121863){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{Input}\end{tabular}}}}}%
-    \put(0.02640195,0.22272397){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{prediction}\end{tabular}}}}}%
-    \put(0.00660613,0.23001766){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{ShiftNet}\end{tabular}}}}}%
-    \put(0.02640195,0.3696913){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{Ground-Truth}\end{tabular}}}}}%
-    \put(0.59553928,0.0020506){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{$R_{1}$}\end{tabular}}}}%
-    \put(0.74886161,0.00205063){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{$R_{20}$}\end{tabular}}}}%
-    \put(0.9127921,0.00205063){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{$R_{20|1}$}\end{tabular}}}}%
+    \put(0.37178835,0.42910197){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene A\end{tabular}}}}%
+    \put(0.86398787,0.42910197){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene B\end{tabular}}}}%
+    \put(0.02115159,0.07930878){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Input\end{tabular}}}}}%
+    \put(0.02441003,0.21976496){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ShiftNet\end{tabular}}}}}%
+    \put(0.01759562,0.41509578){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:gt}\end{tabular}}}}}%
+    \put(0.07333952,0.0115252){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$R_{1}$\end{tabular}}}}%
+    \put(0.25476117,0.01152522){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$R_{20}$\end{tabular}}}}%
+    \put(0.41171436,0.01152522){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$R_{20|1}$\end{tabular}}}}%
+    \put(0.59922859,0.0115252){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$R_{1}$\end{tabular}}}}%
+    \put(0.75526266,0.01152523){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$R_{20}$\end{tabular}}}}%
+    \put(0.90858913,0.01152523){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$R_{20|1}$\end{tabular}}}}%
   \end{picture}%
 \endgroup%

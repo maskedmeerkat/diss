@@ -1,4 +1,4 @@
-%% Creator: Inkscape 1.1 (c68e22c387, 2021-05-23), www.inkscape.org
+%% Creator: Inkscape 1.0 (4035a4fb49, 2020-05-01), www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
 %% Accompanies image file 'qual_results_gt_choice_scene040.pdf' (pdf, eps, ps)
 %%
@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{357.35164612bp}%
+    \setlength{\unitlength}{438.42387042bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,31 +50,28 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.81227857)%
+  \begin{picture}(1,0.67593766)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0.03612728,0.66824515){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize 0.1m\end{tabular}}}}}%
-    \put(0.00850439,0.61787454){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize height threshold\end{tabular}}}}}%
+    \put(0.10743822,0.5298913){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.1m\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{qual_results_gt_choice_scene040.pdf}}%
-    \put(0.03612728,0.27591741){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize 1.7m\end{tabular}}}}}%
-    \put(0.00850439,0.22554677){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize height threshold\end{tabular}}}}}%
+    \put(0.10745158,0.20515346){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}1.7 m\end{tabular}}}}}%
+    \put(0.06842688,0.28464834){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}height thresholds\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{qual_results_gt_choice_scene040.pdf}}%
-    \put(0.03612728,0.47208123){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize 0.5m\end{tabular}}}}}%
-    \put(0.00850439,0.42171064){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize height threshold\end{tabular}}}}}%
+    \put(0.10743822,0.37000151){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}0.5m\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{qual_results_gt_choice_scene040.pdf}}%
-    \put(0.03612728,0.0198362){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize mapped area\end{tabular}}}}}%
+    \put(0.84367409,0.55533085){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}no street\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=4]{qual_results_gt_choice_scene040.pdf}}%
-    \put(0.97004895,0.64725739){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize no street\end{tabular}}}}}%
+    \put(0.84367409,0.06726188){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}radar map\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=5]{qual_results_gt_choice_scene040.pdf}}%
-    \put(0.97004895,0.20875656){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize no street, sidewalk\end{tabular}}}}}%
-    \put(0.99767166,0.25492958){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize or terrain\end{tabular}}}}}%
+    \put(0.40161639,0.6551423){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Lidar Maps\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=6]{qual_results_gt_choice_scene040.pdf}}%
-    \put(0.97004895,0.43010573){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize no street or\end{tabular}}}}}%
-    \put(0.99767166,0.44689593){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize sidewalk\end{tabular}}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=7]{qual_results_gt_choice_scene040.pdf}}%
-    \put(0.97004895,0.03134371){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize radar map\end{tabular}}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=8]{qual_results_gt_choice_scene040.pdf}}%
-    \put(0.44614826,0.80377417){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize lidar maps\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=9]{qual_results_gt_choice_scene040.pdf}}%
+    \put(0.02360193,0.05067638){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}area\end{tabular}}}}%
+    \put(-0.00248582,0.07854162){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}mapped\end{tabular}}}}%
+    \put(0.84464965,0.38142826){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}or sidewalk\end{tabular}}}}%
+    \put(0.86069393,0.40945388){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}no street\end{tabular}}}}%
+    \put(0.84628686,0.2355513){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}sidewalk,\end{tabular}}}}%
+    \put(0.84575895,0.20473247){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}or terrain\end{tabular}}}}%
+    \put(0.84367409,0.26637012){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}no street,\end{tabular}}}}%
   \end{picture}%
 \endgroup%
