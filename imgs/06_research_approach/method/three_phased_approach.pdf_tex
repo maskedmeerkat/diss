@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{453.54330709bp}%
+    \setlength{\unitlength}{431.70343835bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,37 +50,37 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.2)%
+  \begin{picture}(1,0.20500189)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{three_phased_approach.pdf}}%
-    \put(0.36632639,0.10038793){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1$\end{tabular}}}}%
+    \put(0.37873746,0.11097681){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{three_phased_approach.pdf}}%
-    \put(0.35677054,0.0474712){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\underline{m}_u$\end{tabular}}}}%
-    \put(0.43055556,0.00970266){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}%
-    \put(0.49598241,0.00970266){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_o$\end{tabular}}}}%
-    \put(0.56140921,0.00970266){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}%
+    \put(0.36174895,0.05538302){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\underline{m}_u$\end{tabular}}}}%
+    \put(0.44621598,0.01570377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$m_f$\end{tabular}}}}%
+    \put(0.51495277,0.01570377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$m_o$\end{tabular}}}}%
+    \put(0.58368951,0.01570377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$m_u$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{three_phased_approach.pdf}}%
-    \put(0.38956757,0.14992733){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Initialization Phase\end{tabular}}}}%
+    \put(0.36145907,0.1630224){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Initialization Phase\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=4]{three_phased_approach.pdf}}%
-    \put(0.74495726,0.09377334){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1$\end{tabular}}}}%
+    \put(0.73135331,0.11097681){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=5]{three_phased_approach.pdf}}%
-    \put(0.73540144,0.04747119){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\underline{m}_u$\end{tabular}}}}%
-    \put(0.80918646,0.00970266){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}%
-    \put(0.87461329,0.00970266){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_o$\end{tabular}}}}%
-    \put(0.94004016,0.00970266){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}%
+    \put(0.71436484,0.05538301){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\underline{m}_u$\end{tabular}}}}%
+    \put(0.79883187,0.01570377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$m_f$\end{tabular}}}}%
+    \put(0.86756863,0.01570377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$m_o$\end{tabular}}}}%
+    \put(0.93630545,0.01570377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$m_u$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=6]{three_phased_approach.pdf}}%
-    \put(0.77150583,0.14992732){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Convergence Phase\end{tabular}}}}%
+    \put(0.71754965,0.16302239){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Convergence Phase\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=7]{three_phased_approach.pdf}}%
-    \put(0.00509451,0.09377334){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1$\end{tabular}}}}%
+    \put(0.01660391,0.10402759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=8]{three_phased_approach.pdf}}%
-    \put(-0.00446131,0.04747119){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\underline{m}_u$\end{tabular}}}}%
-    \put(0.0693237,0.00970266){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_f$\end{tabular}}}}%
-    \put(0.13475052,0.00970266){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_o$\end{tabular}}}}%
-    \put(0.20017735,0.00970266){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $m_u$\end{tabular}}}}%
+    \put(-0.00038456,0.05538301){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\underline{m}_u$\end{tabular}}}}%
+    \put(0.08408245,0.01570377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$m_f$\end{tabular}}}}%
+    \put(0.15281919,0.01570377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$m_o$\end{tabular}}}}%
+    \put(0.22155598,0.01570377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$m_u$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=9]{three_phased_approach.pdf}}%
-    \put(0.07463783,0.14992732){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Start Phase\end{tabular}}}}%
+    \put(0.0479701,0.16302239){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Start Phase\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=10]{three_phased_approach.pdf}}%
-    \put(0.32039029,0.08054418){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $1-\underline{m}_u$\end{tabular}}}}%
+    \put(0.31657902,0.09012916){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1-\underline{m}_u$\end{tabular}}}}%
   \end{picture}%
 \endgroup%

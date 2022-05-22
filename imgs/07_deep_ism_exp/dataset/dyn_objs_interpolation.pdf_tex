@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{453.54330709bp}%
+    \setlength{\unitlength}{435.47317625bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,16 +50,16 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.2)%
+  \begin{picture}(1,0.21528307)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{dyn_objs_interpolation.pdf}}%
-    \put(0.10190869,0.03173083){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize x\end{tabular}}}}%
-    \put(0.37757428,0.03173083){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{x}$\end{tabular}}}}%
-    \put(0.65323992,0.03173083){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize x\end{tabular}}}}%
-    \put(0.00188408,0.10904445){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize y\end{tabular}}}}%
-    \put(0.27754965,0.10904445){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $\tilde{y}$\end{tabular}}}}%
-    \put(0.55321529,0.10904445){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize y\end{tabular}}}}%
+    \put(0.095994,0.02498959){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x$\end{tabular}}}}%
+    \put(0.38573576,0.02154508){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\tilde{x}$\end{tabular}}}}%
+    \put(-0.0004253,0.1110268){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y$\end{tabular}}}}%
+    \put(0.28369438,0.1110268){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\tilde{y}$\end{tabular}}}}%
+    \put(0.57424344,0.1110268){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$y$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{dyn_objs_interpolation.pdf}}%
+    \put(0.67020294,0.02498959){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$x$\end{tabular}}}}%
   \end{picture}%
 \endgroup%

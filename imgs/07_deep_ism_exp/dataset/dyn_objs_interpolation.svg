@@ -12,9 +12,9 @@
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
    id="svg8"
    version="1.1"
-   viewBox="0 0 159.99999 32"
-   height="32mm"
-   width="160mm">
+   viewBox="0 0 153.62525 33.072918"
+   height="33.072918mm"
+   width="153.62526mm">
   <sodipodi:namedview
      inkscape:document-rotation="0"
      units="mm"
@@ -25,15 +25,15 @@
      fit-margin-top="0"
      inkscape:window-maximized="1"
      inkscape:window-y="-8"
-     inkscape:window-x="54"
-     inkscape:window-height="1057"
-     inkscape:window-width="1858"
+     inkscape:window-x="1912"
+     inkscape:window-height="1017"
+     inkscape:window-width="1920"
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="73.745793"
-     inkscape:cx="253.32235"
-     inkscape:zoom="7.5767673"
+     inkscape:cy="117.89587"
+     inkscape:cx="284.15118"
+     inkscape:zoom="1.8941918"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -41,8 +41,8 @@
      pagecolor="#ffffff"
      id="base">
     <inkscape:grid
-       originy="-273.54832"
-       originx="33.72229"
+       originy="-272.61398"
+       originx="29.721966"
        type="xygrid"
        id="grid815"
        dotted="true" />
@@ -2814,18 +2814,18 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      style="stroke-linecap:butt;stroke-linejoin:round"
-     transform="translate(33.722298,-3.45171)"
+     transform="translate(29.721979,-2.5173693)"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
     <g
-       transform="matrix(0.11363935,0,0,0.11363935,83.533321,-0.77942072)"
+       transform="matrix(0.11363935,0,0,0.11363935,81.94582,-0.77942072)"
        clip-path="url(#pa4dd656170)"
        id="g15">
       <image
@@ -2840,10 +2840,10 @@
     <path
        sodipodi:nodetypes="cc"
        id="path3891"
-       d="m 90.867358,1.2790164 0,40.8327066"
+       d="M 90.867358,2.5173693 V 35.590286"
        style="fill:none;stroke:#808080;stroke-width:0.295167px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <g
-       transform="matrix(1.1155937,0,0,1.1155937,0.29962186,1.9783161)"
+       transform="matrix(1.1155937,0,0,1.1155937,3.474622,1.9783161)"
        id="g9488">
       <path
          d="M -27.380736,23.093107 H -3.1518441 V 5.0386744 H -27.380736 Z"
@@ -2993,7 +2993,7 @@
          id="path193-9" />
     </g>
     <g
-       transform="matrix(1.1155937,0,0,1.1155937,0.29962186,1.9783161)"
+       transform="matrix(1.1155937,0,0,1.1155937,3.474622,1.9783161)"
        id="g9531">
       <path
          d="M 12.155607,23.093106 H 36.384499 V 5.0386739 H 12.155607 Z"
@@ -3263,7 +3263,7 @@
          id="path253-0" />
     </g>
     <g
-       transform="matrix(1.1155937,0,0,1.1155937,0.29962186,1.9783161)"
+       transform="matrix(1.1155937,0,0,1.1155937,3.474622,1.9783161)"
        id="g9574">
       <path
          d="M 51.691956,23.093107 H 75.920848 V 5.0386745 H 51.691956 Z"
@@ -3534,77 +3534,77 @@
     </g>
     <text
        id="text9465"
-       y="30.374777"
-       x="-17.416908"
-       style="font-style:normal;font-weight:normal;font-size:0.787114px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167"
+       y="31.751255"
+       x="-14.974876"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167"
        xml:space="preserve"><tspan
-         style="font-size:0.787114px;stroke-width:0.295167"
-         y="30.374777"
-         x="-17.416908"
+         style="font-size:4.23333px;stroke-width:0.295167"
+         y="31.751255"
+         x="-14.974876"
          id="tspan9463"
-         sodipodi:role="line">\scriptsize x</tspan></text>
+         sodipodi:role="line">$x$</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:0.787114px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
-       x="26.689587"
-       y="30.374777"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
+       x="29.536777"
+       y="32.280418"
        id="text9465-4"><tspan
          sodipodi:role="line"
          id="tspan9463-4"
-         x="26.689587"
-         y="30.374777"
-         style="font-size:0.787114px;stroke-width:0.295167">\scriptsize $\tilde{x}$</tspan></text>
+         x="29.536777"
+         y="32.280418"
+         style="font-size:4.23333px;stroke-width:0.295167">$\tilde{x}$</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:0.787114px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
-       x="70.796089"
-       y="30.374777"
-       id="text9465-2"><tspan
-         sodipodi:role="line"
-         id="tspan9463-7"
-         x="70.796089"
-         y="30.374777"
-         style="font-size:0.787114px;stroke-width:0.295167">\scriptsize x</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:0.787114px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
-       x="-33.420845"
-       y="18.004599"
+       x="-29.787315"
+       y="18.533766"
        id="text9465-45"><tspan
          sodipodi:role="line"
          id="tspan9463-9"
-         x="-33.420845"
-         y="18.004599"
-         style="font-size:0.787114px;stroke-width:0.295167">\scriptsize y</tspan></text>
+         x="-29.787315"
+         y="18.533766"
+         style="font-size:0.787114px;stroke-width:0.295167">$y$</tspan></text>
     <text
        id="text9465-45-8"
-       y="18.004599"
-       x="10.685646"
+       y="18.533766"
+       x="13.860644"
        style="font-style:normal;font-weight:normal;font-size:0.787114px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
        xml:space="preserve"><tspan
          style="font-size:0.787114px;stroke-width:0.295167"
-         y="18.004599"
-         x="10.685646"
+         y="18.533766"
+         x="13.860644"
          id="tspan9463-9-5"
-         sodipodi:role="line">\scriptsize $\tilde{y}$</tspan></text>
+         sodipodi:role="line">$\tilde{y}$</tspan></text>
     <text
        id="text9465-45-0"
-       y="18.004599"
-       x="54.792149"
+       y="18.533766"
+       x="58.496319"
        style="font-style:normal;font-weight:normal;font-size:0.787114px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
        xml:space="preserve"><tspan
          style="font-size:0.787114px;stroke-width:0.295167"
-         y="18.004599"
-         x="54.792149"
+         y="18.533766"
+         x="58.496319"
          id="tspan9463-9-9"
-         sodipodi:role="line">\scriptsize y</tspan></text>
+         sodipodi:role="line">$y$</tspan></text>
     <path
        id="path9790"
-       d="m 1.4726732,16.733282 v 2.108337 h 4.2166787 v 1.054172 l 3.1625086,-2.10834 -3.1625086,-2.108339 v 1.05417 z"
+       d="m 3.58934,16.733282 v 2.108337 h 4.2166787 v 1.054172 l 3.1625093,-2.10834 -3.1625093,-2.108339 v 1.05417 z"
        style="fill:none;stroke:#000000;stroke-width:0.210834px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.210834px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 45.57917,16.733282 v 2.108337 h 4.216679 v 1.054172 l 3.162508,-2.10834 -3.162508,-2.108339 v 1.05417 z"
+       d="m 47.695838,16.733282 v 2.108337 h 4.216679 v 1.054172 l 3.162508,-2.10834 -3.162508,-2.108339 v 1.05417 z"
        id="path9790-7" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
+       x="73.238121"
+       y="31.751255"
+       id="text9465-8"><tspan
+         sodipodi:role="line"
+         id="tspan9463-5"
+         x="73.238121"
+         y="31.751255"
+         style="font-size:4.23333px;stroke-width:0.295167">$x$</tspan></text>
   </g>
 </svg>

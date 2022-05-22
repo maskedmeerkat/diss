@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{249.32561199bp}%
+    \setlength{\unitlength}{364.66014952bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,21 +50,20 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.36016504)%
+  \begin{picture}(1,0.24698103)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{idm_radar.pdf}}%
-    \put(0.72670833,0.29273849){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{detection 1, thin IDM }\end{tabular}}}}%
+    \put(0.65440877,0.17651222){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}detection 1, thin IDM \end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{idm_radar.pdf}}%
-    \put(0.72670833,0.24460866){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{detection 1, big IDM}\end{tabular}}}}%
+    \put(0.65440877,0.13625052){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}detection 1, big IDM\end{tabular}}}}%
+    \put(0.65440877,0.09128894){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}detection 2\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{idm_radar.pdf}}%
-    \put(0.72670833,0.14834905){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{detection 2, thin IDM }\end{tabular}}}}%
+    \put(0.65440876,0.2166052){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}detection 1\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=4]{idm_radar.pdf}}%
-    \put(0.72670833,0.10021918){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{detection 2, big IDM}\end{tabular}}}}%
+    \put(0.65440877,0.05119594){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}detection 2, thin IDM \end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=5]{idm_radar.pdf}}%
-    \put(0.72670833,0.34086833){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{detection 1}\end{tabular}}}}%
+    \put(0.65440877,0.01093427){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}detection 2, big IDM\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=6]{idm_radar.pdf}}%
-    \put(0.72670833,0.19647886){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{detection 2}\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=7]{idm_radar.pdf}}%
   \end{picture}%
 \endgroup%

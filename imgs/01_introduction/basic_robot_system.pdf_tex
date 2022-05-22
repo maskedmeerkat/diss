@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{398.58363835bp}%
+    \setlength{\unitlength}{443.5836816bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,19 +50,20 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.32343869)%
+  \begin{picture}(1,0.24835771)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{basic_robot_system.pdf}}%
-    \put(0.17494951,0.2813667){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Perception\end{tabular}}}}%
-    \put(0.57938268,0.20986351){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Planning\end{tabular}}}}%
-    \put(0.86202946,0.20694546){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Control\end{tabular}}}}%
+    \put(0.05305833,0.21055378){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Sense\end{tabular}}}}%
+    \put(0.644733,0.14630434){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Plan\end{tabular}}}}%
+    \put(0.90077347,0.14368232){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Act\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{basic_robot_system.pdf}}%
-    \put(0.55459769,0.04051375){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Environment\end{tabular}}}}%
+    \put(0.3432933,0.16614468){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}World\end{tabular}}}}%
+    \put(0.31964229,0.13034773){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Modeling\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{basic_robot_system.pdf}}%
-    \put(0.11321249,0.21314396){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\tiny{Sensing}\end{tabular}}}}%
+    \put(0.08851752,0.13034773){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Processing\end{tabular}}}}%
+    \put(0.10601306,0.16614468){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Sensory\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=4]{basic_robot_system.pdf}}%
-    \put(0.30429211,0.21971268){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\tiny{Environment}\end{tabular}}}}%
-    \put(0.31558209,0.20089604){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\tiny{Modelling}\end{tabular}}}}%
+    \put(0.58625602,0.03640377){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Environment\end{tabular}}}}%
   \end{picture}%
 \endgroup%

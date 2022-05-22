@@ -490,7 +490,7 @@ In case of occurring aleatoric uncertainty, the network is confronted with both 
 For the first variation, the evidential occupancy classes are extended to separately model the dynamic class instead of mixing it into the free and occupied classes(e.g. $[0.5, 0.5,0] \rightarrow [1,0,0,0]$). With regards to the network, the Softmax output as well as the \gls{mse} loss have to be extended by one dimension to realize this configuration. Additionally, to adapt the targets, an operation which shifts the occupancy labels from the evidential $\vec{m}=[b_f,b_o,u]^\top$ to the extended representation $\mathring{\vec{m}}=[\mathring{b_d},\mathring{b_f},\mathring{b_o},\mathring{u}]^\top$, sufficing \gls{sym:r} \ref{subreq:ev_rep}, \ref{subreq:unknown_mass} and \ref{subreq:conflicting_mass}, can be defined as follows
 \begin{align}
 	\label{eq:extend_shift}
-	\text{shift extension} \quad\mathring{\vec{m}} &\succ \vec{m}\\
+	\text{shift extension} \quad\mathring{\vec{m}} &\succ(\vec{m})\\
 	\mathring{b}_d &= 2\cdot \min(b_f,b_o)\\
 	\mathring{b}_{f/o} &= b_{f/o} - \min(b_f,b_o)\\
 	\mathring{u} &= u
@@ -499,13 +499,13 @@ Here, $\min(b_f,b_o)$ describes the amount of mass being equal in both the free 
 Moreover, to use estimates in the extended representation $\tilde{\mathring{\vec{m}}}$ in the evidential occupancy mapping pipeline, a compression operation can be defined as follows
 \begin{align}
 	\label{eq:compress_shift}
-	\text{shift compression} \quad\vec{m} &\prec \mathring{\vec{m}}\\
+	\text{shift compression} \quad\vec{m} &\prec(\mathring{\vec{m}})\\
 	b_{f/o} &= \mathring{b}_{f/o} - \min(\mathring{b}_f,\mathring{b}_o) + \dfrac{\mathring{b}_d}{2}\\
 	u &= \mathring{u} + 2\cdot\min(\mathring{b}_f,\mathring{b}_o)
 \end{align}
 This operation quantifies the learned aleatoric uncertainty between the free and occupied class as the amount of mass equally distributed into free and occupied ($\min(\mathring{b}_f,\mathring{b}_o)$) following H\ref{hyp:sota_not_model_unc}. Afterwards, the equal portion is extracted from their respective classes and shifted to the unknown class. Also, the dynamic mass is split into equal portions and added to the free and occupied class respectively, to account for \gls{sym:r} \ref{subreq:conflicting_mass}. The network trained on the extended labels $\hat{\mathring{\vec{m}}}$ and capable of producing evidential estimates $\tilde{\vec{m}}$ by applying the extend operation defined in Eq. \ref{eq:compress_shift} is from here on referred to as \textbf{ShiftNet}. The ShiftNet method is depicted in the second row of Fig. \ref{fig:deep_ism_variants}.
 \\\\
-The third method is heavily based on the method proposed by Sensoy et al. \cite{sensoy2018evidential}. In their method, a Dirichlet network is trained on the Bayes risk of the \gls{mse} (see Eq. \ref{eq:bayes_risk_mse}) to model aleatoric uncertainty and subjective logic (see Eq. \ref{eq:e2m} and \ref{eq:e2p}) is used to transform the Dirichlet \gls{pdf} to evidential masses. This will be referred to as \textbf{DirNet} and is depicted in the last row of Fig. \ref{fig:deep_ism_variants}. However, in the original formulation of Sensoy et al., all unknown mass is solely due to aleatoric uncertainty. But, in the evidential occupancy formulation, the unknown mass both represents uncertainty and lack of information. Thus, to additionally provide labels for the unknown mass e.g. in unobserved areas, the loss from Eq. \ref{eq:bayes_risk_mse} shall be altered as follows
+The third method is heavily based on the method proposed by Sensoy et al. \cite{sensoy2018evidential}. In their method, a Dirichlet network is trained on the Bayes risk of the \gls{mse} (see Eq. \ref{eq:bayes_risk_mse}) to model aleatoric uncertainty and \gls{subj_logic} (see Eq. \ref{eq:e2m} and \ref{eq:e2p}) is used to transform the Dirichlet \gls{pdf} to evidential masses. This will be referred to as \textbf{DirNet} and is depicted in the last row of Fig. \ref{fig:deep_ism_variants}. However, in the original formulation of Sensoy et al., all unknown mass is solely due to aleatoric uncertainty. But, in the evidential occupancy formulation, the unknown mass both represents uncertainty and lack of information. Thus, to additionally provide labels for the unknown mass e.g. in unobserved areas, the loss from Eq. \ref{eq:bayes_risk_mse} shall be altered as follows
 \begin{align}
 	\mathcal{L}_i = (\hat{u}_i-\tilde{u}_{i})^2 + \sum_{k\in [f,o]}(b_{ik}-\tilde{p}_{ik})^2 + \dfrac{\tilde{p}_{ik}(1-\tilde{p}_{ik})}{S_i+1} 
 \end{align}
