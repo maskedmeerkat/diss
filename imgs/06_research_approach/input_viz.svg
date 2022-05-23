@@ -22,15 +22,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.7883837"
-     inkscape:cx="184.70152"
-     inkscape:cy="265.8375"
+     inkscape:zoom="2.6787919"
+     inkscape:cx="454.45595"
+     inkscape:cy="168.11303"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="1912"
+     inkscape:window-width="1858"
+     inkscape:window-height="1057"
+     inkscape:window-x="54"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      fit-margin-top="0"
@@ -1522,7 +1522,7 @@
          y="48.726334"
          x="-22.036489"
          id="tspan1757-4"
-         sodipodi:role="line">\gls{sym:c_rgb}</tspan></text>
+         sodipodi:role="line">\gls{c_rgb}</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
@@ -1533,7 +1533,7 @@
          id="tspan1757-2-8"
          x="11.830173"
          y="48.726334"
-         style="font-size:4.23333px;stroke-width:0.264583">\gls{sym:c_seg}</tspan></text>
+         style="font-size:4.23333px;stroke-width:0.264583">\gls{c_s}</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
@@ -1544,7 +1544,7 @@
          id="tspan1757-0-2"
          x="43.580196"
          y="48.726334"
-         style="font-size:4.23333px;stroke-width:0.264583">\gls{sym:c_depth}</tspan></text>
+         style="font-size:4.23333px;stroke-width:0.264583">\gls{c_d}</tspan></text>
     <text
        id="text1759-2-2-6"
        y="48.726334"
@@ -1555,66 +1555,62 @@
          y="48.726334"
          x="69.509384"
          id="tspan1757-0-0-6"
-         sodipodi:role="line">\gls{sym:c_depth} &amp; \gls{sym:r_n}</tspan></text>
-    <g
-       id="g1933"
-       transform="translate(0,-0.25032686)">
-      <text
-         id="text1759"
-         y="10.626306"
+         sodipodi:role="line">\gls{c_d} &amp; \gls{r_n}</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="-18.332319"
+       y="10.375978"
+       id="text1759"><tspan
+         sodipodi:role="line"
+         id="tspan1757"
          x="-18.332319"
-         style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-         xml:space="preserve"><tspan
-           style="font-size:4.23333px;stroke-width:0.264583"
-           y="10.626306"
-           x="-18.332319"
-           id="tspan1757"
-           sodipodi:role="line">\gls{sym:l}</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
+         y="10.375978"
+         style="font-size:4.23333px;stroke-width:0.264583">\gls{l}</tspan></text>
+    <text
+       id="text1759-8"
+       y="10.375979"
+       x="11.830173"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
+       xml:space="preserve"><tspan
+         style="font-size:4.23333px;stroke-width:0.264583"
+         y="10.375979"
          x="11.830173"
-         y="10.626307"
-         id="text1759-8"><tspan
-           sodipodi:role="line"
-           id="tspan1757-2"
-           x="11.830173"
-           y="10.626307"
-           style="font-size:4.23333px;stroke-width:0.264583">\gls{sym:gt}</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
+         id="tspan1757-2"
+         sodipodi:role="line">\gls{gt}</tspan></text>
+    <text
+       id="text1759-2"
+       y="10.375979"
+       x="45.696865"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
+       xml:space="preserve"><tspan
+         style="font-size:4.23333px;stroke-width:0.264583"
+         y="10.375979"
          x="45.696865"
-         y="10.626307"
-         id="text1759-2"><tspan
-           sodipodi:role="line"
-           id="tspan1757-0"
-           x="45.696865"
-           y="10.626307"
-           style="font-size:4.23333px;stroke-width:0.264583">\gls{sym:r}</tspan></text>
-      <text
-         id="text1759-2-2"
-         y="10.626307"
+         id="tspan1757-0"
+         sodipodi:role="line">\gls{r}</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
+       x="77.976059"
+       y="10.375979"
+       id="text1759-2-2"><tspan
+         sodipodi:role="line"
+         id="tspan1757-0-0"
          x="77.976059"
-         style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
-         xml:space="preserve"><tspan
-           style="font-size:4.23333px;stroke-width:0.264583"
-           y="10.626307"
-           x="77.976059"
-           id="tspan1757-0-0"
-           sodipodi:role="line">\gls{sym:r_n}</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:1.41111px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
+         y="10.375979"
+         style="font-size:4.23333px;stroke-width:0.264583">\gls{r_n}</tspan></text>
+    <text
+       id="text1759-2-2-7"
+       y="10.375979"
+       x="108.13857"
+       style="font-style:normal;font-weight:normal;font-size:1.41111px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
+       xml:space="preserve"><tspan
+         style="font-size:1.41111px;stroke-width:0.264583"
+         y="10.375979"
          x="108.13857"
-         y="10.626307"
-         id="text1759-2-2-7"><tspan
-           sodipodi:role="line"
-           id="tspan1757-0-0-2"
-           x="108.13857"
-           y="10.626307"
-           style="font-size:1.41111px;stroke-width:0.264583">\gls{sym:r_n_1}</tspan></text>
-    </g>
+         id="tspan1757-0-0-2"
+         sodipodi:role="line">\gls{r_n_1}</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:0.705556px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
@@ -1625,6 +1621,6 @@
          id="tspan1757-0-0-2-6"
          x="107.08025"
          y="48.726334"
-         style="font-size:0.705556px;stroke-width:0.264583">\gls{sym:l} &amp; \gls{sym:r_n}</tspan></text>
+         style="font-size:0.705556px;stroke-width:0.264583">\gls{l} &amp; \gls{r_n}</tspan></text>
   </g>
 </svg>

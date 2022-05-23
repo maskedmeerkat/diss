@@ -10,6 +10,8 @@
 \newacronym[plural={IC$_\text{RGB}$Ms}]{ic_rgbm}{IC$_\text{RGB}$M}{Inverse Camera RGB Model}
 \newacronym[plural={IC$_\text{S}$Ms}]{ic_sm}{IC$_\text{S}$M}{Inverse Camera Semantic Model}
 \newacronym[plural={IC$_\text{D}$Ms}]{ic_dm}{IC$_\text{D}$M}{Inverse Camera Depth Model}
+\newacronym[plural={IC$_\text{D}$R$_{20}$Ms}]{ic_dr_20m}{IC$_\text{D}$R$_{20}$M}{Inverse Camera Depth and Radar (20) Model}
+\newacronym[plural={ILR$_{20}$Ms}]{ilr_20m}{ILR$_{20}$M}{Inverse Lidar and Radar (20) Model}
 \newacronym[plural={IRMs}]{irm}{IRM}{Inverse Radar Model}
 \newacronym[plural={FoVs}]{fov}{FoV}{Field of View}
 \newacronym[plural={VAEs}]{vae}{VAE}{Variational Autoencoder}
@@ -31,6 +33,14 @@
 \newacronym[plural={SemSeg}]{semseg}{SemSeg}{semantic segmentation}
 \newacronym[plural={MonoDepth}]{monodepth}{MonoDepth}{monocular depth destimation}
 \newacronym[plural={SL}]{subj_logic}{SL}{subjective logic}
+\newacronym[plural={L}]{l}{L}{\gls{bev} projection of lidar detections without ground-plane}
+\newacronym[plural={GT}]{gt}{GT}{Ground-truth occupancy map patch used as labels to train the deep inverse sensor models}
+\newacronym[plural={R}]{r}{R}{\gls{bev} projection of all radars' detections of the most recent timestep}
+\newacronym[plural={R$_N$}]{r_n}{R$_N$}{\gls{bev} projection of all radars' dynamic and static detections of the recent $N$ timesteps}
+\newacronym[plural={R$_{N|1}$}]{r_n_1}{R$_{N|1}$}{Same as \gls{r_n} but only projecting the most recent dynamic detection}
+\newacronym[plural={C$_{\text{RGB}}$}]{c_rgb}{C$_{\text{RGB}}$}{Homography \gls{bev} projection of the RGB values for each camera}
+\newacronym[plural={C$_{\text{S}}$}]{c_s}{C$_{\text{S}}$}{Homography \gls{bev} projection of the semantic segmentation for each camera}
+\newacronym[plural={C$_{\text{D}}$}]{c_d}{C$_{\text{D}}$}{\gls{bev} projection of \gls{monodepth} prediction for each camera}
 
 
 

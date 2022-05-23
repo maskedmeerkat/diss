@@ -133,7 +133,7 @@ Even though the redundancy reduced IR$_{20}$M map comes close to the edge perfor
 %=================================%
 \subsection{Setup of Deep ISM Maps Comparison}
 \label{subsec:setup_analyze_deep_ism_maps_diff_sensors}
-In this section, RQ\ref{requ:comp_deep_occ_maps} shall be tackled concerning the comparison of occupancy mapping results given the proposed deep \gls{ism} with different inputs. The setup for comparing occupancy maps given different sensor modalities is the same as described in \ref{subsec:setup_of_red_analy}. The only difference is that for this experiment the fusion method is chosen to be the redundancy reduced accumulation with Yager's rule for all variants. The compared ISMs are all trained ShiftNets while the inputs are \gls{monodepth} (MD), lidar (L) and their respective combinations with the accumulated radar point cloud of the last 20 steps (R$_{20}$). 
+In this section, RQ\ref{requ:comp_deep_occ_maps} shall be tackled concerning the comparison of occupancy mapping results given the proposed deep \gls{ism} with different inputs. The setup for comparing occupancy maps given different sensor modalities is the same as described in \ref{subsec:setup_of_red_analy}. The only difference is that for this experiment the fusion method is chosen to be the redundancy reduced accumulation with Yager's rule for all variants (abbrev. as "deep, red."). The compared ISMs are all trained ShiftNets while the inputs are \gls{monodepth} (\gls{c_d}), lidar (\gls{l}) and their respective combinations with the accumulated radar point cloud of the last 20 steps (R$_{20}$). 
 %==========================================================================%
 %
 %==========================================================================%
@@ -144,12 +144,12 @@ The quantitative results show a similar line of improvement as shown for the ISM
 		\begin{tabular}{c|c|ccc|ccc}
 			& \backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
 			\hline
-			MD &$p(k|f)$ & \textcolor{mygreen}{89.1} & \textcolor{myred}{1.1} & 9.8& \textcolor{mygreen}{72.5} & \textcolor{myred}{3.3} & 24.2 \\
+			\gls{c_d} &$p(k|f)$ & \textcolor{mygreen}{89.1} & \textcolor{myred}{1.1} & 9.8& \textcolor{mygreen}{72.5} & \textcolor{myred}{3.3} & 24.2 \\
 			&$p(k|o)$ & \textcolor{myred}{34.3} & \textcolor{mygreen}{19.1} & 46.6& \textcolor{myred}{34.1} & \textcolor{mygreen}{18.9} & 47.0 \\
 			&$p(k|u)$ & 11.4 & 4.4 & 84.2& 13.9 & 8.8 & 77.3 \\
 			& mIoU &77.8&13.5&34.6&19.3&13.4&15.7 \\
 			\hline
-			MD \& R$_{20}$ &$p(k|f)$ & \textcolor{mygreen}{88.4} & \textcolor{myred}{2.3} & 9.3& \textcolor{mygreen}{69.2} & \textcolor{myred}{7.2} & 23.6 \\
+			\gls{c_d} \& R$_{20}$ &$p(k|f)$ & \textcolor{mygreen}{88.4} & \textcolor{myred}{2.3} & 9.3& \textcolor{mygreen}{69.2} & \textcolor{myred}{7.2} & 23.6 \\
 			&$p(k|o)$ & \textcolor{myred}{20.3} & \textcolor{mygreen}{45.7} & 34.0& \textcolor{myred}{20.2} & \textcolor{mygreen}{45.3} & 34.5 \\
 			&$p(k|u)$ & 12.8 & 7.0 & 80.2& 12.9 & 13.8 & 73.3 \\
 			& mIoU &78.0&28.3&33.4&18.6&28.2&15.2 \\
@@ -238,7 +238,8 @@ In the areas, where the geo \gls{irm} map is wrong, the lower bounded deep \gls{
 \end{center}
 Looking at the qualitative results in Fig. \ref{fig:qual_analysis_of_prior}, the property of the deep \gls{irm} to inter- \& extrapolate can be seen between radar detections and in areas lacking information. One notable example of extrapolation is marked in the lower white box of scene A where the area is assigned/initialized by the deep \gls{irm} variants while the geo \gls{irm} lacks to provide this information. However, in some cases (e.g. upper white box in scene A), the extrapolation might be false leading to mass that has to be reassigned later. Additionally, wrong interpolations (e.g. white box on the upper right in scene B) or even direct errors in presence of detections (e.g. white box on the upper left of scene B) can occur in the deep \gls{irm}. In these cases, using the deep \gls{irm} purely for initialization leads the areas to remain in a distinguishable state in contrast to the verified cells in the convergence phase (compare with right most images). Also, the influence of a dynamic object following the ego vehicle (e.g. bottom white box in scene B) can be dampened and distinguished using the deep \gls{irm} as a prior.
 \begin{center}
-	\import{imgs/08_occ_mapping_exp/analysis_of_prior}{analysis_of_prior_scenes_442_n_488.pdf_tex}
+	\resizebox{\textwidth}{!}{
+	\import{imgs/08_occ_mapping_exp/analysis_of_prior}{analysis_of_prior_scenes_442_n_488.pdf_tex}}
 	\captionof{figure}{\label{fig:qual_analysis_of_prior}Qualitative results of three mapping approaches (column 1-4) for two scenes with the geo \gls{ilm} ground-truth map in the first column. Additionally, the 4th column shows the result of filtering out all non-converged pixels of the 3rd column's map. This is done by setting all pixels with $m_u > \underline{m}_u = 0.3$ to $m_u = 1$.}
 \end{center}
 %=================================%

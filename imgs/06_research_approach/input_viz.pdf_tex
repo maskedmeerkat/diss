@@ -54,15 +54,15 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{input_viz.pdf}}%
-    \put(0.06964516,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:c_rgb}\end{tabular}}}}%
-    \put(0.28335988,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:c_seg}\end{tabular}}}}%
-    \put(0.48371762,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:c_depth}\end{tabular}}}}%
-    \put(0.64734311,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:c_depth} \& \gls{sym:r_n}\end{tabular}}}}%
-    \put(0.09302023,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:l}\end{tabular}}}}%
-    \put(0.28335988,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:gt}\end{tabular}}}}%
-    \put(0.4970748,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:r}\end{tabular}}}}%
-    \put(0.70077185,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:r_n}\end{tabular}}}}%
-    \put(0.89111164,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:r_n_1}\end{tabular}}}}%
-    \put(0.88443315,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{sym:l} \& \gls{sym:r_n}\end{tabular}}}}%
+    \put(0.06964516,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{c_rgb}\end{tabular}}}}%
+    \put(0.28335988,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{c_s}\end{tabular}}}}%
+    \put(0.48371762,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{c_d}\end{tabular}}}}%
+    \put(0.64734311,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{c_d} \& \gls{r_n}\end{tabular}}}}%
+    \put(0.09302023,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{l}\end{tabular}}}}%
+    \put(0.28335988,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{gt}\end{tabular}}}}%
+    \put(0.4970748,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{r}\end{tabular}}}}%
+    \put(0.70077185,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{r_n}\end{tabular}}}}%
+    \put(0.89111164,0.24830925){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{r_n_1}\end{tabular}}}}%
+    \put(0.88443315,0.00630029){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{l} \& \gls{r_n}\end{tabular}}}}%
   \end{picture}%
 \endgroup%

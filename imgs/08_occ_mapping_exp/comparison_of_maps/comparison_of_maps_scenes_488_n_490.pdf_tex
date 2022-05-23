@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{464.03278501bp}%
+    \setlength{\unitlength}{468.17731242bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,27 +50,34 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.44300112)%
+  \begin{picture}(1,0.48362163)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
+    \put(0.45943358,0.06260396){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red.\end{tabular}}}}%
+    \put(0.47733552,0.03255225){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{ic_dm}\end{tabular}}}}%
+    \put(0.4804518,0.0053315){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{comparison_of_maps_scenes_488_n_490.pdf}}%
-    \put(0.00654923,0.28190528){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{Scene A}\end{tabular}}}}}%
-    \put(0.00654923,0.08777553){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{Scene B}\end{tabular}}}}}%
-    \put(0.04669577,0.02442076){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{geo ILM}\end{tabular}}}}%
-    \put(0.06609097,0.00179303){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{map}\end{tabular}}}}%
+    \put(-0.00020025,0.35846903){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}A\end{tabular}}}}%
+    \put(-0.00058196,0.16550355){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}B\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{comparison_of_maps_scenes_488_n_490.pdf}}%
-    \put(0.19862473,0.02442076){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{geo IRM}\end{tabular}}}}%
-    \put(0.21801991,0.00179303){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{map}\end{tabular}}}}%
-    \put(0.33115845,0.02442076){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IRM}\end{tabular}}}}%
-    \put(0.35055365,0.00179303){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{map}\end{tabular}}}}%
-    \put(0.46692485,0.02442076){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IMDM}\end{tabular}}}}%
-    \put(0.49601765,0.00179303){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{map}\end{tabular}}}}%
-    \put(0.59299362,0.02442076){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IMD\&RM}\end{tabular}}}}%
-    \put(0.63501656,0.00179303){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{map}\end{tabular}}}}%
-    \put(0.75138775,0.02442076){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep ILM}\end{tabular}}}}%
-    \put(0.77078295,0.00179303){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{map}\end{tabular}}}}%
-    \put(0.88392162,0.02442076){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IL\&RM}\end{tabular}}}}%
-    \put(0.90978189,0.00179303){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{map}\end{tabular}}}}%
+    \put(0.32426368,0.06260396){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red.\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{comparison_of_maps_scenes_488_n_490.pdf}}%
+    \put(0.34216561,0.03255225){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
+    \put(0.3452819,0.0053315){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0.60236038,0.06260396){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red.\end{tabular}}}}%
+    \put(0.61065057,0.03255225){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{ic_dr_20m}\end{tabular}}}}%
+    \put(0.62337861,0.0053315){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0.74021283,0.06260396){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red.\end{tabular}}}}%
+    \put(0.77068508,0.03255225){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ILM\end{tabular}}}}%
+    \put(0.76123108,0.0053315){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0.87637385,0.06260396){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red.\end{tabular}}}}%
+    \put(0.89427581,0.03255225){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{ilr_20m}\end{tabular}}}}%
+    \put(0.89739214,0.0053315){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0.06789161,0.06260396){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo\end{tabular}}}}%
+    \put(0.06978141,0.03255225){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ILM\end{tabular}}}}%
+    \put(0.05942832,0.0053315){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0.21236042,0.06260396){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo\end{tabular}}}}%
+    \put(0.20515887,0.03255225){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
+    \put(0.20827516,0.0053315){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
   \end{picture}%
 \endgroup%
