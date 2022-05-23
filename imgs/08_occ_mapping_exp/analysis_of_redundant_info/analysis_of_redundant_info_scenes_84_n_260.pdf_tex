@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{449.72715843bp}%
+    \setlength{\unitlength}{448.78319928bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,32 +50,30 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.29122269)%
+  \begin{picture}(1,0.31854062)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0.00675761,0.09587761){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{Scene B}\end{tabular}}}}}%
+    \put(0.00140947,0.14299272){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}B\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
-    \put(0.06259489,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{geo ILM}\end{tabular}}}}%
-    \put(0.0459181,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated}\end{tabular}}}}%
+    \put(0.05189528,0.06986337){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo ILM\end{tabular}}}}%
+    \put(0.07194055,0.03730138){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
-    \put(0.00675757,0.19830881){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{Scene A}\end{tabular}}}}}%
+    \put(-0.0002089,0.24898161){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}A\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
-    \put(0.38112194,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IR$_{20}$M}\end{tabular}}}}%
-    \put(0.38112194,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated}\end{tabular}}}}%
+    \put(0.21594994,0.07205038){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo IR$_{20}$M\end{tabular}}}}%
+    \put(0.23346541,0.03730138){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=4]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
-    \put(0.22102484,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{geo IR$_{20}$M}\end{tabular}}}}%
-    \put(0.21435413,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated}\end{tabular}}}}%
-    \put(0.86474883,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IR$_{20}$M}\end{tabular}}}}%
-    \put(0.84140136,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated with}\end{tabular}}}}%
-    \put(0.82472452,0.00185008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{redundancy reduction}\end{tabular}}}}%
+    \put(0.36765425,0.07187743){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep IR$_{20}$M\end{tabular}}}}%
+    \put(0.86409814,0.07187743){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red.\end{tabular}}}}%
+    \put(0.69165073,0.07187743){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep IR$_{20}$M\end{tabular}}}}%
+    \put(0.52978783,0.07187743){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep \& geo\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=5]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
-    \put(0.70343131,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep IR$_{20}$M}\end{tabular}}}}%
-    \put(0.68341916,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated with}\end{tabular}}}}%
-    \put(0.73011418,0.00185008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{cutoff}\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=6]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
-    \put(0.51576074,0.0485451){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{deep \& geo IR$_{20}$M}\end{tabular}}}}%
-    \put(0.54244362,0.02519759){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated}\end{tabular}}}}%
-    \put(0.57246184,0.00185008){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{fusion}\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=7]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
+    \put(0.39601469,0.03730138){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0.55856396,0.03730137){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
+    \put(0.7211173,0.03689011){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0.88366254,0.00556191){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0.55856396,0.00556191){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0.7022316,0.00515063){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}+ cutoff\end{tabular}}}}%
+    \put(0.88367989,0.03730137){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
   \end{picture}%
 \endgroup%

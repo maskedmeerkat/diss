@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{448.30611582bp}%
+    \setlength{\unitlength}{452.80614177bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,28 +50,27 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.3680521)%
+  \begin{picture}(1,0.36482088)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{viz_progress_scene_446.pdf}}%
-    \put(0.37874573,0.02099052){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{$t=1$}\end{tabular}}}}%
-    \put(0.24628556,0.26582895){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{map state}\end{tabular}}}}}%
+    \put(0.3782944,0.01458307){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$t=1$\end{tabular}}}}%
+    \put(0.2504633,0.2694995){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}map\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{viz_progress_scene_446.pdf}}%
-    \put(0.24628556,0.16811545){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{update}\end{tabular}}}}}%
-    \put(0.62427106,0.02099052){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{$t=10$}\end{tabular}}}}%
+    \put(0.2504633,0.14819689){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}update\end{tabular}}}}}%
+    \put(0.62137968,0.01458307){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$t=10$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{viz_progress_scene_446.pdf}}%
-    \put(0.87265345,0.02099052){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{$t=12$}\end{tabular}}}}%
+    \put(0.86729358,0.01458307){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$t=12$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=4]{viz_progress_scene_446.pdf}}%
-    \put(0.24628556,0.0505468){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{map state}\end{tabular}}}}}%
-    \put(0.26970704,0.27252082){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{@ $ t-1$}\end{tabular}}}}}%
-    \put(0.26970704,0.18174378){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{@ $t$}\end{tabular}}}}}%
-    \put(0.26970704,0.0793222){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{@ $t$}\end{tabular}}}}}%
+    \put(0.2504633,0.06130204){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}map\end{tabular}}}}}%
+    \put(0.27696469,0.25036291){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}@ $ t-1$\end{tabular}}}}}%
+    \put(0.27696469,0.16711339){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}@ $t$\end{tabular}}}}}%
+    \put(0.27696469,0.06570968){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}@ $t$\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=5]{viz_progress_scene_446.pdf}}%
-    \put(0.08123792,0.04295298){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{geo IRM}\end{tabular}}}}%
-    \put(0.06450826,0.01953146){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated}\end{tabular}}}}%
+    \put(0.06249149,0.23051101){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo ILM\end{tabular}}}}%
+    \put(0.07712677,0.19905352){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=6]{viz_progress_scene_446.pdf}}%
-    \put(0.08123792,0.2083234){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{geo ILM}\end{tabular}}}}%
-    \put(0.06450826,0.18490186){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize{accumulated}\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=7]{viz_progress_scene_446.pdf}}%
+    \put(0.06249149,0.03696998){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo IR$_{20}$M\end{tabular}}}}%
+    \put(0.07712677,0.00551249){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
   \end{picture}%
 \endgroup%

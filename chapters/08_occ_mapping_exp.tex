@@ -43,11 +43,11 @@ The above results demonstrate the claimed properties of all combination rules an
 %=================================%
 \subsection{Setup of Redundancy Analysis in Deep ISMs}
 \label{subsec:setup_of_red_analy}
-To verify H\ref{hyp:temporal_dependence} concerning the accumulation of temporal redundancy in deep \gls{ism} mapping, occupancy maps are created in five ways. The baseline is the direct accumulation using Yager's rule, abbreviated as "accum.". This is evaluated for the deep as well as the geo \gls{ism}. Second, a na\"ive solution is evaluated which moves all free and occupied mass to unknown for predictions with $m_u>=0.9$ to hinder small predictions to accumulate over time ("accum. with cutoff"). Third, the method as proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps} is used to reduce the redundancy ("accum. with redundancy reduction"). Eventually, the fusion using the deep \gls{ism} with and without redundancy reduction respectively with the geo ISMs by directly accumulating the predictions using Yager's rule is evaluated. Here, the fusion is investigated to analyze whether the deep \gls{ism} indeed overwrites most of the geo \gls{ism}'s predictions as suggested in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
+To verify H\ref{hyp:temporal_dependence} concerning the accumulation of temporal redundancy in deep \gls{ism} mapping, occupancy maps are created in five ways. The baseline is the direct accumulation using Yager's rule, abbreviated as "Yager". This is evaluated for the deep as well as the geo \gls{ism}. Second, a na\"ive solution is evaluated which moves all free and occupied mass to unknown for predictions with $m_u>=0.9$ to hinder small predictions to accumulate over time ("Yager + cutoff"). Third, the method as proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps} is used to reduce the redundancy of the deep \gls{ism} predictions before accumulation with Yager's rule. The so reduced predictions are abbreviated with "deep, red.". Eventually, the fusion using the deep \gls{ism} with and without redundancy reduction respectively with the geo \gls{ism}s by accumulating the predictions using Yager's rule is evaluated. Here, the fusion is investigated to analyze whether the deep \gls{ism} indeed overwrites most of the geo \gls{ism}'s predictions as suggested in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
 \\\\
 The evaluation is performed using only the accumulated radar detections of the recent 20 timesteps (R$_{20}$) since the focus of this work lies on radar occupancy mapping. Additionally, it is assumed that the effects are similar using other sensor modalities. The geo \gls{ism} method is used as described in Section \ref{subsec:method_geo_irm} and ShiftNet, as described Section \ref{subsec:method_al_uncert_in_deep_isms}, is used as a deep \gls{ism}.
 \\\\
-The metrics used are the normed confusion matrix (see Section \ref{subsec:confusion_matrix}) and the mIoU. Here, the metrics are evaluated separately in all of the area in a 20m vicinity around the ego vehicle trajectory ("whole mapped area") and in an area of 15 pixels around occupied ground truth pixels in the reference occupancy maps. Here, the mIoU is only evaluated around the occupied borders to quantify the cleanliness. The reference maps are created by accumulating the geo \gls{ilm}. Two examples of the evaluation areas can be found in \ref{fig:qual_analysis_of_redundant_info}. The scenes mapped are solely taken from the test set which was not used during training.
+The metrics used are the normed confusion matrix (see Section \ref{subsec:confusion_matrix}) and the mIoU. Here, the metrics are evaluated separately in all of the area in a 20m vicinity around the ego vehicle trajectory ("whole mapped area") and in an area of 15 pixels around occupied ground truth pixels in the reference occupancy maps. Here, the mIoU is only evaluated around the occupied borders to quantify the cleanliness. The reference maps are created by accumulating the geo \gls{ilm} using Yager's rule. Two examples of the evaluation areas can be found in \ref{fig:qual_analysis_of_redundant_info}. The scenes mapped are solely taken from the test set which was not used during training.
 %=================================%
 %
 %=================================%
@@ -59,33 +59,33 @@ The findings in Fig. \ref{tab:conf_mat_redunt_info} show that, even though, the 
 		& \backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
 		\hline
 		geo IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{57.9} & \textcolor{myred}{2.3} & 39.8& \textcolor{mygreen}{44.3} & \textcolor{myred}{5.9} & 49.8 \\
-		accumulated &$p(k|o)$ & \textcolor{myred}{16.1} & \textcolor{mygreen}{36.3} & 47.6& \textcolor{myred}{15.9} & \textcolor{mygreen}{36.0} & 48.1 \\
+		Yager &$p(k|o)$ & \textcolor{myred}{16.1} & \textcolor{mygreen}{36.3} & 47.6& \textcolor{myred}{15.9} & \textcolor{mygreen}{36.0} & 48.1 \\
 		&$p(k|u)$ & 2.8 & 5.7 & 91.5& 4.0 & 9.7 & 86.3 \\
 		& mIoU & - & - & - &16.8&24.6&14.2 \\
 		\hline	
 		deep IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{86.6} & \textcolor{myred}{11.7} & 1.7& \textcolor{mygreen}{68.2} & \textcolor{myred}{28.4} & 3.4 \\
-		accumulated &$p(k|o)$ & \textcolor{myred}{27.2} & \textcolor{mygreen}{69.6} & 3.2& \textcolor{myred}{27.3} & \textcolor{mygreen}{69.4} & 3.3 \\
+		Yager &$p(k|o)$ & \textcolor{myred}{27.2} & \textcolor{mygreen}{69.6} & 3.2& \textcolor{myred}{27.3} & \textcolor{mygreen}{69.4} & 3.3 \\
 		&$p(k|u)$ & 28.9 & 57.5 & 13.6& 27.2 & 64.5 & 8.3 \\
 		& mIoU & - & - & - &15.3&12.4&2.8 \\
 		\hline
 		deep \& geo IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{86.7} & \textcolor{myred}{11.6} & 1.7& \textcolor{mygreen}{68.4} & \textcolor{myred}{28.3} & 3.3 \\
-		accumulated &$p(k|o)$ & \textcolor{myred}{27.3} & \textcolor{mygreen}{69.5} & 3.2& \textcolor{myred}{27.4} & \textcolor{mygreen}{69.3} & 3.3 \\
-		fusion&$p(k|u)$ & 29.0 & 57.4 & 13.6& 27.3 & 64.4 & 8.3 \\
+		Yager &$p(k|o)$ & \textcolor{myred}{27.3} & \textcolor{mygreen}{69.5} & 3.2& \textcolor{myred}{27.4} & \textcolor{mygreen}{69.3} & 3.3 \\
+		&$p(k|u)$ & 29.0 & 57.4 & 13.6& 27.3 & 64.4 & 8.3 \\
 		& mIoU & - & - & - &15.3&12.4&2.7 \\
 		\hline
 		deep IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{87.4} & \textcolor{myred}{10.5} & 2.1& \textcolor{mygreen}{69.4} & \textcolor{myred}{26.7} & 3.9 \\
-		accumulated with&$p(k|o)$ & \textcolor{myred}{28.3} & \textcolor{mygreen}{67.0} & 4.7& \textcolor{myred}{28.4} & \textcolor{mygreen}{66.8} & 4.8 \\
-		cutoff &$p(k|u)$ & 33.7 & 34.7 & 31.6& 30.4 & 51.9 & 17.7 \\
+		Yager + cutoff&$p(k|o)$ & \textcolor{myred}{28.3} & \textcolor{mygreen}{67.0} & 4.7& \textcolor{myred}{28.4} & \textcolor{mygreen}{66.8} & 4.8 \\
+		&$p(k|u)$ & 33.7 & 34.7 & 31.6& 30.4 & 51.9 & 17.7 \\
 		& mIoU & - & - & - &15.1&16.5&5.2 \\			
 		\hline
-		deep IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{88.5} & \textcolor{myred}{5.9} & 5.6& \textcolor{mygreen}{71.6} & \textcolor{myred}{16.7} & 11.7 \\
-		accumulated with &$p(k|o)$ & \textcolor{myred}{29.0} & \textcolor{mygreen}{55.7} & 15.3& \textcolor{myred}{29.0} & \textcolor{mygreen}{55.4} & 15.6 \\
-		redundancy reduction &$p(k|u)$ & 26.3 & 12.9 & 60.8& 26.3 & 23.4 & 50.3 \\
+		deep, red. IR$_{20}$M &$p(k|f)$ & \textcolor{mygreen}{88.5} & \textcolor{myred}{5.9} & 5.6& \textcolor{mygreen}{71.6} & \textcolor{myred}{16.7} & 11.7 \\
+		Yager &$p(k|o)$ & \textcolor{myred}{29.0} & \textcolor{mygreen}{55.7} & 15.3& \textcolor{myred}{29.0} & \textcolor{mygreen}{55.4} & 15.6 \\
+		&$p(k|u)$ & 26.3 & 12.9 & 60.8& 26.3 & 23.4 & 50.3 \\
 		& mIoU & - & - & - &16.8&23.4&11.8 \\
 		\hline
 		deep, red. \& geo IR$_{20}$M  &$p(k|f)$ & \textcolor{mygreen}{88.9} & \textcolor{myred}{5.8} & 5.3& \textcolor{mygreen}{72.9} & \textcolor{myred}{16.4} & 10.7 \\
-		accumulated&$p(k|o)$ & \textcolor{myred}{29.7} & \textcolor{mygreen}{56.6} & 13.7& \textcolor{myred}{29.7} & \textcolor{mygreen}{56.3} & 14.0 \\
-		fusion&$p(k|u)$ & 26.8 & 14.3 & 58.9& 26.9 & 25.2 & 47.9 \\
+		Yager&$p(k|o)$ & \textcolor{myred}{29.7} & \textcolor{mygreen}{56.6} & 13.7& \textcolor{myred}{29.7} & \textcolor{mygreen}{56.3} & 14.0 \\
+		&$p(k|u)$ & 26.8 & 14.3 & 58.9& 26.9 & 25.2 & 47.9 \\
 		& mIoU &69.1&24.0&27.0&17.0&24.1&11.4 \\
 		\hline
 		& & \multicolumn{3}{c|}{\scriptsize{whole mapped area}} & \multicolumn{3}{c}{\scriptsize{boundary area}}
@@ -100,8 +100,9 @@ Applying redundancy reduction before accumulation has a similar effect than cuto
 \\\\
 Finally, the fusion of the reduced deep \gls{irm} with the geometric further shows the benefit of the proposed method. Here, all but the free false rate improve while the free false rate only slightly worsens. In the boundary area, the overall improvement leads to reaching the best score for free space and a close performance in the other classes compared to the geo \gls{irm} map. These findings are also qualitatively verified in Fig. \ref{fig:qual_analysis_of_prior} in Section \ref{subsec:exp_of_prior_analy}.
 \begin{center}
-	\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{analysis_of_redundant_info_scenes_84_n_260.pdf_tex}
-	\captionof{figure}{\label{fig:qual_analysis_of_redundant_info}Qualitative results of the three mapping approaches using different sensor modalities for two scenes. Here, the first row shows the ground truth map created by accumulating the geo \gls{ilm} with the evaluation area overlayed in white around the occupied pixels. The other maps are created using deep ISMs based on ShiftNet with their respective sensor inputs (see Section \ref{subsec:setup_of_red_analy}).}
+	\resizebox{\textwidth}{!}{
+	\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{analysis_of_redundant_info_scenes_84_n_260.pdf_tex}}
+	\captionof{figure}{\label{fig:qual_analysis_of_redundant_info}Illustration of qualitative results for the different occupancy mapping variants for two scenes (A \& B).}
 \end{center}
 To further verify the workings of the redundancy reduction update, three steps of the mapping procedure are visualized in Fig. \ref{fig:viz_mapping_progress}. It can be seen that in the first step, when all map cells are initialized to unknown, the complete prediction of the deep \gls{irm} is used to update the map. Afterwards, the majority of new information comes from areas that just entered the deep \gls{irm}'s \gls{fov}. In the depicted case, the ego vehicle is moving from left to right and, thus, the majority of new information is at the right border (see e.g. white box on the right for $t=10$). Besides from areas entering the \gls{ism}'s \gls{fov}, formerly occluded that become visible are also identified to provide new information (see white box for $t=12$). Finally, the redundancy reduction is formulated to treat regions of conflict as rich in new information. This is done to allow the map to react to changes in the environment e.g. a parked vehicles starting to move. Thus, dynamic objects are also treated as new information and remain in the update (see left white box for $t=10$).
 \begin{center}
