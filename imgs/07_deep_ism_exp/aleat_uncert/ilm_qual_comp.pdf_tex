@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{413.580106bp}%
+    \setlength{\unitlength}{385.42409341bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,30 +50,25 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,1.16516669)%
+  \begin{picture}(1,1.18721779)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{ilm_qual_comp.pdf}}%
-    \put(0.03966886,0.88703151){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene A\end{tabular}}}}}%
-    \put(0.03966886,0.52620107){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene B\end{tabular}}}}}%
-    \put(0.03966886,0.16537121){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene C\end{tabular}}}}}%
-    \put(0.09715525,0.27201262){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Input\end{tabular}}}}}%
-    \put(0.09715525,0.06341881){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Prediction\end{tabular}}}}}%
-    \put(0.09715525,0.78507911){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Prediction\end{tabular}}}}}%
-    \put(0.09715525,0.6328429){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Input\end{tabular}}}}}%
-    \put(0.09715525,0.99367341){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Input\end{tabular}}}}}%
-    \put(0.14330001,0.01765924){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo ILM\end{tabular}}}}%
-    \put(0.30900938,0.01765924){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep ILM\end{tabular}}}}%
-    \put(0.65694728,0.01765924){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep IRM\end{tabular}}}}%
-    \put(0.85987481,0.01765924){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Label\end{tabular}}}}%
-    \put(0.09715525,0.42424862){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Prediction\end{tabular}}}}}%
+    \put(0.82065707,0.35053486){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene C\end{tabular}}}}%
+    \put(0.02365493,0.27941059){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Input\end{tabular}}}}}%
+    \put(0.02365493,0.05557858){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Prediction\end{tabular}}}}}%
+    \put(0.02365493,0.82995763){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Prediction\end{tabular}}}}}%
+    \put(0.02365493,0.66660025){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Input\end{tabular}}}}}%
+    \put(0.02365493,1.05379017){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Input\end{tabular}}}}}%
+    \put(0.07317066,0.00647618){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo ILM\end{tabular}}}}%
+    \put(0.25098542,0.00647618){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep ILM\end{tabular}}}}%
+    \put(0.6243409,0.00647618){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep IR$_{20}$M\end{tabular}}}}%
+    \put(0.87711908,0.00647618){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{gt}\end{tabular}}}}%
+    \put(0.02365493,0.44276774){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Prediction\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{ilm_qual_comp.pdf}}%
-    \put(0.47389695,0.01765924){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep ILRM\end{tabular}}}}%
+    \put(0.42791837,0.00647618){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep ILR$_{20}$M\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{ilm_qual_comp.pdf}}%
-    \put(0.16158308,1.13130651){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Lidar\end{tabular}}}}%
-    \put(0.33655791,1.13130651){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Lidar\end{tabular}}}}%
-    \put(0.48684534,1.13130651){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Lidar \& R$_{20}$\end{tabular}}}}%
-    \put(0.69587871,1.13130651){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}R$_{20}$\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=4]{ilm_qual_comp.pdf}}%
+    \put(0.82065707,0.73772481){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene B\end{tabular}}}}%
+    \put(0.82065707,1.12491458){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene A\end{tabular}}}}%
   \end{picture}%
 \endgroup%
