@@ -529,7 +529,9 @@ To quantify the \gls{ism} and occupancy mapping results, a confusion matrix vari
 	\item to cope with the amount of pixels per class over the whole dataset, the above is done on an image basis and averaged over all test samples
 	\item[$\rightarrow$] this leads to the probability $p(\tilde{m}_k|\hat{m}_k)$ to estimate class $k$ for a pixel given the pixel belongs to the actual class $k$ with $k \in [d, f, o, u]$
 \end{enumerate}
-Since all of the investigated models behave severely different in the visible and occluded area, it is necessary to provide independent metrics for these two cases. Thus, the metrics are additionally computed for visible and occluded areas, while the occluded area is defined as the pixels where the geo \gls{ilm}'s unknown mass surpasses the other class' masses.
+Since all of the investigated models behave severely different in the visible and occluded area, it is necessary to provide independent metrics for these two cases. Thus, the metrics are additionally computed for visible and occluded areas, while the occluded area is defined as the pixels where the geo \gls{ilm}'s unknown mass surpasses the other class' masses. Thus, only a stochastically insignificant portion of unknown labels remains in the visible area, which is why these scores are excluded from consideration.
+\\\\
+To help the interpretation of the confusion matrix, values are marked in green to show true positives while red shows the percentages of false predictions. The unknown class predictions, marked in black, are treated as the safe state and, as such, do not add to the false rates. Additionally, since the network is permitted to extrapolate the state in unknown areas, all predictions deviating from the unknown class given unknown labels should also not be treated as false.
 %======================================%
 %
 %======================================%

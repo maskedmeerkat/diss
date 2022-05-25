@@ -1,4 +1,4 @@
-%% Creator: Inkscape 1.0.2-2 (e86c870879, 2021-01-15), www.inkscape.org
+%% Creator: Inkscape 1.0 (4035a4fb49, 2020-05-01), www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
 %% Accompanies image file 'irm_qual_comp.pdf' (pdf, eps, ps)
 %%
@@ -67,7 +67,7 @@
     \put(0.41491095,0.00530773){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}SoftNet\end{tabular}}}}%
     \put(0.57493463,0.00530773){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}DirNet\end{tabular}}}}%
     \put(0.71883566,0.00530773){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ShiftNet\end{tabular}}}}%
-    \put(0.8901788,0.00530773){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Label\end{tabular}}}}%
+    \put(0.89974758,0.00530773){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{gt}\end{tabular}}}}%
     \put(0.06949468,0.40283048){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}R$_{20}$\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{irm_qual_comp.pdf}}%
   \end{picture}%
