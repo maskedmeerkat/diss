@@ -15,7 +15,7 @@ This section details the requirements for both the trained \gls{ism} and the fus
 %======================================%
 %
 %======================================%
-\subsection{Requirements for trained ISMs}
+\subsection{Requirements for deep ISMs}
 \label{subsec:requirements_for_ev_representation}
 The requirements for the learned \gls{ism} are of theoretical as well as practical nature. First, to obtain a generalized measurement representation, \gls{bev} grid maps shall be used as inputs. This is the de facto standard for trained \gls{ism}s in literature given point cloud inputs (see Section \ref{sec:deep_isms}). Moreover, while it might not be without loss of information, other sensor data e.g. provided by cameras can also be transformed into \gls{bev}. Additionally, the outputs shall also be provided as \gls{bev} grid maps to ease the later fusion into \gls{bev} occupancy maps. Therefore, the following requirement can be formulated.
 \\
@@ -59,7 +59,7 @@ Finally, on the theoretical side, the model shall estimate the evidential classe
 %======================================%
 %
 %======================================%
-\subsection{Requirements for Usage of trained ISMs as Priors in Occupancy Mapping}
+\subsection{Requirements for Usage of deep ISMs as Priors in Occupancy Mapping}
 \label{subsec:requirements_for_usage_of_deep_ims_as_priors_in_occmapping}
 To enable the fusion of the trained with the geo \gls{ism}s into a common representation, the trained \gls{ism} estimates have to suffice the additional specification for \gls{ism}s used in occupancy mapping, as defined in Section \ref{sec:occupancy_mapping}, namely
 \\
@@ -90,7 +90,7 @@ In this section, the \gls{sota} defined in Chapter \ref{ch:state_of_the_art} is 
 %======================================%
 %
 %======================================%
-\subsection{Research Needs and Review of State-of-the-Art for Geo ILMs and IRMs}
+\subsection{Research Needs and Review of State-of-the-Art for geo ILMs and IRMs}
 \label{subsec:research_needs_for_geo_ilms_n_irms}
 The first step in order to analyze trained \gls{ism}s is the definition of a reference and baseline model. To generate \gls{bev} occupancy targets resource efficiently, as demanded in R\ref{subreq:min_requirements}, the \gls{sota} in all cases relies on automatic label generation using geo \gls{ilm}s from 360$^\circ$ spinning lidars. For most automated driving test vehicles, these types of lidars are already deployed for verification, making lidar data easily accessible. Moreover, after once manually defining the geo \gls{ilm}, no additional manual labor is required. Therefore, the automatic generation of \gls{bev} occupancy target via geo \gls{ilm}s suffices R\ref{subreq:min_requirements}.
 \\\\
@@ -109,7 +109,7 @@ The second problem revolves around the enrichment of free space. Here, the \gls{
 %======================================%
 %
 %======================================%
-\subsection{Research Needs for deep, evidential Inverse Sensor Models}
+\subsection{Research Needs for deep, evidential ISMs}
 \label{subsec:research_needs_for_deep_isms}
 Given the target and baseline model, the creation of trained \gls{ism}s can be studied in more detail. Here, the current \gls{sota} approaches all tackle the creation of trained \gls{ism}s by applying \gls{cnn}s in the form of UNets with skip connections. While the interpretation of the input varies between it being an image or some kind of multi-channel \gls{bev} grid map, \gls{cnn}s are an appropriate choice for they are designed to leverage spatial context from matrix-like data. Moreover, through breakthroughs like Dropout for regularization, BatchNorm for normalization and skip connections for conservation of information, current \gls{cnn} models can be designed with increased number of stacked layers. This results in increased modeling capacities allowing them to capture the information from big amounts of data. Thus, the application of UNets as the de facto standard model already suffices R\ref{subreq:input_output} and R\ref{subreq:big_data}.
 \\\\
@@ -220,7 +220,7 @@ To finally obtain the interpolated bounding box pose, the way along the interpol
 %======================================%
 %
 %======================================%
-\subsection{Definition of the Geo ILM}
+\subsection{Definition of the geo ILM}
 \label{subsec:method_geo_ilm}
 Both lidar and radar sensors use a radial measurement principal which is why it makes sense to model them using the ray casting \gls{ism} as explained in Section \ref{subsec:ray_casting}, however in a modified way. In case of the \gls{ilm}, first the ground detections have to be removed. To do so, either a height-threshold or a semantic segmentation based approach can be chosen. The specific choice used in this work is detailed in Section \ref{sec:choice_of_gt}.
 \\\\
@@ -254,7 +254,7 @@ Afterwards, free space rays with opening angle $\varphi_\sphericalangle$ are cas
 %======================================%
 %
 %======================================%
-\subsection{Definition of the Geo IRM}
+\subsection{Definition of the geo IRM}
 \label{subsec:method_geo_irm}
 For the geo \gls{irm}, a cone model which is based on the \gls{idm}$_{\text{B-Spline}}$ as proposed in \cite{loop2016closed} is used with the following adjustments. First, since the whole uncertainty ellipse of a radar detection falls within one of the 31,25 cm $\times$ 31,25 cm grid cells in the \gls{bev} grid, a scaled, evidential version of the \gls{idm}$_{\text{ideal}}$ can be used as an approximation of the \gls{idm}$_{\text{B-Spline}}$'s radial component.
 \\\\
@@ -305,7 +305,7 @@ Another problem connected with the sparsity is the low coverage of free space. I
 %======================================%
 %
 %======================================%
-\subsection{Methodology to define the Geo ISM's Hyperparameters and Removal of Ground-Plane Detections}
+\subsection{Methodology to define the geo ISM's Hyperparameters and Removal of Ground-Plane Detections}
 \label{subsec:method_choice_of_gt}
 The analysis of which method to chose as a baseline and which as ground truth, according to RQ\ref{requ:what_is_best_gt} and RQ\ref{requ:fr_space_enrichment}, is a chicken and egg problem since one has to be kept fixed to analyze the other. Hence, it is proposed to initially manually define and fix the geo \gls{ilm} using the threshold-based ground-plane removal as normally applied in the literature. This preliminary geo \gls{ilm} will act as reference to analyze the free space enrichment (see RQ\ref{requ:fr_space_enrichment}) of the geo \gls{irm}. 
 \\\\

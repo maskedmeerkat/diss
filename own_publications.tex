@@ -1,0 +1,33 @@
+% !TeX document-id = {472b8256-ff07-4ed3-835a-b0348069229a}
+% !TeX program = lualatex
+% !BIB program = biber
+% !TeX spellcheck = en_us
+\documentclass[12pt,
+	a4paper,
+	bibliography=totocnumbered, % totoc,
+	captions=tableheading,
+	headings=normal,
+	parskip=half*,
+	chapterentrydots=true,
+	numbers=noenddot,
+	twoside,
+	openright
+]{scrreprt}
+
+
+% Load packages and setup document to match ika style
+\input{utils/config}
+% Load references from file
+\addbibresource{literature/bibliography.bib}
+
+\begin{document}	
+	\nocite{carrillo2015autonomous} % name all your selected references
+	
+	{
+		\ihead{Publications}
+		%\thispagestyle{empty}
+		\printbibliography
+		\newpage
+	}
+	
+\end{document}

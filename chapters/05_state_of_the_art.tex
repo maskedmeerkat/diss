@@ -40,7 +40,7 @@ In contrast to sensor models, which describe the sensor characteristics given th
 %==========================================================================%
 %
 %==========================================================================%
-\subsection{Ray-Casting in geometric Inverse Sensor Models}
+\subsection{Ray-Casting in geo ISMs}
 \label{subsec:ray_casting}
 Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. To describe these sensor models, the following notation shall be introduced. For the geo \gls{ism}s a Gaussian measurement noise is assumed whose true mean is defined in polar coordinates as $(\mu_r, \mu_\varphi)$ while its measurement is defined as $(\tilde{\mu_r}, \tilde{\mu_\varphi})$ with the estimated measurement variance $(\tilde{\sigma}_r, \tilde{\sigma}_\varphi)$.
 \\\\
@@ -157,7 +157,7 @@ For completion it shall be mentioned that in case of denser radar point clouds, 
 %==========================================================================%
 %
 %==========================================================================%
-\section{Deep Inverse Sensor Models}
+\section{Deep ISMs}
 \label{sec:deep_isms}
 In recent years, the literature solely focuses on the creation of deep \gls{ism}s utilizing deep \gls{cnn}s. 
 %======================================%

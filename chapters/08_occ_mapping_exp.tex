@@ -36,12 +36,12 @@ The above results demonstrate the claimed properties of all combination rules an
 %==========================================================================%
 %
 %==========================================================================%
-\section{Analysis of redundant Information in Deep ISMs}
+\section{Analysis of redundant Information in deep ISMs}
 \label{sec:exp_analyze_redundant_info}
 %=================================%
 %
 %=================================%
-\subsection{Setup of Redundancy Analysis in Deep ISMs}
+\subsection{Setup of Redundancy Analysis in deep ISMs}
 \label{subsec:setup_of_red_analy}
 To verify H\ref{hyp:temporal_dependence} concerning the accumulation of temporal redundancy in deep \gls{ism} mapping, occupancy maps are created in five ways. The baseline is the direct accumulation using Yager's rule, abbreviated as "Yager". This is evaluated for the deep as well as the geo \gls{ism}. Second, a na\"ive solution is evaluated which moves all free and occupied mass to unknown for predictions with $m_u>=0.9$ to hinder small predictions to accumulate over time ("Yager + cutoff"). Third, the method as proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps} is used to reduce the redundancy of the deep \gls{ism} predictions before accumulation with Yager's rule. The so reduced predictions are abbreviated with "deep, red.". Eventually, the fusion using the deep \gls{ism} with and without redundancy reduction respectively with the geo \gls{ism}s by accumulating the predictions using Yager's rule is evaluated. Here, the fusion is investigated to analyze whether the deep \gls{ism} indeed overwrites most of the geo \gls{ism}'s predictions as suggested in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
 \\\\
@@ -51,7 +51,7 @@ The metrics used are the normed confusion matrix (see Section \ref{subsec:confus
 %=================================%
 %
 %=================================%
-\subsection{Results of Redundancy Analysis in Deep ISMs}
+\subsection{Results of Redundancy Analysis in deep ISMs}
 \label{subsec:results_of_red_analy}
 The findings in Fig. \ref{tab:conf_mat_redunt_info} show that, even though, the geo IR$_{20}$M's occupancy map has the least true positive rates overall, it also has by far the least false rates. More specifically, the deep IR$_{20}$Ms without redundancy reduction produce about four times and the one with the reduction about twice the amount of false occupied predictions in the whole mapped area. Around the boundaries, this ratio even goes up slightly. For free false rates, the ratio of geo IR$_{20}$M maps is about half of the other variants. On the other hand, the geo IR$_{20}$M maps only reach about half the true occupied and about two third of the free positive rates. Also, the sparse nature of the geo IR$_{20}$M can be seen for the unknown class where the accumulation of the deep IR$_{20}$M results in ten times the false rates both for free and occupied. This is also reflected by the "cleanliness" of boundaries as measured by the mIoU where this variant reaches the best score in the occupied and unknown classes and is clearly shown in Fig. \ref{fig:qual_analysis_of_redundant_info} for both scenes.
 \begin{center}
@@ -112,7 +112,7 @@ To further verify the workings of the redundancy reduction update, three steps o
 %=================================%
 %
 %=================================%
-\subsection{Discussion of Redundancy Analysis in Deep ISMs}
+\subsection{Discussion of Redundancy Analysis in deep ISMs}
 \label{subsec:discussion_of_red_analy}
 The experiment in Section \ref{subsec:results_of_red_analy} shows the problem of uncontrolled accumulation of masses in occluded areas. This property leads to fully overwriting the geo IR$_{20}$Ms predictions during mapping. This makes the use of the original deep IR$_{20}$M in fusion with the standard Yager rule prohibitive. 
 \\\\
@@ -126,7 +126,7 @@ Even though the redundancy reduced IR$_{20}$M map comes close to the edge perfor
 %==========================================================================%
 %
 %==========================================================================%
-\section{Comparison of Deep ISM Occupancy Maps given different Sensor Modalities}
+\section{Comparison of deep ISM Occupancy Maps given different Sensor Modalities}
 \label{sec:exp_comparison_deep_ism_maps_diff_sensors}
 %=================================%
 %
@@ -137,7 +137,7 @@ In this section, RQ\ref{requ:comp_deep_occ_maps} shall be tackled concerning the
 %==========================================================================%
 %
 %==========================================================================%
-\subsection{Results of Deep ISM Maps Comparison}
+\subsection{Results of deep ISM Maps Comparison}
 \label{subsec:results_analyze_deep_ism_maps_diff_sensors}
 The quantitative results show a similar line of improvement as shown for the ISM comparison in Section \ref{sec:cam_lidar_fusion_in_deep_isms} and are overall consistent in the whole as well as the boundary area. More specifically, the \gls{monodepth} input lacks behind the lidar input in all classes. While, the false occupied rate is doubled for the lidar resulting in a $1\%$ increase, the true occupied rate is more than three times higher providing an increase of almost $50\%$. This improvement can be clearly verified qualitatively comparing the sharpness of occupied boundaries between \gls{monodepth} and lidar maps. Moreover, adding radar information provides a further improvement in true rates. This is especially true for the \gls{monodepth} case, showing that providing measured depth over estimated depth improves the occupancy predictions. For the false rates, radar provides consistent improvement for the free class while slightly decreasing the performance for the occupied case.
 \begin{center}
@@ -177,12 +177,12 @@ The analysis in this section provides a quantitative as well as qualitative comp
 %==========================================================================%
 %
 %==========================================================================%
-\section{Analysis of Deep ISM Priors for Occupancy Mapping}
+\section{Analysis of deep ISM Priors for Occupancy Mapping}
 \label{sec:exp_analyze_prior_properties}
 %=================================%
 %
 %=================================%
-\subsection{Setup of Deep ISM Priors Analysis}
+\subsection{Setup of deep ISM Priors Analysis}
 \label{subsec:setup_of_prior_analy}
 In this section it shall be analyzed how the high accuracy of geo \gls{ism} around edges can be combined with the inter- \& extrapolation properties of deep \gls{ism}s by initializing the map using the deep and finetuning it with the geo \gls{ism}. These experiments are performed using the same sensor inputs, test sets and ground truth as described in Section \ref{subsec:setup_of_red_analy} for the same reasons. 
 \\\\
@@ -198,7 +198,7 @@ The metrics for the comparison are normed confusion matrices as described in Sec
 %=================================%
 %
 %=================================%
-\subsection{Experiment of Deep ISM Priors Analysis}
+\subsection{Experiment of deep ISM Priors Analysis}
 \label{subsec:exp_of_prior_analy}
 First, the redundancy reduction's property to suffice a lower bound $\underline{m}_u$ during fusion, which is proven on simulated data in Section \ref{sec:exp_choice_comb_rule}, shall be additionally verified using the real world sensor inputs. Fig. \ref{tab:prior_violations} shows the violations of the lower bound in percentage and absolute number. It can be seen that, given a lower bound of $\underline{m}_u = 0.3$, a small percentage of cells violate the lower bound. Provided a grace interval of $0.002$, these violations, however, vanish.
 
@@ -245,6 +245,6 @@ Looking at the qualitative results in Fig. \ref{fig:qual_analysis_of_prior}, the
 %=================================%
 %
 %=================================%
-\subsection{Discussion of Deep ISM Priors Analysis}
+\subsection{Discussion of deep ISM Priors Analysis}
 \label{subsec:discussion_of_prior_analy}
 The above shown experimental results on real world sensor data together with the verification based on simulation in Section \ref{sec:exp_choice_comb_rule} show that the method devised in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps} is indeed capable to restrict the fusion of an \gls{ism} to a lower bound given a grace interval to allow for numerical instability. Thus providing an answer to RQ\ref{requ:disable_deep_ism_influence}. It has also been shown that the majority of the geo \gls{irm} map's correct predictions remain intact. The found falsification is to be expected since it is still a fusion approach. If both models result in similar errors, e.g. due to incorrect modeling, missing detections, false dynamic state of a detection etc., these errors are amplified resulting in a falsification. It is, however, shown that the falsification is reduced using the deep \gls{irm} as a prior, again demonstrating the restrictive influence of the deep \gls{ism} purely for initialization.
