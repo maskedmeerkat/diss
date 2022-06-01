@@ -18,7 +18,7 @@
 % Load packages and setup document to match ika style
 \input{utils/config}
 % Load references from file
-\addbibresource{literature/bibliography.bib}
+\addbibresource[label=ref]{literature/bibliography.bib}
 % Load acronyms from file
 \loadglsentries[acronym]{glossaries/acronym_entries}
 % Load symbols from file
@@ -90,12 +90,21 @@
 }
 % Bibliography list
 {
-	\ihead{Bibliography}
+%	\ihead{Bibliography}
 	%\thispagestyle{empty}
-	\printbibliography
-	\newpage
+	\printbibliography[title={Bibliography}, heading=bibnumbered, notkeyword=own]
+%	\newpage
 }
 \glsaddall 
+
+% Bibliography list of own publications
+{
+	%	\ihead{Bibliography}
+	%\thispagestyle{empty}
+	\printbibliography[title={Publications}, heading=bibnumbered, keyword=own]
+	\newpage
+}
+\glsaddall
 
 
 % % List of figures
@@ -114,10 +123,6 @@
 %	\listoftodos
 %	\newpage
 %}
-
-\citePub{fordlanekeeping2021}
-\bibliographystylePub{unsrt}
-\bibliographyPub{refs-etc}
 %\input{chapters/99_Appendix.tex}
 
 \end{document}
