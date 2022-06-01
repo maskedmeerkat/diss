@@ -86,7 +86,7 @@ Eventually, as mentioned above, the geo \gls{ism} is considered to be a verified
 %==========================================================================%
 \section{Review of the State-of-the-Art and Research Needs}
 \label{sec:research_needs}
-In this section, the \gls{sota} defined in Chapter \ref{ch:state_of_the_art} is analyzed with respect to the requirements defined in Section \ref{sec:requirements}.
+In this section, the \gls{sota}, as defined in Chapter \ref{ch:state_of_the_art}, is analyzed with respect to the requirements defined in Section \ref{sec:requirements}.
 %======================================%
 %
 %======================================%
@@ -159,21 +159,24 @@ First, in contrast to geo \gls{ism}s which only provide estimates in regions dir
 \end{center}
 \begin{hyp}[H\ref{hyp:temporal_dependence}] \label{hyp:temporal_dependence}
 	Due to inter- and extrapolation in areas not directly measured, deep \gls{ism}s contain informational dependence between time steps. This leads to accumulation of bias and or falsification of previously correct assigned areas when their estimates are fused into the occupancy maps using a combination rule that assumes informational independence.  
-\end{hyp} 
+\end{hyp}
 In case H\ref{hyp:temporal_dependence} holds, the literature in Section \ref{subsec:combination_of_dependent_evidence} suggests to either remove the redundancy before combination or adapt the combination rule itself to account for the redundancy. This work will focus on removing the redundancy beforehand using Eq. \ref{eq:discount_op} since the Yager and Dempster combination rule, as defined in Section \ref{subsec:combination_of_independent_evidence}, provide well studied, often used fusion methods for evidential occupancy mapping. To remove the redundancy, half of the approaches in the literature focus on defining a constant redundancy weighting between sensor modalities. This is, however, not applicable for the setup in this work, since there is only one sensor modality and the dependency is on the environment.
 \\\\
 The other half proposes approaches to measure the amount of information in each to be fused mass and compare them using the mutual information, as stated in Eq. \ref{eq:mutual_info_with_entrop}. However, no general procedure is proposed to measure the mutual information in signals. Thus, the following questions emerges
+\\
 \begin{requ}[RQ\ref{requ:how_to_meas_redund}] \label{requ:how_to_meas_redund}
 	How can the mutual information be measured to asses the informational redundancy in evidential occupancy mapping?
 \end{requ}
 \begin{requ}[RQ\ref{requ:how_to_define_discount_fact}] \label{requ:how_to_define_discount_fact}
 	How can a discount factor be defined based on the mutual information to remove the amount of redundant information between two evidential occupancy masses?
 \end{requ}
-Additionally, the problem arises that the evidential representation for occupancy mapping slightly differs from the standard in that it defines the conflict state as a meaningful transition state and not as another source of uncertainty based on contradictory information sources. Therefore, the regularly used entropy and the corresponding discount factors cannot be utilized in the proposed form. Also, the second commonly used measure, namely the specificity, quantifies how much mass is distributed into single element classes like the free and occupied class in contrast to the unknown which is both free and occupied. However, the specificity for evidential occupancy mapping is in the interval $[0.5,1.0]$ which can easily be seen by examining Eq. \ref{eq:specificity}. Thus, even for a total lack of information indicated by $\vec{m} = [0,0,1]^\top$, the specificity equals $0.5$ disqualifying it as a direct measure for information, too. This leads to the following research questions 
+Additionally, the problem arises that the evidential representation for occupancy mapping slightly differs from the standard in that it defines the conflict state as a meaningful transition state and not as another source of uncertainty based on contradictory information sources. Therefore, the regularly used entropy and the corresponding discount factors cannot be utilized in the proposed form. Also, the second commonly used measure, namely the specificity, quantifies how much mass is distributed into single element classes like the free and occupied class in contrast to the unknown which is both free and occupied. However, the specificity for evidential occupancy mapping is in the interval $[0.5,1.0]$ which can easily be seen by examining Eq. \ref{eq:specificity}. Thus, even for a total lack of information indicated by $\vec{m} = [0,0,1]^\top$, the specificity equals $0.5$ disqualifying it as a direct measure for information, too. This leads to the following research questions
+\\
 \begin{requ}[RQ\ref{requ:how_to_meas_info}] \label{requ:how_to_meas_info}
 	How can the information content in evidential occupancy mapping be measured?
 \end{requ}
 Eventually, to utilize the deep \gls{ism} estimates as priors according to R\ref{subreq:initialize_with_deep_ism} and \ref{subreq:converge_to_geo_ism}, a procedure has to be developed to answer the following questions
+\\
 \begin{requ}[RQ\ref{requ:disable_deep_ism_influence}] \label{requ:disable_deep_ism_influence}
 	How can the influence of the deep \gls{ism} be disabled in case a definable amount of data has been collected, as defined in R\ref{subreq:initialize_with_deep_ism} and \ref{subreq:converge_to_geo_ism}?
 \end{requ}

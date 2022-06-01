@@ -100,6 +100,7 @@ With regards to the analysis of ground-plane removal techniques according to RQ\
 %==========================================================================%
 \section{Choice of UNet Architecture}
 \label{sec:choice_of_unet_arch}
+This section details the experimental determination of hyperparameters of the deep \gls{ism}'s base architecture, as defined in Section \ref{subsec:method_deep_ism_architecture}.
 %======================================%
 %
 %======================================%
@@ -165,6 +166,7 @@ Moreover, it has been shown that the reduction in the ResNet layer's bottleneck 
 %==========================================================================%
 \section{Aleatoric Uncertainties in deep ISMs}
 \label{sec:al_uncert_in_deep_isms}
+This section describes the experiments to analyze to which extent the different deep \gls{ism} variants, described in Section \ref{subsec:method_al_uncert_in_deep_isms}, are capable to capture aleatoric uncertainties.
 %======================================%
 %
 %======================================%
@@ -275,13 +277,14 @@ The above analysis and experimental results provide a partial answer to RQ\ref{r
 %==========================================================================%
 %
 %==========================================================================%
-\section{Analysis dynamic Detection Encoding for R$_{20}$ ShiftNet Inputs}
+\section{Analysis of dynamic Detection Encoding for R$_{20}$ ShiftNet Inputs}
 \label{sec:analysis_dyn_encoding}
+In this section, the effect of encoding all static and dynamic radar detections of the temporal horizon is compared against encoding all static but only the most recent dynamic radar detections as deep \gls{irm} inputs. 
 %======================================%
 %
 %======================================%
 \subsection{Experimental Setup}
-In this section, the investigation of the effect of radar input encodings on the deep \gls{ism} performance is finalized. The first two variants, namely the radar \gls{bev} projection of a single timestep R$_1$ and the temporally accumulated radar projection with decay on the dynamic detections' intensity R$_{20}$ are already discussed in Section \ref{sec:al_uncert_in_deep_isms}. Thus, this section focuses on encoding temporally accumulated radar detections while only marking the latest dynamic detections, abbreviated as R$_{20|1}$. The three variants are explained in more detail in Section \ref{subsec:def_of_targets_n_inputs}. For the analysis, the ShiftNet deep \gls{ism} is trained until convergence as marked by the validation set defined in NuScenes. The qualitative and quantitative results are purely based on the test set.
+The first two variants, namely the radar \gls{bev} projection of a single timestep R$_1$ and the temporally accumulated radar projection with decay on the dynamic detections' intensity R$_{20}$ are already discussed in Section \ref{sec:al_uncert_in_deep_isms}. Thus, this section focuses on encoding temporally accumulated radar detections while only marking the latest dynamic detections, abbreviated as R$_{20|1}$. The three variants are explained in more detail in Section \ref{subsec:def_of_targets_n_inputs}. For the analysis, the ShiftNet deep \gls{ism} is trained until convergence as marked by the validation set defined in NuScenes. The qualitative and quantitative results are purely based on the test set.
 %======================================%
 %
 %======================================%
@@ -320,6 +323,7 @@ Overall, the quantitative scores for R$_{20}$ exceed the ones for R$_{20|1}$ and
 %==========================================================================%
 \section{Analysis of Camera, Lidar and Fused Inputs for deep ISMs}
 \label{sec:cam_lidar_fusion_in_deep_isms}
+The focus of this section is the experimental comparison between deep \gls{ism}s trained with inputs from cameras, lidar and a respective fusion of these modalities with radar measurements.
 %======================================%
 %
 %======================================%
