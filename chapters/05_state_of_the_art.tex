@@ -26,7 +26,7 @@ consisting of the empty $\emptyset$, free \gls{sym:set_f}, occupied \gls{sym:set
 \end{align} 
 In the normalized form, $m(\emptyset)$ is always zero and, thus, can be removed from consideration. The vector of normalized mass functions can then be written as follows
 \begin{align}
-	\vec{m} = \begin{bmatrix} m(\gls{sym:set_f}), & m(\gls{sym:set_o}), & m(\gls{sym:set_u}) \end{bmatrix}^{\text{T}} = \begin{bmatrix} m_f, & m_o, & m_u \end{bmatrix}^{\text{T}}
+	\vec{m} = \begin{bmatrix} m(\gls{sym:set_f}), & m(\gls{sym:set_o}), & m(\gls{sym:set_u}) \end{bmatrix}^{\top} = \begin{bmatrix} m_f, & m_o, & m_u \end{bmatrix}^{\top}
 \end{align}
 The evidential formulation adds and additional degree of freedom by modeling the unknown class separately. This allows to distinguish the case of conflicting information, indicating a cell to be free and occupied at the same time, from the case of absent information which, in the probabilistic view, both results in \gls{sym:p_o} equaling 0.5. In \cite{moras2011moving,yu2015evidential,kurdej2012map}, it is proposed to utilize the conflicting information to represent dynamic objects which comes naturally since they are neither free nor occupied but rather in a transition state.
 \\\\
@@ -42,60 +42,60 @@ In contrast to sensor models, which describe the sensor characteristics given th
 %==========================================================================%
 \subsection{Ray-Casting in geo ISMs}
 \label{subsec:ray_casting}
-Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. To describe these sensor models, the following notation shall be introduced. For the geo \gls{ism}s a Gaussian measurement noise is assumed whose true mean is defined in polar coordinates as $(\gls{sym:mu_r}, \gls{sym:mu_phi})$ while its measurement is defined as $(\tilde{\mu}_r, \tilde{\mu}_\varphi)$ with the estimated measurement variance $(\tilde{\sigma}_r, \tilde{\sigma}_\varphi)$.
+Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. To describe these sensor models, the following notation shall be introduced. For the geo \gls{ism}s, a Gaussian measurement noise is assumed whose mean and variance are defined in polar coordinates \gls{sym:polar_coordinates} as $(\gls{sym:mu_r}, \gls{sym:mu_phi})$ and $(\gls{sym:sigma_r}, \gls{sym:sigma_phi})$, respectively. For a given detection, the mean is defined as the measured value while the variance is in most works obtained through offline calibration.
 \\\\
-To model a radial sensor, Elfes \cite{elfes1989using} proposed in his seminal work to utilize the Bayesian framework as follows. First, rays are cast from the sensor towards detections, modeling the regions crossed by the ray as an \gls{idm}. As a first step, this \gls{idm} is assumed to be an \gls{idm_ideal}, which defines everything along the distance $r$ between the true object boundary $\mu_r$ and the sensor as free, the position of the object boundary as occupied and everything else as unknown. Given the true object angle $\mu_{\varphi}$,  this can be written as follows 
+To model a radial sensor, Elfes \cite{elfes1989using} proposed in his seminal work to utilize the Bayesian framework as follows. First, rays are cast from the sensor towards detections, modeling the regions crossed by the ray as an \gls{idm}. As a first step, the detection this \gls{idm} is assumed to be an \gls{idm_ideal}, which defines everything along the distance \gls{sym:polar_r} between the object boundary \gls{sym:mu_r} and the sensor as free, the position of the object boundary as occupied and everything else as unknown. Given the object angle \gls{sym:mu_phi}, this can be written as follows 
 \begin{align}
 	\label{eq:ideal_idm}
-	\gls{idm_ideal}(r,\mu_r) = P(\gls{sym:p_o}(r) = 1 |\mu_r) &= 
+	\gls{idm_ideal}(\gls{sym:polar_r},\gls{sym:mu_r}) = P(\gls{sym:p_o}(\gls{sym:polar_r}) = 1 |\gls{sym:mu_r}) &= 
 	\begin{cases}
-		0 &, \varphi = \mu_{\varphi} \text{ and } r < \mu_r\\
-		1 &, \varphi = \mu_{\varphi} \text{ and }r = \mu_r\\
-		0.5 &, \varphi = \mu_{\varphi} \text{ and } \mu_r < r\\				
+		0 &, \gls{sym:polar_phi} = \gls{sym:mu_phi} \text{ and } \gls{sym:polar_r} < \gls{sym:mu_r}\\
+		1 &, \gls{sym:polar_phi} = \gls{sym:mu_phi} \text{ and } \gls{sym:polar_r} = \gls{sym:mu_r}\\
+		0.5 &, \gls{sym:polar_phi} = \gls{sym:mu_phi} \text{ and } \gls{sym:mu_r} < \gls{sym:polar_r}\\				
 		0.5 &, \text{else}		
 	\end{cases}
 \end{align}
-Next, since the radial measurement $z = (\tilde{\mu}_r, \tilde{\mu}_{\varphi})$ is in fact not ideal but contains uncertainty, the \gls{idm_ideal} is convoluted with a radial and angular Gaussian noise model. Here, Elfes argues that this model can only be evaluated in closed form for special sensor models and, thus, instead provides visualizations of the numerical results. These steps to obtain a 2D probabilistic \gls{idm} are visualized in Fig. \ref{fig:idm}.
+Next, since the radial measurement is in fact not ideal but rather contains uncertainty, the \gls{idm_ideal} is convoluted with a radial and angular Gaussian noise model. Elfes argues that this model can only be evaluated in closed form for special sensor models and, thus, instead provides visualizations of the numerical results. These steps to obtain a 2D probabilistic \gls{idm} are visualized in Fig. \ref{fig:idm}.
 \begin{center}
 	\import{imgs/05_state_of_the_art/geo_isms/}{idm.pdf_tex}
-	\captionof{figure}{\label{fig:idm} Visualization of a) the ideal \gls{idm} with the sensor at position $(0,0)$ and the detection at $(4,0)$, b) the influence of radial Gaussian noise and c) radial and angular Gaussian noise on the ideal \gls{idm}.}
+	\captionof{figure}{\label{fig:idm} Visualization of a) the \gls{idm_ideal} with the sensor at position $(0,0)$ and the detection at $(4,0)$, b) the influence of radial Gaussian noise and c) radial and angular Gaussian noise on the \gls{idm_ideal}.}
 \end{center}
-In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s radial component along $\mu_\varphi$ using the error function $\text{Erf}(x) = \dfrac{2}{\pi} \int_{0}^{x}e^{-t^2}dt$ as follows 
+In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s radial component along \gls{sym:mu_phi} using the error function $\text{Erf}(\gls{sym:polar_r}) = \dfrac{2}{\pi} \int_{0}^{\gls{sym:polar_r}}e^{-r'^2}dr'$ which will be referred to as \gls{idm_gauss}. This \gls{idm} can be written as follows 
 \begin{align}
 	\label{eq:gauss_idm}
-	\text{\gls{idm}}_{\text{Gauss}}(r,\tilde{\mu}_r, \sigma_r, \varphi = \mu_\varphi) = P(\gls{sym:p_o}(r, \varphi = \mu_\varphi) = 1 |\tilde{\mu}_r)  =& \dfrac{1}{2}\text{Erf}\left(\dfrac{\tilde{\mu}_r-r}{\sqrt{2}\sigma_r}\right)\\
-	&- \dfrac{1}{4}\text{Erf}\left(\dfrac{\tilde{\mu}_r - r - 3\sigma_r}{\sqrt{2}\sigma_r}\right) + \dfrac{1}{4} \notag
+	\gls{idm_gauss}(\gls{sym:polar_r},\gls{sym:mu_r}, \gls{sym:sigma_r}, \gls{sym:polar_phi} = \gls{sym:mu_phi}) = P(\gls{sym:p_o}(\gls{sym:polar_r}, \gls{sym:polar_phi} = \gls{sym:mu_phi}) = 1 |\gls{sym:mu_r})  =& \dfrac{1}{2}\text{Erf}\left(\dfrac{\gls{sym:mu_r}-\gls{sym:polar_r}}{\sqrt{2}\gls{sym:sigma_r}}\right)\\
+	&- \dfrac{1}{4}\text{Erf}\left(\dfrac{\gls{sym:mu_r} - \gls{sym:polar_r} - 3\gls{sym:sigma_r}}{\sqrt{2}\gls{sym:sigma_r}}\right) + \dfrac{1}{4} \notag
 \end{align}
 \begin{center}
 	\import{imgs/05_state_of_the_art/geo_isms/}{radial_geo_idm.pgf}
-	\captionof{figure}{\label{fig:radial_geo_idm}Example of the ideal \gls{idm} with $\mu_r = 2$ and an object thickness $\tau = 0.3$, together with the \gls{idm}$_{\text{Gauss}}$ with $\sigma_r = 0.1$ and \gls{idm}$_{\text{B-Spline}}$ with the same variance. The left side shows a zoom of the right side around the border between free and occupied space.}
+	\captionof{figure}{\label{fig:radial_geo_idm}Example of the \gls{idm_ideal} with $\gls{sym:mu_r} = 2$ and an object thickness $\tau = 0.3$, together with the \gls{idm_gauss} with $\gls{sym:sigma_r} = 0.1$ and \gls{idm}$_{\text{B-Spline}}$ with the same variance. The left side shows a zoom of the right side around the border between free and occupied space.}
 \end{center}
-They continue to show that the application of a Gaussian noise model always leads to a slightly shifted decision boundary between free and occupied space with regards to the ideal \gls{idm}'s. This effect is illustrated in the zoomed region left in Fig. \ref{fig:radial_geo_idm}. Therefore, they propose a quadratic b-spline as an alternative noise model designed in a way to always deliver the same free-occupied-border as the \gls{idm}$_{\text{ideal}}$ while approximately maintaining the shape of the \gls{idm}$_{\text{Gauss}}$ (see Fig. \ref{fig:radial_geo_idm}). The quadratic b-spline and the corresponding radial \gls{idm}, after convolving the proposed b-spline with the ideal \gls{idm}, can be written as follows
+They continue to show that the application of a Gaussian noise model always leads to a slightly shifted decision boundary between free and occupied space with regards to the \gls{idm_ideal}'s. This effect is illustrated in the zoomed region left in Fig. \ref{fig:radial_geo_idm}. Therefore, they propose a quadratic b-spline as an alternative noise model designed in a way to always deliver the same free-occupied-border as the \gls{idm}$_{\text{ideal}}$ while approximately maintaining the shape of the \gls{idm_gauss} (see Fig. \ref{fig:radial_geo_idm}). The quadratic b-spline and the corresponding radial \gls{idm}, after convolving the proposed b-spline with the \gls{idm_ideal}, are referred to as \gls{idm_bspline}. This \gls{idm} can be written as follows
 \begin{align}
 	\label{eq:bspline}
-	\text{BSpline}(x) &= 
+	\text{BSpline}(r) &= 
 	\begin{cases}
-		0 &, x < -3\\
-		\dfrac{(3+x)^3}{48} &, -3 \leq x \leq -1\\
-		\dfrac{1}{2}+\dfrac{x(3+x)(3-x)}{24} &, -1 < x < 1\\
-		1-\dfrac{(3-x)^3}{48} &, 1 \leq x \leq 3\\
-		1 &, 3 < x\\
+		0 &, r < -3\\
+		(3+r)^3 / 48 &, -3 \leq r \leq -1\\
+		\dfrac{1}{2} + r(3+r)(3-r) / 24 &, -1 < r < 1\\
+		1 - (3-r)^3 / 48 &, 1 \leq r \leq 3\\
+		1 &, 3 < r
 	\end{cases}\\
 %
 	\label{eq:bspline_idm}
-	\text{\gls{idm}}_{\text{B-Spline}}(r,\tilde{\mu}_r, \sigma_r, \varphi = \mu_\varphi) &= \text{BSpline}((r - \tilde{\mu}_r)/\sigma_r) - \dfrac{1}{2}\text{BSpline}((r - \tilde{\mu}_r)/\sigma_r - 3)
+	\gls{idm_bspline}(r,\gls{sym:mu_r}, \gls{sym:sigma_r}, \gls{sym:polar_phi} = \gls{sym:mu_phi}) &= \text{BSpline}((r - \gls{sym:mu_r})/\gls{sym:sigma_r}) - \dfrac{1}{2}\text{BSpline}((r - \gls{sym:mu_r})/\gls{sym:sigma_r} - 3)
 \end{align}
-The \gls{idm}$_{\text{B-Spline}}$ has been widely adopted in occupancy mapping \cite{mouhagir2017using,reineking2013evidential,yu2015evidential}.
+The \gls{idm_bspline} has been widely adopted in occupancy mapping \cite{mouhagir2017using,reineking2013evidential,yu2015evidential}.
 \\\\
-In \cite{pagac1996evidential}, Pagac et al. extended the probabilistic \gls{idm} to the evidential framework given an arbitrary probabilistic \gls{idm} as follows  
+In \cite{pagac1996evidential}, Pagac et al. extended the probabilistic \gls{idm} to the evidential framework given an \gls{idm_prob}. This \gls{idm_ev} can be written as follows  
 \begin{align}
 	\label{eq:ev_ray_casting_model}
-	\text{\gls{idm}}_{\text{ev}} &=
+	\gls{idm_ev} &=
 	\begin{cases}
-		\begin{bmatrix} 2\Delta p, &0, &1 - 2\Delta p \end{bmatrix}^{\top}, & \text{\gls{idm}}_{\text{prob}} < 0.5 \\
-		\begin{bmatrix} 0, &2\Delta p, &1 - 2\Delta p \end{bmatrix}^{\top}, & \text{\gls{idm}}_{\text{prob}} \geq 0.5
+		\begin{bmatrix} 2\Delta p, &0, &1 - 2\Delta p \end{bmatrix}^{\top}, & \gls{idm_prob} < 0.5 \\
+		\begin{bmatrix} 0, &2\Delta p, &1 - 2\Delta p \end{bmatrix}^{\top}, & \gls{idm_prob} \geq 0.5
 	\end{cases}\\
-	\Delta p &= \| 0.5 - \text{\gls{idm}}_{\text{prob}} \|
+	\Delta p &= \| 0.5 - \gls{idm_prob} \|
 \end{align}
 Eventually, to arrive at the \gls{ism}, the \gls{idm} is applied on each detection of the sensor measurement and their influences are accumulated using one of the fusion approaches described in \ref{subsec:combination_of_independent_evidence}.
 %======================================%
@@ -136,9 +136,9 @@ For this work, only the radar signals prefiltered by the manufacturer are consid
 However, the accuracy of radars is not constant, as assumed in the standard \gls{idm}, but rather depends on the radial distance, reflecting material, detection angle and atmospheric interference. Therefore, the \gls{idm}'s probabilities have to be adapted to account for these influences. To do so, Clark et al. \cite{clarke2012sensor} propose the following scaling factor
 \begin{align}
 	\label{eq:clarke_scaling}
-	G_{\text{Clarke}} = G_p G_\varphi G_a
+	\gls{sym:g_clarke} = \gls{sym:g_p} \gls{sym:g_phi} \gls{sym:g_a}
 \end{align}
-where $G_p$ scales the \gls{idm} linearly dependent on the received signal's power amplitude relative to its range. Moreover, $G_\varphi$ is used to decrease the detection probabilities quadratically depending on the angle between detection and sensor center ray relative to the maximum angle in the sensor's \gls{fov}. Eventually, $G_a$ is used to incorporate the influence of range dependent grid areas. This, however, becomes only relevant for polar grids and can be neglected in Cartesian coordinates. This model is further extended in \cite{prophet2018adaptions} by additionally decreasing the probabilities linearly depending on the ego vehicle's velocity.
+where \gls{sym:g_p} scales the \gls{idm} linearly dependent on the received signal's power amplitude relative to its range. Moreover, \gls{sym:g_phi} is used to decrease the detection probabilities quadratically depending on the angle between detection and sensor center ray relative to the maximum angle in the sensor's \gls{fov}. Eventually, \gls{sym:g_a} is used to incorporate the influence of range dependent grid areas. This, however, becomes only relevant for polar grids and can be neglected in Cartesian coordinates. This model is further extended in \cite{prophet2018adaptions} by additionally decreasing the probabilities linearly depending on the ego vehicle's velocity.
 \\\\
 In addition to the different noise influences, most point clouds of nowadays automotive radar used in production are highly sparse (e.g. 64 detections per radar for the sensors used in this work). The sparsity in combination with the fact that the signals can contain outliers and detections behind objections due to multi-path reflections can lead to casting \gls{idm} rays which partially cut through actually occupied areas, as shown in Fig. \ref{fig:geo_irm_drawn} b). To counteract this effect, Weber et al. \cite{werber2015automotive} propose to, additionally, reduce the influence of detections linearly dependent on their range. Moreover, they ignore free space of rays which falls together with occupied areas of other rays. Even though this procedure not fully removes the problem of rays cutting through objects, it highly dampens it and prohibits foreground detections from being overwritten.
 \\\\
