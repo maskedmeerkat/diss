@@ -5,7 +5,7 @@ In this chapter, the experimental findings from Chapter \ref{ch:deep_ism_exp} an
 %==========================================================================%
 %
 %==========================================================================%
-\section{Summary of geo ILM and IRM}
+\section{Summary and Outlook of geo ILM and IRM}
 \label{sec:disc_of_geo_ilm_n_irm}
 To create the targets for the free, occupied and unknown class to train the deep \gls{ism}s, the usage of occupancy map patches created by accumulating a geo \gls{ilm} over time is proposed. This geo \gls{ilm} needs to only be manually defined and tuned once. Thus, it suffices R\ref{subreq:min_requirements} to minimize manual labor. It is further tuned for the dimensions defined in R\ref{subreq:grid_map_size} so that the map patches as well as all models trained on them meet the requirement. However, since the lidar sensor does not measure motion information, the manually annotated labels for dynamic objects are overlayed. This can be further optimized e.g. by clustering the lidar points and determining the cluster's motion state through radar measurements or by using a Doppler lidar \cite{ma2019moving}.
 \\\\
@@ -15,7 +15,7 @@ Using the best performing geo \gls{irm} variant as reference, the initially tune
 %==========================================================================%
 %
 %==========================================================================%
-\section{Summary of deep, evidential ISMs}
+\section{Summary and Outlook of deep, evidential ISMs}
 \label{sec:disc_deep_ev_isms}
 Given the ground-truth occupancy maps and a reference geo \gls{irm}, the trained \gls{ism} models can be analyzed. Here, deep \gls{cnn}-based models are favored over other machine learning approaches since they have been proven in the literature and in this work to be capable of utilizing large amounts of data, sufficing R\ref{subreq:big_data} use big data. Also, \gls{cnn}s are designed to utilize the spatial coherence in data, which can be seen e.g. in the white box of scene A in Fig. \ref{fig:qual_comp_radar_encoding} where the shape of moving vehicles is being estimated solely on a single detection point and the street layout. Eventually, deep \gls{cnn}s are capable to be trained on multi-class classification tasks, sufficing R\ref{subreq:ev_rep}, thus meeting all the preliminary requirements to chose the model.
 \\\\
@@ -33,7 +33,7 @@ Eventually, Section \ref{sec:cam_lidar_fusion_in_deep_isms} also provides an ana
 %==========================================================================%
 %
 %==========================================================================%
-\section{Summary of deep, evidential ISMs in Occupancy Mapping}
+\section{Summary and Outlook of deep, evidential ISMs in Occupancy Mapping}
 \label{sec:disc_deep_ev_isms_in_occ_maps}
 For occupancy mapping, it is suggested in H\ref{hyp:temporal_dependence} that the estimates of deep \gls{ism}s contain temporal redundancy which would violate R\ref{subreq:indep_info}. Using the proposed Yager's rule of combination, this might lead to an accumulation of low certain estimates up to the point of full convergence. This phenomenon is investigated in Section \ref{sec:exp_analyze_redundant_info} and can be most clearly seen in the occluded areas in Fig. \ref{fig:qual_analysis_of_redundant_info} for the "deep IR$_{20}$M accumulated" results. Also, the fusion with the geo \gls{irm} shows that its influence is completely overwritten by directly fusing it with the deep \gls{irm}, thus, further demonstrating the importance of a solution. To further analyze the cause of the problem, a threshold-based cutoff of low probable estimates is analyzed in the same section. It shows that the accumulation of occupied mass is dampened, proving that the unchecked influence of low certain estimates is indeed one part of the problem.
 \\\\

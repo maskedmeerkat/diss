@@ -23,7 +23,6 @@
 
 %enable \gls
 \usepackage[automake,nonumberlist,acronym,toc,nopostdot,nomain,numberedsection=autolabel, section=section]{glossaries}
-%\usepackage[acronym, numberedsection, section=section]{glossaries}
 \newglossary[slg]{symbolslist}{syi}{syg}{Symbols} % create add. symbolslist
 \makeglossaries
 % Displays unit in symbole list
@@ -34,6 +33,10 @@
 		& \glssymbol{##1}
 		& \glossentrydesc{##1}  \tabularnewline
 	}
+}
+\newglossarystyle{acronymlong}{%
+	\glossarystyle{long}%
+	\renewcommand{\glsgroupskip}{}
 }
 \makeindex
 \setacronymstyle{long-short}

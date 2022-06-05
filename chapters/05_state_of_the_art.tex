@@ -42,12 +42,12 @@ In contrast to sensor models, which describe the sensor characteristics given th
 %==========================================================================%
 \subsection{Ray-Casting in geo ISMs}
 \label{subsec:ray_casting}
-Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. To describe these sensor models, the following notation shall be introduced. For the geo \gls{ism}s a Gaussian measurement noise is assumed whose true mean is defined in polar coordinates as $(\mu_r, \mu_\varphi)$ while its measurement is defined as $(\tilde{\mu}_r, \tilde{\mu}_\varphi)$ with the estimated measurement variance $(\tilde{\sigma}_r, \tilde{\sigma}_\varphi)$.
+Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. To describe these sensor models, the following notation shall be introduced. For the geo \gls{ism}s a Gaussian measurement noise is assumed whose true mean is defined in polar coordinates as $(\gls{sym:mu_r}, \gls{sym:mu_phi})$ while its measurement is defined as $(\tilde{\mu}_r, \tilde{\mu}_\varphi)$ with the estimated measurement variance $(\tilde{\sigma}_r, \tilde{\sigma}_\varphi)$.
 \\\\
-To model a radial sensor, Elfes \cite{elfes1989using} proposed in his seminal work to utilize the Bayesian framework as follows. First, rays are cast from the sensor towards detections, marking the regions crossed by the ray with the ideal \gls{idm}. This ideal \gls{idm} defines everything along the distance $r$ between the true object boundary $\mu_r$ and the sensor as free, the position of the object boundary as occupied and everything else as unknown. Given the true object angle $\mu_{\varphi}$,  this can be written as follows 
+To model a radial sensor, Elfes \cite{elfes1989using} proposed in his seminal work to utilize the Bayesian framework as follows. First, rays are cast from the sensor towards detections, modeling the regions crossed by the ray as an \gls{idm}. As a first step, this \gls{idm} is assumed to be an \gls{idm_ideal}, which defines everything along the distance $r$ between the true object boundary $\mu_r$ and the sensor as free, the position of the object boundary as occupied and everything else as unknown. Given the true object angle $\mu_{\varphi}$,  this can be written as follows 
 \begin{align}
 	\label{eq:ideal_idm}
-	\text{\gls{idm}}_{\text{ideal}}(r,\mu_r) = P(\gls{sym:p_o}(r) = 1 |\mu_r) &= 
+	\gls{idm_ideal}(r,\mu_r) = P(\gls{sym:p_o}(r) = 1 |\mu_r) &= 
 	\begin{cases}
 		0 &, \varphi = \mu_{\varphi} \text{ and } r < \mu_r\\
 		1 &, \varphi = \mu_{\varphi} \text{ and }r = \mu_r\\
@@ -55,7 +55,7 @@ To model a radial sensor, Elfes \cite{elfes1989using} proposed in his seminal wo
 		0.5 &, \text{else}		
 	\end{cases}
 \end{align}
-Next, since the radial measurement $z = (\tilde{\mu}_r, \tilde{\mu}_{\varphi})$ is in fact not ideal but contains uncertainty, the ideal \gls{idm} is convoluted with a radial and angular Gaussian noise model. Here, Elfes argues that this model can only be evaluated in closed form for special sensor models and, thus, instead provides visualizations of the numerical results. These steps to obtain a 2D probabilistic \gls{idm} are visualized in Fig. \ref{fig:idm}.
+Next, since the radial measurement $z = (\tilde{\mu}_r, \tilde{\mu}_{\varphi})$ is in fact not ideal but contains uncertainty, the \gls{idm_ideal} is convoluted with a radial and angular Gaussian noise model. Here, Elfes argues that this model can only be evaluated in closed form for special sensor models and, thus, instead provides visualizations of the numerical results. These steps to obtain a 2D probabilistic \gls{idm} are visualized in Fig. \ref{fig:idm}.
 \begin{center}
 	\import{imgs/05_state_of_the_art/geo_isms/}{idm.pdf_tex}
 	\captionof{figure}{\label{fig:idm} Visualization of a) the ideal \gls{idm} with the sensor at position $(0,0)$ and the detection at $(4,0)$, b) the influence of radial Gaussian noise and c) radial and angular Gaussian noise on the ideal \gls{idm}.}
