@@ -54,7 +54,7 @@
 	\newpage
 }
 
-%\lipsum[1]
+\include{chapters/03_abstract}
 \include{chapters/04_introduction}
 \include{chapters/05_state_of_the_art}
 \include{chapters/06_research_approach}
@@ -75,34 +75,33 @@
 
 % List of symbols (make sure Perl is installed)
 {
-	\ihead{Symbols}
-	%\thispagestyle{empty}
-	\printglossary[type=symbolslist,style=symbunitlong,title=List of Symbols,toctitle=Symbols]
-%	\printglossary[type=symbolslist,style=alttree,title=List of Symbols,toctitle=Symbols]
-	\newpage
+	\chapter{Glossary}
+	\label{ch:gls}
+	\printglossary[type=symbolslist, style=symbunitlong, title={List of Symbols}, toctitle={List of Symbols}, numberedsection]
+	\printglossary[type=\acronymtype, style=long, title={List of Abbreviations}, toctitle={List of Abbreviations}, numberedsection]
 }
-% List of Abbreviations (make sure Perl is installed)
-{
-	\ihead{Abbreviations}
-	%\thispagestyle{empty}
-	\printglossary[type=\acronymtype,style=long,title=List of Abbreviations,toctitle=Abbreviations]
-	\clearpage
-}
+%{
+%	\ihead{Symbols}
+%	%\thispagestyle{empty}
+%	\printglossary[type=symbolslist,style=symbunitlong,title=List of Symbols,toctitle=Symbols]
+%%	\printglossary[type=symbolslist,style=alttree,title=List of Symbols,toctitle=Symbols]
+%	\newpage
+%}
+%% List of Abbreviations (make sure Perl is installed)
+%{
+%	\ihead{Abbreviations}
+%	%\thispagestyle{empty}
+%	\printglossary[type=\acronymtype,style=long,title=List of Abbreviations,toctitle=Abbreviations]
+%	\clearpage
+%}
 % Bibliography list
 {
-%	\ihead{Bibliography}
-	%\thispagestyle{empty}
-	\printbibliography[title={Bibliography}, heading=bibnumbered, notkeyword=own]
-%	\newpage
-}
-\glsaddall 
-
-% Bibliography list of own publications
-{
-	%	\ihead{Bibliography}
-	%\thispagestyle{empty}
-	\printbibliography[title={Publications}, heading=bibnumbered, keyword=own]
+	\chapter{Bibliography}
+	\label{ch:bib}
+	\printbibliography[title={List of References}, heading=subbibnumbered, notkeyword=own]
 	\newpage
+	% Bibliography list of own publications
+	\printbibliography[title={List of Publications in Relation to this Thesis}, heading=subbibnumbered, keyword=own]
 }
 \glsaddall
 

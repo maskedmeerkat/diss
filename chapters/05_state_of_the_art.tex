@@ -10,25 +10,25 @@ This chapter briefly describes the main forms of environment representation used
 \label{sec:occupancy_mapping}
 Occupancy grid maps are an often employed form of environmental representation in the field of robotics \cite{carrillo2015autonomous,elfes1989using,fleuret2007multicamera}. In this form, first introduced in \cite{elfes1989using}, the surrounding is stored as a \gls{bev} grid map where each cell contains information about the corresponding environmental patch's occupancy state. Here, a cell is defined to be occupied, if the robot is not able to traverse the area and free vice versa. In the original form, this state is expressed in the probabilistic domain using the probabilities for occupied \gls{sym:p_o} and free \gls{sym:p_f} for which the following holds
 \begin{align}
-	p_o &\in [0,1]\\
-	p_f &= 1-p_o\\
-	\vec{p} &= \begin{bmatrix} p_f & p_o \end{bmatrix}
+	\gls{sym:p_o} &\in [0,1]\\
+	\gls{sym:p_f} &= 1-\gls{sym:p_o}\\
+	\gls{sym:vec_p_occ} &= \begin{bmatrix} \gls{sym:p_f}, & \gls{sym:p_o} \end{bmatrix}
 \end{align}
-Here, $p_o$ equaling zero indicates a cell being free, $p_o$ equaling one indicates a cell being occupied and $p_o$ equaling 0.5 represents the unknown state. An alternative to the probabilistic formulation is proposed in \cite{pagac1996evidential} which is widely applied for evidential mapping \cite{moras2011moving,yu2015evidential,mouhagir2017using}. It uses the evidential representation \cite{dempster1968generalization,shafer1976mathematical} to define the occupancy state as the so called power set
+Here, \gls{sym:p_o} equaling zero indicates a cell being free, \gls{sym:p_o} equaling one indicates a cell being occupied and \gls{sym:p_o} equaling 0.5 represents the unknown state. An alternative to the probabilistic formulation is proposed in \cite{pagac1996evidential} which is widely applied for evidential mapping \cite{moras2011moving,yu2015evidential,mouhagir2017using}. It uses the evidential representation \cite{dempster1968generalization,shafer1976mathematical} to define the occupancy state as the so called power set
 \begin{align}
-	2^{U} = \{\emptyset, F, O, U\}, \qquad U = \{F,O\}	
+	2^{\gls{sym:set_u}} = \{\emptyset, \gls{sym:set_f}, \gls{sym:set_o}, \gls{sym:set_u}\}, \qquad \gls{sym:set_u} = \{\gls{sym:set_f}, \gls{sym:set_o}\}	
 \end{align}
-consisting of the empty $\emptyset$, free $F$, occupied $O$ and unknown set $U$. Additionally, mass functions $m(A)$ are defined which map each element of $2^{U}$ to the amount of evidence associated with it. In their normalized form, which will be assumed from here on, the mass functions are defined to suffice the following conditions
+consisting of the empty $\emptyset$, free \gls{sym:set_f}, occupied \gls{sym:set_o} and unknown set \gls{sym:set_u}. Additionally, mass functions \gls{sym:mA} with $\gls{sym:A} \in 2^{\gls{sym:set_u}}$ are defined which map each element of $2^{\gls{sym:set_u}}$ to the amount of evidence associated with it. In their normalized form, which will be assumed from here on, the mass functions are defined to suffice the following conditions
 \begin{align}
 	\label{eq:evidential_norm}
 	m(\emptyset) &= 0\\
-	\sum_{A \in 2^{U}} m(A) &= 1
+	\sum_{\gls{sym:A} \in 2^{\gls{sym:set_u}}} \gls{sym:mA} &= 1
 \end{align} 
 In the normalized form, $m(\emptyset)$ is always zero and, thus, can be removed from consideration. The vector of normalized mass functions can then be written as follows
 \begin{align}
-	\vec{m} = \begin{bmatrix} m(F), & m(O), & m(U) \end{bmatrix}^{\text{T}} = \begin{bmatrix} m_f, & m_o, & m_u \end{bmatrix}^{\text{T}}
+	\vec{m} = \begin{bmatrix} m(\gls{sym:set_f}), & m(\gls{sym:set_o}), & m(\gls{sym:set_u}) \end{bmatrix}^{\text{T}} = \begin{bmatrix} m_f, & m_o, & m_u \end{bmatrix}^{\text{T}}
 \end{align}
-The evidential formulation adds and additional degree of freedom by modeling the unknown class separately. This allows to distinguish the case of conflicting information, indicating a cell to be free and occupied at the same time, from the case of absent information which, in the probabilistic view, both results in $p_o$ equaling 0.5. In \cite{moras2011moving,yu2015evidential,kurdej2012map}, it is proposed to utilize the conflicting information to represent dynamic objects which comes naturally since they are neither free nor occupied but rather in a transition state.
+The evidential formulation adds and additional degree of freedom by modeling the unknown class separately. This allows to distinguish the case of conflicting information, indicating a cell to be free and occupied at the same time, from the case of absent information which, in the probabilistic view, both results in \gls{sym:p_o} equaling 0.5. In \cite{moras2011moving,yu2015evidential,kurdej2012map}, it is proposed to utilize the conflicting information to represent dynamic objects which comes naturally since they are neither free nor occupied but rather in a transition state.
 \\\\
 To build such occupancy maps, sensor measurements are being fed into so called \gls{ism}s to obtain an estimate of the occupancy state around the vehicle. This estimate is then transformed into map coordinates and fused into the map using evidential combination rules. To obtain unbiased maps in which each information is weighted equally, the \gls{ism} estimates have to be informational independent \cite{pagac1996evidential}. The following sections will elaborate on the variants of \gls{ism}s and evidential combination rules at hand.
 %==========================================================================%
@@ -42,12 +42,12 @@ In contrast to sensor models, which describe the sensor characteristics given th
 %==========================================================================%
 \subsection{Ray-Casting in geo ISMs}
 \label{subsec:ray_casting}
-Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. To describe these sensor models, the following notation shall be introduced. For the geo \gls{ism}s a Gaussian measurement noise is assumed whose true mean is defined in polar coordinates as $(\mu_r, \mu_\varphi)$ while its measurement is defined as $(\tilde{\mu_r}, \tilde{\mu_\varphi})$ with the estimated measurement variance $(\tilde{\sigma}_r, \tilde{\sigma}_\varphi)$.
+Most of the sensors deployed in automated driving for environment perception use a radial sensing principle like e.g. cameras and lidars. These sensors are only capable of perceiving objects in direct line of sight. To describe these sensor models, the following notation shall be introduced. For the geo \gls{ism}s a Gaussian measurement noise is assumed whose true mean is defined in polar coordinates as $(\mu_r, \mu_\varphi)$ while its measurement is defined as $(\tilde{\mu}_r, \tilde{\mu}_\varphi)$ with the estimated measurement variance $(\tilde{\sigma}_r, \tilde{\sigma}_\varphi)$.
 \\\\
 To model a radial sensor, Elfes \cite{elfes1989using} proposed in his seminal work to utilize the Bayesian framework as follows. First, rays are cast from the sensor towards detections, marking the regions crossed by the ray with the ideal \gls{idm}. This ideal \gls{idm} defines everything along the distance $r$ between the true object boundary $\mu_r$ and the sensor as free, the position of the object boundary as occupied and everything else as unknown. Given the true object angle $\mu_{\varphi}$,  this can be written as follows 
 \begin{align}
 	\label{eq:ideal_idm}
-	\text{\gls{idm}}_{\text{ideal}}(r,\mu_r) = P(p_o(r) = 1 |\mu_r) &= 
+	\text{\gls{idm}}_{\text{ideal}}(r,\mu_r) = P(\gls{sym:p_o}(r) = 1 |\mu_r) &= 
 	\begin{cases}
 		0 &, \varphi = \mu_{\varphi} \text{ and } r < \mu_r\\
 		1 &, \varphi = \mu_{\varphi} \text{ and }r = \mu_r\\
@@ -63,7 +63,7 @@ Next, since the radial measurement $z = (\tilde{\mu}_r, \tilde{\mu}_{\varphi})$ 
 In \cite{loop2016closed}, Loop et al. provide a formulation of the \gls{idm}'s radial component along $\mu_\varphi$ using the error function $\text{Erf}(x) = \dfrac{2}{\pi} \int_{0}^{x}e^{-t^2}dt$ as follows 
 \begin{align}
 	\label{eq:gauss_idm}
-	\text{\gls{idm}}_{\text{Gauss}}(r,\tilde{\mu}_r, \sigma_r, \varphi = \mu_\varphi) = P(p_o(r, \varphi = \mu_\varphi) = 1 |\tilde{\mu}_r)  =& \dfrac{1}{2}\text{Erf}\left(\dfrac{\tilde{\mu}_r-r}{\sqrt{2}\sigma_r}\right)\\
+	\text{\gls{idm}}_{\text{Gauss}}(r,\tilde{\mu}_r, \sigma_r, \varphi = \mu_\varphi) = P(\gls{sym:p_o}(r, \varphi = \mu_\varphi) = 1 |\tilde{\mu}_r)  =& \dfrac{1}{2}\text{Erf}\left(\dfrac{\tilde{\mu}_r-r}{\sqrt{2}\sigma_r}\right)\\
 	&- \dfrac{1}{4}\text{Erf}\left(\dfrac{\tilde{\mu}_r - r - 3\sigma_r}{\sqrt{2}\sigma_r}\right) + \dfrac{1}{4} \notag
 \end{align}
 \begin{center}
@@ -318,19 +318,19 @@ In case of regression problems, the majority of works model the noise as a Gauss
 \end{align}
 For classification, the common approach is to apply Softmax output activations coupled with a cross-entropy loss. This trains the network to predict the weights of a Categorical distribution $\mathrm{Cat}(\tilde{y}_i|x_i)$ \cite{goodfellow2016deep}. To further estimate the aleatoric uncertainties, the network can be altered to predict a Dirichlet distribution $\mathrm{Dir}(p_i|\vec{\alpha}(x_i))$ over the weights by estimating its shape parameters \gls{sym:vec_alpha} $\in \mathbb{R}_{>1}$. Here, the shape parameters can be estimated by either using an exponential \cite{wu2019quantifying} or ReLU \cite{sensoy2018evidential} output activation before adding one to each dimension. To further obtain the final predictions, the estimated Dirichlet distribution $\mathrm{Dir}(p_i|\vec{\alpha}(x_i))$ is treated as a prior to a Multinomial distribution $\mathrm{Mult}(\tilde{y}_i|p_i)$ and has to be marginalized out. Thus, to train the network, the negative marginal log-likelihood 
 \begin{align}
-	\mathcal{L}_i &= -\log\left( \int\prod_{k=1}^{K}p_{ik}^{y_{ik}}\dfrac{1}{\mathrm{Beta}(\vec{\alpha}_i)}\prod_{k=1}^{K}p_{ik}^{\alpha_{ik}^{-1}}d\vec{p}_i \right)  = \sum_{k=1}^{K}y_{ik}(\log(S_i)-\log(\alpha_{ik}))	
+	\mathcal{L}_i &= -\log\left( \int\prod_{k=1}^{K}p_{ik}^{y_{ik}}\dfrac{1}{\mathrm{Beta}(\vec{\alpha}_i)}\prod_{k=1}^{K}p_{ik}^{\alpha_{ik}^{-1}}d\gls{sym:vec_p_occ}_i \right)  = \sum_{k=1}^{K}y_{ik}(\log(S_i)-\log(\alpha_{ik}))	
 \end{align}  
 can be minimized, as proposed in \cite{wu2019quantifying,sensoy2018evidential}. Here, $\mathrm{Beta}(\cdot)$ equals the Beta distribution and $S_i = \sum_{k=1}^{K} \alpha_k$. Sensoy et al. \cite{sensoy2018evidential} additionally propose to minimize the Bayes risk for the \gls{mse}
 \begin{align}
 	\label{eq:bayes_risk_mse}
-	\mathcal{L}_i = \int \underbrace{\| \vec{y}_i - \vec{p}_i\|^{2}_{2}}_{\text{amount of error}}\underbrace{\dfrac{1}{\mathrm{Beta}(\vec{\alpha}_i)}\prod_{k=1}^{K}p_{ik}^{\alpha_{ik}^{-1}}}_{\text{probability of error}}d\vec{p}_i = \sum_{k=1}^{K}(y_{ik}-\tilde{p}_{ik})^2 + \dfrac{\tilde{p}_{ik}(1-\tilde{p}_{ik})}{S_i+1}
+	\mathcal{L}_i = \int \underbrace{\| \vec{y}_i - \gls{sym:vec_p_occ}_i\|^{2}_{2}}_{\text{amount of error}}\underbrace{\dfrac{1}{\mathrm{Beta}(\vec{\alpha}_i)}\prod_{k=1}^{K}p_{ik}^{\alpha_{ik}^{-1}}}_{\text{probability of error}}d\gls{sym:vec_p_occ}_i = \sum_{k=1}^{K}(y_{ik}-\tilde{p}_{ik})^2 + \dfrac{\tilde{p}_{ik}(1-\tilde{p}_{ik})}{S_i+1}
 \end{align} 
 as an empirically verified more stable variant. Josang \cite{audun2018subjective} proposed the so called "subjective logic" framework, where he argues that evidential masses can be expressed as probabilistic Dirichlet distributions using evidence $e \in \mathbb{R}_{\geq 0}$ as the connecting element. The evidence can be used as follows to transform one representation to the other
 \begin{align}
 	\label{eq:e2m}
 	\vec{b} &= \dfrac{\vec{e}}{S} \text{ and } u = \dfrac{K}{S}\\
 	\label{eq:e2p}
-	\vec{p} &= \mathbb{E}[\mathrm{Dir}(\vec{e})] = \dfrac{\vec{\alpha}}{S}\\
+	\gls{sym:vec_p_occ} &= \mathbb{E}[\mathrm{Dir}(\vec{e})] = \dfrac{\vec{\alpha}}{S}\\
 	\alpha_k &= e_k + 1
 \end{align} 
 This allows to model the aleatoric uncertainties for evidential masses with a network by first learning a Dirichlet distribution as mentioned above and further applying the transformations from eq. \eqref{eq:e2m} \cite{sensoy2018evidential}. 

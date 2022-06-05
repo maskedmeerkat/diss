@@ -1,4 +1,5 @@
 # tex generated files
+*.glo
 *.acn
 *.acr
 *.alg
