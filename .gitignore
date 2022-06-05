@@ -1,4 +1,9 @@
+# bib files
+*.bib.bak
+*.bib.sav.tmp
+
 # tex generated files
+*.synctex(busy)
 *.glo
 *.acn
 *.acr

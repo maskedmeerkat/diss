@@ -1,4 +1,4 @@
-%% Creator: Inkscape 1.0 (4035a4fb49, 2020-05-01), www.inkscape.org
+%% Creator: Inkscape 1.2 (dc2aedaf03, 2022-05-15), www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
 %% Accompanies image file 'conv_n_resnet_layer.pdf' (pdf, eps, ps)
 %%
@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{326.00079634bp}%
+    \setlength{\unitlength}{341.16798461bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,18 +50,20 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.23227611)%
+  \begin{picture}(1,0.26776915)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{conv_n_resnet_layer.pdf}}%
-    \put(0.72319511,0.17488969){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $1\times 1\times C_\text{in}$\end{tabular}}}}%
-    \put(0.69558782,0.10759557){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $K\times K\times C_\text{in}/D$\end{tabular}}}}%
-    \put(0.72319511,0.04030149){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $1\times 1\times C_\text{out}$\end{tabular}}}}%
+    \put(0.72911979,0.20329124){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1\times 1\times C_\text{in}$\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{conv_n_resnet_layer.pdf}}%
-    \put(0.04902766,0.1766621){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize $K\times K\times C_\text{out}$ conv. (s, Dropout)\end{tabular}}}}%
-    \put(0.16405809,0.10936802){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize leaky ReLu\end{tabular}}}}%
+    \put(0.02341368,0.20552768){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\gls{sym:kernelsize}\times \gls{sym:kernelsize}\times C_\text{out}$ conv. (s, Dropout)\end{tabular}}}}%
+    \put(0.18736761,0.12390238){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}leaky \gls{relu}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{conv_n_resnet_layer.pdf}}%
-    \put(0.16405809,0.04207391){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\scriptsize BatchNorm\end{tabular}}}}%
+    \put(0.18501099,0.04110349){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{batchnorm}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=4]{conv_n_resnet_layer.pdf}}%
+    \put(0.7027398,0.12405649){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$\gls{sym:kernelsize}\times \gls{sym:kernelsize}\times C_\text{in}/D$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{conv_n_resnet_layer.pdf}}%
+    \put(0.72472312,0.04014715){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}$1\times 1\times C_\text{out}$\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{conv_n_resnet_layer.pdf}}%
   \end{picture}%
 \endgroup%
