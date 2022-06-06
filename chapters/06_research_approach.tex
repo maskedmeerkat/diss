@@ -606,7 +606,7 @@ Including the definition of $K$ and the discount operation, it follows that
 \begin{align}
 	\underline{m}_u & \underbrace{\leq}_{\eqref{eq:discount_op}\text{ \& }\eqref{eq:conflict}} m_{u}^{0:T-1}(1-\gamma+\gamma\tilde{m}_{u}^{0:T}) + m_{o}^{0:T-1}\gamma\tilde{m}_{f}^{0:T} + m_{f}^{0:T-1}\gamma\tilde{m}_{o}^{0:T}\\
 %
-	\underline{m}_u &\leq m_{u}^{0:T-1} + \gamma (\underbrace{m_{u}^{0:T-1}\tilde{m}_{u}^{0:T} - m_{u}^{0:T-1} + m_{o}^{0:T-1}\tilde{m}_{f}^{0:T} + m_{f}^{0:T-1}\tilde{m}_{o}^{0:T}}_{=: \xi}) \quad|-m_{u}^{0:T-1} |\div\xi
+	\underline{m}_u &\leq m_{u}^{0:T-1} + \gamma (\underbrace{m_{u}^{0:T-1}\tilde{m}_{u}^{0:T} - m_{u}^{0:T-1} + m_{o}^{0:T-1}\tilde{m}_{f}^{0:T} + \gls{sym:m_f}^{0:T-1}\tilde{m}_{o}^{0:T}}_{=: \xi}) \quad|-m_{u}^{0:T-1} |\div\xi
 \end{align}
 Since the above derivation is made for the case of combination in the initialization phase, both the map cell's and deep \gls{ism} estimate's unknown masses are in the interval $m_u^{0:T-1},\quad \tilde{m}_u^{0:T}\in[\underline{m}_u,1]$. Thus, for $\xi\equiv 0$ \eqref{eq:lower_bound_condition} is satisfied.\\
 In case $\xi \neq 0$, the two following solutions can be found 

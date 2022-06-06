@@ -22,8 +22,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7.5767672"
-     inkscape:cx="177.0544"
-     inkscape:cy="27.188377"
+     inkscape:cx="393.63754"
+     inkscape:cy="87.636321"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -1796,7 +1796,7 @@
        style="fill:none;stroke:#000000;stroke-width:0.165;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker6401)" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:2.11667px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
+       style="font-style:normal;font-weight:normal;font-size:0.705556px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
        x="71.773636"
        y="11.145748"
        id="text2672-84"><tspan
@@ -1804,7 +1804,7 @@
          id="tspan2670-00"
          x="71.773636"
          y="11.145748"
-         style="font-size:2.11667px;stroke-width:0.264583">$1\times 1\times C_\text{in}$</tspan></text>
+         style="font-size:0.705556px;stroke-width:0.264583">$1\times 1\times \gls{sym:conv_channel}_{in}$</tspan></text>
     <rect
        style="fill:none;stroke:#00cc00;stroke-width:0.264999;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        id="rect6859-6"
@@ -1823,7 +1823,7 @@
          y="10.876577"
          x="-13.16267"
          id="tspan2670-00-7"
-         sodipodi:role="line">$\gls{sym:kernelsize}\times \gls{sym:kernelsize}\times C_\text{out}$ \gls{conv} (\gls{sym:stride}, Dropout)</tspan></text>
+         sodipodi:role="line">$\gls{sym:kernelsize}\times \gls{sym:kernelsize}\times \gls{sym:conv_channel}_{out}$ \gls{conv} (\gls{sym:stride}, Dropout)</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.165;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5329-83)"
        d="M 15.597821,3.452485 V 6.098318"
@@ -1904,7 +1904,7 @@
          y="20.682163"
          x="68.598633"
          id="tspan2670-00-3"
-         sodipodi:role="line">$\gls{sym:kernelsize}\times \gls{sym:kernelsize}\times C_\text{in}/D$</tspan></text>
+         sodipodi:role="line">$\gls{sym:kernelsize}\times \gls{sym:kernelsize}\times \gls{sym:conv_channel}_{in}/\gls{sym:chan_red}$</tspan></text>
     <rect
        style="fill:none;stroke:#00cc00;stroke-width:0.275;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
        id="rect5293-5-4-2-1-2"
@@ -1917,13 +1917,13 @@
        id="text2672-84-9"
        y="30.781197"
        x="71.244469"
-       style="font-style:normal;font-weight:normal;font-size:1.41111px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
+       style="font-style:normal;font-weight:normal;font-size:0.705556px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:round"
        xml:space="preserve"><tspan
-         style="font-size:1.41111px;stroke-width:0.264583"
+         style="font-size:0.705556px;stroke-width:0.264583"
          y="30.781197"
          x="71.244469"
          sodipodi:role="line"
-         id="tspan1613">$1\times 1\times C_\text{out}$</tspan></text>
+         id="tspan1613">$1\times 1\times \gls{sym:conv_channel}_{out}$</tspan></text>
     <g
        id="g2216"
        transform="translate(-7.1237508)">
