@@ -136,21 +136,15 @@
 	sort=vcar,
 	type=symbolslist}
 
-\newglossaryentry{sym:p_o_tilde}{
-	name={\ensuremath{\tilde{p}_o}},
-	description={occupancy probability estimates},
-	sort=vcar,
-	type=symbolslist}
-
-\newglossaryentry{sym:p_o_hat}{
-	name={\ensuremath{\hat{p}_o}},
-	description={occupancy probability labels},
-	sort=vcar,
-	type=symbolslist}
-
 \newglossaryentry{sym:p_f}{
 	name={\ensuremath{p_f}},
 	description={free probability},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:p_k}{
+	name={\ensuremath{p_k}},
+	description={placeholder either for free or occupied probability},
 	sort=vcar,
 	type=symbolslist}
 
@@ -232,6 +226,36 @@
 	sort=vcar,
 	type=symbolslist}
 
+\newglossaryentry{sym:alpha_f}{
+	name={\ensuremath{\alpha_f}},
+	description={positive shape parameter for free class in a Dirichlet distribution},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:alpha_o}{
+	name={\ensuremath{\alpha_o}},
+	description={positive shape parameter for occupied class in a Dirichlet distribution},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:alpha_k}{
+	name={\ensuremath{\alpha_k}},
+	description={placeholder either for free or occupied Dirichlet shape parameter},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:sum_alpha}{
+	name={\ensuremath{\Sigma_{\alpha}}},
+	description={sum of positive shape parameters of a Dirichlet distribution},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:K}{
+	name={\ensuremath{K}},
+	description={set containing evidence indices $[f,o,u]$ need for occupancy mapping},
+	sort=vcar,
+	type=symbolslist}
+
 \newglossaryentry{sym:dempster_comb}{
 	name={\ensuremath{\oplus_D}},
 	description={evidential combination using Dempster's rule},
@@ -298,20 +322,32 @@
 	sort=vcar,
 	type=symbolslist}
 
-\newglossaryentry{sym:categorical}{
-	name={\ensuremath{\mathrm{Cat}}},
-	description={Categorical probability density function},
+\newglossaryentry{sym:target}{
+	name={\ensuremath{\xi}},
+	description={target in a loss function},
 	sort=vcar,
 	type=symbolslist}
 
-\newglossaryentry{sym:multinomial}{
-	name={\ensuremath{\mathrm{Mult}}},
-	description={Multinomial probability density function},
+\newglossaryentry{sym:beta_fu}{
+	name={\ensuremath{\mathrm{Beta}}},
+	description={Beta distribution},
 	sort=vcar,
 	type=symbolslist}
 
-\newglossaryentry{sym:dirichlet}{
+\newglossaryentry{sym:dir_fu}{
 	name={\ensuremath{\mathrm{Dir}}},
-	description={Dirichlet probability density function},
+	description={Dirichlet distribution},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:tilde}{
+	name={\ensuremath{\tilde{ }}},
+	description={estimated quantity},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:vec_e}{
+	name={\ensuremath{\vec{e}}},
+	description={evidence vector in subjective logic framework},
 	sort=vcar,
 	type=symbolslist}
