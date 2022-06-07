@@ -49,9 +49,11 @@ Finally, on the theoretical side, the model shall estimate the evidential classe
 \begin{subreq}[R\ref{subreq:ev_rep}] \label{subreq:ev_rep}
 	The predicted output should capture the amount of free, occupied and unknown information.
 \end{subreq}
+\vspace{\baselineskip}
 \begin{subreq}[R\ref{subreq:unknown_mass}] \label{subreq:unknown_mass}
 	The unknown mass should be an inverse measure for the overall information content capturing both uncertainty and lack of information.
 \end{subreq}
+\vspace{\baselineskip}
 \begin{subreq}[R\ref{subreq:conflicting_mass}] \label{subreq:conflicting_mass}
 	The amount of conflicting information, which is realized by mass being evenly distributed both into the free and occupied class, shall be an indicator for dynamic objects.
 \end{subreq}
@@ -78,6 +80,7 @@ Eventually, as mentioned above, the geo \gls{ism} is considered to be a verified
 \begin{subreq}[R\ref{subreq:initialize_with_deep_ism}] \label{subreq:initialize_with_deep_ism}
 	The occupancy map shall be initialized with the trained \gls{ism}'s estimates up to the point when a definable amount of measurement information has been collected.
 \end{subreq}
+\vspace{\baselineskip}
 \begin{subreq}[R\ref{subreq:converge_to_geo_ism}] \label{subreq:converge_to_geo_ism}
 	The occupancy map shall converge to the geo \gls{ism} with increasing amount of measurements.
 \end{subreq}
@@ -167,6 +170,7 @@ The other half proposes approaches to measure the amount of information in each 
 \begin{requ}[RQ\ref{requ:how_to_meas_redund}] \label{requ:how_to_meas_redund}
 	How can the mutual information be measured to asses the informational redundancy in evidential occupancy mapping?
 \end{requ}
+\vspace{\baselineskip}
 \begin{requ}[RQ\ref{requ:how_to_define_discount_fact}] \label{requ:how_to_define_discount_fact}
 	How can a discount factor be defined based on the mutual information to remove the amount of redundant information between two evidential occupancy masses?
 \end{requ}
@@ -192,7 +196,7 @@ Finally, since the evidential occupancy mapping using deep \gls{ism}s has not be
 \label{subsec:choice_of_dataset}
 In order to answer the above posed research questions, a dataset containing big amounts of urban recordings of lidar with semantic information, camera, odometry and radar is required. Additionally, it would be nice to use a public dataset, for it allows comparability and reproducability. At the start of the thesis' implementation phase, the only dataset sufficing these requirements is the publicly available NuScenes dataset \cite{caesar2020nuscenes}, which can be seen in the dataset comparison provided in Table 1 in the paper.
 \\\\
-The dataset is separated into $1000$ so called scenes each containing the data of roughly a $20$ second drive during which data from each modality is recorded, which is referred to as sensor sweeps. Additionally, so called samples are defined every $0.5$ seconds containing annotations like bounding boxes and semantics for all sensor modalities. To enable comparability, the train-val-test split is predefined by the NuScenes creators.
+The dataset is separated into 1000 so called scenes each containing the data of roughly a 20 second drive during which data from each modality is recorded, which is referred to as sensor sweeps. Additionally, so called samples are defined every 0.5 seconds containing annotations like bounding boxes and semantics for all sensor modalities. To enable comparability, the train-val-test split is predefined by the NuScenes creators.
 \\\\
 Regarding the sensor setup, six cameras three of which face front left, center, right and three of which face back left, center, right are installed. Each camera captures 1.4MP images at a rate of 12 Hz. Additionally, five 77 GHz \gls{fmcw} radars are mounted to the car's front left, center, right and back left and right. To obtain ground-truth depth information, a 32 beam spinning lidar is mounted to the roofs center that captures frames with 20 Hz. The pose information is based on a fusion of lidar odometry, \gls{gps} and \gls{imu}.  For more details, the reader is referred to Table 2 in the paper.
 %==========================================================================%
@@ -215,7 +219,7 @@ The definition of baseline and ground-truth data is followed by defining the dee
 \label{subsec:method_dyn_info_for_lidar}
 To obtain the dynamic information for lidar sweeps, the sample's bounding boxes of dynamic objects are interpolated for intermediate sweeps and all lidar detections intersecting with the boxes are marked as dynamic. Here, the interpolations are obtained as follows. First, corresponding bounding boxes of dynamic objects are identified by their track ids for two subsequent samples. To avoid singularities, the bounding box poses of each identified pair are first transformed into the temporally first bounding box's coordinate frame. Next, a third degree polynomial is used to interpolate the poses. The polynomial is defined to intersects with the positions of the provided poses. Also, the polynomial's derivative at the interpolation points has to equal the tangents of the pose's angle. Thus intermediate poses should have  positions coinciding with the polynomial with orientations given by the arc-tangent of the polynomial's derivative.
 \\\\
-To finally obtain the interpolated bounding box pose, the way along the interpolated trajectory is numerically integrated and divided into equidistant segments. Under the assumption that the tracked, dynamic object travels with a constant velocity between the two samples, the interpolated pose is given at the point when the relative traveled distance between the first and second sample's pose is closest to the relative time of the sweep between the two samples. The so identified pose can then be transformed into the coordinate frame of the currently interpolated sweep. The interpolation procedure and the overlay of the resulting interpolated bounding boxes over a lidar sweep's detection image are illustrated in Fig. \ref{fig:dyn_objs_interpolation}.
+To finally obtain the interpolated bounding box pose, the way along the interpolated trajectory is numerically integrated and divided into equidistant segments. Under the assumption that the tracked, dynamic object travels with a constant velocity between the two samples, the interpolated pose is given at the point when the relative traveled distance between the first and second sample's pose is closest to the relative time of the sweep between the two samples. The so identified pose can then be transformed into the coordinate frame of the currently interpolated sweep. The interpolation procedure and the overlay of the resulting interpolated bounding boxes over a lidar sweep's detection image are illustrated in Fig. \ref{fig:dyn_objs_interpolation} in Cartesian coordinates \gls{sym:cart_coordinates}.
 \begin{center}
 	\import{imgs/07_deep_ism_exp/dataset}{dyn_objs_interpolation.pdf_tex}
 	\captionof{figure}{\label{fig:dyn_objs_interpolation}Illustration of the three steps to obtain interpolations of the 2d bounding box poses on the left hand side together with an example of resulting interpolated bounding boxes (yellow) overlayed on a lidar sweep's \gls{bev} detection image on the right. The three interpolation stages from left to right show the original bounding box poses of two consecutive samples, the poses transformed into the first poses coordinates together with the interpolated poses (gray) and finally the poses back in the original coordinate frame with the interpolations.}
@@ -227,30 +231,30 @@ To finally obtain the interpolated bounding box pose, the way along the interpol
 \label{subsec:method_geo_ilm}
 Both lidar and radar sensors use a radial measurement principal which is why it makes sense to model them using the ray casting \gls{ism} as explained in Section \ref{subsec:ray_casting}, however in a modified way. In case of the \gls{ilm}, first the ground detections have to be removed. To do so, either a height-threshold or a semantic segmentation based approach can be chosen. The specific choice used in this work is detailed in Section \ref{sec:choice_of_gt}.
 \\\\
-Afterwards, free space rays with opening angle $\varphi_\sphericalangle$ are cast for each angle in increments of $\varphi_\sphericalangle$ in the range $[0^\circ, 360^\circ]$ around the sensor center either up to a maximum distance $r_\text{max}$ or until intersecting with a detection. All \gls{bev} grid cells affected by the free space ray are set to $[M_F,0,1-M_F]^\top$ using the tunable free space weight $M_F \in [0,1]$. On the other hand, position of collided detections are either set to $[0,M_O,1-M_O]^\top$ for static detections with the occupied space weight $M_O \in [0,1]$ or to $[M_D, M_D, 1-2M_D]^\top$ for dynamic detections with the dynamic object weight $M_D \in [0,0.5]$. Here, the information about the motion state is not provided by the lidar itself but by external sources like additional labels in the dataset. The additional motion information will only be used to generate labels to train the deep \gls{ism} variants but not to generate deep \gls{ism} inputs! This procedure has the effect that detections occluded in the \gls{bev} projection are filtered out which better matches the radar's sensing capability. An algorithmic summary of the geo \gls{ilm} in pseudo code is shown in Alg. \ref{alg:geo_ilm}.
+Afterwards, free space rays with opening angle \gls{sym:open_angle} are cast in non-overlapping increments of \gls{sym:open_angle} in the range $[0^\circ, 360^\circ]$ around the sensor center either up to a maximum distance \gls{sym:r_max} or until intersecting with a detection. All \gls{bev} grid cells affected by the free space ray are set to $[\gls{sym:idm_mf},0,1-\gls{sym:idm_mf}]^\top$ using the tunable free space weight $\gls{sym:idm_mf} \in [0,1]$. On the other hand, position of collided detections are either set to $[0,\gls{sym:idm_mo},1-\gls{sym:idm_mo}]^\top$ for static detections with the occupied space weight $\gls{sym:idm_mo} \in [0,1]$ or to $[\gls{sym:idm_md}, \gls{sym:idm_md}, 1-2\gls{sym:idm_md}]^\top$ for dynamic detections with the dynamic object weight $\gls{sym:idm_md} \in [0,0.5]$. Here, the information about the motion state is not provided by the lidar itself but by external sources like additional labels in the dataset. The additional motion information will only be used to generate labels to train the deep \gls{ism} variants but not to generate deep \gls{ism} inputs! This procedure has the effect that detections occluded in the \gls{bev} projection are filtered out which better matches the radar's sensing capability. An algorithmic summary of the geo \gls{ilm} in pseudo code is shown in Alg. \ref{alg:geo_ilm}.
 \\\\
 \begin{algorithm}[H]
 	\caption{\label{alg:geo_ilm}Geo ILM}
-	\textbf{Hyperparameters:} $M_F, M_O, M_D, \varphi_\sphericalangle, N$\;
+	\textbf{Hyperparameters:} $\gls{sym:idm_mf}, \gls{sym:idm_mo}, \gls{sym:idm_md}, \gls{sym:open_angle}$\;
 	\Function{castFreeSpace}{
-		\Comment{see \eqref{eq:idm_radar} with $M_O = M_D = 0$}
+		\Comment{see \eqref{eq:idm_radar} with $\gls{sym:idm_mo} = \gls{sym:idm_md} = 0$}
 	}
 	remove ground-plane detections\;
-	initialize all cells in the \gls{ilm} image to $m_u=1$\;
-	\For{$\varphi_{\text{center}}$ \text{in} discretizedAngles360}{
+	initialize all cells in the \gls{ilm} image to $\gls{sym:m_u}=1$\;
+	\For{$\gls{sym:center_angle}$ \text{in} discretizedAngles360}{
 		\If{(at least one detection in current cone area)}{
-			$(r_{\text{det}}, \varphi_{\text{det}})$ = \FuncCall{getClosestDetectionInsideConeArea}{$\varphi_{\text{center}}$, $\varphi_\sphericalangle$, $r_{\text{max}}$}\;
-			\FuncCall{castFreeSpaceRay}{$\varphi_{\text{center}}$, $r_{\text{det}}$, $\varphi_\sphericalangle$, $M_F$}\;
+			$(\gls{sym:r_det}, \gls{sym:phi_det})$ = \FuncCall{getClosestDetectionInsideConeArea}{$\gls{sym:center_angle}$, $\gls{sym:open_angle}$, $\gls{sym:r_max}$}\;
+			\FuncCall{castFreeSpaceRay}{$\gls{sym:center_angle}$, $\gls{sym:r_det}$, $\gls{sym:open_angle}$, $\gls{sym:idm_mf}$}\;
 			\Comment{mark closest detection}
 			\If{(detection is static)}{
-				\FuncCall{assignCellValue}{$(r_{\text{det}}, \varphi_{\text{det}})$, $[0,M_O,1-M_O]$}\;
+				\FuncCall{assignCellValue}{$(\gls{sym:r_det}, \gls{sym:phi_det})$, $[0,\gls{sym:idm_mo},1-\gls{sym:idm_mo}]$}\;
 			}
 			\Else{
-				\FuncCall{assignCellValue}{$(r_{\text{det}}, \varphi_{\text{det}})$, $[M_D, M_D, 1-2M_D]$}\;
+				\FuncCall{assignCellValue}{$(\gls{sym:r_det}, \gls{sym:phi_det})$, $[\gls{sym:idm_md}, \gls{sym:idm_md}, 1-2\gls{sym:idm_md}]$}\;
 			}
 		}
 		\Else{
-			\FuncCall{castFreeSpaceRay}{$\varphi_{\text{center}}$, $r_{\text{max}}$, $\varphi_\sphericalangle$, $M_F$}\;			
+			\FuncCall{castFreeSpaceRay}{$\gls{sym:center_angle}$, $\gls{sym:r_max}$, $\gls{sym:open_angle}$, $\gls{sym:idm_mf}$}\;			
 		}
 	}
 \end{algorithm}
@@ -264,44 +268,44 @@ For the geo \gls{irm}, a cone model which is based on the \gls{idm}$_{\text{B-Sp
 In angular direction, it is proposed to linearly approximate the influence of the Gaussian noise, again due to the coarse discretization. However, cones with enlarged opening angles are used to counteract cases of \gls{idm} rays passing between detections in sparsely measured areas. While the enlarged cones lead to a desired enrichment of free space they would also lead to blurring the occupied space and with it, object boundaries. Thus, only the free space follows the linearly approximated Gaussian noise in angular direction while the detection's influence is, again, restricted to its occurring cell. Thus, the following adapted evidential \gls{idm} is proposed to be used for radars
 \begin{align}
 	\label{eq:idm_radar}
-	\text{\gls{idm}}_{radar}(r, \varphi, \mu_r, \mu_\varphi, d) &= 
+	\text{\gls{idm}}_{radar}(r, \varphi, \gls{sym:r_det}, \gls{sym:phi_det}, \gls{sym:d_det}) &= 
 	\begin{cases}
-		[M_{F\sphericalangle},0,1-M_{F\sphericalangle}]^\top &, \Delta\varphi \leq \dfrac{\varphi_\sphericalangle}{2}, r < \mu_r\\
-		[0,M_O,1-M_O]^\top &, \varphi = \mu_{\varphi}, r = \mu_r, d = \text{False}\\
-		[M_D,M_D,1-2M_D]^\top &, \varphi = \mu_{\varphi}, r = \mu_r, d = \text{True}\\		
+		[M_{F\sphericalangle},0,1-M_{F\sphericalangle}]^\top &, \Delta\varphi \leq \dfrac{\gls{sym:open_angle}}{2}, r < \gls{sym:r_det}\\
+		[0,\gls{sym:idm_mo},1-\gls{sym:idm_mo}]^\top &, \varphi = \gls{sym:phi_det}, r = \gls{sym:r_det}, \gls{sym:d_det} = \text{False}\\
+		[\gls{sym:idm_md},\gls{sym:idm_md},1-2\gls{sym:idm_md}]^\top &, \varphi = \gls{sym:phi_det}, r = \gls{sym:r_det}, \gls{sym:d_det} = \text{True}\\		
 		[0,0,1]^\top &, \text{ else}\\
 	\end{cases}\\
 	%	
-	\text{with } \quad M_{F\sphericalangle} &= M_F(1 - \dfrac{\Delta\varphi}{\varphi_\sphericalangle}) \quad\text{and}\quad \Delta\varphi = |\varphi - \mu_\varphi|\\
+	\text{with } \quad M_{F\sphericalangle} &= \gls{sym:idm_mf}(1 - \dfrac{\Delta\varphi}{\gls{sym:open_angle}}) \quad\text{and}\quad \Delta\varphi = |\varphi - \gls{sym:phi_det}|\\
 \end{align}
-With $r$ and $\varphi$ being the cylindrical coordinates measured in the radar's sensor coordinate frame, $\mu_r$ and $\mu_{\varphi}$ being the cylindrical  coordinates of the detection and $d$ the Boolean flag indicating the dynamic state of the detection. However, for reasons detailed in Section \ref{subsec:geo_ism_radar}, \gls{idm}$_{radar}$ can not be directly applied on each detection to obtain the \gls{irm}. Here, the main problem is the assumption that only objects in line of sight are detected. This assumption is violated for the radar since objects can be detected in occluded areas due to multi-path reflections. This leads to big amounts of free space being assigned to occupied areas by \gls{idm} rays cast towards detections in occluded areas. 
+With $r$ and $\varphi$ being the cylindrical coordinates measured in the radar's sensor coordinate frame, $\gls{sym:r_det}$ and $\gls{sym:phi_det}$ being the cylindrical  coordinates of the detection and \gls{sym:d_det} the Boolean flag indicating the dynamic state of the detection. However, for reasons detailed in Section \ref{subsec:geo_ism_radar}, \gls{idm}$_{radar}$ can not be directly applied on each detection to obtain the \gls{irm}. Here, the main problem is the assumption that only objects in line of sight are detected. This assumption is violated for the radar since objects can be detected in occluded areas due to multi-path reflections. This leads to big amounts of free space being assigned to occupied areas by \gls{idm} rays cast towards detections in occluded areas. 
 \\\\
 In this work, the occlusion problem is addressed similar to \cite{werber2015automotive} with the alteration that the free space part of the \gls{idm} is not only ignored in occupied regions of other rays, but ends at it. In case the contours of all objects are densely detected, this would suffice to solve the problem. However, radar detections are also sparse which is why measurements of preceding time steps are additionally used to densify object boundaries. In contrast to the \gls{ilm}, detections occluded in the \gls{bev} projection shall still be marked as occupied in the \gls{irm} in order not to further increase the sparseness. The time horizon, in which detections are accumulated, shall be set to a finite value to dampen the influence of potential outliers. This procedure only introduces the time horizon as hyperparameter and, thus, proposes a good candidate to answer RQ\ref{requ:fr_space_enrichment}.
 \begin{center}
 	\import{imgs/06_research_approach/method/}{idm_radar.pdf_tex}
 	\captionof{figure}{\label{idm_radar}Illustration of the proposed \gls{idm}'s contours being applied on two detections. It shows the big and thing \gls{idm}s being cast for each detection. Also, it shows that the big \gls{idm} cone's range for detection two (stripped blue) is limited by the first detection. On the other hand, the thin \gls{idm} of the second detection is, for the given scenario, able to assign free space up to the second detection.}
 \end{center}
-Another problem connected with the sparsity is the low coverage of free space. In this work, the method proposed in \cite{prophet2018adaptions} is altered to find an answer for RQ\ref{requ:fr_space_enrichment} by instead casting the original rays again but with a much wider opening angle. This assumes that the manufacturer's prefiltering of the raw radar signal is done in away to preserve detections belonging to the object closest to the sensor. The justification for this assumption is based on the fact that radars are applied in safety critical collision avoidance systems. The second iteration of wider \gls{idm} rays shall only be used to enrich the free space and, thus, use $M_O = 0$. Additionally, it shall be fused with the first iterations \gls{irm} using Dempster's combination rule. An algorithmic summary of the geo \gls{irm} in pseudo code is shown in Alg. \ref{alg:geo_irm}.
+Another problem connected with the sparsity is the low coverage of free space. In this work, the method proposed in \cite{prophet2018adaptions} is altered to find an answer for RQ\ref{requ:fr_space_enrichment} by instead casting the original rays again but with a much wider opening angle. This assumes that the manufacturer's prefiltering of the raw radar signal is done in away to preserve detections belonging to the object closest to the sensor. The justification for this assumption is based on the fact that radars are applied in safety critical collision avoidance systems. The second iteration of wider \gls{idm} rays shall only be used to enrich the free space and, thus, use $\gls{sym:idm_mo} = 0$. Additionally, it shall be fused with the first iterations \gls{irm} using Dempster's combination rule. An algorithmic summary of the geo \gls{irm} in pseudo code is shown in Alg. \ref{alg:geo_irm}.
 \\\\
 \begin{algorithm}[H]
 	\caption{\label{alg:geo_irm}Geo IRM}
-	\textbf{Hyperparameters:} $M_F^{(\text{\scriptsize thin})}, M_F^{(\text{\scriptsize big})}, \varphi_\sphericalangle^{(\text{\scriptsize thin})}, \varphi_\sphericalangle^{(\text{\scriptsize big})}, M_O, M_D, N$\;	
+	\textbf{Hyperparameters:} $\gls{sym:idm_mf}^{(\text{\scriptsize thin})}, \gls{sym:idm_mf}^{(\text{\scriptsize big})}, \gls{sym:open_angle}^{(\text{\scriptsize thin})}, \gls{sym:open_angle}^{(\text{\scriptsize big})}, \gls{sym:idm_mo}, \gls{sym:idm_md}, \gls{sym:temp_hor}$\;	
 	\Function{castFreeSpace}{
-		\Comment{see \eqref{eq:idm_radar} with $M_O = M_D = 0$}
+		\Comment{see \eqref{eq:idm_radar} with $\gls{sym:idm_mo} = \gls{sym:idm_md} = 0$}
 	}
 	initialize all cells in the \gls{irm} image to $m_u=1$\;
-	transform previous $N$ radar point clouds of all radars to current \gls{irm} image\;
-	\For{$(\mu_r, \mu_\varphi)$ \text{in} currentDetections}{
+	transform previous \gls{sym:temp_hor} radar point clouds of all radars to current \gls{irm} image\;
+	\For{$(\gls{sym:r_det}, \gls{sym:phi_det})$ \text{in} currentDetections}{
 		\Comment{range at which the free space of the ray is stopped}
-		$(r_{\text{det}}, \varphi_{\text{det}})$ = \FuncCall{getClosestDetectionInsideConeArea}{$\varphi_{\text{center}}$, $\varphi_\sphericalangle$, $r_{\text{max}}$}\;	
+		$(\gls{sym:r_det}, \gls{sym:phi_det})$ = \FuncCall{getClosestDetectionInsideConeArea}{$\gls{sym:center_angle}$, $\gls{sym:open_angle}$, $\gls{sym:r_max}$}\;	
 		\Comment{cast thin and big free space rays}
-		\FuncCall{castFreeSpaceRay}{$\varphi_{\text{center}}$, $r_{\text{det}}$, $\varphi_\sphericalangle^{(\text{\scriptsize thin})}$, $M_F^{(\text{\scriptsize thin})}$}\;		
-		\FuncCall{DempsterRule}{\FuncCall{castFreeSpaceRay}{$\varphi_{\text{center}}$, $r_{\text{det}}$, $\varphi_\sphericalangle^{(\text{\scriptsize big})}$, $M_F^{(\text{\scriptsize big})}$}}\;
+		\FuncCall{castFreeSpaceRay}{$\gls{sym:center_angle}$, $r_{\text{det}}$, $\gls{sym:open_angle}^{(\text{\scriptsize thin})}$, $\gls{sym:idm_mf}^{(\text{\scriptsize thin})}$}\;		
+		\FuncCall{DempsterRule}{\FuncCall{castFreeSpaceRay}{$\gls{sym:center_angle}$, $r_{\text{det}}$, $\gls{sym:open_angle}^{(\text{\scriptsize big})}$, $\gls{sym:idm_mf}^{(\text{\scriptsize big})}$}}\;
 		\If{(detection is static)}{
-			\FuncCall{assignCellValue}{$(\mu_r, \mu_\varphi)$, $[0,M_O,1-M_O]$}\;
+			\FuncCall{assignCellValue}{$(\gls{sym:r_det}, \gls{sym:phi_det})$, $[0,\gls{sym:idm_mo},1-\gls{sym:idm_mo}]$}\;
 		}
 		\Else{
-			\FuncCall{assignCellValue}{$(\mu_r, \mu_\varphi)$, $[M_D, M_D, 1-2M_D]$}\;
+			\FuncCall{assignCellValue}{$(\gls{sym:r_det}, \gls{sym:phi_det})$, $[\gls{sym:idm_md}, \gls{sym:idm_md}, 1-2\gls{sym:idm_md}]$}\;
 		}
 	}
 \end{algorithm}
@@ -315,7 +319,7 @@ The analysis of which method to chose as a baseline and which as ground truth, a
 To do so, three variants of the geo \gls{irm} (as defined in Alg.\ref{alg:geo_irm}), are compared which subsequently add more of the proposed algorithm's components. First, the \gls{idm}$_\text{radar}$ shall only be applied without accumulation of radar detections over time and only as a thin cone. This corresponds to fixing the parameters in Alg. \ref{alg:geo_irm} as shown for the first variant in Fig. \ref{tab:geo_irm_variants}. Next, the additional influence of using accumulated detections is analyzed (see Fig. \ref{tab:geo_irm_variants} \#2), followed by the additional application of cones with big opening angles (see Fig. \ref{tab:geo_irm_variants} \#3). These variants are used to create occupancy maps which are compared with maps created from the fixed geo \gls{ilm}. Here, the maps are created using Yager's rule of combination and the metric for comparison is the m\gls{iou}, evaluated within the area reached by the \gls{ism}s. To obtain best competitive results for each method, the parameters labeled as "?" for each respective variant in Fig. \ref{tab:geo_irm_variants} are chosen via a grid search.
 \begin{center}
 	\begin{tabular}{cl|c|c|c|c|c|c|c}
-		& geo \gls{irm} Variant & $M_F^{(\text{thin})}$ & $M_F^{(\text{big})}$ & $\varphi_\sphericalangle^{(\text{\scriptsize thin})}$ & $\varphi_\sphericalangle^{(\text{\scriptsize big})}$ & $M_O$ & $M_D$ & $N$ \\
+		& geo \gls{irm} Variant & $\gls{sym:idm_mf}^{(\text{thin})}$ & $\gls{sym:idm_mf}^{(\text{big})}$ & $\gls{sym:open_angle}^{(\text{\scriptsize thin})}$ & $\gls{sym:open_angle}^{(\text{\scriptsize big})}$ & $\gls{sym:idm_mo}$ & $\gls{sym:idm_md}$ & \gls{sym:temp_hor} \\
 		\hline
 		\#1 &Ray Casting \gls{irm}& ? & \textcolor{myred}{0} & ? & \textcolor{myred}{0} & ? & ? & \textcolor{myred}{1} \\
 		\#2 &... + Accumulation & ? & \textcolor{myred}{0} & ? & \textcolor{myred}{0} & ? & ? & ? \\
@@ -331,11 +335,11 @@ After the evaluation of the geo \gls{irm}, the best performing variant is fixed 
 \label{subsec:def_of_targets_n_inputs}
 To analyze the effects and performance of deep \gls{ism}s given different sensor inputs, lidar, camera and radar measurements have to be encoded into an input representation. For this work, a common representation for all sensor modalities and the training targets is chosen to be \gls{bev} images as further detailed in R\ref{subreq:grid_map_size}. In the following, the steps are detailed to create the lidar, camera and radar \gls{bev} image inputs together with the corresponding deep \gls{ism} labels. 
 \\\\
-Starting with the lidar \gls{bev} detection images, first, the ground-plane has to be removed. The specific removal method and its parameters are experimentally defined in Section \ref{sec:choice_of_gt}. Afterwards, the detection positions are discretized into the coordinates of a gray-scale image and marked with value $1.0$ as opposed to the default value of $0.0$. The so processed lidar \gls{bev} image will be referred to as \gls{l} and their \gls{ism}s as \gls{ilm}. An example is shown in Fig. \ref{fig:input_viz}. This encoding has been proposed by the author in \cite{bauer2019deepame}.
+Starting with the lidar \gls{bev} detection images, first, the ground-plane has to be removed. The specific removal method and its parameters are experimentally defined in Section \ref{sec:choice_of_gt}. Afterwards, the detection positions are discretized into the coordinates of a gray-scale image and marked with value 1.0 as opposed to the default value of 0.0. The so processed lidar \gls{bev} image will be referred to as \gls{l} and their \gls{ism}s as \gls{ilm}. An example is shown in Fig. \ref{fig:input_viz}. This encoding has been proposed by the author in \cite{bauer2019deepame}.
 \\\\
-For the radar images, the sweep information of all corner and the front radar are used. All of the static detections, distinguishable through a flag provided in the NuScenes dataset, are marked as $1.0$ opposed to the default pixel value $0.0$. To analyze RQ\ref{requ:radar_dyn_encoding}, three encoding variants will be investigated. First, only the detection information of a single timestep shall be encoded marking the dynamic detections with half intensity ($0.5$). This encoding is referred to as \gls{r}. Alternatively, radar detections shall be accumulated over $N$ timesteps, marking the dynamic detections as $0.5(1-\dfrac{t}{N})$. This indicates the transition state of dynamic objects between free and occupied by marking the most recent detections as $0.5$ and linearly decreasing their influence over time. The time horizon $N$ is chosen by performing a grid search as shown in Section \ref{sec:choice_of_gt}. This encoding is defined as \gls{r_n}. Finally, the third considered encoding again accumulates the static detections over $N$ timesteps. However, only the most recent dynamic detections are marked with $0.5$, which is referred to as \gls{r_n_1}. A comparison between \gls{r}, \gls{r_n} and \gls{r_n_1} is presented in Section \ref{sec:analysis_dyn_encoding} and exemplary illustrations can be found in Fig. \ref{fig:input_viz}. The corresponding \gls{ism}s are referred to as \gls{irm} with the "R" being appended by the respective indices per variant. These encodings have been proposed by the author in \cite{bauer2019deepame,bauer2019deepiv}.
+For the radar images, the sweep information of all corner and the front radar are used. All of the static detections, distinguishable through a flag provided in the NuScenes dataset, are marked as 1.0 opposed to the default pixel value $0.0$. To analyze RQ\ref{requ:radar_dyn_encoding}, three encoding variants will be investigated. First, only the detection information of a single timestep shall be encoded marking the dynamic detections with half intensity (0.5). This encoding is referred to as \gls{r}. Alternatively, radar detections shall be accumulated over \gls{sym:temp_hor} timesteps, marking the dynamic detections as $0.5(1-\dfrac{t}{\gls{sym:temp_hor}})$. This indicates the transition state of dynamic objects between free and occupied by marking the most recent detections as $0.5$ and linearly decreasing their influence over time. The time horizon \gls{sym:temp_hor} is chosen by performing a grid search as shown in Section \ref{sec:choice_of_gt}. This encoding is defined as \gls{r_n}. Finally, the third considered encoding again accumulates the static detections over \gls{sym:temp_hor} timesteps. However, only the most recent dynamic detections are marked with 0.5, which is referred to as \gls{r_n_1}. A comparison between \gls{r}, \gls{r_n} and \gls{r_n_1} is presented in Section \ref{sec:analysis_dyn_encoding} and exemplary illustrations can be found in Fig. \ref{fig:input_viz}. The corresponding \gls{ism}s are referred to as \gls{irm} with the "R" being appended by the respective indices per variant. These encodings have been proposed by the author in \cite{bauer2019deepame,bauer2019deepiv}.
 \\\\
-In case of the camera \gls{bev} images, the homography projection as well as the \gls{monodepth} projection are considered. To obtain the homography-based \gls{bev} images, lidar points are identified which are only $5$cm away from the ideal flat ground-plane. These lidar detections are then transformed both to the \gls{bev} and the camera image. Afterwards, the corresponding pixel coordinates in both representations are identified and used to compute the homography matrix using a RANSAC-based filter. After identifying the homography for each camera, the images are projected into the \gls{bev} image where overlapping areas are being replaced and areas with no detections remain black. This \gls{bev} projection is referred to as \gls{c_rgb}. Additionally, a variant named \gls{c_s} is defined where the semantic annotations are transformed using the homography transformation. The semantic labels are being obtained by applying DeepLab V3+ \cite{deeplabv3plus2018} using the Xceptin network \cite{chollet2017xception} as a backbone trained on the Cityscapes dataset \cite{cordts2016cityscapes} without further finetuning. The color coding is taken over from Cityscapes. Examples of \gls{c_rgb} and \gls{c_s} are shown in Fig. \ref{fig:input_viz}. The respective \gls{ism}s are referred to as \gls{ic_rgbm} and \gls{ic_sm}. These encodings have been used in previous works, as described in Section \ref{subsec:deep_ism_camera}.
+In case of the camera \gls{bev} images, the homography projection as well as the \gls{monodepth} projection are considered. To obtain the homography-based \gls{bev} images, lidar points are identified which are only 5 cm away from the ideal flat ground-plane. These lidar detections are then transformed both to the \gls{bev} and the camera image. Afterwards, the corresponding pixel coordinates in both representations are identified and used to compute the homography matrix using a RANSAC-based filter. After identifying the homography for each camera, the images are projected into the \gls{bev} image where overlapping areas are being replaced and areas with no detections remain black. This \gls{bev} projection is referred to as \gls{c_rgb}. Additionally, a variant named \gls{c_s} is defined where the semantic annotations are transformed using the homography transformation. The semantic labels are being obtained by applying DeepLab V3+ \cite{deeplabv3plus2018} using the Xceptin network \cite{chollet2017xception} as a backbone trained on the Cityscapes dataset \cite{cordts2016cityscapes} without further finetuning. The color coding is taken over from Cityscapes. Examples of \gls{c_rgb} and \gls{c_s} are shown in Fig. \ref{fig:input_viz}. The respective \gls{ism}s are referred to as \gls{ic_rgbm} and \gls{ic_sm}. These encodings have been used in previous works, as described in Section \ref{subsec:deep_ism_camera}.
 \\\\
 For the \gls{monodepth} projection, the semi-supervised model as proposed in \cite{guizilini2020robust} is used. Here, a model pretrained on Cityscapes is finetuned in a semi-supervised way on the NuScenes data. The resulting point cloud of all cameras is then projected into the \gls{bev} image while the pixel intensities represent the scaled height information. More specifically, the height is clipped into the interval $[-0.5,1.0]$m and scaled to the intensity interval $[0,1]$. This encoding and \gls{ism} will be referred to as \gls{c_d} and \gls{ic_dm} and an example is shown in Fig. \ref{fig:input_viz}. To the best of the author's knowledge, this encoding is first used in this work.
 \\\\
@@ -360,10 +364,10 @@ Next, the network architecture has to be analyzed to suffice RQ\ref{requ:network
 			\multicolumn{3}{c}{}             \\				
 			layers & abbr. & parameters \\
 			\hline
-			\textcolor[rgb]{0.2,0.4,0.8}{ResNet} & res$(\cdot)$ & $K=3, C_{\text{out}}, D$ \\
-			\textcolor[rgb]{0.18,0.76,0.49}{Convolution} & conv$_s(\cdot)$ & $K=3, C_{\text{out}}, s$\\
-			\textcolor[rgb]{0.18,0.76,0.49}{conv without Dropout} & \underline{conv}$_s(\cdot)$ & $K=3, C_{\text{out}}, s$\\		
-			\textcolor[rgb]{0.57,0.25,0.67}{bilinear upsampling} & up$_u(\cdot)$ & $K=3 ,C_{\text{out}}, u$\\
+			\textcolor[rgb]{0.2,0.4,0.8}{ResNet} & res$(\cdot)$ & $\gls{sym:kernelsize}=3, \gls{sym:conv_channel}_{\text{out}}, \gls{sym:chan_red}$ \\
+			\textcolor[rgb]{0.18,0.76,0.49}{Convolution} & \gls{conv}$_s(\cdot)$ & $\gls{sym:kernelsize}=3, \gls{sym:conv_channel}_{\text{out}}, \gls{sym:stride}$\\
+			\textcolor[rgb]{0.18,0.76,0.49}{\gls{conv} without Dropout} & \underline{\gls{conv}}$_s(\cdot)$ & $\gls{sym:kernelsize}=3, \gls{sym:conv_channel}_{\text{out}}, \gls{sym:stride}$\\		
+			\textcolor[rgb]{0.57,0.25,0.67}{bilinear upsampling} & up$_u(\cdot)$ & $\gls{sym:kernelsize}=3 ,\gls{sym:conv_channel}_{\text{out}}, \gls{sym:up_factor}$\\
 			Concatenation & cat$(\cdot ,\cdot)$ & ---\\
 			Input / \textcolor[rgb]{1.0,0.4,0.0}{Output} & $x$ / y$(\cdot)$& --- / ---\\
 			\multicolumn{3}{c}{}             \\					
@@ -482,36 +486,36 @@ Next, the network architecture has to be analyzed to suffice RQ\ref{requ:network
 %======================================%
 \subsection{Methodology to account for aleatoric Uncertainties in deep ISMs}
 \label{subsec:method_al_uncert_in_deep_isms}
-As explained in Section \ref{subsec:research_needs_for_deep_isms}, the baseline deep \gls{ism} considered in this work shall model the evidential occupancy estimation using a Softmax output activation (see Eq. \ref{eq:softmax}) to transform the last layer's predictions $z$ of each of the $K$ classes into the normed network output $\tilde{y}$. The training loss between the prediction $\tilde{y}$ and the targets $\hat{y}$ shall be the standard \gls{mse} regression loss. For the first method, the predictions and targets directly equal the evidential masses ($\tilde{y} = \tilde{m}$ and $\hat{y} = \hat{m}$). This configuration is from here on referred to as \textbf{SoftNet} which has been proposed by the author in \cite{bauer2019deepame,bauer2019deepiv}. A visualization is shown in the first row of Fig. \ref{fig:deep_ism_variants}. 
+As explained in Section \ref{subsec:research_needs_for_deep_isms}, the baseline deep \gls{ism} considered in this work shall model the evidential occupancy estimation using a Softmax output activation (see Eq. \ref{eq:softmax}) to transform the last layer's features \gls{sym:last_feat} normed evidential output $\tilde{\gls{sym:vec_m}}$. The training loss between the prediction $\tilde{\gls{sym:vec_m}}$ and the targets $\gls{sym:target}_{\gls{sym:vec_m}}$ shall be the standard \gls{mse} regression loss. This configuration is from here on referred to as \textbf{SoftNet} which has been proposed by the author in \cite{bauer2019deepame,bauer2019deepiv}. A visualization is shown in the first row of Fig. \ref{fig:deep_ism_variants}. 
 \begin{align}
 	\label{eq:softmax}
-	\tilde{y}(\vec{z})_i &= \dfrac{e^{z_i}}{\sum_{k=1}^{K}e^{z_k}}\\
+	\tilde{\gls{sym:m_k}}_i &= \dfrac{e^{\gls{sym:last_feat}_i}}{\sum_{k\in [f,o,u]}e^{\gls{sym:last_feat}_k}}\\
 	\label{eq:mse}
-	\mathcal{L}_{\text{MSE}} &= \sum_{k=1}^{K}(\hat{y}_k - \tilde{y}_k)^2
+	\gls{sym:l2} &= \dfrac{1}{N}\sum_{i=1}^{N}\|\gls{sym:target}_{\gls{sym:vec_m}i} - \gls{sym:vec_m}_i\|^2_{2}
 \end{align}
 In case of occurring aleatoric uncertainty, the network is confronted with both information indicating a pixel to be free and occupied, leading to H\ref{hyp:sota_not_model_unc}. To investigate H\ref{hyp:sota_not_model_unc} further, first, the architecture as specified in Section \ref{subsec:method_deep_ism_architecture} will be trained in the SoftNet configuration using the data as specified in Section \ref{subsec:def_of_targets_n_inputs}. Next, the normed confusion matrix, as detailed in Section \ref{subsec:confusion_matrix}, will be computed for the test data predictions. The normed confusion matrix is an expansion of the commonly used \gls{iou} and thus provides more detailed insights. Additionally, two alternatives to SoftNet shall be investigated to potentially answer RQ\ref{requ:how_to_sep_uncertainty}. 
 \\\\
-For the first variation, the evidential occupancy classes are extended to separately model the dynamic class instead of mixing it into the free and occupied classes(e.g. $[0.5, 0.5,0] \rightarrow [1,0,0,0]$). With regards to the network, the Softmax output as well as the \gls{mse} loss have to be extended by one dimension to realize this configuration. Additionally, to adapt the targets, an operation which shifts the occupancy labels from the evidential $\vec{m}=[b_f,b_o,u]^\top$ to the extended representation $\mathring{\vec{m}}=[\mathring{b_d},\mathring{b_f},\mathring{b_o},\mathring{u}]^\top$, sufficing \gls{r} \ref{subreq:ev_rep}, \ref{subreq:unknown_mass} and \ref{subreq:conflicting_mass}, can be defined as follows
+For the first variation, the evidential occupancy classes are extended to separately model the dynamic class instead of mixing it into the free and occupied classes(e.g. $[0.5, 0.5,0] \rightarrow [1,0,0,0]$). With regards to the network, the Softmax output as well as the \gls{mse} loss have to be extended by one dimension to realize this configuration. Additionally, to adapt the targets, an operation which shifts the occupancy labels from the evidential $\gls{sym:vec_m}=[\gls{sym:m_f},\gls{sym:m_o}, \gls{sym:m_u}]^\top$ to the extended representation $\gls{sym:vec_m_o}=[\gls{sym:m_d_o}, \gls{sym:m_f_o}, \gls{sym:m_o_o}, \gls{sym:m_u_o}]^\top$, sufficing \gls{r} \ref{subreq:ev_rep}, \ref{subreq:unknown_mass} and \ref{subreq:conflicting_mass}, can be defined as follows
 \begin{align}
 	\label{eq:extend_shift}
-	\text{shift extension} \quad\mathring{\vec{m}} &\succ(\vec{m})\\
-	\mathring{b}_d &= 2\cdot \min(b_f,b_o)\\
-	\mathring{b}_{f/o} &= b_{f/o} - \min(b_f,b_o)\\
-	\mathring{u} &= u
+	\text{shift extension} \quad\gls{sym:vec_m_o} &\succ(\gls{sym:vec_m})\\
+	\gls{sym:m_d_o} &= 2\cdot \min(\gls{sym:m_f},\gls{sym:m_o})\\
+	\gls{sym:m_k_o} &= \gls{sym:m_k} - \min(\gls{sym:m_f},\gls{sym:m_o}),  \quad k \in [f, o]\\
+	\gls{sym:m_u_o} &= \gls{sym:m_u}
 \end{align}
-Here, $\min(b_f,b_o)$ describes the amount of mass being equal in both the free and occupied class. This portion is extracted from both classes, which doubles its amount, and shifted to the newly created dynamic class, leaving the unknown class untouched.\\ 
-Moreover, to use estimates in the extended representation $\tilde{\mathring{\vec{m}}}$ in the evidential occupancy mapping pipeline, a compression operation can be defined as follows
+Here, $\min(\gls{sym:m_f_o},\gls{sym:m_o_o})$ describes the amount of mass being equal in both the free and occupied class. This portion is extracted from both classes, which doubles its amount, and shifted to the newly created dynamic class, leaving the unknown class untouched.\\ 
+Moreover, to use estimates in the extended representation $\tilde{\gls{sym:vec_m_o}}$ in the evidential occupancy mapping pipeline, a compression operation can be defined as follows
 \begin{align}
 	\label{eq:compress_shift}
-	\text{shift compression} \quad\vec{m} &\prec(\mathring{\vec{m}})\\
-	b_{f/o} &= \mathring{b}_{f/o} - \min(\mathring{b}_f,\mathring{b}_o) + \dfrac{\mathring{b}_d}{2}\\
-	u &= \mathring{u} + 2\cdot\min(\mathring{b}_f,\mathring{b}_o)
+	\text{shift compression} \quad\gls{sym:vec_m} &\prec(\gls{sym:vec_m_o})\\
+	\gls{sym:m_k} &= \gls{sym:m_k_o} - \min(\gls{sym:m_f_o},\gls{sym:m_o_o}) + \dfrac{\gls{sym:m_d_o}}{2},  \quad k \in [f, o]\\
+	\gls{sym:m_u} &= \gls{sym:m_u_o} + 2\cdot\min(\gls{sym:m_f_o},\gls{sym:m_o_o})
 \end{align}
-This operation quantifies the learned aleatoric uncertainty between the free and occupied class as the amount of mass equally distributed into free and occupied ($\min(\mathring{b}_f,\mathring{b}_o)$) following H\ref{hyp:sota_not_model_unc}. Afterwards, the equal portion is extracted from their respective classes and shifted to the unknown class. Also, the dynamic mass is split into equal portions and added to the free and occupied class respectively, to account for \gls{r} \ref{subreq:conflicting_mass}. The network trained on the extended labels $\hat{\mathring{\vec{m}}}$ and capable of producing evidential estimates $\tilde{\vec{m}}$ by applying the extend operation defined in Eq. \ref{eq:compress_shift} is from here on referred to as \textbf{ShiftNet}. To the best knowledge of the author, this method is investigated in this work for the first time. The ShiftNet method is depicted in the second row of Fig. \ref{fig:deep_ism_variants}.
+This operation quantifies the learned aleatoric uncertainty between the free and occupied class as the amount of mass equally distributed into free and occupied ($\min(\gls{sym:m_f_o},\gls{sym:m_o_o})$) following H\ref{hyp:sota_not_model_unc}. Afterwards, the equal portion is extracted from their respective classes and shifted to the unknown class. Also, the dynamic mass is split into equal portions and added to the free and occupied class respectively, to account for \gls{r} \ref{subreq:conflicting_mass}. The network trained on the extended labels $\gls{sym:target}_{\gls{sym:vec_m_o}}$ and capable of producing evidential estimates $\tilde{\gls{sym:vec_m}}$ by applying the extend operation defined in Eq. \ref{eq:compress_shift} is from here on referred to as \textbf{ShiftNet}. To the best knowledge of the author, this method is investigated in this work for the first time. The ShiftNet method is depicted in the second row of Fig. \ref{fig:deep_ism_variants}.
 \\\\
 The third method is heavily based on the method proposed by Sensoy et al. \cite{sensoy2018evidential}. In their method, a Dirichlet network is trained on the Bayes risk of the \gls{mse} (see Eq. \ref{eq:bayes_risk_mse}) to model aleatoric uncertainty and \gls{subj_logic} (see Eq. \ref{eq:e2m} and \ref{eq:e2p}) is used to transform the Dirichlet \gls{pdf} to evidential masses. This will be referred to as \textbf{DirNet} and has been proposed by the author in \cite{bauer2019deepiv}. A depiction is shown in the last row of Fig. \ref{fig:deep_ism_variants}. However, in the original formulation of Sensoy et al., all unknown mass is solely due to aleatoric uncertainty. But, in the evidential occupancy formulation, the unknown mass both represents uncertainty and lack of information. Thus, to additionally provide labels for the unknown mass e.g. in unobserved areas, the loss from Eq. \ref{eq:bayes_risk_mse} shall be altered as follows
 \begin{align}
-	\mathcal{L}_i = (\hat{u}_i-\tilde{u}_{i})^2 + \sum_{k\in [f,o]}(b_{ik}-\tilde{p}_{ik})^2 + \dfrac{\tilde{p}_{ik}(1-\tilde{p}_{ik})}{S_i+1} 
+	\mathcal{L}_i = (\gls{sym:target}_{\gls{sym:m_u}i}-\tilde{\gls{sym:m_u}}_i)^2 + \sum_{k\in [f,o]}(\gls{sym:target}_{\gls{sym:m_k}i}-\tilde{\gls{sym:m_k}}_i)^2 + \dfrac{\tilde{\gls{sym:m_k}}_i(1-\tilde{\gls{sym:m_k}}_i)}{\gls{sym:sum_alpha}_i+1} 
 \end{align}
 \begin{center}
 	\import{imgs/06_research_approach/method/}{deep_ism_variants.pdf_tex}

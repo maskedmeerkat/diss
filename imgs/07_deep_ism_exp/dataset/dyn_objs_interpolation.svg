@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="dyn_objs_interpolation.svg"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   inkscape:version="1.2 (dc2aedaf03, 2022-05-15)"
    id="svg8"
    version="1.1"
-   viewBox="0 0 153.62525 33.072918"
-   height="33.072918mm"
-   width="153.62526mm">
+   viewBox="0 0 154.17096 36.599888"
+   height="36.599888mm"
+   width="154.17097mm"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <sodipodi:namedview
      inkscape:document-rotation="0"
      units="mm"
@@ -24,25 +24,28 @@
      fit-margin-left="0"
      fit-margin-top="0"
      inkscape:window-maximized="1"
-     inkscape:window-y="-8"
-     inkscape:window-x="1912"
-     inkscape:window-height="1017"
-     inkscape:window-width="1920"
+     inkscape:window-y="18"
+     inkscape:window-x="-8"
+     inkscape:window-height="987"
+     inkscape:window-width="1680"
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="117.89587"
-     inkscape:cx="284.15118"
-     inkscape:zoom="1.8941918"
+     inkscape:cy="69.434289"
+     inkscape:cx="165.55972"
+     inkscape:zoom="2.6787917"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
      bordercolor="#666666"
      pagecolor="#ffffff"
-     id="base">
+     id="base"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
-       originy="-272.61398"
-       originx="29.721966"
+       originy="-272.61395"
+       originx="30.267664"
        type="xygrid"
        id="grid815"
        dotted="true" />
@@ -2814,13 +2817,12 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
      style="stroke-linecap:butt;stroke-linejoin:round"
-     transform="translate(29.721979,-2.5173693)"
+     transform="translate(30.267681,-2.5173693)"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
@@ -2840,10 +2842,10 @@
     <path
        sodipodi:nodetypes="cc"
        id="path3891"
-       d="M 90.867358,2.5173693 V 35.590286"
+       d="M 90.867358,2.5173693 V 38.750915"
        style="fill:none;stroke:#808080;stroke-width:0.295167px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <g
-       transform="matrix(1.1155937,0,0,1.1155937,3.474622,1.9783161)"
+       transform="matrix(1.2344259,0,0,1.6512329,6.7565518,-4.3458785)"
        id="g9488">
       <path
          d="M -27.380736,23.093107 H -3.1518441 V 5.0386744 H -27.380736 Z"
@@ -2993,7 +2995,7 @@
          id="path193-9" />
     </g>
     <g
-       transform="matrix(1.1155937,0,0,1.1155937,3.474622,1.9783161)"
+       transform="matrix(1.2347225,0,0,1.6511051,2.0548264,-4.3440666)"
        id="g9531">
       <path
          d="M 12.155607,23.093106 H 36.384499 V 5.0386739 H 12.155607 Z"
@@ -3263,7 +3265,7 @@
          id="path253-0" />
     </g>
     <g
-       transform="matrix(1.1155937,0,0,1.1155937,3.474622,1.9783161)"
+       transform="matrix(1.2344466,0,0,1.6510467,-3.9725123,-4.34324)"
        id="g9574">
       <path
          d="M 51.691956,23.093107 H 75.920848 V 5.0386745 H 51.691956 Z"
@@ -3534,77 +3536,77 @@
     </g>
     <text
        id="text9465"
-       y="31.751255"
+       y="38.101257"
        x="-14.974876"
        style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167"
        xml:space="preserve"><tspan
          style="font-size:4.23333px;stroke-width:0.295167"
-         y="31.751255"
+         y="38.101257"
          x="-14.974876"
          id="tspan9463"
-         sodipodi:role="line">$x$</tspan></text>
+         sodipodi:role="line">$\gls{sym:cart_x}$</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
        x="29.536777"
-       y="32.280418"
+       y="38.101257"
        id="text9465-4"><tspan
          sodipodi:role="line"
          id="tspan9463-4"
          x="29.536777"
-         y="32.280418"
-         style="font-size:4.23333px;stroke-width:0.295167">$\tilde{x}$</tspan></text>
+         y="38.101257"
+         style="font-size:4.23333px;stroke-width:0.295167">$\gls{sym:cart_x}'$</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:0.787114px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
-       x="-29.787315"
-       y="18.533766"
+       x="-30.316483"
+       y="20.121267"
        id="text9465-45"><tspan
          sodipodi:role="line"
          id="tspan9463-9"
-         x="-29.787315"
-         y="18.533766"
-         style="font-size:0.787114px;stroke-width:0.295167">$y$</tspan></text>
+         x="-30.316483"
+         y="20.121267"
+         style="font-size:0.787114px;stroke-width:0.295167">$\gls{sym:cart_y}$</tspan></text>
     <text
        id="text9465-45-8"
-       y="18.533766"
-       x="13.860644"
+       y="20.121267"
+       x="13.331478"
        style="font-style:normal;font-weight:normal;font-size:0.787114px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
        xml:space="preserve"><tspan
          style="font-size:0.787114px;stroke-width:0.295167"
-         y="18.533766"
-         x="13.860644"
+         y="20.121267"
+         x="13.331478"
          id="tspan9463-9-5"
-         sodipodi:role="line">$\tilde{y}$</tspan></text>
+         sodipodi:role="line">$\gls{sym:cart_y}'$</tspan></text>
     <text
        id="text9465-45-0"
-       y="18.533766"
-       x="58.496319"
+       y="20.121267"
+       x="56.37965"
        style="font-style:normal;font-weight:normal;font-size:0.787114px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
        xml:space="preserve"><tspan
          style="font-size:0.787114px;stroke-width:0.295167"
-         y="18.533766"
-         x="58.496319"
+         y="20.121267"
+         x="56.37965"
          id="tspan9463-9-9"
-         sodipodi:role="line">$y$</tspan></text>
+         sodipodi:role="line">$\gls{sym:cart_y}$</tspan></text>
     <path
        id="path9790"
-       d="m 3.58934,16.733282 v 2.108337 h 4.2166787 v 1.054172 l 3.1625093,-2.10834 -3.1625093,-2.108339 v 1.05417 z"
+       d="m 3.58934,17.999658 v 2.108337 h 4.2166787 v 1.054172 l 3.1625093,-2.10834 -3.1625093,-2.108339 v 1.05417 z"
        style="fill:none;stroke:#000000;stroke-width:0.210834px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.210834px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 47.695838,16.733282 v 2.108337 h 4.216679 v 1.054172 l 3.162508,-2.10834 -3.162508,-2.108339 v 1.05417 z"
+       d="m 47.695838,17.999658 v 2.108337 h 4.216679 v 1.054172 l 3.162508,-2.10834 -3.162508,-2.108339 v 1.05417 z"
        id="path9790-7" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.295167;stroke-linecap:butt;stroke-linejoin:round"
        x="73.238121"
-       y="31.751255"
+       y="38.101257"
        id="text9465-8"><tspan
          sodipodi:role="line"
          id="tspan9463-5"
          x="73.238121"
-         y="31.751255"
-         style="font-size:4.23333px;stroke-width:0.295167">$x$</tspan></text>
+         y="38.101257"
+         style="font-size:4.23333px;stroke-width:0.295167">$\gls{sym:cart_x}$</tspan></text>
   </g>
 </svg>

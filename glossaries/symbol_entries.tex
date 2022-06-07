@@ -1,30 +1,36 @@
 \newglossaryentry{sym:g_clarke}{
 	name={\ensuremath{G_{\text{Clarke}}}},
-	description={overall scaling factor of IRM proposed by Clark et al. \cite{clarke2012sensor}},
+	description={overall scaling factor of \gls{irm} proposed by Clark et al. \cite{clarke2012sensor}},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:g_p}{
 	name={\ensuremath{G_p}},
-	description={power-dependant scaling factor of IRM \cite{clarke2012sensor}},
+	description={power-dependant scaling factor of \gls{irm} \cite{clarke2012sensor}},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:conv_channel}{
 	name={\ensuremath{C}},
-	description={amount of channels of a convolution operation in CNNs},
+	description={amount of channels of a convolution operation in \gls{cnn}s},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:chan_red}{
 	name={\ensuremath{D}},
-	description={channel reduction factor of a convolution operation in CNNs},
+	description={channel reduction factor of a convolution operation in \gls{cnn}s},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:up_factor}{
+	name={\ensuremath{u}},
+	description={upsampling factor of a convolution layer with binlinear upsampling},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:feat_w}{
 	name={\ensuremath{W}},
-	description={width of a feature in a CNN},
+	description={width of a feature in a \gls{cnn}},
 	sort=vcar,
 	type=symbolslist}
 
@@ -42,37 +48,37 @@
 
 \newglossaryentry{sym:feat_h}{
 	name={\ensuremath{H}},
-	description={height of a feature in a CNN},
+	description={height of a feature in a \gls{cnn}},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:recepfield}{
 	name={\ensuremath{\mathrm{RecepField}}},
-	description={receptive field in CNNs},
+	description={receptive field in \gls{cnn}s},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:kernelsize}{
 	name={\kappa},
-	description={kernel size of a convolution operation in CNNs},
+	description={kernel size of a convolution operation in \gls{cnn}s},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:stride}{
 	name={\ensuremath{s}},
-	description={stride of a convolution operation in CNNs},
+	description={stride of a convolution operation in \gls{cnn}s},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:g_phi}{
 	name={\ensuremath{G_\varphi}},
-	description={angle-dependant scaling factor of IRM \cite{clarke2012sensor}},
+	description={angle-dependant scaling factor of \gls{irm} \cite{clarke2012sensor}},
 	sort=vcar,
 	type=symbolslist}
 
 \newglossaryentry{sym:g_a}{
 	name={\ensuremath{G_a}},
-	description={range-dependant scaling factor of IRM \cite{clarke2012sensor}},
+	description={range-dependant scaling factor of \gls{irm} \cite{clarke2012sensor}},
 	sort=vcar,
 	type=symbolslist}
 
@@ -81,7 +87,7 @@
 	description={mean of a Gaussian distribution},
 	sort=vcar,
 	type=symbolslist}
-
+%
 \newglossaryentry{sym:sigma}{
 	name={\ensuremath{\sigma}},
 	description={variance of a Gaussian distribution},
@@ -101,8 +107,8 @@
 	type=symbolslist}
 
 \newglossaryentry{sym:polar_coordinates}{
-	name={\ensuremath{[\vec{e}_r, \vec{e}_\varphi, \vec{e}_z]}},
-	description={unit vectors of polar coordinate system},
+	name={\ensuremath{[\vec{e}_r, \vec{e}_\varphi]}},
+	description={unit vectors of 2D polar coordinate system},
 	sort=vcar,
 	type=symbolslist}
 
@@ -115,6 +121,24 @@
 \newglossaryentry{sym:polar_r}{
 	name={\ensuremath{r}},
 	description={radial distance in \ensuremath{\vec{e}_r} direction},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:cart_coordinates}{
+	name={\ensuremath{[\vec{e}_x, \vec{e}_y]}},
+	description={unit vectors of 2D Cartesian coordinate system},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:cart_x}{
+	name={\ensuremath{x}},
+	description={distance in \ensuremath{\vec{e}_x} direction},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:cart_y}{
+	name={\ensuremath{y}},
+	description={distance in \ensuremath{\vec{e}_y} direction},
 	sort=vcar,
 	type=symbolslist}
 
@@ -199,6 +223,48 @@
 \newglossaryentry{sym:m_u}{
 	name={\ensuremath{m_u}},
 	description={evidential mass function of unknown set},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:vec_m_o}{
+	name={\ensuremath{\mathring{\vec{m}}}},
+	description={vector of mass functions in extended evidential framework},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:m_d_o}{
+	name={\ensuremath{\mathring{m_d}}},
+	description={dynamic mass function in extended evidential framework},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:m_o_o}{
+	name={\ensuremath{\mathring{m_o}}},
+	description={occupied mass function in extended evidential framework},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:m_f_o}{
+	name={\ensuremath{\mathring{m_f}}},
+	description={free mass function in extended evidential framework},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:m_u_o}{
+	name={\ensuremath{\mathring{m_u}}},
+	description={unknown mass function in extended evidential framework},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:m_k_o}{
+	name={\ensuremath{\mathring{m_k}}},
+	description={placeholder for dynamic, free, occupied or unknown mass in extended evidential framework},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:m_k}{
+	name={\ensuremath{m_k}},
+	description={placeholder either for free, occupied or unknown evidential mass},
 	sort=vcar,
 	type=symbolslist}
 
@@ -348,6 +414,72 @@
 
 \newglossaryentry{sym:vec_e}{
 	name={\ensuremath{\vec{e}}},
-	description={evidence vector in subjective logic framework},
+	description={evidence vector in \gls{subj_logic}},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:open_angle}{
+	name={\ensuremath{\varphi_\sphericalangle}},
+	description={opening angle of free space ray in \gls{idm}},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:center_angle}{
+	name={\ensuremath{\varphi_\text{center}}},
+	description={center angle of space ray in \gls{idm}},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:r_max}{
+	name={\ensuremath{r_\text{max}}},
+	description={maximal range of free space ray in \gls{idm}},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:idm_mf}{
+	name={\ensuremath{M_F}},
+	description={free weight in the \gls{idm}},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:idm_mo}{
+	name={\ensuremath{M_O}},
+	description={occupied weight in the \gls{idm}},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:idm_md}{
+	name={\ensuremath{M_D}},
+	description={dynamic weight in the \gls{idm}},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:r_det}{
+	name={\ensuremath{r_\text{det}}},
+	description={radial distance of a range sensor detection},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:phi_det}{
+	name={\ensuremath{\varphi_\text{det}}},
+	description={radial distance of a range sensor detection},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:d_det}{
+	name={\ensuremath{d_\text{det}}},
+	description={dynamic flag of a radar's detection},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:temp_hor}{
+	name={\ensuremath{T}},
+	description={temporal accumulation horizon for detections in \gls{ism}s},
+	sort=vcar,
+	type=symbolslist}
+
+\newglossaryentry{sym:last_feat}{
+	name={\ensuremath{\vec{z}}},
+	description={features in \gls{cnn} before the final output activation},
 	sort=vcar,
 	type=symbolslist}
