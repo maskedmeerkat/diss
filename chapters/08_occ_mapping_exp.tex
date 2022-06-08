@@ -1,7 +1,7 @@
 % !TeX root = ../main.tex
 \chapter{Deep, evidential ISMs as Priors for Occupancy Mapping Experiments}
 \label{ch:deep_ev_isms_as_prior_for_occmaps_exp}
-\todo{chapter overview}
+This chapter contains the investigation of temporally accumulating the afore defined \gls{ism}s. This investigation is started with the analysis of the evidential combination rules mentioned in the \gls{sota} against the ones proposed by the author in Section \ref{subsec:method_to_use_deep_isms_in_occmaps} and \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}. Afterwards, the hypothesis of redundancy accumulation for occupancy maps created with deep \gls{ism}s H\ref{hyp:temporal_dependence} is investigated together with the effectiveness of the solution proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps}. Given these results, occupancy maps are created using the best performing geo as well as deep \gls{ism}s for each sensor modality as identified in Chapter \ref{ch:deep_ism_exp}. Eventually, the fusion approach proposed in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps} is analyzed with regards to violations of the proposed bounds and improvements over the baseline fusion. Besides the comparison of combination rules in the first part of the chapter, which is based on a simulated input signal, all experiments are based on the NuScenes dataset (see Section \ref{subsec:choice_of_dataset}) using the standard train-val-test split.
 %==========================================================================%
 %
 %==========================================================================%
@@ -13,7 +13,7 @@ In this section, a simulated verification of the combination rules' properties d
 %=================================%
 \subsection{Setup of the Verification of Combination Rule Choices}
 \label{subsec:setup_choice_comb_rule}
-To demonstrate the properties, an evidential occupancy signal (first row Fig. \ref{fig:ds_comb_rule_comparison}) is fused over time with a mass initialized with $m_u = 1$ using different combination rules. This simulates the occupancy state of a single cell in the occupancy map over time. The signal starts with a step-wise ramp-up of the occupied mass, followed by a completely contradictory signal, a signal with partial conflict, two consecutive contradicting signals and, eventually, a signal with full conflict.
+To demonstrate the properties, an evidential occupancy signal (first row Fig. \ref{fig:ds_comb_rule_comparison}) is fused over time with a mass initialized with $\gls{sym:m_u} = 1$ using different combination rules. This simulates the occupancy state of a single cell in the occupancy map over time. The signal starts with a step-wise ramp-up of the occupied mass, followed by a completely contradictory signal, a signal with partial conflict, two consecutive contradicting signals and, eventually, a signal with full conflict.
 %=================================%
 %
 %=================================%
@@ -22,13 +22,13 @@ To demonstrate the properties, an evidential occupancy signal (first row Fig. \r
 Beginning with Dempster's rule, it can be seen that the fused mass always fully converges to the class of the signal with the highest portion (see Dempster graph e.g. in the time interval $[0, 20]$). Given temporal independent information and no conflict, this behavior would be desired since each time step provides new evidence of the state. However, in presence of conflict, the fused mass should converge to a state representing the portion of conflict to represent cells being dynamic. Since Dempster's rule lacks the ability to do so, it is disqualified for usage in this work.
 \begin{center}
 	\import{imgs/08_occ_mapping_exp/choice_of_comb_rule}{ds_comb_rule_comparison.pgf}
-	\captionof{figure}{\label{fig:ds_comb_rule_comparison}This figure shows the qualitative evaluation of the different evidential combination rules given input signals for free, occupied and unknown mass (first subplot) over time with an exemplary lower unknown threshold $\underline{m}_u$ overlayed.}
+	\captionof{figure}{\label{fig:ds_comb_rule_comparison}This figure shows the qualitative evaluation of the different evidential combination rules given input signals for free, occupied and unknown mass (first subplot) over time with an exemplary lower unknown threshold $\gls{sym:m_u_}$ overlayed.}
 \end{center}
-Similar to Dempster's rule, Yager's rule, in absence of conflict, converges fully to the dominating class (see Yager graph e.g. in the time interval $[0, 20]$). In presence of conflicting mass, Yager's rule recuperates unknown mass (see e.g. time interval $[35, 45]$) and allows to directly switch the state, as opposed to Dempster's rule (compare Dempster and Yager graph in time interval $[35, 45]$). The recuperation capability is useful in the initialization phase to correct for state changes without falling below $\underline{m}_u$. Also, while Yager's rule is capable of representing the conflict state of a signal (see Yager graph in the time interval $[80, 100]$ and $[140, 160]$) it never reaches the original input conflict due to the recuperated unknown mass. It shall be argued that the property of recuperating unknown mass outweighs the deficit of biased conflict representation for the purpose of initializing the occupancy state.  
+Similar to Dempster's rule, Yager's rule, in absence of conflict, converges fully to the dominating class (see Yager graph e.g. in the time interval $[0, 20]$). In presence of conflicting mass, Yager's rule recuperates unknown mass (see e.g. time interval $[35, 45]$) and allows to directly switch the state, as opposed to Dempster's rule (compare Dempster and Yager graph in time interval $[35, 45]$). The recuperation capability is useful in the initialization phase to correct for state changes without falling below $\gls{sym:m_u_}$. Also, while Yager's rule is capable of representing the conflict state of a signal (see Yager graph in the time interval $[80, 100]$ and $[140, 160]$) it never reaches the original input conflict due to the recuperated unknown mass. It shall be argued that the property of recuperating unknown mass outweighs the deficit of biased conflict representation for the purpose of initializing the occupancy state.  
 \\\\
 To solve the biased conflict state in the convergence phase, the YaDer rule has been proposed. It can be seen that by equally distributing the conflict into the conflicting classes instead of shifting it to the unknown class, the fused mass converges to the input's conflict state (see YaDer graph in the time interval $[80, 100]$ and $[140, 160]$). Also, in case of absent conflict, YaDer rule, like Yager and Dempster, fully converges to the dominating class (see YaDer graph e.g. in the time interval $[0,20]$). Thus, the YaDer rule combines both the Yager rule's property to represent conflict and Dempster rule's property to strictly reduce the unknown mass, giving it its name. These properties makes YaDer rule an ideal candidate to be used in the convergence phase.
 \\\\
-Eventually, the lower-bounded (lb) Yager rule's property to only converge to the input signal until the same unknown mass is reached is shown in the last graph (e.g. in time interval $[0, 30]$). It can be seen that there is a discrepancy between the converged fused state and the input mass. This is due to the fact that the input is assumed to originate from a deep \gls{ism} with limited certainty. Therefore, the input is first rescaled into the interval $m_u \in [\underline{m}_u, 1]$ before fed into the lb Yager rule. Moreover, it can be seen when comparing the time intervals $[35, 45]$ and $[45, 55]$ that a state switch between free and occupied can only be realized if the conflicting signal has high enough certainty relative to the current state. This is desired in order not to overwrite a highly certain estimate, potentially predicted close to data, with lower certain ones, potentially based on extrapolations. Problematic, however, is that the state change is not fully completed letting the fused mass converge to a conflicting state. This is due to increasingly discounting the input signal when reducing the difference in unknown mass between input and fused signal. This property ensures that once $\underline{m}_u$ is reached, the deep \gls{ism} can not further influence the fused mass (see lower-bounded Yager graph in the time interval $[100, 160]$). Here, it shall be argued that the benefit of reducing the influence of outliers and the property of deactivating the deep \gls{ism}'s influence outweigh the shortcoming of incomplete state change for the initialization phase. 
+Eventually, the lower-bounded (lb) Yager rule's property to only converge to the input signal until the same unknown mass is reached is shown in the last graph (e.g. in time interval $[0, 30]$). It can be seen that there is a discrepancy between the converged fused state and the input mass. This is due to the fact that the input is assumed to originate from a deep \gls{ism} with limited certainty. Therefore, the input is first rescaled into the interval $\gls{sym:m_u} \in [\gls{sym:m_u_}, 1]$ before fed into the lb Yager rule. Moreover, it can be seen when comparing the time intervals $[35, 45]$ and $[45, 55]$ that a state switch between free and occupied can only be realized if the conflicting signal has high enough certainty relative to the current state. This is desired in order not to overwrite a highly certain estimate, potentially predicted close to data, with lower certain ones, potentially based on extrapolations. Problematic, however, is that the state change is not fully completed letting the fused mass converge to a conflicting state. This is due to increasingly discounting the input signal when reducing the difference in unknown mass between input and fused signal. This property ensures that once $\gls{sym:m_u_}$ is reached, the deep \gls{ism} can not further influence the fused mass (see lower-bounded Yager graph in the time interval $[100, 160]$). Here, it shall be argued that the benefit of reducing the influence of outliers and the property of deactivating the deep \gls{ism}'s influence outweigh the shortcoming of incomplete state change for the initialization phase. 
 %=================================%
 %
 %=================================%
@@ -46,7 +46,7 @@ This section focuses on the experimental verification of H\ref{hyp:temporal_depe
 %=================================%
 \subsection{Setup of Redundancy Analysis in deep ISMs}
 \label{subsec:setup_of_red_analy}
-To verify H\ref{hyp:temporal_dependence}, occupancy maps are created in five ways. The baseline is the direct accumulation using Yager's rule, abbreviated as "Yager". This is evaluated for the deep as well as the geo \gls{ism}. Second, a na\"ive solution is evaluated which moves all free and occupied mass to unknown for predictions with $m_u>=0.9$ to hinder small predictions to accumulate over time ("Yager + cutoff"). Third, the method as proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps} is used to reduce the redundancy of the deep \gls{ism} predictions before accumulation with Yager's rule. The so reduced predictions are abbreviated with "deep, red.". Eventually, the fusion using the deep \gls{ism} with and without redundancy reduction respectively with the geo \gls{ism}s by accumulating the predictions using Yager's rule is evaluated. Here, the fusion is investigated to analyze whether the deep \gls{ism} indeed overwrites most of the geo \gls{ism}'s predictions as suggested in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
+To verify H\ref{hyp:temporal_dependence}, occupancy maps are created in five ways. The baseline is the direct accumulation using Yager's rule, abbreviated as "Yager". This is evaluated for the deep as well as the geo \gls{ism}. Second, a na\"ive solution is evaluated which moves all free and occupied mass to unknown for predictions with $\gls{sym:m_u}>=0.9$ to hinder small predictions to accumulate over time ("Yager + cutoff"). Third, the method as proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps} is used to reduce the redundancy of the deep \gls{ism} predictions before accumulation with Yager's rule. The so reduced predictions are abbreviated with "deep, red.". Eventually, the fusion using the deep \gls{ism} with and without redundancy reduction respectively with the geo \gls{ism}s by accumulating the predictions using Yager's rule is evaluated. Here, the fusion is investigated to analyze whether the deep \gls{ism} indeed overwrites most of the geo \gls{ism}'s predictions as suggested in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
 \\\\
 The evaluation is performed using only the accumulated radar detections of the recent 20 timesteps (R$_{20}$) since the focus of this work lies on radar occupancy mapping. Additionally, it is assumed that the effects are similar using other sensor modalities. The geo \gls{ism} method is used as described in Section \ref{subsec:method_geo_irm} and ShiftNet, as described Section \ref{subsec:method_al_uncert_in_deep_isms}, is used as a deep \gls{ism}.
 \\\\
@@ -59,36 +59,36 @@ The metrics used are the normed confusion matrix (see Section \ref{subsec:confus
 The findings in Fig. \ref{tab:conf_mat_redunt_info} show that, even though, the geo IR$_{20}$M's occupancy map has the least true positive rates overall, it also has by far the least false rates. More specifically, the deep IR$_{20}$Ms without redundancy reduction produce about four times and the one with the reduction about twice the amount of false occupied predictions in the whole mapped area. Around the boundaries, this ratio even goes up slightly. For free false rates, the ratio of geo IR$_{20}$M maps is about half of the other variants. On the other hand, the geo IR$_{20}$M maps only reach about half the true occupied and about two third of the free positive rates. Also, the sparse nature of the geo IR$_{20}$M can be seen for the unknown class where the accumulation of the deep IR$_{20}$M results in ten times the false rates both for free and occupied. This is also reflected by the "cleanliness" of boundaries as measured by the mIoU where this variant reaches the best score in the occupied and unknown classes and is clearly shown in Fig. \ref{fig:qual_analysis_of_redundant_info} for both scenes.
 \begin{center}
 	\begin{tabular}{c|c|ccc|ccc}
-		& \backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
+		& $\tilde{k}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$\\
 		\hline
-		geo&$p(k|f)$ & \textcolor{mygreen}{57.9} & \textcolor{myred}{2.3} & 39.8& \textcolor{mygreen}{44.3} & \textcolor{myred}{5.9} & 49.8 \\
-		IR$_{20}$M&$p(k|o)$ & \textcolor{myred}{16.1} & \textcolor{mygreen}{36.3} & 47.6& \textcolor{myred}{15.9} & \textcolor{mygreen}{36.0} & 48.1 \\
-		Yager&$p(k|u)$ & 2.8 & 5.7 & 91.5& 4.0 & 9.7 & 86.3 \\
+		geo&$p(\tilde{k}|f)$ & \textcolor{mygreen}{57.9} & \textcolor{myred}{2.3} & 39.8& \textcolor{mygreen}{44.3} & \textcolor{myred}{5.9} & 49.8 \\
+		IR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{16.1} & \textcolor{mygreen}{36.3} & 47.6& \textcolor{myred}{15.9} & \textcolor{mygreen}{36.0} & 48.1 \\
+		Yager&$p(\tilde{k}|u)$ & 2.8 & 5.7 & 91.5& 4.0 & 9.7 & 86.3 \\
 		& mIoU & - & - & - &16.8&24.6&14.2 \\
 		\hline	
-		deep&$p(k|f)$ & \textcolor{mygreen}{86.6} & \textcolor{myred}{11.7} & 1.7& \textcolor{mygreen}{68.2} & \textcolor{myred}{28.4} & 3.4 \\
-		IR$_{20}$M&$p(k|o)$ & \textcolor{myred}{27.2} & \textcolor{mygreen}{69.6} & 3.2& \textcolor{myred}{27.3} & \textcolor{mygreen}{69.4} & 3.3 \\
-		Yager&$p(k|u)$ & 28.9 & 57.5 & 13.6& 27.2 & 64.5 & 8.3 \\
+		deep&$p(\tilde{k}|f)$ & \textcolor{mygreen}{86.6} & \textcolor{myred}{11.7} & 1.7& \textcolor{mygreen}{68.2} & \textcolor{myred}{28.4} & 3.4 \\
+		IR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{27.2} & \textcolor{mygreen}{69.6} & 3.2& \textcolor{myred}{27.3} & \textcolor{mygreen}{69.4} & 3.3 \\
+		Yager&$p(\tilde{k}|u)$ & 28.9 & 57.5 & 13.6& 27.2 & 64.5 & 8.3 \\
 		& mIoU & - & - & - &15.3&12.4&2.8 \\
 		\hline
-		deep \& geo&$p(k|f)$ & \textcolor{mygreen}{86.7} & \textcolor{myred}{11.6} & 1.7& \textcolor{mygreen}{68.4} & \textcolor{myred}{28.3} & 3.3 \\
-		IR$_{20}$M&$p(k|o)$ & \textcolor{myred}{27.3} & \textcolor{mygreen}{69.5} & 3.2& \textcolor{myred}{27.4} & \textcolor{mygreen}{69.3} & 3.3 \\
-		Yager&$p(k|u)$ & 29.0 & 57.4 & 13.6& 27.3 & 64.4 & 8.3 \\
+		deep \& geo&$p(\tilde{k}|f)$ & \textcolor{mygreen}{86.7} & \textcolor{myred}{11.6} & 1.7& \textcolor{mygreen}{68.4} & \textcolor{myred}{28.3} & 3.3 \\
+		IR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{27.3} & \textcolor{mygreen}{69.5} & 3.2& \textcolor{myred}{27.4} & \textcolor{mygreen}{69.3} & 3.3 \\
+		Yager&$p(\tilde{k}|u)$ & 29.0 & 57.4 & 13.6& 27.3 & 64.4 & 8.3 \\
 		& mIoU & - & - & - &15.3&12.4&2.7 \\
 		\hline
-		deep&$p(k|f)$ & \textcolor{mygreen}{87.4} & \textcolor{myred}{10.5} & 2.1& \textcolor{mygreen}{69.4} & \textcolor{myred}{26.7} & 3.9 \\
-		IR$_{20}$M&$p(k|o)$ & \textcolor{myred}{28.3} & \textcolor{mygreen}{67.0} & 4.7& \textcolor{myred}{28.4} & \textcolor{mygreen}{66.8} & 4.8 \\
-		Yager + cutoff&$p(k|u)$ & 33.7 & 34.7 & 31.6& 30.4 & 51.9 & 17.7 \\
+		deep&$p(\tilde{k}|f)$ & \textcolor{mygreen}{87.4} & \textcolor{myred}{10.5} & 2.1& \textcolor{mygreen}{69.4} & \textcolor{myred}{26.7} & 3.9 \\
+		IR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{28.3} & \textcolor{mygreen}{67.0} & 4.7& \textcolor{myred}{28.4} & \textcolor{mygreen}{66.8} & 4.8 \\
+		Yager + cutoff&$p(\tilde{k}|u)$ & 33.7 & 34.7 & 31.6& 30.4 & 51.9 & 17.7 \\
 		& mIoU & - & - & - &15.1&16.5&5.2 \\			
 		\hline
-		deep, red.&$p(k|f)$ & \textcolor{mygreen}{88.5} & \textcolor{myred}{5.9} & 5.6& \textcolor{mygreen}{71.6} & \textcolor{myred}{16.7} & 11.7 \\
-		IR$_{20}$M&$p(k|o)$ & \textcolor{myred}{29.0} & \textcolor{mygreen}{55.7} & 15.3& \textcolor{myred}{29.0} & \textcolor{mygreen}{55.4} & 15.6 \\
-		Yager&$p(k|u)$ & 26.3 & 12.9 & 60.8& 26.3 & 23.4 & 50.3 \\
+		deep, red.&$p(\tilde{k}|f)$ & \textcolor{mygreen}{88.5} & \textcolor{myred}{5.9} & 5.6& \textcolor{mygreen}{71.6} & \textcolor{myred}{16.7} & 11.7 \\
+		IR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{29.0} & \textcolor{mygreen}{55.7} & 15.3& \textcolor{myred}{29.0} & \textcolor{mygreen}{55.4} & 15.6 \\
+		Yager&$p(\tilde{k}|u)$ & 26.3 & 12.9 & 60.8& 26.3 & 23.4 & 50.3 \\
 		& mIoU & - & - & - &16.8&23.4&11.8 \\
 		\hline
-		deep, red. \& geo&$p(k|f)$ & \textcolor{mygreen}{88.9} & \textcolor{myred}{5.8} & 5.3& \textcolor{mygreen}{72.9} & \textcolor{myred}{16.4} & 10.7 \\
-		IR$_{20}$M&$p(k|o)$ & \textcolor{myred}{29.7} & \textcolor{mygreen}{56.6} & 13.7& \textcolor{myred}{29.7} & \textcolor{mygreen}{56.3} & 14.0 \\
-		Yager&$p(k|u)$ & 26.8 & 14.3 & 58.9& 26.9 & 25.2 & 47.9 \\
+		deep, red. \& geo&$p(\tilde{k}|f)$ & \textcolor{mygreen}{88.9} & \textcolor{myred}{5.8} & 5.3& \textcolor{mygreen}{72.9} & \textcolor{myred}{16.4} & 10.7 \\
+		IR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{29.7} & \textcolor{mygreen}{56.6} & 13.7& \textcolor{myred}{29.7} & \textcolor{mygreen}{56.3} & 14.0 \\
+		Yager&$p(\tilde{k}|u)$ & 26.8 & 14.3 & 58.9& 26.9 & 25.2 & 47.9 \\
 		& mIoU &69.1&24.0&27.0&17.0&24.1&11.4 \\
 		\hline
 		& & \multicolumn{3}{c|}{whole mapped area} & \multicolumn{3}{c}{boundary area}
@@ -97,7 +97,7 @@ The findings in Fig. \ref{tab:conf_mat_redunt_info} show that, even though, the 
 \end{center}
 Next, scores of the accumulated deep IR$_{20}$M reach the highest true and false rates for occupied predictions especially in the unknown regions which can be seen in all of the marked boxes in Fig. \ref{fig:qual_analysis_of_redundant_info}. This also leads to the lowest mIoU scores in the boundary region. When fusing the predictions with the geo IR$_{20}$Ms, the scores do only minimally change hinting to a domination of the deep IR$_{20}$M over the geometric one. The qualitative results verify this domination by barely showing any signs of the geo IR$_{20}$Ms influence. By looking closely in the upper white box in scene B some occupied detections of the geo IR$_{20}$M can be found.
 \\\\
-The na\"ive solution to cutoff low probable predictions $m_u > 0.9$ and set them to unknown slightly reduces the true and false rates of occupied predictions. However, in unknown areas, the amount of occupied predictions is more drastically reduced. Interestingly, the false and true rates of free space slightly increase through the cutoff. These findings can also be verified in Fig. \ref{fig:qual_analysis_of_redundant_info} by comparing the accumulated deep IR$_{20}$M with and without cutoff. Here, the most significant change can be seen by a reduction in occupied predictions in the unknown areas. In some cases (white box in scene A), free space replaces the former occupied areas.
+The na\"ive solution to cutoff low probable predictions $\gls{sym:m_u} > 0.9$ and set them to unknown slightly reduces the true and false rates of occupied predictions. However, in unknown areas, the amount of occupied predictions is more drastically reduced. Interestingly, the false and true rates of free space slightly increase through the cutoff. These findings can also be verified in Fig. \ref{fig:qual_analysis_of_redundant_info} by comparing the accumulated deep IR$_{20}$M with and without cutoff. Here, the most significant change can be seen by a reduction in occupied predictions in the unknown areas. In some cases (white box in scene A), free space replaces the former occupied areas.
 \\\\
 Applying redundancy reduction before accumulation has a similar effect than cutoff. The occupied rates decline while the free rates are increased. However, in the unknown area, both the free and occupied rates are reduced in contrast to cutoff where the free rate is increased. Another difference is the ratio of changes which, compared to cutoff, is more in favor of true rates. The better ratio together with the improved performance in unknown areas, eventually, lead to a strictly better edge preservation that almost reaches the level of the geo IR$_{20}$M's mIoU. These finds can also be verified in the white box in scene A of Fig. \ref{fig:qual_analysis_of_redundant_info}. Here, the accumulation of free space in the occluded area is reduced compared to the cutoff variant. Also, in the white boxes in scene B, the occupied edges are less spread. At the same time, there is also less weight put into occupied areas.
 \\\\
@@ -146,26 +146,26 @@ The setup for comparing occupancy maps given different sensor modalities is the 
 The quantitative results show a similar line of improvement as shown for the ISM comparison in Section \ref{sec:cam_lidar_fusion_in_deep_isms} and are overall consistent in the whole as well as the boundary area. More specifically, the \gls{monodepth} input lacks behind the lidar input in all classes. While, the false occupied rate is doubled for the lidar resulting in a $1\%$ increase, the true occupied rate is more than three times higher providing an increase of almost $50\%$. This improvement can be clearly verified qualitatively comparing the sharpness of occupied boundaries between \gls{monodepth} and lidar maps. Moreover, adding radar information provides a further improvement in true rates. This is especially true for the \gls{monodepth} case, showing that providing measured depth over estimated depth improves the occupancy predictions. For the false rates, radar provides consistent improvement for the free class while slightly decreasing the performance for the occupied case.
 \begin{center}
 		\begin{tabular}{c|c|ccc|ccc}
-			& \backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
+			& $\tilde{k}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$\\
 			\hline
-			deep, red.&$p(k|f)$ & \textcolor{mygreen}{89.1} & \textcolor{myred}{1.1} & 9.8& \textcolor{mygreen}{72.5} & \textcolor{myred}{3.3} & 24.2 \\
-			\gls{ic_dm}&$p(k|o)$ & \textcolor{myred}{34.3} & \textcolor{mygreen}{19.1} & 46.6& \textcolor{myred}{34.1} & \textcolor{mygreen}{18.9} & 47.0 \\
-			Yager&$p(k|u)$ & 11.4 & 4.4 & 84.2& 13.9 & 8.8 & 77.3 \\
+			deep, red.&$p(\tilde{k}|f)$ & \textcolor{mygreen}{89.1} & \textcolor{myred}{1.1} & 9.8& \textcolor{mygreen}{72.5} & \textcolor{myred}{3.3} & 24.2 \\
+			\gls{ic_dm}&$p(\tilde{k}|o)$ & \textcolor{myred}{34.3} & \textcolor{mygreen}{19.1} & 46.6& \textcolor{myred}{34.1} & \textcolor{mygreen}{18.9} & 47.0 \\
+			Yager&$p(\tilde{k}|u)$ & 11.4 & 4.4 & 84.2& 13.9 & 8.8 & 77.3 \\
 			& mIoU &77.8&13.5&34.6&19.3&13.4&15.7 \\
 			\hline
-			deep, red.\& R$_{20}$ &$p(k|f)$ & \textcolor{mygreen}{88.4} & \textcolor{myred}{2.3} & 9.3& \textcolor{mygreen}{69.2} & \textcolor{myred}{7.2} & 23.6 \\
-			\gls{ic_dm}&$p(k|o)$ & \textcolor{myred}{20.3} & \textcolor{mygreen}{45.7} & 34.0& \textcolor{myred}{20.2} & \textcolor{mygreen}{45.3} & 34.5 \\
-			Yager&$p(k|u)$ & 12.8 & 7.0 & 80.2& 12.9 & 13.8 & 73.3 \\
+			deep, red.\& R$_{20}$ &$p(\tilde{k}|f)$ & \textcolor{mygreen}{88.4} & \textcolor{myred}{2.3} & 9.3& \textcolor{mygreen}{69.2} & \textcolor{myred}{7.2} & 23.6 \\
+			\gls{ic_dm}&$p(\tilde{k}|o)$ & \textcolor{myred}{20.3} & \textcolor{mygreen}{45.7} & 34.0& \textcolor{myred}{20.2} & \textcolor{mygreen}{45.3} & 34.5 \\
+			Yager&$p(\tilde{k}|u)$ & 12.8 & 7.0 & 80.2& 12.9 & 13.8 & 73.3 \\
 			& mIoU &78.0&28.3&33.4&18.6&28.2&15.2 \\
 			\hline
-			deep, red.&$p(k|f)$ & \textcolor{mygreen}{93.4} & \textcolor{myred}{2.0} & 4.6& \textcolor{mygreen}{81.5} & \textcolor{myred}{6.4} & 12.1 \\
-			\gls{ilm}&$p(k|o)$ & \textcolor{myred}{14.2} & \textcolor{mygreen}{68.8} & 17.0& \textcolor{myred}{14.1} & \textcolor{mygreen}{68.3} & 17.6 \\
-			Yager&$p(k|u)$ & 14.5 & 11.4 & 74.1& 14.7 & 22.3 & 63.0 \\
+			deep, red.&$p(\tilde{k}|f)$ & \textcolor{mygreen}{93.4} & \textcolor{myred}{2.0} & 4.6& \textcolor{mygreen}{81.5} & \textcolor{myred}{6.4} & 12.1 \\
+			\gls{ilm}&$p(\tilde{k}|o)$ & \textcolor{myred}{14.2} & \textcolor{mygreen}{68.8} & 17.0& \textcolor{myred}{14.1} & \textcolor{mygreen}{68.3} & 17.6 \\
+			Yager&$p(\tilde{k}|u)$ & 14.5 & 11.4 & 74.1& 14.7 & 22.3 & 63.0 \\
 			& mIoU &82.2&38.0&32.6&21.6&37.9&14.0 \\
 			\hline
-			deep, red.&$p(k|f)$ & \textcolor{mygreen}{93.9} & \textcolor{myred}{2.2} & 3.9& \textcolor{mygreen}{82.0} & \textcolor{myred}{7.2} & 10.8 \\
-			ILR$_{20}$M&$p(k|o)$ & \textcolor{myred}{12.7} & \textcolor{mygreen}{71.0} & 16.3& \textcolor{myred}{12.7} & \textcolor{mygreen}{70.6} & 16.7 \\
-			Yager&$p(k|u)$ & 12.2 & 9.9 & 77.9& 11.9 & 19.5 & 68.6 \\
+			deep, red.&$p(\tilde{k}|f)$ & \textcolor{mygreen}{93.9} & \textcolor{myred}{2.2} & 3.9& \textcolor{mygreen}{82.0} & \textcolor{myred}{7.2} & 10.8 \\
+			ILR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{12.7} & \textcolor{mygreen}{71.0} & 16.3& \textcolor{myred}{12.7} & \textcolor{mygreen}{70.6} & 16.7 \\
+			Yager&$p(\tilde{k}|u)$ & 12.2 & 9.9 & 77.9& 11.9 & 19.5 & 68.6 \\
 			& mIoU &83.3&40.7&34.8&21.9&40.7&15.2 \\
 			\hline
 			& & \multicolumn{3}{c|}{whole mapped area} & \multicolumn{3}{c}{boundary area}
@@ -193,57 +193,58 @@ In this section, it shall be analyzed how the high accuracy of geo \gls{ism} aro
 The experiments are performed using the same sensor inputs, test sets and ground truth as described in Section \ref{subsec:setup_of_red_analy} for the same reasons. The methods compared create maps by accumulating
 \begin{itemize}[noitemsep,nolistsep]
 	\item the geo \gls{irm} using Yager's rule,
-	\item the redundancy reduced deep and geo \gls{irm} combined with Yager's rule and $\underline{m}_u = 0$ for the deep \gls{irm} and
-	\item the fusion of the reduced deep \gls{irm} with $\underline{m}_u = 0.3$ using Yager while the geo \gls{irm} is fused using Yager for all cells with $\underline{m}_u < 0.3$ and YaDer elsewhere
+	\item the redundancy reduced deep and geo \gls{irm} combined with Yager's rule and $\gls{sym:m_u_} = 0$ for the deep \gls{irm} and
+	\item the fusion of the reduced deep \gls{irm} with $\gls{sym:m_u_} = 0.3$ using Yager while the geo \gls{irm} is fused using Yager for all cells with $\gls{sym:m_u_} < 0.3$ and YaDer elsewhere
 \end{itemize}
 The considerations and definitions for this approach are detailed in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}. 
 \\\\
-The metrics for the comparison are normed confusion matrices as described in Section \ref{subsec:confusion_matrix}. This metric is separately evaluated in the total area influenced by the geo \gls{irm} (geo \gls{irm} $(m_u) < 1$) and for all areas where the geo \gls{irm} was false or correct respectively. This distinction is chosen to quantify the overall improvement of the fused maps over the geo \gls{irm} and to specifically quantify the falsification and correction properties. For lower bounded deep \gls{irm} fusion, only the areas with $m_u > \underline{m}_u$ are evaluated since the method lacks the capability to provide this distinction. The remaining areas stay in the initialization phase and, therefore, are of lesser interest. Additionally, the percentage and absolute number of violations of the lower bound $m_u$ in areas untouched by the geo \gls{irm} are investigated to verify the properties described in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
+The metrics for the comparison are normed confusion matrices as described in Section \ref{subsec:confusion_matrix}. This metric is separately evaluated in the total area influenced by the geo \gls{irm} (geo \gls{irm} $(\gls{sym:m_u}) < 1$) and for all areas where the geo \gls{irm} was false or correct respectively. This distinction is chosen to quantify the overall improvement of the fused maps over the geo \gls{irm} and to specifically quantify the falsification and correction properties. For lower bounded deep \gls{irm} fusion, only the areas with $\gls{sym:m_u} > \gls{sym:m_u_}$ are evaluated since the method lacks the capability to provide this distinction. The remaining areas stay in the initialization phase and, therefore, are of lesser interest. Additionally, the percentage and absolute number of violations of the lower bound $\gls{sym:m_u}$ in areas untouched by the geo \gls{irm} are investigated to verify the properties described in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
 %=================================%
 %
 %=================================%
 \subsection{Experiment of deep ISM Priors Analysis}
 \label{subsec:exp_of_prior_analy}
-First, the redundancy reduction's property to suffice a lower bound $\underline{m}_u$ during fusion, which is proven on simulated data in Section \ref{sec:exp_choice_comb_rule}, shall be additionally verified using the real world sensor inputs. Fig. \ref{tab:prior_violations} shows the violations of the lower bound in percentage and absolute number. It can be seen that, given a lower bound of $\underline{m}_u = 0.3$, a small percentage of cells violate the lower bound. Provided a grace interval of $0.002$, these violations, however, vanish.
+First, the redundancy reduction's property to suffice a lower bound $\gls{sym:m_u_}$ during fusion, which is proven on simulated data in Section \ref{sec:exp_choice_comb_rule}, shall be additionally verified using the real world sensor inputs. Fig. \ref{tab:prior_violations} shows the violations of the lower bound in percentage and absolute number. It can be seen that, given a lower bound of $\gls{sym:m_u_} = 0.3$, a small percentage of cells violate the lower bound. Provided a grace interval of 0.002, these violations, however, vanish.
 \begin{center}
 	\begin{tabular}{c|ccc}
-		violations of $\underline{m}_u=0.3$ & percentage & total amount \\
+		violations of $\gls{sym:m_u_}=0.3$ & percentage & total amount \\
 		\hline
 		fused Map(m$_u$ < 0.300) | geo \gls{irm} Map(m$_u$ = 1) & 0.00023\% & 2476\\
 		fused Map(m$_u$ < 0.298) | geo \gls{irm} Map(m$_u$ = 1) & 0.0\% & 0
 	\end{tabular}
-	\captionof{figure}{\label{tab:prior_violations}Analysis of the amount of lower bound violations. A violation is given when the maps unknown mass $m_u$ falls below the lower bound $\underline{m}_u=0.3$ for pixels untouched by the geo \gls{irm} (geo \gls{irm} map's unknown mass equals one). The violations are computed for the strict lower bound and given some slack of $0.002$ on the lower bound.}
+	\captionof{figure}{\label{tab:prior_violations}Analysis of the amount of lower bound violations. A violation is given when the maps unknown mass $\gls{sym:m_u}$ falls below the lower bound $\gls{sym:m_u_}=0.3$ for pixels untouched by the geo \gls{irm} (geo \gls{irm} map's unknown mass equals one). The violations are computed for the strict lower bound and given some slack of 0.002 on the lower bound.}
 \end{center} 
-Next, the falsification and correction properties of the fusion approaches are analyzed. Starting with deep \& geo \gls{irm} map with $\underline{m}_u=0$, the unknown mass is the lowest of all variants showing the dense properties of the deep \gls{irm}. However, this also causes an increase in false rates. Here, the lower bounded fusion overall decreases the rates. But, the decrease in false rates is higher compared to the decrease in true rates resulting in an overall better ratio of false to true classification. 
+Next, the falsification and correction properties of the fusion approaches are analyzed. Starting with deep \& geo \gls{irm} map with $\gls{sym:m_u_}=0$, the unknown mass is the lowest of all variants showing the dense properties of the deep \gls{irm}. However, this also causes an increase in false rates. Here, the lower bounded fusion overall decreases the rates. But, the decrease in false rates is higher compared to the decrease in true rates resulting in an overall better ratio of false to true classification. 
 \\\\
 For the areas, where the geo \gls{irm} map is correct, it can be seen that the lower bounded deep \gls{irm} leads to some areas becoming unknown while the majority of the already correct predictions remain correct after the fusion. Looking at the fused maps without lower bound, the deep \gls{irm} influence causes more falsification as seen at the higher false rates and lower true rates.
 \\\\
 In the areas, where the geo \gls{irm} map is wrong, the lower bounded deep \gls{irm} leads to worsening the false rates which, however, is still increased given no lower bound. Nevertheless, the lower bounded deep \gls{ism} also leads to a great portion of improvement transforming unknown mass to correct assignments. For the unrestricted fusion, however, the true rates exceed the ones of the restricted fusion. 
 \begin{center}
+	\footnotesize
 \begin{tabular}{c|c|ccc|ccc|ccc}
-	&\backslashbox{}{\scriptsize{$k$}} & $f$ & $o$ & $u$ & $f$ & $o$ & $u$ & $f$ & $o$ & $u$\\
+	& $\tilde{k}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$& $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$\\
 \hline
-	geo&$p(k|f)$ & \textcolor{mygreen}{59.9} & \textcolor{myred}{8.1} & 32.0& \textcolor{mygreen}{100.0} & \textcolor{myred}{0.0} & 0.0& \textcolor{mygreen}{0.0} & \textcolor{myred}{20.9} & 79.1 \\
-	IR$_{20}$M&$p(k|o)$ & \textcolor{myred}{21.7} & \textcolor{mygreen}{50.1} & 28.2& \textcolor{myred}{0.0} & \textcolor{mygreen}{100.0} & 0.0& \textcolor{myred}{42.7} & \textcolor{mygreen}{0.0} & 57.3 \\
-	Yager&$p(k|u)$ & 11.1 & 33.7 & 55.2& 0.0 & 0.0 & 100.0& 25.6 & 74.4 & 0.0 \\
+	geo&$p(\tilde{k}|f)$ & \textcolor{mygreen}{59.9} & \textcolor{myred}{8.1} & 32.0& \textcolor{mygreen}{100.0} & \textcolor{myred}{0.0} & 0.0& \textcolor{mygreen}{0.0} & \textcolor{myred}{20.9} & 79.1 \\
+	IR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{21.7} & \textcolor{mygreen}{50.1} & 28.2& \textcolor{myred}{0.0} & \textcolor{mygreen}{100.0} & 0.0& \textcolor{myred}{42.7} & \textcolor{mygreen}{0.0} & 57.3 \\
+	Yager&$p(\tilde{k}|u)$ & 11.1 & 33.7 & 55.2& 0.0 & 0.0 & 100.0& 25.6 & 74.4 & 0.0 \\
 \hline
-	deep, red. \& geo &$p(k|f)$ & \textcolor{mygreen}{78.3} & \textcolor{myred}{16.7} & 5.0& \textcolor{mygreen}{88.1} & \textcolor{myred}{9.3} & 2.6& \textcolor{mygreen}{63.1} & \textcolor{myred}{28.4} & 8.5 \\
-	IR$_{20}$M&$p(k|o)$ & \textcolor{myred}{29.2} & \textcolor{mygreen}{65.1} & 5.7& \textcolor{myred}{8.3} & \textcolor{mygreen}{89.8} & 1.9& \textcolor{myred}{47.9} & \textcolor{mygreen}{42.4} & 9.7 \\
-	YaDer($\underline{m}_u = 0$)&$p(k|u)$ & 33.4 & 48.9 & 17.7& 41.0 & 29.8 & 29.2& 23.6 & 73.2 & 3.2 \\
+	deep, red. \& geo &$p(\tilde{k}|f)$ & \textcolor{mygreen}{78.3} & \textcolor{myred}{16.7} & 5.0& \textcolor{mygreen}{88.1} & \textcolor{myred}{9.3} & 2.6& \textcolor{mygreen}{63.1} & \textcolor{myred}{28.4} & 8.5 \\
+	IR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{29.2} & \textcolor{mygreen}{65.1} & 5.7& \textcolor{myred}{8.3} & \textcolor{mygreen}{89.8} & 1.9& \textcolor{myred}{47.9} & \textcolor{mygreen}{42.4} & 9.7 \\
+	YaDer($\gls{sym:m_u_} = 0$)&$p(\tilde{k}|u)$ & 33.4 & 48.9 & 17.7& 41.0 & 29.8 & 29.2& 23.6 & 73.2 & 3.2 \\
 \hline
-	deep, red. \& geo &$p(k|f)$ & \textcolor{mygreen}{77.8} & \textcolor{myred}{13.0} & 9.2& \textcolor{mygreen}{91.4} & \textcolor{myred}{6.0} & 2.6& \textcolor{mygreen}{57.0} & \textcolor{myred}{24.1} & 18.9 \\
-	IR$_{20}$M&$p(k|o)$ & \textcolor{myred}{25.2} & \textcolor{mygreen}{64.5} & 10.3& \textcolor{myred}{5.2} & \textcolor{mygreen}{92.5} & 2.3& \textcolor{myred}{46.8} & \textcolor{mygreen}{34.2} & 19.0 \\
-	YaDer($\underline{m}_u = 0.3$)&$p(k|u)$ & 27.8 & 43.0 & 29.2& 31.5 & 18.8 & 49.7& 23.2 & 73.2 & 3.6 \\
+	deep, red. \& geo &$p(\tilde{k}|f)$ & \textcolor{mygreen}{77.8} & \textcolor{myred}{13.0} & 9.2& \textcolor{mygreen}{91.4} & \textcolor{myred}{6.0} & 2.6& \textcolor{mygreen}{57.0} & \textcolor{myred}{24.1} & 18.9 \\
+	IR$_{20}$M&$p(\tilde{k}|o)$ & \textcolor{myred}{25.2} & \textcolor{mygreen}{64.5} & 10.3& \textcolor{myred}{5.2} & \textcolor{mygreen}{92.5} & 2.3& \textcolor{myred}{46.8} & \textcolor{mygreen}{34.2} & 19.0 \\
+	YaDer($\gls{sym:m_u_} = 0.3$)&$p(\tilde{k}|u)$ & 27.8 & 43.0 & 29.2& 31.5 & 18.8 & 49.7& 23.2 & 73.2 & 3.6 \\
 \hline
-	& & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$}} & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \& correct}} & \multicolumn{3}{c}{\scriptsize{geo IR$_{20}$M$(m_u) < 1$ \& false}} 
+	& & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(\gls{sym:m_u}) < 1$}} & \multicolumn{3}{c|}{\scriptsize{geo IR$_{20}$M$(\gls{sym:m_u}) < 1$ \& correct}} & \multicolumn{3}{c}{\scriptsize{geo IR$_{20}$M$(\gls{sym:m_u}) < 1$ \& false}} 
 \end{tabular}
-\captionof{table}{\label{tab:quant_analysis_of_prior}Normed confusion matrices evaluated for the geo \gls{irm} map, the fusion of the reduced deep \& geo \gls{irm} and the fusion of the lower bounded, reduced deep \& geo \gls{irm}. The confusion matrices are evaluated in the area influenced by the geo \gls{irm} (left), the correctly influenced area (middle) and the falsely influenced area (right). Additionally, the lower bounded method is only evaluated for cells in the convergence phase ($m_u < \underline{m}_u$). Examples of areas in the convergence phase are depicted in right Fig. \ref{fig:qual_analysis_of_prior}.}
+\captionof{table}{\label{tab:quant_analysis_of_prior}Normed confusion matrices evaluated for the geo \gls{irm} map, the fusion of the reduced deep \& geo \gls{irm} and the fusion of the lower bounded, reduced deep \& geo \gls{irm}. The confusion matrices are evaluated in the area influenced by the geo \gls{irm} (left), the correctly influenced area (middle) and the falsely influenced area (right). Additionally, the lower bounded method is only evaluated for cells in the convergence phase ($\gls{sym:m_u} < \gls{sym:m_u_}$). Examples of areas in the convergence phase are depicted in right Fig. \ref{fig:qual_analysis_of_prior}.}
 \end{center}
 Looking at the qualitative results in Fig. \ref{fig:qual_analysis_of_prior}, the property of the deep \gls{irm} to inter- \& extrapolate can be seen between radar detections and in areas lacking information. One notable example of extrapolation is marked in the lower white box of scene A where the area is assigned/initialized by the deep \gls{irm} variants while the geo \gls{irm} lacks to provide this information. However, in some cases (e.g. upper white box in scene A), the extrapolation might be false leading to mass that has to be reassigned later. Additionally, wrong interpolations (e.g. white box on the upper right in scene B) or even direct errors in presence of detections (e.g. white box on the upper left of scene B) can occur in the deep \gls{irm}. In these cases, using the deep \gls{irm} purely for initialization leads the areas to remain in a distinguishable state in contrast to the verified cells in the convergence phase (compare with right most images). Also, the influence of a dynamic object following the ego vehicle (e.g. bottom white box in scene B) can be dampened and distinguished using the deep \gls{irm} as a prior.
 \begin{center}
 	\resizebox{\textwidth}{!}{
 	\import{imgs/08_occ_mapping_exp/analysis_of_prior}{analysis_of_prior_scenes_442_n_488.pdf_tex}}
-	\captionof{figure}{\label{fig:qual_analysis_of_prior}Qualitative results of three mapping approaches (column 1-4) for two scenes with the geo \gls{ilm} ground-truth map in the first column. Additionally, the 4th column shows the result of filtering out all non-converged pixels of the 3rd column's map. This is done by setting all pixels with $m_u > \underline{m}_u = 0.3$ to $m_u = 1$.}
+	\captionof{figure}{\label{fig:qual_analysis_of_prior}Qualitative results of three mapping approaches (column 1-4) for two scenes with the geo \gls{ilm} ground-truth map in the first column. Additionally, the 4th column shows the result of filtering out all non-converged pixels of the 3rd column's map. This is done by setting all pixels with $\gls{sym:m_u} > \gls{sym:m_u_} = 0.3$ to $\gls{sym:m_u} = 1$.}
 \end{center}
 %=================================%
 %

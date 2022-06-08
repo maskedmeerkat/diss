@@ -174,7 +174,7 @@ The other half proposes approaches to measure the amount of information in each 
 \begin{requ}[RQ\ref{requ:how_to_define_discount_fact}] \label{requ:how_to_define_discount_fact}
 	How can a discount factor be defined based on the mutual information to remove the amount of redundant information between two evidential occupancy masses?
 \end{requ}
-Additionally, the problem arises that the evidential representation for occupancy mapping slightly differs from the standard in that it defines the conflict state as a meaningful transition state and not as another source of uncertainty based on contradictory information sources. Therefore, the regularly used entropy and the corresponding discount factors cannot be utilized in the proposed form. Also, the second commonly used measure, namely the specificity, quantifies how much mass is distributed into single element classes like the free and occupied class in contrast to the unknown which is both free and occupied. However, the specificity for evidential occupancy mapping is in the interval $[0.5,1.0]$ which can easily be seen by examining Eq. \ref{eq:specificity}. Thus, even for a total lack of information indicated by $\vec{m} = [0,0,1]^\top$, the specificity equals $0.5$ disqualifying it as a direct measure for information, too. This leads to the following research questions
+Additionally, the problem arises that the evidential representation for occupancy mapping slightly differs from the standard in that it defines the conflict state as a meaningful transition state and not as another source of uncertainty based on contradictory information sources. Therefore, the regularly used entropy and the corresponding discount factors cannot be utilized in the proposed form. Also, the second commonly used measure, namely the specificity, quantifies how much mass is distributed into single element classes like the free and occupied class in contrast to the unknown which is both free and occupied. However, the specificity for evidential occupancy mapping is in the interval $[0.5,1.0]$ which can easily be seen by examining Eq. \ref{eq:specificity}. Thus, even for a total lack of information indicated by $\gls{sym:vec_m} = [0,0,1]^\top$, the specificity equals $0.5$ disqualifying it as a direct measure for information, too. This leads to the following research questions
 \\
 \begin{requ}[RQ\ref{requ:how_to_meas_info}] \label{requ:how_to_meas_info}
 	How can the information content in evidential occupancy mapping be measured?
@@ -534,7 +534,7 @@ To quantify the \gls{ism} and occupancy mapping results, a confusion matrix vari
 	\item for each ground-truth pixels belonging to a class, sum up how much weight has been estimated to belong to each class (e.g. for all ground-truth occupied pixels, how much mass is estimated to be free, how much occupied, ...)
 	\item divide the sum of estimated mass for each class by the amount of ground-truth pixels for the current class 
 	\item to cope with the amount of pixels per class over the whole dataset, the above is done on an image basis and averaged over all test samples
-	\item[$\rightarrow$] this leads to the probability $p(\tilde{m}_k|\hat{m}_k)$ to estimate class $k$ for a pixel given the pixel belongs to the actual class $k$ with $k \in [d, f, o, u]$
+	\item[$\rightarrow$] this leads to the probability $p(\tilde{\gls{sym:m_k_o}}|\gls{sym:target}_{\gls{sym:m_k_o}})$ to estimate class $k$ for a pixel given the pixel belongs to the actual class $k$ with $k \in [d, f, o, u]$. This probability will be abbreviated as $p(\tilde{k}|k)$. 
 \end{enumerate}
 Since all of the investigated models behave severely different in the visible and occluded area, it is necessary to provide independent metrics for these two cases. Thus, the metrics are additionally computed for visible and occluded areas, while the occluded area is defined as the pixels where the geo \gls{ilm}'s unknown mass surpasses the other class' masses. Thus, only a stochastically insignificant portion of unknown labels remains in the visible area, which is why these scores are excluded from consideration.
 \\\\
@@ -548,33 +548,33 @@ In order to investigate H\ref{hyp:temporal_dependence}, an alternative to the st
 \\\\
 The problem addressed in H\ref{hyp:temporal_dependence} revolves around accumulation of redundant information over time. This, directly leads to the question of how to measure the information content in deep \gls{ism}s in the first place, as formulated in RQ\ref{requ:how_to_meas_info}. As stated in Section \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}, the commonly used entropy and specificity measure cannot be used to quantify the information in evidential occupancy mapping. However, since the deep \gls{ism}s in this work are constructed in a way to suffice R\ref{subreq:unknown_mass}, the unknown mass should correlate with the information content. This assumption is verified in the experiments discussed in sections \ref{sec:al_uncert_in_deep_isms} and \ref{sec:cam_lidar_fusion_in_deep_isms}.
 \\\\
-Given the unknown mass as a measure for information, the problem of how to quantify the temporal redundancy shall be tackled (RQ\ref{requ:how_to_meas_redund}). In this work, the redundancy shall be assessed through mutual information, for reasons explained in Section \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}. Alternatives are briefly discussed in Section \ref{subsec:discussion_of_red_analy}. To obtain the mutual information, this work proposes to use temporally accumulated measurement signals as inputs for the deep \gls{ism}s. In doing so, the deep \gls{ism} learns to directly approximate the occupancy state $\vec{m}_{0:T}$ given the information $I_{0:T}$ of time step zero up to the current step $T$. On the other hand, before fusion, the map provides a successively obtained estimate of the environment state $\vec{m}_{0:T-1}$ of all previous measurements. Ideally, this means that the deep \gls{ism} prediction contains all of the information stored in the occupancy map around the current ego vehicle's location with the addition of the information captured in the current time step. Thus, using the unknown mass as an inverse measure for information, the non-redundant part of the information can be approximated as follows
+Given the unknown mass as a measure for information, the problem of how to quantify the temporal redundancy shall be tackled (RQ\ref{requ:how_to_meas_redund}). In this work, the redundancy shall be assessed through mutual information, for reasons explained in Section \ref{subsec:research_needs_for_usage_of_deep_ims_as_priors_in_occmapping}. Alternatives are briefly discussed in Section \ref{subsec:discussion_of_red_analy}. To obtain the mutual information, this work proposes to use temporally accumulated measurement signals as inputs for the deep \gls{ism}s. In doing so, the deep \gls{ism} learns to directly approximate the occupancy state $\gls{sym:vec_m}_{0:\gls{sym:temp_hor}}$ given the information $\gls{sym:info}_{0:\gls{sym:temp_hor}}$ of time step zero up to the current step \gls{sym:temp_hor}. On the other hand, before fusion, the map provides a successively obtained estimate of the environment state $\gls{sym:vec_m}_{0:\gls{sym:temp_hor}-1}$ of all previous measurements. Ideally, this means that the deep \gls{ism} prediction contains all of the information stored in the occupancy map around the current ego vehicle's location with the addition of the information captured in the current time step. Thus, using the unknown mass as an inverse measure for information, the non-redundant part of the information can be approximated as follows
 \begin{align}
 	\label{eq:non_redund_info_}
-	I^{T|0:T} &= I^{0:T} - I^{0:T-1} \approx \underbrace{m^{u,0:T-1} - m^{u,0:T}}_{\equiv\Delta m_{u}}
+	\gls{sym:info}^{\gls{sym:temp_hor}|0:\gls{sym:temp_hor}} &= \gls{sym:info}^{0:\gls{sym:temp_hor}} - \gls{sym:info}^{0:\gls{sym:temp_hor}-1} \approx \underbrace{\gls{sym:m_u}^{0:\gls{sym:temp_hor}-1} - \gls{sym:m_u}^{0:\gls{sym:temp_hor}}}_{\equiv\Delta \gls{sym:m_u}}
 \end{align}
-However, a problem arises in case the static environment assumption of occupancy mapping is violated. When solely using $\Delta m_u$ as a measure for information, a shift between free and occupied can only be achieved if the new signal is more certain. To allow for class shifts even if measurement signals are equally certain, it is proposed to add the conflict $K$ as defined in \eqref{eq:conflict} to the difference in unknown mass leading to the following improved approximation of novel information 
+However, a problem arises in case the static environment assumption of occupancy mapping is violated. When solely using $\Delta \gls{sym:m_u}$ as a measure for information, a shift between free and occupied can only be achieved if the new signal is more certain. To allow for class shifts even if measurement signals are equally certain, it is proposed to add the conflict \gls{sym:ev_conf} as defined in \eqref{eq:conflict} to the difference in unknown mass leading to the following improved approximation of novel information 
 \begin{align}
 	\label{eq:non_redund_info}
-	I^{T|0:T} &\approx \Delta m_{u} + K \in [-1,1]
+	\gls{sym:info}^{\gls{sym:temp_hor}|0:\gls{sym:temp_hor}} &\approx \Delta \gls{sym:m_u} + \gls{sym:ev_conf} \in [-1,1]
 \end{align}
-In case a new measurement contains conflicting information $K$ but is also less certain than the current map state, $\Delta m_u$ will become negative and reduce the amount of novelty in the update. This effect is desired to reduce the influence of outliers. The qualitative evaluation in the bottom plot of Fig. \ref{fig:ds_comb_rule_comparison} in Section \ref{sec:exp_choice_comb_rule} shows the approximated amount of novel information in several fusion constellations.
+In case a new measurement contains conflicting information \gls{sym:ev_conf} but is also less certain than the current map state, $\Delta \gls{sym:m_u}$ will become negative and reduce the amount of novelty in the update. This effect is desired to reduce the influence of outliers. The qualitative evaluation in the bottom plot of Fig. \ref{fig:ds_comb_rule_comparison} in Section \ref{sec:exp_choice_comb_rule} shows the approximated amount of novel information in several fusion constellations.
 \\\\
-At this point, it should be mentioned that the map region around the vehicle could simply be updated by replacing the old map state with the new deep \gls{ism} estimate since it already predicts $m_{u,0:T}$. This, however, would remove all of the geo \gls{ism}'s influences. Therefore, it is rather proposed to discount the deep \gls{ism} estimate according to the amount of non-redundant information and combine it with the current map state. To do so, RQ\ref{requ:how_to_define_discount_fact} has to be answered to obtain a discount factor for the discount operation defined in Eq. \ref{eq:discount_op}. The requirements for the discount factor $\gamma$ can be formulated as follows
+At this point, it should be mentioned that the map region around the vehicle could simply be updated by replacing the old map state with the new deep \gls{ism} estimate since it already predicts $\gls{sym:m_u}^{0:\gls{sym:temp_hor}}$. This, however, would remove all of the geo \gls{ism}'s influences. Therefore, it is rather proposed to discount the deep \gls{ism} estimate according to the amount of non-redundant information and combine it with the current map state. To do so, RQ\ref{requ:how_to_define_discount_fact} has to be answered to obtain a discount factor for the discount operation defined in Eq. \ref{eq:discount_op}. The requirements for the discount factor $\gls{sym:discount_fac}$ can be formulated as follows
 \begin{align}
 	\label{eq:discount_factor_behavior}
-	\gamma &= 
+	\gls{sym:discount_fac} &= 
 	\begin{cases}
-		0, I^{T|0:T} \leq 0\\
-		0, \lim\limits_{I^{T|0:T} \rightarrow 0}\\
-		1, \lim\limits_{I^{T|0:T} \rightarrow 1}\\
-		1, I^{T|0:T} \geq 1
+		0, \gls{sym:info}^{\gls{sym:temp_hor}|0:\gls{sym:temp_hor}} \leq 0\\
+		0, \lim\limits_{\gls{sym:info}^{\gls{sym:temp_hor}|0:\gls{sym:temp_hor}} \rightarrow 0}\\
+		1, \lim\limits_{\gls{sym:info}^{\gls{sym:temp_hor}|0:\gls{sym:temp_hor}} \rightarrow 1}\\
+		1, \gls{sym:info}^{\gls{sym:temp_hor}|0:\gls{sym:temp_hor}} \geq 1
 	\end{cases}
 \end{align}
-It should be noted that, ideally, $I_{T|0:T} < 0$ never occurs since the next time step's estimate is based on at least the same amount of information as the previous one. Since the proposed approximation of $I_{T|0:T}$ in \eqref{eq:non_redund_info} lies within the interval $[-1,1]$, the behavior defined in Eq. \ref{eq:discount_factor_behavior} between 0 and 1 can e.g. be achieved in a linear way as follows
+It should be noted that, ideally, $\gls{sym:info}^{\gls{sym:temp_hor}|0:\gls{sym:temp_hor}} < 0$ never occurs since the next time step's estimate is based on at least the same amount of information as the previous one. Since the proposed approximation of $I_{\gls{sym:temp_hor}|0:\gls{sym:temp_hor}}$ in \eqref{eq:non_redund_info} lies within the interval $[-1,1]$, the behavior defined in Eq. \ref{eq:discount_factor_behavior} between 0 and 1 can e.g. be achieved in a linear way as follows
 \begin{align}
 	\label{eq:relu_discount_factor}
-	\gamma &= \mathrm{ReLU}(\Delta m_u + K)
+	\gls{sym:discount_fac} &= \gls{relu}(\Delta \gls{sym:m_u} + \gls{sym:ev_conf})
 \end{align}
 However, alternatives like a scaled hyperbolic tangent non-linearity can also be applied to e.g. dampen the influence of highly certain and highly redundant estimates. Since no clear preference is given, this work will focus on the discount factor as defined in Eq. \ref{eq:relu_discount_factor}. Finally, the decision of which combination rule to chose to combine the deep \gls{ism} estimate after discounting the redundancy will be detailed in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}.
 %======================================%
@@ -587,61 +587,63 @@ In this section, the requirements R\ref{subreq:initialize_with_deep_ism} and \re
 Normally, as explained in Section \ref{sec:occupancy_mapping}, the map's state is initially set to the prior e.g. obtained through previous mapping of the environment. In this work, however, the map shall be initialized using a deep \gls{ism} during mapping. A simple procedure to do so would be to initially set the state of all grid cells to unknown. Afterwards, if a grid cell is still in the initial state and falls in the deep \gls{ism}'s field of view, replace the grid cell's value by the deep \gls{ism}'s estimate and leave it untouched otherwise. However, since the deep \gls{ism}'s estimates are noisy, potentially prone to errors and to account for the fact that the estimates might improve due to better measurement coverage at later time steps, the following three stepped procedure is proposed to filter these effects. 
 \\\\
 \textbf{Start Phase}\\
-First, in the start phase, all cells shall be set to $m_u = 1$ as illustrated on the left side in Fig. \ref{fig:three_phased_approach}. 
+First, in the start phase, all cells shall be set to $\gls{sym:m_u} = 1$ as illustrated on the left side in Fig. \ref{fig:three_phased_approach}. 
 \\\\
 \textbf{Initialization Phase}\\
-Afterwards, in the initialization phase, both the geo and deep \gls{ism} estimates are integrated into the map. This phase lasts until a definable amount of measurement information has been collected. In this work, the information content is described using the unknown mass (see Section \ref{subsec:method_to_use_deep_isms_in_occmaps}). Therefore, a threshold on the unknown mass $\underline{m}_u$ is introduced to quantify whether enough data has been collected in a parameterizable way. Since the deep \gls{ism} shall only be used to initialize the map, its estimates should be integrated in a way that the unknown mass never falls below $\underline{m}_u$. At the same time, in case the true occupancy state changes, the combination should be conducted in a way to allow shifting mass between occupied and free while keeping or even recuperating unknown mass. The possibility to recuperate unknown mass is important since once the unknown mass has reached $\underline{m}_u$, the deep \gls{ism}'s influence is suppressed given the redundancy removal is applied as proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps}. This potentially prohibits the state change to be fully successful. To achieve the above described properties, the following procedure is proposed.
+Afterwards, in the initialization phase, both the geo and deep \gls{ism} estimates are integrated into the map. This phase lasts until a definable amount of measurement information has been collected. In this work, the information content is described using the unknown mass (see Section \ref{subsec:method_to_use_deep_isms_in_occmaps}). Therefore, a threshold on the unknown mass $\gls{sym:m_u_}$ is introduced to quantify whether enough data has been collected in a parameterizable way. Since the deep \gls{ism} shall only be used to initialize the map, its estimates should be integrated in a way that the unknown mass never falls below $\gls{sym:m_u_}$. At the same time, in case the true occupancy state changes, the combination should be conducted in a way to allow shifting mass between occupied and free while keeping or even recuperating unknown mass. The possibility to recuperate unknown mass is important since once the unknown mass has reached $\gls{sym:m_u_}$, the deep \gls{ism}'s influence is suppressed given the redundancy removal is applied as proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps}. This potentially prohibits the state change to be fully successful. To achieve the above described properties, the following procedure is proposed.
 \\\\
-First, restrict the certainty of the deep \gls{ism} estimates to $\underline{m}_u$ using the discounting operation as follows
+First, restrict the certainty of the deep \gls{ism} estimates to $\gls{sym:m_u_}$ using the discounting operation as follows
 \begin{align}
-	\underline{\tilde{\vec{m}}}^{0:T} &= (1-\underline{m}_u) \otimes \tilde{\vec{m}}^{0:T}
+	\tilde{\gls{sym:vec_m_}}^{0:\gls{sym:temp_hor}} &= (1-\gls{sym:m_u_}) \gls{sym:discount_op} \tilde{\gls{sym:vec_m}}^{0:\gls{sym:temp_hor}}
 \end{align}
-with $\tilde{\vec{m}}^{0:T}$ being the evidential mass estimate of one grid cell provided by the deep \gls{ism} given accumulated measurement information from timestep zero till the current timestep $T$. This restriction of certainty, however, does not influence the amount of redundancy in the deep \gls{ism} estimates. Thus, the next step consists in removing the redundancy as proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps} by an additional discounting operation. The restricted deep \gls{ism} certainty together with the discounting of non-redundant information makes sure that once a map cell's unknown mass has fallen beneath $\underline{m}_u$, all further deep \gls{ism} estimates are ignored. However, it is still possible for the deep \gls{ism} to reduce the unknown mass below the lower limit in the combination step as long as it has not been reached. Therefore, the discount factor to remove the redundancy has to be adapted to suffice the following condition 
+with $\tilde{\gls{sym:vec_m}}^{0:\gls{sym:temp_hor}}$ being the evidential mass estimate of one grid cell provided by the deep \gls{ism} given accumulated measurement information from timestep zero till the current timestep \gls{sym:temp_hor}. This restriction of certainty, however, does not influence the amount of redundancy in the deep \gls{ism} estimates. Thus, the next step consists in removing the redundancy as proposed in Section \ref{subsec:method_to_use_deep_isms_in_occmaps} by an additional discounting operation. The restricted deep \gls{ism} certainty together with the discounting of non-redundant information makes sure that once a map cell's unknown mass has fallen beneath $\gls{sym:m_u_}$, all further deep \gls{ism} estimates are ignored. However, it is still possible for the deep \gls{ism} to reduce the unknown mass below the lower limit in the combination step as long as it has not been reached. Therefore, the discount factor to remove the redundancy has to be adapted to suffice the following condition 
 \begin{align}
-	\vec{m}^{0:T} &= \vec{m}^{0:T-1} \oplus \underbrace{(\gamma \otimes \underline{\tilde{\vec{m}}}^{0:T})}_{\approx \tilde{\vec{m}}^{T|0:T}}\\
-	\underline{m}_u &\leq m^{0:T}_{u}
+	\gls{sym:vec_m}^{0:\gls{sym:temp_hor}} &= \gls{sym:vec_m}^{0:\gls{sym:temp_hor}-1} \gls{sym:ev_comb} \underbrace{(\gls{sym:discount_fac} \gls{sym:discount_op} \tilde{\gls{sym:vec_m_}}^{0:\gls{sym:temp_hor}})}_{\approx \tilde{\gls{sym:vec_m}}^{\gls{sym:temp_hor}|0:\gls{sym:temp_hor}}}\\
+	\gls{sym:m_u_} &\leq \gls{sym:m_u}^{0:\gls{sym:temp_hor}}
 	\label{eq:lower_bound_condition}
 \end{align} 
-with $\vec{m}^{0:T-1}$ and $\vec{m}^{0:T}$ being the occupancy map's state accumulated from timestep zero to timestep $T$ and $T-1$ respectively and $\tilde{\vec{m}}^{T}$ being the redundancy-removed evidential mass estimate at timestep $T$ given the former timesteps information. Here, the adaption of $\gamma$, defined in \eqref{eq:relu_discount_factor}, in a way that the fusion respects the lower bound $\underline{m}_{u}$, depends on the choice of combination rule. Since the combination requires the possibility to recuperate unknown mass, Yager's rule is chosen over Dempster's (for details on the properties of evidential combination rules see Section \ref{subsec:combination_of_independent_evidence} and Section \ref{sec:exp_choice_comb_rule}). Given Yager's combination rule, $\gamma$ shall be chosen as follows
+with $\gls{sym:vec_m}^{0:\gls{sym:temp_hor}-1}$ and $\gls{sym:vec_m}^{0:\gls{sym:temp_hor}}$ being the occupancy map's state accumulated from timestep zero to timestep \gls{sym:temp_hor} and $\gls{sym:temp_hor}-1$ respectively and $\tilde{\gls{sym:vec_m}}^{\gls{sym:temp_hor}}$ being the redundancy-removed evidential mass estimate at timestep $\gls{sym:temp_hor}$ given the former timesteps information. Here, the adaption of $\gls{sym:discount_fac}$, defined in \eqref{eq:relu_discount_factor}, in a way that the fusion respects the lower bound $\gls{sym:m_u_}$, depends on the choice of combination rule. Since the combination requires the possibility to recuperate unknown mass, Yager's rule is chosen over Dempster's (for details on the properties of evidential combination rules see Section \ref{subsec:combination_of_independent_evidence} and Section \ref{sec:exp_choice_comb_rule}). Given Yager's combination rule, $\gls{sym:discount_fac}$ shall be chosen as follows
 \begin{align}
-	\underline{m}_u &\leq m^{0:T}_{u} \underbrace{=}_{\eqref{eq:yagers_rule}} m_{u}^{0:T-1}\tilde{m}_{u}^{T}+K \\
+	\gls{sym:m_u_} &\leq \gls{sym:m_u}^{0:\gls{sym:temp_hor}} \underbrace{=}_{\eqref{eq:yagers_rule}} \gls{sym:m_u}^{0:\gls{sym:temp_hor}-1}\tilde{\gls{sym:m_u}}^{\gls{sym:temp_hor}}+\gls{sym:ev_conf} \\
 \end{align}
-Including the definition of $K$ and the discount operation, it follows that
+Including the definition of \gls{sym:ev_conf} and the discount operation, it follows that
 \begin{align}
-	\underline{m}_u & \underbrace{\leq}_{\eqref{eq:discount_op}\text{ \& }\eqref{eq:conflict}} m_{u}^{0:T-1}(1-\gamma+\gamma\tilde{m}_{u}^{0:T}) + m_{o}^{0:T-1}\gamma\tilde{m}_{f}^{0:T} + m_{f}^{0:T-1}\gamma\tilde{m}_{o}^{0:T}\\
+	\gls{sym:m_u_} & \underbrace{\leq}_{\eqref{eq:discount_op}\text{ \& }\eqref{eq:conflict}} \gls{sym:m_u}^{0:\gls{sym:temp_hor}-1}(1-\gls{sym:discount_fac}+\gls{sym:discount_fac}\tilde{m}_{u}^{0:\gls{sym:temp_hor}}) + \gls{sym:m_o}^{0:\gls{sym:temp_hor}-1}\gls{sym:discount_fac}\tilde{m}_{f}^{0:\gls{sym:temp_hor}} + \gls{sym:m_f}^{0:\gls{sym:temp_hor}-1}\gls{sym:discount_fac}\tilde{m}_{o}^{0:\gls{sym:temp_hor}}\\
 %
-	\underline{m}_u &\leq m_{u}^{0:T-1} + \gamma (\underbrace{m_{u}^{0:T-1}\tilde{m}_{u}^{0:T} - m_{u}^{0:T-1} + m_{o}^{0:T-1}\tilde{m}_{f}^{0:T} + \gls{sym:m_f}^{0:T-1}\tilde{m}_{o}^{0:T}}_{=: \xi}) \quad|-m_{u}^{0:T-1} |\div\xi
-\end{align}
-Since the above derivation is made for the case of combination in the initialization phase, both the map cell's and deep \gls{ism} estimate's unknown masses are in the interval $m_u^{0:T-1},\quad \tilde{m}_u^{0:T}\in[\underline{m}_u,1]$. Thus, for $\xi\equiv 0$ \eqref{eq:lower_bound_condition} is satisfied.\\
-In case $\xi \neq 0$, the two following solutions can be found 
-\begin{align}
-	\text{case: } \xi > 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\leq \gamma\\
-	\text{case: } \xi < 0 \rightarrow \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} &\geq \gamma 
-\end{align}
-Here, the case of $\xi > 0$, can be further simplified. Since $\underline{m}_u -m_{u}^{0:T-1} \leq 0$ and $\gamma \in [0,1]$, $\gamma$ already fulfills the requirement and, thus, does not need to be adapted. Therefore, the final discount factor to both reduce the informational redundancy in the deep \gls{ism} estimate and, at the same time, respects a lower bound on the unknown mass $\underline{m}_{u}$ after combination using Yager's rule can be written as 
-\begin{align}
-	\text{case: } \xi > 0 \rightarrow \tilde{\gamma} &= \gamma\\
+	\gls{sym:m_u_} &\leq \gls{sym:m_u}^{0:\gls{sym:temp_hor}-1} + \gls{sym:discount_fac} (\underbrace{\gls{sym:m_u}^{0:\gls{sym:temp_hor}-1}\tilde{m}_{u}^{0:\gls{sym:temp_hor}} - \gls{sym:m_u}^{0:\gls{sym:temp_hor}-1} + \gls{sym:m_o}^{0:\gls{sym:temp_hor}-1}\tilde{m}_{f}^{0:\gls{sym:temp_hor}} + \gls{sym:m_f}^{0:\gls{sym:temp_hor}-1}\tilde{m}_{o}^{0:\gls{sym:temp_hor}}}_{=: \zeta}) \quad|-\gls{sym:m_u}^{0:\gls{sym:temp_hor}-1}\\
 %
-	\text{case: } \xi < 0 \rightarrow \tilde{\gamma} &= \min \left(\gamma, \dfrac{\underline{m}_u -m_{u}^{0:T-1}}{\xi} \right)
+	\gls{sym:discount_fac}\zeta & \geq \gls{sym:m_u_} - \gls{sym:m_u}^{0:\gls{sym:temp_hor}-1} |\div\zeta
+\end{align}
+Since the above derivation is made for the case of combination in the initialization phase, both the map cell's and deep \gls{ism} estimate's unknown masses are in the interval $\gls{sym:m_u}^{0:\gls{sym:temp_hor}-1},\quad \tilde{m}_u^{0:\gls{sym:temp_hor}}\in[\gls{sym:m_u_},1]$. Thus, for $\zeta\equiv 0$ \eqref{eq:lower_bound_condition} is satisfied.\\
+In case $\zeta \neq 0$, the two following solutions can be found 
+\begin{align}
+	\text{case: } \zeta > 0 \rightarrow \gls{sym:discount_fac} &\geq \dfrac{\gls{sym:m_u_} -\gls{sym:m_u}^{0:\gls{sym:temp_hor}-1}}{\zeta} \\
+	\text{case: } \zeta < 0 \rightarrow \gls{sym:discount_fac} &\leq \dfrac{\gls{sym:m_u_} -\gls{sym:m_u}^{0:\gls{sym:temp_hor}-1}}{\zeta}  
+\end{align}
+Here, the case of $\zeta > 0$, can be further simplified. Since $\gls{sym:m_u_} -\gls{sym:m_u}^{0:\gls{sym:temp_hor}-1} \leq 0$ and $\gls{sym:discount_fac} \in [0,1]$, $\gls{sym:discount_fac}$ already fulfills the requirement and, thus, does not need to be adapted. Therefore, the final discount factor \gls{sym:discount_fac_} that both reduce the informational redundancy in the deep \gls{ism} estimate and, at the same time, respects a lower bound on the unknown mass $\gls{sym:m_u_}$ after combination using Yager's rule can be written as 
+\begin{align}
+	\text{case: } \zeta > 0 \rightarrow \gls{sym:discount_fac_} &= \gls{sym:discount_fac}\\
+%
+	\text{case: } \zeta < 0 \rightarrow \gls{sym:discount_fac_} &= \min \left(\gls{sym:discount_fac}, \dfrac{\gls{sym:m_u_} -\gls{sym:m_u}^{0:\gls{sym:temp_hor}-1}}{\zeta} \right)
 \end{align}
 This modified Yager rule shall be referred to as lower bounded Yager rule. To fuse the geo \gls{ism} estimates into the map during the initialization phase, it is again proposed to use Yager's combination rule. The reason is the same as for the deep \gls{ism} fusion and revolves around the fact that Yager's rule is better suited to cope with changes in the true occupancy state.
 \\\\
-In the center of Fig. \ref{fig:three_phased_approach}, the main properties of the initialization phase to alter the map's state up the the lower bound $\underline{m}_{u}$ are depicted. It also shows the capability to move mass between free and occupied while recuperating unknown mass. Furthermore, a summary of the combination rule's desired properties both for the deep and geo \gls{ism} in the initialization phase are listed in Fig. \ref{tab:desired_comb_rule_properties}.
+In the center of Fig. \ref{fig:three_phased_approach}, the main properties of the initialization phase to alter the map's state up the the lower bound $\gls{sym:m_u_}$ are depicted. It also shows the capability to move mass between free and occupied while recuperating unknown mass. Furthermore, a summary of the combination rule's desired properties both for the deep and geo \gls{ism} in the initialization phase are listed in Fig. \ref{tab:desired_comb_rule_properties}.
 \begin{center}
 	\import{imgs/06_research_approach/method/}{three_phased_approach.pdf_tex}
 	\captionof{figure}{\label{fig:three_phased_approach}Illustration of the three phases of a grid cell's occupancy state. Beginning with the start phase where the evidential mass is set to be all unknown. Afterwards, in the initialization phase, the unknown mass can be shifted into the free and occupied class and be recuperated using the deep and geo \gls{ism}'s predictions. Finally, in the convergence phase, the geo \gls{ism}'s estimates are used to strictly reduce the unknown mass while the deep \gls{ism} is being disabled.}
 \end{center}
 \textbf{Convergence Phase}\\
-Once the unknown mass has fallen below the threshold $\underline{m}_u$, the convergence phase starts. Here, the geo \gls{ism} should still be integrated into the map while the influence of the deep \gls{ism} should be disabled, guaranteeing a convergence towards the geo \gls{ism}. The combination rule for the deep \gls{ism} as defined for the initialization phase already makes sure that the influence of the deep \gls{ism} is being disabled in the convergence phase. 
+Once the unknown mass has fallen below the threshold $\gls{sym:m_u_}$, the convergence phase starts. Here, the geo \gls{ism} should still be integrated into the map while the influence of the deep \gls{ism} should be disabled, guaranteeing a convergence towards the geo \gls{ism}. The combination rule for the deep \gls{ism} as defined for the initialization phase already makes sure that the influence of the deep \gls{ism} is being disabled in the convergence phase. 
 \\\\
-For the geo \gls{ism}, a combination rule has to be chosen that integrates the estimates in a way to strictly reduce the unknown mass but at the same time is capable to shift mass between the free and occupied class to, again, account for changes in the occupancy state or for correction purposes. To suffice these requirements, the usage of an adapted Yager's rule is proposed. The adaptation seeks to disable the capability to recuperate unknown mass to ensure that the unknown mass always remains below $\underline{m}_{u}$. To do so, it is proposed to assign the conflict $K$ in equal portions to the free and occupied mass instead of assigning it to the unknown mass. This can be written as follows
+For the geo \gls{ism}, a combination rule has to be chosen that integrates the estimates in a way to strictly reduce the unknown mass but at the same time is capable to shift mass between the free and occupied class to, again, account for changes in the occupancy state or for correction purposes. To suffice these requirements, the usage of an adapted Yager's rule is proposed. The adaptation seeks to disable the capability to recuperate unknown mass to ensure that the unknown mass always remains below $\gls{sym:m_u_}$. To do so, it is proposed to assign the conflict \gls{sym:ev_conf} in equal portions to the free and occupied mass instead of assigning it to the unknown mass. This can be written as follows
 \begin{align}
 	\label{eq:yaders_rule}
-	\vec{m}_1 \oplus_B \vec{m}_2 &=  
+	\gls{sym:vec_m}_1 \gls{sym:yader_comb} \gls{sym:vec_m}_2 &=  
 	\begin{bmatrix} 
-		m_{f1}m_{f2} + m_{f1}m_{u2} + m_{u1}m_{f2} + K/2\\
-		m_{o1}m_{o2} + m_{o1}m_{u2} + m_{u1}m_{o2} + K/2\\
-		m_{u1}m_{u2}\\
+		\gls{sym:m_f}_{1}\gls{sym:m_f}_{2} + \gls{sym:m_f}_{1}\gls{sym:m_u}_{2} + \gls{sym:m_u}_{1}\gls{sym:m_f}_{2} + \gls{sym:ev_conf}/2\\
+		\gls{sym:m_o}_{1}\gls{sym:m_o}_{2} + \gls{sym:m_o}_{1}\gls{sym:m_u}_{2} + \gls{sym:m_u}_{1}\gls{sym:m_o}_{2} + \gls{sym:ev_conf}/2\\
+		\gls{sym:m_u}_{1}\gls{sym:m_u}_{2}\\
 	\end{bmatrix}
 \end{align}
 This combination rule shall be referred to as \textbf{YaDer}'s rule since it combines the properties of Yager's rule to model conflicting mass and of Dempster's rule to strictly reduce unknown mass. 
@@ -658,19 +660,19 @@ An overview of the desired combination rule properties in each phase is provided
 		& geo \gls{ism}
 		& $\bullet$ fully converge & $\bullet$ fully converge \\
 		&
-		& $\bullet$ strictly reduce $m_u$& $\bullet$ recuperate $m_u$ \\
+		& $\bullet$ strictly reduce $\gls{sym:m_u}$& $\bullet$ recuperate $\gls{sym:m_u}$ \\
 \cline{2-4}
 		& deep \gls{ism}
-		& $\bullet$ converge up to $\Delta m_u = 0$ & $\bullet$ converge up to $\Delta m_u = 0$ \\
+		& $\bullet$ converge up to $\Delta \gls{sym:m_u} = 0$ & $\bullet$ converge up to $\Delta \gls{sym:m_u} = 0$ \\
 		&
-		& $\bullet$ strictly reduce $m_u$ & $\bullet$ recuperate $m_u$ \\
+		& $\bullet$ strictly reduce $\gls{sym:m_u}$ & $\bullet$ recuperate $\gls{sym:m_u}$ \\
 \hline
 \hline
 	\parbox[t]{5mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{converg.}}} 
 	& geo \gls{ism}
 	& $\bullet$ fully converge & $\bullet$ fully converge \\
 	& 
-	& $\bullet$ strictly reduce $m_u$ & $\bullet$ strictly reduce $m_u$ \\
+	& $\bullet$ strictly reduce $\gls{sym:m_u}$ & $\bullet$ strictly reduce $\gls{sym:m_u}$ \\
 \cline{2-4}
 	&deep \gls{ism}
 	& $\bullet$ unchanged & $\bullet$ unchanged \\
