@@ -39,7 +39,7 @@ In order to obtain lidar occupancy maps closer resembling the ground-truth occup
 \subsection{Experimental Results for geo ILM and IRM Parameter Tuning}
 \label{subsec:exp_results_params_ilm_irm}
 In order to parameterize the temporary geo \gls{ilm}, the height-threshold will be defined first. Here, the parameter is increased up to the point where additional structure besides street is being removed. Using the so found height threshold of 0.6 cm, the free and occupied weight $\gls{sym:idm_mf}, \gls{sym:idm_mo}, \gls{sym:idm_md}$ and the opening angle $\gls{sym:open_angle}$ of Alg. \ref{alg:geo_ilm} are balanced in a way that 
-\begin{itemize}[noitemsep,nolistsep]
+\begin{itemize}[noitemsep,nolistsep,topsep=0pt]
 	\item remaining ground points and dynamic object artifacts are being filtered out
 	\item \gls{idm} rays don't cut through object boundaries
 	\item object boundaries are as dense as possible
@@ -135,22 +135,23 @@ Based on these results, $\gls{sym:conv_channel}_0 = 32$ is chosen and further us
 \end{tabular}
 \captionof{table}{\label{tab:networking_tuning_exp_setup}Hyperparameter setting for all network tuning experiments}
 \end{center}
-To fine tune the capacity of the network, $\gls{sym:conv_channel}_0$ is fixed to 32 while an upper limit on the number of filters is set to $\gls{sym:conv_channel}_{\max}=128$. Given this setup, \gls{sym:chan_red} is halved, starting from 0.5 up to the point where the performance collapses. It can be seen that this is the case after the second reduction, as shown by the blue dots in the left plot of Fig. \ref{fig:network_tuning}. The parameter settings for the two experiments labeled "7" and "8" are shown in the lower part of \ref{tab:networking_tuning_exp_setup}. The experimental results show that a reduction of \gls{sym:chan_red} from 0.5 to 0.25 brings the network about $6\%$ closer to the goal of 100 Hz while roughly keeping its performance. Also, the interpolation capability seems to deteriorate only after the second reduction step, as shown qualitatively in Fig. \ref{fig:gt_exp_qual_results}. At the same time, the first reduction more than halves the training time.
+To fine tune the capacity of the network, $\gls{sym:conv_channel}_0$ is fixed to 32 while an upper limit on the number of filters is set to $\gls{sym:conv_channel}_{\max}=128$. Given this setup, \gls{sym:chan_red} is halved, starting from 0.5 up to the point where the performance collapses. It can be seen that this is the case after the second reduction, as shown by the blue dots in the left plot of Fig. \ref{fig:network_tuning}. The parameter settings for the two experiments labeled "7" and "8" are shown in the lower part of \ref{tab:networking_tuning_exp_setup}. 
 \begin{center}
 	\import{imgs/07_deep_ism_exp/choice_of_gt}{qualitative_comparison.pdf_tex}
 	\captionof{figure}{\label{fig:gt_exp_qual_results}Qualitative results of the different models trained in the experiments as numbered in Fig. \ref{tab:networking_tuning_exp_setup} with the radar input \gls{r}$_{1}$ and the ground-truth \gls{gt}.}
 \end{center}
 \begin{center}
-\begin{minipage}{.5\textwidth}
-	\import{imgs/07_deep_ism_exp/network_tuning}{mIoU_network_tuning.tex}
-\end{minipage}
-%
-\hfill
-\begin{minipage}{.47\textwidth}
-	\import{imgs/07_deep_ism_exp/network_tuning}{train_time_network_tuning.tex} 
-\end{minipage}
+	\begin{minipage}{.5\textwidth}
+		\import{imgs/07_deep_ism_exp/network_tuning}{mIoU_network_tuning.tex}
+	\end{minipage}
+	%
+	\hfill
+	\begin{minipage}{.47\textwidth}
+		\import{imgs/07_deep_ism_exp/network_tuning}{train_time_network_tuning.tex} 
+	\end{minipage}
 	\captionof{figure}{\label{fig:network_tuning}Experimental results of the network tuning experiments. On the left-hand-side, the mIoU over the CPU inference time is shown while on the right-hand-side, the training time is plotted for each experiment. Here, orange marks the first part of the experiments in which the downsamlping rate \gls{sym:chan_red} is fixed and the initial amount of filters $\gls{sym:conv_channel}_0$ is searched. On the other hand, blue marks the second stage of the parameter search in which \gls{sym:chan_red} is finetuned.}
 \end{center}
+The experimental results show that a reduction of \gls{sym:chan_red} from 0.5 to 0.25 brings the network about $6\%$ closer to the goal of 100 Hz while roughly keeping its performance. Also, the interpolation capability seems to deteriorate only after the second reduction step, as shown qualitatively in Fig. \ref{fig:gt_exp_qual_results}. At the same time, the first reduction more than halves the training time.
 %======================================%
 %
 %======================================%
@@ -188,7 +189,7 @@ In contrast to SoftNet, DirNet is capable of shifting the aleatoric uncertainty 
 \\\\
 Finally, ShiftNet demonstrates even better capabilities in shifting the aleatoric uncertainties to the unknown class as compared to DirNet which is indicated by the highest unknown mass rates of all model variants. This uncertainty-awareness can again also be observed by higher unknown mass rates for the occluded as compared to the visible areas. The effect of shifted uncertainty is so dominant that it can even be seen in the qualitative results in Fig. \ref{fig:irm_qual_comp} by unknown space (blue) around all occupied boundaries. Regarding the occupied and free space, ShiftNet provides the least false rates and best free space predictions for all classes compared to all learned \gls{irm}s. However, it lacks the capability to predict occupied areas with high certainty.
 \\\\
-For the \gls{r}$_{20}$ scores, an expected overall improvement of all models can be observed. Here, the free space predictions of SoftNet even improve to the point of surpassing the other variants. With regards to aleatoric uncertainty, the unknown mass portions for the DirNet and ShiftNet decrease compared to the \gls{r}$_1$ scores as is desired in the light of more input information. Additionally, similar to the \gls{r}$_1$ scores, an increase in unknown mass can be observed in occluded as compared to visible areas. Another notable change is the improvement in occupied predictions given by ShiftNet, now surpassing SoftNet and almost closing the gap to DirNet. The geo IRM is also capable of improving the dynamic true rate by about seven times and the occupied rate by about 13 times while reducing the respective overall false rates. This is as expected since it can leverage the information of 20 times as many timesteps. Also, the free space true rate reaches about 50$\%$ while only minimally increasing the false rates. These general improvements over the \gls{r}$_1$-based predictions are also clearly visible in Fig. \ref{fig:irm_qual_comp}.
+For the \gls{r}$_{20}$ scores, an expected overall improvement of all models can be observed. Here, the free space predictions of SoftNet even improve to the point of surpassing the other variants. With regards to aleatoric uncertainty, the unknown mass portions for the DirNet and ShiftNet decrease compared to the \gls{r}$_1$ scores as is desired in the light of more input information. Additionally, similar to the \gls{r}$_1$ scores, an increase in unknown mass can be observed in occluded as compared to visible areas. Another notable change is the improvement in occupied predictions given by ShiftNet, now surpassing SoftNet and almost closing the gap to DirNet. 
 %==========================%
 % R01
 %==========================%
@@ -203,22 +204,22 @@ For the \gls{r}$_{20}$ scores, an expected overall improvement of all models can
 		&$p(\tilde{k}|o)$ & \textcolor{myred}{0.2} & \textcolor{myred}{18.4} & \textcolor{mygreen}{0.8} & 80.5 & \textcolor{myred}{0.3} & \textcolor{myred}{30.6} & \textcolor{mygreen}{0.9} & 68.1 & \textcolor{myred}{0.2} & \textcolor{myred}{14.5} & \textcolor{mygreen}{0.8} & 84.4\\
 		&$p(\tilde{k}|u)$ & 0.0 & 5.4 & 0.1 & 94.4 & - & - & - & - & 0.0 & 5.4 & 0.1 & 94.5\\
 		\hline
-%		\multicolumn{13}{c}{}\\
-%		\hline
+		%		\multicolumn{13}{c}{}\\
+		%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{SoftNet}}}&$p(k|d)$ & \textcolor{mygreen}{49.7} & \textcolor{myred}{16.7} & \textcolor{myred}{10.5} & 23.2 & \textcolor{mygreen}{52.5} & \textcolor{myred}{18.8} & \textcolor{myred}{11.5} & 17.2 & \textcolor{mygreen}{48.8} & \textcolor{myred}{15.8} & \textcolor{myred}{9.6} & 25.8\\
 		&$p(\tilde{k}|f)$ & \textcolor{myred}{35.8} & \textcolor{mygreen}{37.0} & \textcolor{myred}{3.3} & 24.0 & \textcolor{myred}{36.2} & \textcolor{mygreen}{42.6} & \textcolor{myred}{3.1} & 18.2 & \textcolor{myred}{35.5} & \textcolor{mygreen}{21.5} & \textcolor{myred}{4.0} & 39.1\\
 		&$p(\tilde{k}|o)$ & \textcolor{myred}{37.8} & \textcolor{myred}{9.6} & \textcolor{mygreen}{17.2} & 35.5 & \textcolor{myred}{43.7} & \textcolor{myred}{11.5} & \textcolor{mygreen}{20.0} & 24.8 & \textcolor{myred}{35.9} & \textcolor{myred}{9.0} & \textcolor{mygreen}{16.2} & 38.9\\
 		&$p(\tilde{k}|u)$ & 25.7 & 8.7 & 4.5 & 61.0 & - & - & - & - & 25.7 & 8.7 & 4.5 & 61.1\\
 		\hline
-%		\multicolumn{13}{c}{}\\
-%		\hline
+		%		\multicolumn{13}{c}{}\\
+		%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{DirNet}}}&$p(k|d)$ & \textcolor{mygreen}{31.0} & \textcolor{myred}{21.9} & \textcolor{myred}{12.8} & 34.3 & \textcolor{mygreen}{35.4} & \textcolor{myred}{27.4} & \textcolor{myred}{13.0} & 24.2 & \textcolor{mygreen}{29.0} & \textcolor{myred}{19.9} & \textcolor{myred}{12.3} & 38.7\\
 		&$p(\tilde{k}|f)$ & \textcolor{myred}{13.6} & \textcolor{mygreen}{47.5} & \textcolor{myred}{5.6} & 33.3 & \textcolor{myred}{15.5} & \textcolor{mygreen}{56.8} & \textcolor{myred}{4.6} & 23.2 & \textcolor{myred}{9.0} & \textcolor{mygreen}{22.3} & \textcolor{myred}{8.4} & 60.3\\
 		&$p(\tilde{k}|o)$ & \textcolor{myred}{13.5} & \textcolor{myred}{9.7} & \textcolor{mygreen}{20.7} & 56.1 & \textcolor{myred}{22.4} & \textcolor{myred}{14.3} & \textcolor{mygreen}{22.9} & 40.3 & \textcolor{myred}{10.8} & \textcolor{myred}{8.4} & \textcolor{mygreen}{19.9} & 60.9\\
 		&$p(\tilde{k}|u)$ & 2.7 & 3.7 & 12.0 & 81.6 & - & - & - & - & 2.7 & 3.6 & 12.0 & 81.7\\
 		\hline
-%		\multicolumn{13}{c}{}\\
-%		\hline
+		%		\multicolumn{13}{c}{}\\
+		%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{ShiftNet}}}&$p(k|d)$ & \textcolor{mygreen}{31.8} & \textcolor{myred}{19.0} & \textcolor{myred}{7.2} & 41.9 & \textcolor{mygreen}{30.7} & \textcolor{myred}{23.3} & \textcolor{myred}{7.5} & 38.6 & \textcolor{mygreen}{33.3} & \textcolor{myred}{17.2} & \textcolor{myred}{6.9} & 42.7\\
 		&$p(\tilde{k}|f)$ & \textcolor{myred}{7.4} & \textcolor{mygreen}{48.6} & \textcolor{myred}{2.0} & 42.0 & \textcolor{myred}{7.5} & \textcolor{mygreen}{56.0} & \textcolor{myred}{1.6} & 34.9 & \textcolor{myred}{7.6} & \textcolor{mygreen}{28.1} & \textcolor{myred}{3.2} & 61.1\\
 		&$p(\tilde{k}|o)$ & \textcolor{myred}{8.4} & \textcolor{myred}{15.1} & \textcolor{mygreen}{13.7} & 62.8 & \textcolor{myred}{10.0} & \textcolor{myred}{19.2} & \textcolor{mygreen}{14.9} & 55.9 & \textcolor{myred}{7.9} & \textcolor{myred}{13.9} & \textcolor{mygreen}{13.4} & 64.8\\
@@ -226,9 +227,9 @@ For the \gls{r}$_{20}$ scores, an expected overall improvement of all models can
 		\hline
 		\multicolumn{2}{c|}{\textbf{\gls{r}$_1$ Scores}} & \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}\\
 		\multicolumn{13}{c}{}\\
-%==========================%
-% R20
-%==========================%
+		%==========================%
+		% R20
+		%==========================%
 		&$\tilde{k}$ & $\tilde{d}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{d}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{d}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$\\
 		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{geo IRM}}}&$p(k|d)$ & \textcolor{mygreen}{7.1} & \textcolor{myred}{24.5} & \textcolor{myred}{6.8} & 61.4 & \textcolor{mygreen}{4.5} & \textcolor{myred}{43.7} & \textcolor{myred}{7.5} & 44.1 & \textcolor{mygreen}{8.2} & \textcolor{myred}{15.9} & \textcolor{myred}{6.5} & 69.3\\
@@ -241,15 +242,15 @@ For the \gls{r}$_{20}$ scores, an expected overall improvement of all models can
 		&$p(\tilde{k}|o)$ & \textcolor{myred}{36.2} & \textcolor{myred}{12.9} & \textcolor{mygreen}{22.8} & 28.1 & \textcolor{myred}{43.2} & \textcolor{myred}{15.3} & \textcolor{mygreen}{25.8} & 15.6 & \textcolor{myred}{33.9} & \textcolor{myred}{12.2} & \textcolor{mygreen}{21.9} & 32.0\\
 		&$p(\tilde{k}|u)$ & 19.2 & 9.9 & 4.6 & 66.3 & - & - & - & - & 19.1 & 9.8 & 4.6 & 66.5\\
 		\hline
-%		\multicolumn{13}{c}{}\\
-%		\hline
+		%		\multicolumn{13}{c}{}\\
+		%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{DirNet}}}&$p(k|d)$ & \textcolor{mygreen}{37.1} & \textcolor{myred}{22.7} & \textcolor{myred}{17.4} & 22.8 & \textcolor{mygreen}{39.6} & \textcolor{myred}{29.2} & \textcolor{myred}{18.3} & 12.8 & \textcolor{mygreen}{36.2} & \textcolor{myred}{20.2} & \textcolor{myred}{16.5} & 27.1\\
 		&$p(\tilde{k}|f)$ & \textcolor{myred}{10.9} & \textcolor{mygreen}{61.5} & \textcolor{myred}{5.1} & 22.4 & \textcolor{myred}{11.3} & \textcolor{mygreen}{71.4} & \textcolor{myred}{3.9} & 13.5 & \textcolor{myred}{10.6} & \textcolor{mygreen}{35.4} & \textcolor{myred}{8.3} & 45.7\\
 		&$p(\tilde{k}|o)$ & \textcolor{myred}{15.2} & \textcolor{myred}{10.5} & \textcolor{mygreen}{31.8} & 42.6 & \textcolor{myred}{25.0} & \textcolor{myred}{15.1} & \textcolor{mygreen}{35.2} & 24.6 & \textcolor{myred}{12.0} & \textcolor{myred}{9.1} & \textcolor{mygreen}{30.7} & 48.2\\
 		&$p(\tilde{k}|u)$ & 3.0 & 5.4 & 12.7 & 78.9 & - & - & - & - & 3.0 & 5.4 & 12.6 & 79.0\\
 		\hline
-%		\multicolumn{13}{c}{}\\
-%		\hline
+		%		\multicolumn{13}{c}{}\\
+		%		\hline
 		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{ShiftNet}}}&$p(k|d)$ & \textcolor{mygreen}{38.5} & \textcolor{myred}{18.1} & \textcolor{myred}{12.7} & 30.7 & \textcolor{mygreen}{35.3} & \textcolor{myred}{22.9} & \textcolor{myred}{13.7} & 28.1 & \textcolor{mygreen}{40.9} & \textcolor{myred}{15.9} & \textcolor{myred}{12.0} & 31.2\\
 		&$p(\tilde{k}|f)$ & \textcolor{myred}{4.7} & \textcolor{mygreen}{62.9} & \textcolor{myred}{3.2} & 29.2 & \textcolor{myred}{4.3} & \textcolor{mygreen}{71.1} & \textcolor{myred}{2.4} & 22.1 & \textcolor{myred}{6.1} & \textcolor{mygreen}{40.8} & \textcolor{myred}{5.3} & 47.8\\
 		&$p(\tilde{k}|o)$ & \textcolor{myred}{6.0} & \textcolor{myred}{13.6} & \textcolor{mygreen}{28.5} & 51.8 & \textcolor{myred}{7.4} & \textcolor{myred}{17.6} & \textcolor{mygreen}{30.9} & 44.1 & \textcolor{myred}{5.7} & \textcolor{myred}{12.4} & \textcolor{mygreen}{27.8} & 54.1\\
@@ -259,8 +260,10 @@ For the \gls{r}$_{20}$ scores, an expected overall improvement of all models can
 	\end{tabular}
 	\captionof{figure}{\label{tab:deep_ism_r20_results}Results of deep \gls{ism} variants trained on \gls{r}$_1$ and \gls{r}$_{20}$ images for visible, occluded and overall areas.  For a detailed explanation of the table format kindly refer to Section \ref{subsec:confusion_matrix}.}
 \end{center}
+The geo \gls{irm} is also capable of improving the dynamic true rate by about seven times and the occupied rate by about 13 times while reducing the respective overall false rates. This is as expected since it can leverage the information of 20 times as many timesteps. Also, the free space true rate reaches about 50$\%$ while only minimally increasing the false rates. These general improvements over the \gls{r}$_1$-based predictions are also clearly visible in Fig. \ref{fig:irm_qual_comp}.
 \begin{center}
-	\import{imgs/07_deep_ism_exp/aleat_uncert}{irm_qual_comp.pdf_tex}
+	\resizebox{\textwidth}{!}{
+	\import{imgs/07_deep_ism_exp/aleat_uncert}{irm_qual_comp.pdf_tex}}
 	\captionof{figure}{\label{fig:irm_qual_comp}Qualitative results of the different compared \gls{irm}s (column-wise) for three validation scenes showing the predictions based on \gls{r}$_1$ and \gls{r}$_{20}$ in the respective rows with the corresponding label. For a detailed explanation of the abbreviations and color format kindly refer to Section \ref{subsec:def_of_targets_n_inputs}.} %Scene A illustrates the models capabilities to predict moving objects of any shape (e.g. two cars, one bus and a cyclist). Additionally, the lower box encloses an example of small distinct objects being situated close to each other. Scene B shows an effect of a bias in the radar data (marked in the box). Most of the time, moving objects only occlude parts of the scene temporarily leading to detections of the occluded areas at other times (e.g. upper box in scene A). Thus, if a wall is erroneously detected as moving and no further detections are provided behind it, the models predicts the area behind the wall as free. Finally, scene C illustrates the capacity of the methods to predict the occupancy state in a general parking space, which is one of the main application scenarios of the proposed system.}
 \end{center}
 %======================================%
@@ -290,27 +293,26 @@ The first two variants, namely the radar \gls{bev} projection of a single timest
 %
 %======================================%
 \subsection{Experimental Results}
-First, the scores shown in Fig. \ref{tab:deep_ism_r20_results} for the inputs \gls{r}$_1$ and \gls{r}$_{20}$ are compared with the scores for \gls{r}$_{20|1}$, shown in Fig. \ref{tab:deep_ism_r20_1_results}. Here, deep \gls{ism}s trained on \gls{r}$_{20}$ show an overall increased performance for the dynamic class over \gls{r}$_{20|1}$. This shows that the encoding of dynamic detections with decay is beneficial over only including the latest dynamic detection for moving object prediction. Qualitatively, the improvement of the estimated dynamic object shapes is clearly visible in the white box in scene A and the left white box in scene B of Fig. \ref{fig:qual_comp_radar_encoding}. More specifically, it is shown that the deep \gls{ism} is capable of producing reasonable shape, position and orientation predictions of the dynamic objects based on a single detection point and the scene layout for \gls{r}$_1$ and \gls{r}$_{20|1}$ compared to the cloud of dynamic detections for \gls{r}$_{20}$. Therefore, the improvement for dynamic objects is to be expected. Nevertheless, accumulation of dynamic detections in \gls{r}$_{20}$ also leads to failure cases. Here, the right white box in scene B of Fig. \ref{fig:qual_comp_radar_encoding} shows a predicted dynamic object for \gls{r}$_{20}$ which is already outside the \gls{ism}'s \gls{fov}. This is caused by the trailing dynamic predictions which does not occur for the other deep \gls{irm} variants.
+First, the scores shown in Fig. \ref{tab:deep_ism_r20_results} for the inputs \gls{r}$_1$ and \gls{r}$_{20}$ are compared with the scores for \gls{r}$_{20|1}$, shown in Fig. \ref{tab:deep_ism_r20_1_results}. Here, deep \gls{ism}s trained on \gls{r}$_{20}$ show an overall increased performance for the dynamic class over \gls{r}$_{20|1}$. This shows that the encoding of dynamic detections with decay is beneficial over only including the latest dynamic detection for moving object prediction. Qualitatively, the improvement of the estimated dynamic object shapes is clearly visible in the white box in scene A and the left white box in scene B of Fig. \ref{fig:qual_comp_radar_encoding}. More specifically, it is shown that the deep \gls{ism} is capable of producing reasonable shape, position and orientation predictions of the dynamic objects based on a single detection point and the scene layout for \gls{r}$_1$ and \gls{r}$_{20|1}$ compared to the cloud of dynamic detections for \gls{r}$_{20}$. Therefore, the improvement for dynamic objects is to be expected. Nevertheless, accumulation of dynamic detections in \gls{r}$_{20}$ also leads to failure cases. 
 \begin{center}
 	\footnotesize
 	\begin{tabular}{c|c|cccc|cccc|cccc}
-	&$\tilde{k}$ & $\tilde{d}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{d}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{d}$ & $\tilde{f}$ & $\tilde{o}$ \\
-	\hline
-	\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{ShiftNet}}}&$p(k|d)$ & \textcolor{mygreen}{29.2} & \textcolor{myred}{21.7} & \textcolor{myred}{14.4} & 34.6 & \textcolor{mygreen}{27.8} & \textcolor{myred}{26.3} & \textcolor{myred}{15.4} & 30.6 & \textcolor{mygreen}{31.0} & \textcolor{myred}{20.3} & \textcolor{myred}{13.2} & 35.5\\
-	&$p(\tilde{k}|f)$ & \textcolor{myred}{4.7} & \textcolor{mygreen}{63.0} & \textcolor{myred}{3.3} & 29.0 & \textcolor{myred}{4.7} & \textcolor{mygreen}{71.9} & \textcolor{myred}{2.5} & 20.9 & \textcolor{myred}{5.0} & \textcolor{mygreen}{38.8} & \textcolor{myred}{5.7} & 50.5\\
-	&$p(\tilde{k}|o)$ & \textcolor{myred}{4.5} & \textcolor{myred}{14.1} & \textcolor{mygreen}{30.0} & 51.4 & \textcolor{myred}{5.7} & \textcolor{myred}{18.4} & \textcolor{mygreen}{32.4} & 43.5 & \textcolor{myred}{4.2} & \textcolor{myred}{12.8} & \textcolor{mygreen}{29.3} & 53.6\\
-	&$p(\tilde{k}|u)$ & 2.1 & 8.2 & 7.7 & 82.0 & - & - & - & - & 2.1 & 8.1 & 7.7 & 82.1\\
-	\hline
-	\multicolumn{2}{c|}{\gls{r}$_{20|1}$ Scores}& \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
-\end{tabular}
-\captionof{table}{\label{tab:deep_ism_r20_1_results}Normed confusion matrix evaluated on ShiftNet model which was trained on \gls{r}$_{20|1}$ inputs. For a detailed explanation of the table format kindly refer to Section \ref{subsec:confusion_matrix}.}
+		&$\tilde{k}$ & $\tilde{d}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{d}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{d}$ & $\tilde{f}$ & $\tilde{o}$ \\
+		\hline
+		\parbox[t]{2mm}{\multirow{4}{*}{\rotatebox[origin=c]{90}{ShiftNet}}}&$p(k|d)$ & \textcolor{mygreen}{29.2} & \textcolor{myred}{21.7} & \textcolor{myred}{14.4} & 34.6 & \textcolor{mygreen}{27.8} & \textcolor{myred}{26.3} & \textcolor{myred}{15.4} & 30.6 & \textcolor{mygreen}{31.0} & \textcolor{myred}{20.3} & \textcolor{myred}{13.2} & 35.5\\
+		&$p(\tilde{k}|f)$ & \textcolor{myred}{4.7} & \textcolor{mygreen}{63.0} & \textcolor{myred}{3.3} & 29.0 & \textcolor{myred}{4.7} & \textcolor{mygreen}{71.9} & \textcolor{myred}{2.5} & 20.9 & \textcolor{myred}{5.0} & \textcolor{mygreen}{38.8} & \textcolor{myred}{5.7} & 50.5\\
+		&$p(\tilde{k}|o)$ & \textcolor{myred}{4.5} & \textcolor{myred}{14.1} & \textcolor{mygreen}{30.0} & 51.4 & \textcolor{myred}{5.7} & \textcolor{myred}{18.4} & \textcolor{mygreen}{32.4} & 43.5 & \textcolor{myred}{4.2} & \textcolor{myred}{12.8} & \textcolor{mygreen}{29.3} & 53.6\\
+		&$p(\tilde{k}|u)$ & 2.1 & 8.2 & 7.7 & 82.0 & - & - & - & - & 2.1 & 8.1 & 7.7 & 82.1\\
+		\hline
+		\multicolumn{2}{c|}{\gls{r}$_{20|1}$ Scores}& \multicolumn{4}{c|}{overall} & \multicolumn{4}{c|}{visible} & \multicolumn{4}{c}{occluded}
+	\end{tabular}
+	\captionof{table}{\label{tab:deep_ism_r20_1_results}Normed confusion matrix evaluated on ShiftNet model which was trained on \gls{r}$_{20|1}$ inputs. For a detailed explanation of the table format kindly refer to Section \ref{subsec:confusion_matrix}.}
 \end{center}
-On the other hand, the overall occupied class performance is slightly but consistently improved by only taking the latest dynamic detection for \gls{r}$_{20|1}$. One potential cause can be seen in the lower white box in scene B of Fig \ref{fig:qual_comp_radar_encoding}. Here, static detections are missing in \gls{r}$_{20}$ which are present in \gls{r}$_{20|1}$. This is caused by some detections almost outside of the time horizon that have been falsely identified as dynamic and are being overlayed over the static predictions. Hence, the accumulation of dynamic detections can cause outliers to deteriorate static detections. Eventually, the free scores are mainly the same, showing that the changes only affect the occupied and dynamic class.
+Here, the right white box in scene B of Fig. \ref{fig:qual_comp_radar_encoding} shows a predicted dynamic object for \gls{r}$_{20}$ which is already outside the \gls{ism}'s \gls{fov}. This is caused by the trailing dynamic predictions which does not occur for the other deep \gls{irm} variants. On the other hand, the overall occupied class performance is slightly but consistently improved by only taking the latest dynamic detection for \gls{r}$_{20|1}$. One potential cause can be seen in the lower white box in scene B of Fig \ref{fig:qual_comp_radar_encoding}. Here, static detections are missing in \gls{r}$_{20}$ which are present in \gls{r}$_{20|1}$. This is caused by some detections almost outside of the time horizon that have been falsely identified as dynamic and are being overlayed over the static predictions. Hence, the accumulation of dynamic detections can cause outliers to deteriorate static detections. Eventually, the free scores are mainly the same, showing that the changes only affect the occupied and dynamic class. Finally, comparing \gls{r}$_{20|1}$ and \gls{r}$_{20}$ with \gls{r}$_1$ it can be seen that the problem of decrease in dynamic prediction performance, indicated by the quantitative results while the qualitative results seem to be sharper, remains.
 \begin{center}
 	\import{imgs/07_deep_ism_exp/radar_dyn_encoding}{qual_comp_radar_encoding.pdf_tex}
 	\captionof{figure}{\label{fig:qual_comp_radar_encoding}Qualitative comparison of ShiftNet predictions (middle) trained on radar inputs with three different dynamic detection encodings (bottom) shown for two scenes with the respective \gls{gt} (top). For a detailed explanation of the abbreviations and color format kindly refer to Section \ref{subsec:def_of_targets_n_inputs}.}
 \end{center}
-Finally, comparing \gls{r}$_{20|1}$ and \gls{r}$_{20}$ with \gls{r}$_1$ it can be seen that the problem of decrease in dynamic prediction performance, indicated by the quantitative results while the qualitative results seem to be sharper, remains.
 %======================================%
 %
 %======================================%
@@ -368,14 +370,13 @@ Based on the false rates, the deep \gls{ic_dm} slightly outperforms the other pu
 \captionof{table}{\label{tab:deep_icm_results}Normed confusion matrix evaluated on the ShiftNet model which was trained on \gls{c_rgb}, \gls{c_s}, \gls{c_d} and, finally, the fusion of \gls{c_d} and \gls{r}$_{20}$. For a detailed explanation of the table format kindly refer to Section \ref{subsec:confusion_matrix}.}
 \end{center}
 More specifically, the only prominent deficit of the deep \gls{ic_dm} lies in its increased false rates for $p(d|o)$ and $p(o|d)$. This shows that, compared to the other purely camera-based models, the deep \gls{ic_dm} is better in estimating whether there is an object present but not in which state (static or dynamic) it is. On the other hand, both homography-based \gls{ism}s struggle to distinguish free from dynamic space. But, the incorporation of semantic information leads to a jump in the true positive rate for dynamic objects. This is to be expected since the semantics provide class information which is directly linked to the possibility of a pixel being dynamic.
-\\\\ 
-Since the deep \gls{ic_dm} shows an on average increased performance over all classes, it will be used to further analyze the effect of fusion with radar. These experiments show that, compared with the deep \gls{ic_dm}, the additional radar information leads to less unknown mass and an overall improvement of positive and false rates throughout all classes. While this improvement is only marginal for the free class, the occupied true positive rate is increased by 12.8$\%$ while also reducing the false rates. The only worsening is observed with regards to false occupied predictions in the dynamic class. Here, the false rate is almost doubled compared to the other camera \gls{ism}s. Comparing to the deep IR$_{20}$M, the deep \gls{ic_dr_20m} provides better performance in each of the overall scores without exception.
-\\\\
-A qualitative example for the improvement of the deep \gls{ic_dr_20m} over the deep IR$_{20}$M can be seen in the white box in Scene B of Fig. \ref{fig:icm_qual_comp}. Here, the \gls{monodepth} provides the additional information that the wall proceeds around the corner, leading the model to assign the area behind the wall as unknown rather than free. Also, the shape of occupied space in the deep \gls{ic_dr_20m} predictions is highly improved over the purely camera-based \gls{ism} predictions.
 \begin{center}
 	\import{imgs/07_deep_ism_exp/aleat_uncert}{icm_qual_comp.pdf_tex}
 	\captionof{figure}{\label{fig:icm_qual_comp}Qualitative comparison of ShiftNets trained on different camera and radar inputs shown for three scenes with the respective \gls{gt}. For a detailed explanation of the abbreviations and color format kindly refer to Section \ref{subsec:def_of_targets_n_inputs}.}
 \end{center}
+Since the deep \gls{ic_dm} shows an on average increased performance over all classes, it will be used to further analyze the effect of fusion with radar. These experiments show that, compared with the deep \gls{ic_dm}, the additional radar information leads to less unknown mass and an overall improvement of positive and false rates throughout all classes. While this improvement is only marginal for the free class, the occupied true positive rate is increased by 12.8$\%$ while also reducing the false rates. The only worsening is observed with regards to false occupied predictions in the dynamic class. Here, the false rate is almost doubled compared to the other camera \gls{ism}s. Comparing to the deep IR$_{20}$M, the deep \gls{ic_dr_20m} provides better performance in each of the overall scores without exception.
+\\\\
+A qualitative example for the improvement of the deep \gls{ic_dr_20m} over the deep IR$_{20}$M can be seen in the white box in Scene B of Fig. \ref{fig:icm_qual_comp}. Here, the \gls{monodepth} provides the additional information that the wall proceeds around the corner, leading the model to assign the area behind the wall as unknown rather than free. Also, the shape of occupied space in the deep \gls{ic_dr_20m} predictions is highly improved over the purely camera-based \gls{ism} predictions.
 %======================================%
 %
 %======================================%
@@ -414,12 +415,12 @@ When comparing the deep with the geo \gls{ilm} scores in Fig. \ref{tab:ilm_quant
 \end{center}
 Finally, when looking at the deep \gls{ilr_20m}, the overall scores in Fig. \ref{tab:ilm_quant_comp} among all classes are improved as expected. For the occupied and free class, the deep \gls{ilr_20m} even manages to improve the true rate while at the same time decrease the false rates. These improvements can also be qualitatively verified looking at the white box in Fig. \ref{fig:ilm_qual_comp} scene B. Here, the area behind the wall both for the deep \gls{ilm} and \gls{irm} is partially or, in case of the radar, fully assigned as free. This error is corrected using the fused input.
 \\\\
-For the dynamic class, the false and true rates remain about the same which shows the lack of distinguishability for dynamic objects provided by the radar encoding. This can again be qualitatively verified looking at the upper white box in scene A. Here, the deep \gls{irm} formerly fully recognized bus as being dynamic while the deep \gls{ilm} interpreted it as occupied. In the fused result, the bus is only partially predicted as dynamic which, thus, worsened the prediction. However, the static car in the deep \gls{ilm} is assigned dynamic in the fusion and the dynamic cyclist's contour becomes more accurate in the fusion.
+For the dynamic class, the false and true rates remain about the same which shows the lack of distinguishability for dynamic objects provided by the radar encoding. This can again be qualitatively verified looking at the upper white box in scene A. 
 \begin{center}
-	\resizebox{\textwidth}{!}{
-	\import{imgs/07_deep_ism_exp/aleat_uncert}{ilm_qual_comp.pdf_tex}}
+		\import{imgs/07_deep_ism_exp/aleat_uncert}{ilm_qual_comp.pdf_tex}
 	\captionof{figure}{\label{fig:ilm_qual_comp}Qualitative comparison of ShiftNets trained on different lidar and radar inputs shown for three scenes with the respective \gls{gt} to the right. For a detailed explanation of the abbreviations and color format kindly refer to Section \ref{subsec:def_of_targets_n_inputs}.}
 \end{center}
+The deep \gls{irm} formerly fully recognized bus as being dynamic while the deep \gls{ilm} interpreted it as occupied. In the fused result, the bus is only partially predicted as dynamic which, thus, worsened the prediction. However, the static car in the deep \gls{ilm} is assigned dynamic in the fusion and the dynamic cyclist's contour becomes more accurate in the fusion.
 %======================================%
 %
 %======================================%

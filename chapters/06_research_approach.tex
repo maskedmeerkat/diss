@@ -132,7 +132,7 @@ Additionally, the majority of deep \gls{ism}s in the literature model the proble
 Regarding the encoding of radar detections for deep \gls{ism}s, the literature proposes to either encode the positions of a single timestep or use the temporally accumulated point cloud respectively projected into \gls{bev}. However, to the best of the author's knowledge, no investigation on how to encode the motion information of the detections has been conducted. Therefore, a rough investigation distinguishing three approaches shall be conducted which is formulated in the following research question\\
 \begin{requ}[RQ\ref{requ:radar_dyn_encoding}] \label{requ:radar_dyn_encoding}
 	To which extent, as measured by the normed confusion matrix (see Section \ref{subsec:confusion_matrix}), does the capability of the proposed deep \gls{ism}s to estimate the position of dynamic, free and occupied areas change choosing the input to be \gls{bev} projected radar detections...
-	\begin{itemize}[noitemsep,nolistsep]
+	\begin{itemize}[noitemsep,nolistsep,topsep=0pt]
 		\item ...of a single timestep encoding the dynamic detections with half intensity?
 		\item ...accumulated over a certain time horizon only encoding the dynamic detections with half intensity of the latest timestep?
 		\item ...accumulated over a certain time horizon linearly reducing the intensity of dynamic detections over time starting at half intensity?
@@ -355,7 +355,7 @@ Finally, the occupancy map patches used as targets to train the deep \gls{ism}s 
 %======================================%
 \subsection{Methodology to define the deep ISM Architecture}
 \label{subsec:method_deep_ism_architecture}
-Next, the network architecture has to be analyzed to suffice RQ\ref{requ:network_search}. To restrict the search space to a feasible subset, the architecture as illustrated in Fig. \ref{fig:std_unet} is considered. Here, the initial grid dimension is halved after each of the four encoder steps using strided $3\times 3$ convolutions while the number of channels is doubled up to a maximum. This is inverted in the decoder using bilinear upsampling. All convolution layers are structured as suggested in the literature (see Section \ref{subsec:architecture} and Fig. \ref{fig:conv_n_resnet_layer}). Whenever the grid's height and width remain constant, ResNet layers, as shown in Fig. \ref{fig:conv_n_resnet_layer}, are deployed to increase efficiency. The last three layers consist of two additional convolution layers without Dropout and the output layer, specifically designed for the applied loss. A detailed description of the hyperparameters and the choices made for the architecture search are elaborated in Section \ref{sec:choice_of_unet_arch}. The layer depth of the network is chosen in a way that a receptive field of 125 is reached which almost covers the whole image (for receptive field computation please refer to \eqref{eq:receptive_field}). This receptive field is chosen to enable the network to learn the principle of occluded areas based on the ego vehicle positioned in the center. It shall be mentioned that a receptive field covering half the input image size might already suffice for the task at hand. However, since the computation cost shrinks quadratically when downsampling the feature size, adding the additional layers to arrive at the full input image's receptive field is almost negligible. 
+Next, the network architecture has to be analyzed to suffice RQ\ref{requ:network_search}. To restrict the search space to a feasible subset, the architecture as illustrated in Fig. \ref{fig:std_unet} is considered. Here, the initial grid dimension is halved after each of the four encoder steps using strided $3\times 3$ convolutions while the number of channels is doubled up to a maximum. This is inverted in the decoder using bilinear upsampling. All convolution layers are structured as suggested in the literature (see Section \ref{subsec:architecture} and Fig. \ref{fig:conv_n_resnet_layer}). Whenever the grid's height and width remain constant, ResNet layers, as shown in Fig. \ref{fig:conv_n_resnet_layer}, are deployed to increase efficiency. The last three layers consist of two additional convolution layers without Dropout and the output layer, specifically designed for the applied loss. A detailed description of the hyperparameters and the choices made for the architecture search are elaborated in Section \ref{sec:choice_of_unet_arch}. The layer depth of the network is chosen in a way that a receptive field of 125 is reached which almost covers the whole image (for receptive field computation please refer to \eqref{eq:receptive_field}). This receptive field is chosen to enable the network to learn the principle of occluded areas based on the ego vehicle positioned in the center. 
 \begin{center}
 	\begin{minipage}{0.5\textwidth}
 		\centering
@@ -388,30 +388,30 @@ Next, the network architecture has to be analyzed to suffice RQ\ref{requ:network
 		\begin{tabular}{l|c|l}
 			layers & abbr. & dimension\\
 			\hline
-			$x$ & $e_{00}$ & $128 \times 128 \times C_\text{in}$\\	
-			res$_D(e_{00})$ & $e_{01}$ & $128 \times 128 \times C_0$\\
+			$x$ & $e_{00}$ & $128 \times 128 \times \gls{sym:conv_channel}_\text{in}$\\	
+			res$_D(e_{00})$ & $e_{01}$ & $128 \times 128 \times \gls{sym:conv_channel}_0$\\
 			&&                                                       \\
 			&&                                                       \\
 			\underline{conv}$_1(e_{01})$ & $s_0$ & $128 \times 128 \times 4$ \\
 			&&                                                   \\
 			\hline
-			conv$_2(e_{01})$ & $e_{10}$ & $64 \times 64 \times C_1$\\
-			res$_D(e_{10})$ & $e_{11}$ & $64 \times 64 \times C_1$ \\
+			conv$_2(e_{01})$ & $e_{10}$ & $64 \times 64 \times \gls{sym:conv_channel}_1$\\
+			res$_D(e_{10})$ & $e_{11}$ & $64 \times 64 \times \gls{sym:conv_channel}_1$ \\
 			\underline{conv}$_1(e_{11})$ & $s_1$ & $64 \times 64 \times 4$ \\
 			&&                                                 \\
 			\hline
-			conv$_2(e_{11})$ & $e_{20}$ & $32 \times 32 \times C_2$\\
-			res$_D(e_{20})$ & $e_{21}$ & $32 \times 32 \times C_2$ \\
+			conv$_2(e_{11})$ & $e_{20}$ & $32 \times 32 \times \gls{sym:conv_channel}_2$\\
+			res$_D(e_{20})$ & $e_{21}$ & $32 \times 32 \times \gls{sym:conv_channel}_2$ \\
 			\underline{conv}$_1(e_{21})$ & $s_2$ & $32 \times 32 \times 4$ \\
 			&&                                                 \\
 			\hline
-			conv$_2(e_{21})$ & $e_{30}$ & $16 \times 16 \times C_3$\\
-			res$_D(e_{30})$ & $e_{31}$ & $16 \times 16 \times C_3$ \\
+			conv$_2(e_{21})$ & $e_{30}$ & $16 \times 16 \times \gls{sym:conv_channel}_3$\\
+			res$_D(e_{30})$ & $e_{31}$ & $16 \times 16 \times \gls{sym:conv_channel}_3$ \\
 			\underline{conv}$_1(e_{31})$ & $s_3$ & $16 \times 16 \times 4$ \\
 			&&                                                 \\
 			\hline
-			conv$_2(e_{31})$ & $e_{40}$ & $8 \times 8 \times C_4$\\
-			res$_D(e_{40})$ & $e_{41}$ & $8 \times 8 \times C_4$ \\
+			conv$_2(e_{31})$ & $e_{40}$ & $8 \times 8 \times \gls{sym:conv_channel}_4$\\
+			res$_D(e_{40})$ & $e_{41}$ & $8 \times 8 \times \gls{sym:conv_channel}_4$ \\
 			\multicolumn{3}{c}{}             \\
 			\multicolumn{3}{c}{\textbf{Encoder Architecture}}             \\
 		\end{tabular}
@@ -451,36 +451,37 @@ Next, the network architecture has to be analyzed to suffice RQ\ref{requ:network
 		\begin{tabular}{l|c|l}
 			layers & abbr. & dimension\\
 			\hline
-			y$(d_{04})$ & $d_{05}$ & $128 \times 128 \times C_\text{out}$\\	
+			y$(d_{04})$ & $d_{05}$ & $128 \times 128 \times \gls{sym:conv_channel}_\text{out}$\\	
 			\underline{conv}$_1(d_{03})$ & $d_{04}$ & $128 \times 128 \times 4$\\
 			\underline{conv}$_1(d_{02})$ & $d_{03}$ & $128 \times 128 \times 4$\\
-			res$_D(d_{01})$ & $d_{02}$ & $128 \times 128 \times C_0$\\
-			cat$(d_{00},s_0)$ & $d_{01}$ & $128 \times 128 \times C_0$\\
-			up$_2(d_{12})$ & $d_{00}$ & $128 \times 128 \times C_0$\\
+			res$_D(d_{01})$ & $d_{02}$ & $128 \times 128 \times \gls{sym:conv_channel}_0$\\
+			cat$(d_{00},s_0)$ & $d_{01}$ & $128 \times 128 \times \gls{sym:conv_channel}_0$\\
+			up$_2(d_{12})$ & $d_{00}$ & $128 \times 128 \times \gls{sym:conv_channel}_0$\\
 			\hline
 			&&\\
-			res$_D(d_{11})$ & $d_{12}$ & $64 \times 64 \times C_1$\\
-			cat$(d_{10},s_1)$ & $d_{11}$ & $64 \times 64 \times C_1$\\
-			up$_2(d_{22})$ & $d_{10}$ & $64 \times 64 \times C_1$\\
+			res$_D(d_{11})$ & $d_{12}$ & $64 \times 64 \times \gls{sym:conv_channel}_1$\\
+			cat$(d_{10},s_1)$ & $d_{11}$ & $64 \times 64 \times \gls{sym:conv_channel}_1$\\
+			up$_2(d_{22})$ & $d_{10}$ & $64 \times 64 \times \gls{sym:conv_channel}_1$\\
 			\hline
 			&&\\
-			res$_D(d_{21})$ & $d_{22}$ & $32 \times 32 \times C_2$\\
-			cat$(d_{20},s_2)$ & $d_{21}$ & $32 \times 32 \times C_2$\\
-			up$(d_{32})$ & $d_{20}$ & $32 \times 32 \times C_2$\\
+			res$_D(d_{21})$ & $d_{22}$ & $32 \times 32 \times \gls{sym:conv_channel}_2$\\
+			cat$(d_{20},s_2)$ & $d_{21}$ & $32 \times 32 \times \gls{sym:conv_channel}_2$\\
+			up$(d_{32})$ & $d_{20}$ & $32 \times 32 \times \gls{sym:conv_channel}_2$\\
 			\hline
 			&&\\
-			res$_D(d_{31})$ & $d_{32}$ & $16 \times 16 \times C_3$\\
-			cat$(d_{30},s_3)$ & $d_{31}$ & $16 \times 16 \times C_3$\\
-			up$_2(d_{40})$ & $d_{30}$ & $16 \times 16 \times C_3$\\
+			res$_D(d_{31})$ & $d_{32}$ & $16 \times 16 \times \gls{sym:conv_channel}_3$\\
+			cat$(d_{30},s_3)$ & $d_{31}$ & $16 \times 16 \times \gls{sym:conv_channel}_3$\\
+			up$_2(d_{40})$ & $d_{30}$ & $16 \times 16 \times \gls{sym:conv_channel}_3$\\
 			\hline
 			&&\\
-			res$_D(e_{41})$ & $d_{40}$ & $8 \times 8 \times C_4$\\
+			res$_D(e_{41})$ & $d_{40}$ & $8 \times 8 \times \gls{sym:conv_channel}_4$\\
 			\multicolumn{3}{c}{}             \\
 			\multicolumn{3}{c}{\textbf{Decoder Architecture}} \\
 		\end{tabular}
 	\end{minipage}
-\captionof{figure}{\label{fig:std_unet}Illustration of the UNet variant's architecture used in this work. The skip connections between encoder and decoder are realized with a convolution, compressing the amount of features to 4 channels and, afterwards, concatenating them with the features of a subsequent layer. Convolution and ResNet layers are structured as shown in Fig. \ref{fig:conv_n_resnet_layer}. The skip connection in the ResNet layer is realized by adding the input to the ResNet layers output before applying the non-linearity.}
+	\captionof{figure}{\label{fig:std_unet}Illustration of the UNet variant's architecture used in this work. The skip connections between encoder and decoder are realized with a convolution, compressing the amount of features to 4 channels and, afterwards, concatenating them with the features of a subsequent layer. Convolution and ResNet layers are structured as shown in Fig. \ref{fig:conv_n_resnet_layer}. The skip connection in the ResNet layer is realized by adding the input to the ResNet layers output before applying the non-linearity.}
 \end{center}
+It shall be mentioned that a receptive field covering half the input image size might already suffice for the task at hand. However, since the computation cost shrinks quadratically when downsampling the feature size, adding the additional layers to arrive at the full input image's receptive field is almost negligible. 
 %======================================%
 %
 %======================================%
@@ -528,14 +529,15 @@ To account for the class imbalance in all of the above mentioned deep \gls{ism} 
 \subsection{Metric to evaluate the ISM Variants}
 \label{subsec:confusion_matrix}
 To quantify the \gls{ism} and occupancy mapping results, a confusion matrix variant is deployed since it provides a more detailed means of analysis as compared to the mIoU score. The confusion matrix variant is constructed in the following steps  
-\begin{enumerate}[noitemsep,nolistsep]
+\begin{enumerate}[noitemsep,nolistsep,topsep=0pt]
 	\item obtain the current lidar occupancy map patch together with the current model's estimates
 	\item define the ground-truth pixels by assigning each pixel to the class with the highest mass in the lidar occupancy map patch 
 	\item for each ground-truth pixels belonging to a class, sum up how much weight has been estimated to belong to each class (e.g. for all ground-truth occupied pixels, how much mass is estimated to be free, how much occupied, ...)
 	\item divide the sum of estimated mass for each class by the amount of ground-truth pixels for the current class 
 	\item to cope with the amount of pixels per class over the whole dataset, the above is done on an image basis and averaged over all test samples
-	\item[$\rightarrow$] this leads to the probability $p(\tilde{\gls{sym:m_k_o}}|\gls{sym:target}_{\gls{sym:m_k_o}})$ to estimate class $k$ for a pixel given the pixel belongs to the actual class $k$ with $k \in [d, f, o, u]$. This probability will be abbreviated as $p(\tilde{k}|k)$. 
 \end{enumerate}
+This leads to the probability $p(\tilde{\gls{sym:m_k_o}}|\gls{sym:target}_{\gls{sym:m_k_o}})$ to estimate class $k$ for a pixel given the pixel belongs to the actual class $k$ with $k \in [d, f, o, u]$. This probability will be abbreviated as $p(\tilde{k}|k)$.
+\\\\ 
 Since all of the investigated models behave severely different in the visible and occluded area, it is necessary to provide independent metrics for these two cases. Thus, the metrics are additionally computed for visible and occluded areas, while the occluded area is defined as the pixels where the geo \gls{ilm}'s unknown mass surpasses the other class' masses. Thus, only a stochastically insignificant portion of unknown labels remains in the visible area, which is why these scores are excluded from consideration.
 \\\\
 To help the interpretation of the confusion matrix, values are marked in green to show true positives while red shows the percentages of false predictions. The unknown class predictions, marked in black, are treated as the safe state and, as such, do not add to the false rates. Additionally, since the network is permitted to extrapolate the state in unknown areas, all predictions deviating from the unknown class given unknown labels should also not be treated as false.

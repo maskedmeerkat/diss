@@ -143,7 +143,7 @@ where \gls{sym:g_p} scales the \gls{idm} linearly dependent on the received sign
 In addition to the different noise influences, most point clouds of nowadays automotive radar used in production are highly sparse (e.g. 64 detections per radar for the sensors used in this work). The sparsity in combination with the fact that the signals can contain outliers and detections behind objections due to multi-path reflections can lead to casting \gls{idm} rays which partially cut through actually occupied areas, as shown in Fig. \ref{fig:geo_irm_drawn} b). To counteract this effect, Weber et al. \cite{werber2015automotive} propose to, additionally, reduce the influence of detections linearly dependent on their range. Moreover, they ignore free space of rays which falls together with occupied areas of other rays. Even though this procedure not fully removes the problem of rays cutting through objects, it highly dampens it and prohibits foreground detections from being overwritten.
 \\\\
 Another problem connected to the detection sparsity is the lack of assigned free space, which is also illustrated in Fig. \ref{fig:geo_irm_drawn} b). To enrich the free space, Prophet et al. \cite{prophet2018adaptions} propose the following procedure
-\begin{enumerate}[noitemsep,nolistsep]
+\begin{enumerate}[noitemsep,nolistsep,topsep=0pt]
 	\item identify the detection $D_1$ which is closest to the boundary of the \gls{fov}
 	\item define the cone spanned between $D_1$ and the \gls{fov}'s border as free space
 	\item in case another radar provides detections falling inside the first's \gls{fov}, identify the detection $D_2$ closest to $D_1$ and restrict the free space cone's angle by $D_2$   
