@@ -28,9 +28,12 @@
 \input{utils/functions.tex}
 
 % Begin document
+\AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
 \begin{document}
-	\resizebox{\textwidth}{!}{\import{imgs}{titel_page.pdf_tex}}
-\newpage
+\newgeometry{top=0cm,bottom=0cm,right=0cm,left=0cm}
+\begin{center}
+	\resizebox{\paperwidth}{!}{\import{imgs}{titel_page.pdf_tex}}
+\end{center}
 % Add cover page
 \include{chapters/01_cover}
 \addblankpage

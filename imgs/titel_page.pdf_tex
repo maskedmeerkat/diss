@@ -1,4 +1,4 @@
-%% Creator: Inkscape 1.0.2-2 (e86c870879, 2021-01-15), www.inkscape.org
+%% Creator: Inkscape 1.2 (dc2aedaf03, 2022-05-15), www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
 %% Accompanies image file 'titel_page.pdf' (pdf, eps, ps)
 %%
@@ -54,5 +54,10 @@
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{titel_page.pdf}}%
+    \put(0.71869194,0.96827365){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\large Daniel Bauer\\\\\end{tabular}}}}%
+    \put(0.33580896,0.89954337){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\Large \textbf{Deep Inverse Sensor Models as Priors }\\\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{titel_page.pdf}}%
+    \put(0.39060051,0.86376162){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\Large \textbf{for evidential Occupancy Mapping}\end{tabular}}}}%
+    \put(0.16509764,1.01332971){\color[rgb]{0,0,0}\rotatebox{41.600701}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\Huge \textbf{\textcolor[rgb]{0.5,0.5,0.5}{Proposal}}\end{tabular}}}}}%
   \end{picture}%
 \endgroup%
