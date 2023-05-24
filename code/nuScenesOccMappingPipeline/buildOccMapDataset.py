@@ -684,6 +684,62 @@ def processSweepOfPcSensor(nusc, sample, scene, sweepNames, vPoses01, t01, senso
 
 
 # ===========================#
+def drawTrajectory(nusc, sample, scene, sweepNames, vPoses01, t01, sensorNames, trajMap, t_r2i, pDim, mDim):
+    # get the sensor poses
+    sPoses = []
+    for sensorName in sensorNames:
+        sPose, _, _ = getPoseAndTimeFromSample(nusc, scene, sample, sensorName)
+        sPoses.append(sPose)
+
+    # find all sweep names between current and next sample
+    sweepNames_ = []
+    for i, sensorName in enumerate(sensorNames):
+        sweepNames_.append(findAllSweepsBetweenTimesteps(t01[0], t01[-1], sweepNames[i], sensorName))
+
+    # find sensor with least sweeps
+    iSensMin = 0
+    for iSens in range(len(sensorNames)):
+        if (len(sweepNames_[iSens]) <= len(sweepNames_[iSensMin])):
+            iSensMin = iSens
+
+    # process each sweep
+    iSweeps = [0] * len(sensorNames)
+    for iSweep in range(len(sweepNames_[iSensMin])):
+        # get current ref timestamp
+        if (sensorNames[0] == 'LIDAR_TOP'):
+            t_ref = int(sweepNames_[iSensMin][iSweep][-24:-8])
+        else:
+            t_ref = int(sweepNames_[iSensMin][iSweep][-20:-4])
+
+        # fill the buffers for each sensor up to the current ref timestamp
+        for iSens, sensorName in enumerate(sensorNames):
+            while (True):
+                # find interpolated pose with closest timestamp
+                if (sensorName == 'LIDAR_TOP'):
+                    t = int(sweepNames_[iSens][iSweeps[iSens]][-24:-8])
+                else:
+                    t = int(sweepNames_[iSens][iSweeps[iSens]][-20:-4])
+                if (t > t_ref):
+                    break
+                idx = np.argmin(abs(t01 - t))
+                vPose = vPoses01[idx, :]
+                pc = np.zeros((3, 1))
+                pc[:2, 0] = vPose[:2]
+                pc[2, 0] = 1  # is static!
+
+                # add bev detection image to detection map
+                trajMap = mapUtils.markInGlobalImg(pc, trajMap, t_r2i, mDim, pDim)
+
+                # get the next sweep
+                if (iSweeps[iSens] < (len(sweepNames_[iSens]) - 1)):
+                    iSweeps[iSens] += 1
+                else:
+                    break
+
+    return trajMap
+
+
+# ===========================#
 def processSweepOfDeepIsm(nusc, sample, scene, sweepNames, vPoses01, t01, sensorNames, buffers, ismMaps, t_r2i,
                           pF, pO, pD, pDim, mDim, aDim, numColsPerCone, y_fake, uMin):
     [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap, deepGeo_ismMap_prior, deepGeo_ismMap_overwrite, deep_ismMap_rmBias] = ismMaps
@@ -1236,10 +1292,10 @@ def saveImg(img, dirPath):
 # flags to toggle visualization
 storeProgress = False
 # radar
-storeRadarImg = False
+storeRadarImg = True
 storeRadarMap = False
 storeIrmImg = False
-storeIrmMap = True
+storeIrmMap = False
 # lidar
 storeLidarImg = False
 storeLidarMap = False
@@ -1250,6 +1306,8 @@ storeIlmMapPatches = False
 store360CamImg = False
 store360SemSegImg = False
 store360MonoDepthImg = False
+# trajectory
+storeTrajectory = True
 # deep ism
 modelDir = "./models/exp_deep_ism_comparison/"
 # DirNet
@@ -1403,6 +1461,8 @@ def main(iScene):
         ilmMaps_storDir = createImgStorDir(STORAGE_DIR + setName + "ilmMaps/")
     if (storeIlmMapPatches):
         ilmMapPatch_storDir = createImgStorDir(STORAGE_DIR + setName + "scene{:04}".format(iScene) + '/ilmMapPatch/')
+    if (storeTrajectory):
+        trajectory_storDir = createImgStorDir(STORAGE_DIR + setName + "scene{:04}".format(iScene) + '/trajectory/')
 
     # get all sweep names inside the scene's timespan
     c_sweepNames = findAllSweepsForTheScene(scene, camNames)
@@ -1439,6 +1499,7 @@ def main(iScene):
     deepGeo_ismMap_overwrite = ismMap.copy()
     deep_ismMap_rescaled_prog = ismMap.copy()
     mappedArea = detMap.copy()
+    trajectoryArea = detMap.copy()
 
     # all ref vehicle positions
     vPoses_ref = []
@@ -1540,6 +1601,11 @@ def main(iScene):
                                                                 radarNames, buff_r, r_detMap, r_ismMap, t_r2i,
                                                                 pF_rMap, pO_rMap, pD_rMap, pDim, mDim, aDim,
                                                                 numColsPerCone_r, storeIrmMap)
+        if (storeTrajectory):
+            trajectoryArea = drawTrajectory(nusc, sample, scene, r_sweepNames, vPoses01, t01,
+                                                                radarNames, trajectoryArea, t_r2i,
+                                                                pDim, mDim)
+
         # if (storeDeepIsmMap):
         #     ismMaps = [deep_ismMap, deep_ismMap_rescaled, deepGeo_ismMap, deepGeo_ismMap_prior, deepGeo_ismMap_overwrite, deep_ismMap_rmBias]
         #     buff_r, ismMaps = processSweepOfDeepIsm(nusc, sample, scene, r_sweepNames, vPoses01, t01,
@@ -1568,6 +1634,8 @@ def main(iScene):
             #         deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapScaled__{0:}.png".format(t_ref))
             # saveImg(deepGeo_ismMap,
             #         deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapFused__{0:}.png".format(t_ref))
+        if (storeTrajectory) and (storeProgress):
+            saveImg(trajectoryArea, trajectory_storDir + trajectory_storDir.split("/")[-2] + "_prog__{0:}.png".format(t_ref))
 
     # store map images
     if (storeLidarMap):
@@ -1579,6 +1647,8 @@ def main(iScene):
         saveImg(r_detMap, r_storDirs[0] + r_storDirs[0].split("/")[-2] + "_map.png")
     if (storeIrmMap):
         saveImg(r_ismMap, irmMap_storDir + irmMap_storDir.split("/")[-2] + ".png")
+    if (storeTrajectory):
+        saveImg(trajectoryArea, trajectory_storDir + trajectory_storDir.split("/")[-2] + ".png")
     # if (storeDeepIsmMap):
         # saveImg(deep_ismMap, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_map.png")
         # saveImg(deep_ismMap_rescaled, deepIsm_storDir + deepIsm_storDir.split("/")[-2] + "_mapScaled.png")
@@ -1612,7 +1682,7 @@ sceneIdxs = np.arange(len(nusc.scene))
 sceneIdxs = valIdxs
 
 # specific scenes
-sceneIdxs = [446]
+sceneIdxs = [84, 260, 488, 490, 442]
 
 t0 = time.time()
 for iScene, sceneIdx in enumerate(sceneIdxs):

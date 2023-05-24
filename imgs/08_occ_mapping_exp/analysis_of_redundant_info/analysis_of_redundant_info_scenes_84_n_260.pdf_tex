@@ -75,5 +75,6 @@
     \put(0.55856396,0.00556191){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
     \put(0.7022316,0.00515063){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}+ cutoff\end{tabular}}}}%
     \put(0.88367989,0.03730137){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{analysis_of_redundant_info_scenes_84_n_260.pdf}}%
   \end{picture}%
 \endgroup%

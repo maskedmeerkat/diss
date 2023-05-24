@@ -79,5 +79,6 @@
     \put(0.21236042,0.06260396){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo\end{tabular}}}}%
     \put(0.20515887,0.03255225){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
     \put(0.20827516,0.0053315){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{comparison_of_maps_scenes_488_n_490.pdf}}%
   \end{picture}%
 \endgroup%

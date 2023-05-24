@@ -107,13 +107,14 @@ Finally, the fusion of the reduced deep \gls{irm} with the geometric further sho
 \begin{center}
 	\resizebox{\textwidth}{!}{
 	\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{analysis_of_redundant_info_scenes_84_n_260.pdf_tex}}
-	\captionof{figure}{\label{fig:qual_analysis_of_redundant_info}Illustration of qualitative results for the different occupancy mapping variants for two scenes (A \& B).}
+	\captionof{figure}{\label{fig:qual_analysis_of_redundant_info}Illustration of qualitative results for the different occupancy mapping variants for two scenes (A \& B). The vehicle's trajectory is overlayed in white over the geo \gls{ilm} map.}
 \end{center}
-To further verify the effect of the redundancy reduction update, three steps of the mapping procedure are visualized in Fig. \ref{fig:viz_mapping_progress}. It can be seen that in the first step, when all map cells are initialized to unknown, the complete prediction of the deep \gls{irm} is used to update the map. Afterwards, the majority of new information comes from areas that just entered the deep \gls{irm}'s \gls{fov}. In the depicted case, the ego vehicle is moving from left to right and, thus, the majority of new information is at the right border (see e.g. white box on the right for $t=10$). 
+To further verify the effect of the redundancy reduction update, three steps of the mapping procedure are visualized in Fig. \ref{fig:viz_mapping_progress}. It can be seen that in the first step, when all map cells are initialized to unknown, the complete prediction of the deep \gls{irm} is used to update the map. Afterwards, the majority of new information comes from areas that just entered the deep \gls{irm}'s \gls{fov}. 
 \begin{center}
 	\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{viz_progress_scene_446.pdf_tex}
-	\captionof{figure}{\label{fig:viz_mapping_progress}Mapping process given redundancy reduced deep \gls{irm} updates. Left, the geo \gls{ilm} and \gls{irm} map are shown for reference. Right, the first row shows the map state before the update, the second the redundancy reduced deep \gls{irm} update based on the first row's state and, finally, the updated map in the last row.}
+	\captionof{figure}{\label{fig:viz_mapping_progress}Mapping process given redundancy reduced deep \gls{irm} updates. Left, the geo \gls{ilm} and \gls{irm} map are shown for reference. Right, the first row shows the map state before the update, the second the redundancy reduced deep \gls{irm} update based on the first row's state and, finally, the updated map in the last row. Additionally, the full trajectory is overlayed in white on the geo \gls{ilm} map. For the map progress, the trajectory is shown as solid for the time between visualizations and dashed for previous timesteps.}
 \end{center}
+In the depicted case, the ego vehicle is moving from left to right and, thus, the majority of new information is at the right border (see e.g. white box on the right for $t=10$). 
 Besides from areas entering the \gls{ism}'s \gls{fov}, formerly occluded areas that become visible are also identified to provide new information (see white box for $t=12$). Finally, the redundancy reduction is formulated to treat regions of conflict as rich in new information. This is done to allow the map to react to changes in the environment e.g. a parked vehicles starting to move. Thus, dynamic objects are also treated as new information and remain in the update (see left white box for $t=10$).
 %=================================%
 %
@@ -179,7 +180,7 @@ The findings of Fig. \ref{tab:conf_mat_deep_ism_map_comparison} are further qual
 \begin{center}
 	\resizebox{\textwidth}{!}{
 		\import{imgs/08_occ_mapping_exp/comparison_of_maps}{comparison_of_maps_scenes_488_n_490.pdf_tex}}
-	\captionof{figure}{\label{fig:comparison_of_maps_diff_sens}Qualitative results of the occupancy maps created using different \gls{ism}s. The abbreviations are explained in Section \ref{subsec:setup_analyze_deep_ism_maps_diff_sensors}.}
+	\captionof{figure}{\label{fig:comparison_of_maps_diff_sens}Qualitative results of the occupancy maps created using different \gls{ism}s. The abbreviations are explained in Section \ref{subsec:setup_analyze_deep_ism_maps_diff_sensors}. The vehicle's trajectory is overlayed in white over the geo \gls{ilm} map.}
 \end{center}
 The analysis in this section provides a quantitative as well as qualitative comparison of the occupancy maps created by the proposed deep \gls{ism} using different sensor input, thus, answering RQ\ref{requ:comp_deep_occ_maps}.
 %==========================================================================%
@@ -247,7 +248,7 @@ Looking at the qualitative results in Fig. \ref{fig:qual_analysis_of_prior}, the
 \begin{center}
 	\resizebox{\textwidth}{!}{
 	\import{imgs/08_occ_mapping_exp/analysis_of_prior}{analysis_of_prior_scenes_442_n_488.pdf_tex}}
-	\captionof{figure}{\label{fig:qual_analysis_of_prior}Qualitative results of three mapping approaches (column 1-4) for two scenes with the geo \gls{ilm} ground-truth map in the first column. Additionally, the 4th column shows the result of filtering out all non-converged pixels of the 3rd column's map. This is done by setting all pixels with $\gls{sym:m_u} > \gls{sym:m_u_} = 0.3$ to $\gls{sym:m_u} = 1$.}
+	\captionof{figure}{\label{fig:qual_analysis_of_prior}Qualitative results of three mapping approaches (column 1-4) for two scenes with the geo \gls{ilm} ground-truth map in the first column. Additionally, the 4th column shows the result of filtering out all non-converged pixels of the 3rd column's map. This is done by setting all pixels with $\gls{sym:m_u} > \gls{sym:m_u_} = 0.3$ to $\gls{sym:m_u} = 1$. The vehicle's trajectory is overlayed in white over the geo \gls{ilm} map.}
 \end{center}
 %=================================%
 %

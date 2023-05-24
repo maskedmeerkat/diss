@@ -55,7 +55,7 @@
     \setlength\tabcolsep{0pt}%
     \put(0.0010644,0.14627511){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}B\end{tabular}}}}%
     \put(0.09528116,0.03637788){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}ILM\end{tabular}}}}%
-    \put(-0.00020373,0.2750618){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}A\end{tabular}}}}%
+    \put(-0.00020372,0.2750618){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}A\end{tabular}}}}%
     \put(0.46976474,0.03637789){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
     \put(0.8372548,0.06480406){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}areas in the \end{tabular}}}}%
     \put(0.82218403,0.03766391){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}convergence\end{tabular}}}}%
@@ -64,13 +64,14 @@
     \put(0,0){\includegraphics[width=\unitlength,page=2]{analysis_of_prior_scenes_442_n_488.pdf}}%
     \put(0.09335849,0.06733155){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo\end{tabular}}}}%
     \put(0.0818225,0.0054242){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
-    \put(0.27515815,0.03637789){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
-    \put(0.28953358,0.06733153){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo\end{tabular}}}}%
+    \put(0.27515816,0.03637789){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
+    \put(0.28953359,0.06733153){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}geo\end{tabular}}}}%
     \put(0.27799759,0.0054242){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Yager\end{tabular}}}}%
-    \put(0.40864408,0.06733153){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red. \& geo\end{tabular}}}}%
+    \put(0.40864409,0.06733153){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red. \& geo\end{tabular}}}}%
     \put(0.66585973,0.03637789){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}IR$_{20}$M\end{tabular}}}}%
-    \put(0.61741824,0.06733153){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red. \& geo\end{tabular}}}}%
+    \put(0.61741825,0.06733153){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}deep, red. \& geo\end{tabular}}}}%
     \put(0.61564836,0.00373709){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}YaDer ($\underline{m}_u = 0.3$)\end{tabular}}}}%
     \put(0.86643715,0.00762698){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}phase\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{analysis_of_prior_scenes_442_n_488.pdf}}%
   \end{picture}%
 \endgroup%
