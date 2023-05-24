@@ -22,7 +22,7 @@
 \usepackage{booktabs}
 
 %enable \gls
-\usepackage[automake,nonumberlist,acronym,toc,nopostdot,nomain,numberedsection=autolabel, section=section]{glossaries}
+\usepackage[xindy,automake,nonumberlist,acronym,toc,nopostdot,nomain,numberedsection=autolabel, section=section]{glossaries}
 \newglossary[slg]{symbolslist}{syi}{syg}{Symbols} % create add. symbolslist
 \makeglossaries
 % Displays unit in symbole list
@@ -117,6 +117,7 @@
 \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 \ihead{\makebox[1cm][l]{\thechapter}\leftmark}
 \ohead{\thepage}
+
 %font Arial
 %\usepackage[scaled=1]{uarial}
 \renewcommand{\rmdefault}{ptm} % Times new Roman

@@ -70,5 +70,6 @@
     \put(0.89974758,0.00530773){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\gls{gt}\end{tabular}}}}%
     \put(0.06949468,0.40283048){\color[rgb]{0,0,0}\rotatebox{90}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}R$_{20}$\end{tabular}}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{irm_qual_comp.pdf}}%
+    \put(0.94058066,0.86821972){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\textcolor{white}{Bus}\end{tabular}}}}%
   \end{picture}%
 \endgroup%

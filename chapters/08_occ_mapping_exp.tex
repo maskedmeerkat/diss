@@ -34,7 +34,7 @@ Eventually, the lower-bounded (lb) Yager rule's property to only converge to the
 %=================================%
 \subsection{Discussion of the Verification of Combination Rule Choices}
 \label{subsec:discussion_choice_comb_rule}
-The above results demonstrate the claimed properties of all combination rules and, thus, verify the choices in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}. With regards to RQ\ref{requ:disable_deep_ism_influence} to disable the influence of the deep \gls{ism}, the results for the lower-bounded Yager rule clearly show the restricting properties of the fusion to suffice a lower bound on the unknown mass. However, to fully verify the robustness of the fusion approaches and investigate additional cases not cover in the above simulations, the proposed approach is applied on real data in the following sections.
+The above results demonstrate the claimed properties of all combination rules and, thus, verify the choices in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}. With regards to RQ\ref{requ:disable_deep_ism_influence} to disable the influence of the deep \gls{ism}, the results for the lower-bounded Yager rule clearly show the restricting properties of the fusion to suffice a lower bound on the unknown mass. However, to fully verify the robustness of the fusion approaches and investigate additional cases not covered in the above simulations, the proposed approach is applied on real data in the following sections.
 %==========================================================================%
 %
 %==========================================================================%
@@ -50,7 +50,7 @@ To verify H\ref{hyp:temporal_dependence}, occupancy maps are created in five way
 \\\\
 The evaluation is performed using only the accumulated radar detections of the recent 20 timesteps (R$_{20}$) since the focus of this work lies on radar occupancy mapping. Additionally, it is assumed that the effects are similar using other sensor modalities. The geo \gls{ism} method is used as described in Section \ref{subsec:method_geo_irm} and ShiftNet, as described Section \ref{subsec:method_al_uncert_in_deep_isms}, is used as a deep \gls{ism}.
 \\\\
-The metrics used are the normed confusion matrix (see Section \ref{subsec:confusion_matrix}) and the mIoU. Here, the metrics are evaluated separately in all of the area in a 20m vicinity around the ego vehicle trajectory ("whole mapped area") and in an area of 15 pixels around occupied ground truth pixels in the reference occupancy maps. Here, the mIoU is only evaluated around the occupied borders to quantify the cleanliness. The reference maps are created by accumulating the geo \gls{ilm} using Yager's rule. Two examples of the evaluation areas can be found in \ref{fig:qual_analysis_of_redundant_info}. The scenes mapped are solely taken from the test set which was not used during training.
+The metrics used are the normed confusion matrix (see Section \ref{subsec:confusion_matrix}) and the mIoU. Here, the metrics are evaluated separately in all of the area in a 20 m vicinity around the ego vehicle trajectory ("whole mapped area") and in an area of 15 pixels around occupied ground truth pixels in the reference occupancy maps. Here, the mIoU is only evaluated around the occupied borders to quantify the cleanliness. The reference maps are created by accumulating the geo \gls{ilm} using Yager's rule. Two examples of the evaluation areas can be found in \ref{fig:qual_analysis_of_redundant_info}. The scenes mapped are solely taken from the test set which was not used during training.
 %=================================%
 %
 %=================================%
@@ -62,7 +62,7 @@ Next, scores of the accumulated deep IR$_{20}$M reach the highest true and false
 \\\\
 The na\"ive solution to cutoff low probable predictions $\gls{sym:m_u} > 0.9$ and set them to unknown slightly reduces the true and false rates of occupied predictions. However, in unknown areas, the amount of occupied predictions is more drastically reduced. Interestingly, the false and true rates of free space slightly increase through the cutoff. These findings can also be verified in Fig. \ref{fig:qual_analysis_of_redundant_info} by comparing the accumulated deep IR$_{20}$M with and without cutoff. Here, the most significant change can be seen by a reduction in occupied predictions in the unknown areas. In some cases (white box in scene A), free space replaces the former occupied areas.
 \\\\
-Applying redundancy reduction before accumulation has a similar effect than cutoff. The occupied rates decline while the free rates are increased. However, in the unknown area, both the free and occupied rates are reduced in contrast to cutoff where the free rate is increased. 
+Applying redundancy reduction before accumulation has a similar effect compared to cutoff. The occupied rates decline while the free rates are increased. However, in the unknown area, both the free and occupied rates are reduced in contrast to cutoff where the free rate is increased. 
 \begin{center}
 	\begin{tabular}{c|c|ccc|ccc}
 		& $\tilde{k}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$ & $\tilde{f}$ & $\tilde{o}$ & $\tilde{u}$\\
@@ -109,12 +109,12 @@ Finally, the fusion of the reduced deep \gls{irm} with the geometric further sho
 	\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{analysis_of_redundant_info_scenes_84_n_260.pdf_tex}}
 	\captionof{figure}{\label{fig:qual_analysis_of_redundant_info}Illustration of qualitative results for the different occupancy mapping variants for two scenes (A \& B).}
 \end{center}
-To further verify the workings of the redundancy reduction update, three steps of the mapping procedure are visualized in Fig. \ref{fig:viz_mapping_progress}. It can be seen that in the first step, when all map cells are initialized to unknown, the complete prediction of the deep \gls{irm} is used to update the map. Afterwards, the majority of new information comes from areas that just entered the deep \gls{irm}'s \gls{fov}. In the depicted case, the ego vehicle is moving from left to right and, thus, the majority of new information is at the right border (see e.g. white box on the right for $t=10$). 
+To further verify the effect of the redundancy reduction update, three steps of the mapping procedure are visualized in Fig. \ref{fig:viz_mapping_progress}. It can be seen that in the first step, when all map cells are initialized to unknown, the complete prediction of the deep \gls{irm} is used to update the map. Afterwards, the majority of new information comes from areas that just entered the deep \gls{irm}'s \gls{fov}. In the depicted case, the ego vehicle is moving from left to right and, thus, the majority of new information is at the right border (see e.g. white box on the right for $t=10$). 
 \begin{center}
 	\import{imgs/08_occ_mapping_exp/analysis_of_redundant_info}{viz_progress_scene_446.pdf_tex}
 	\captionof{figure}{\label{fig:viz_mapping_progress}Mapping process given redundancy reduced deep \gls{irm} updates. Left, the geo \gls{ilm} and \gls{irm} map are shown for reference. Right, the first row shows the map state before the update, the second the redundancy reduced deep \gls{irm} update based on the first row's state and, finally, the updated map in the last row.}
 \end{center}
-Besides from areas entering the \gls{ism}'s \gls{fov}, formerly occluded that become visible are also identified to provide new information (see white box for $t=12$). Finally, the redundancy reduction is formulated to treat regions of conflict as rich in new information. This is done to allow the map to react to changes in the environment e.g. a parked vehicles starting to move. Thus, dynamic objects are also treated as new information and remain in the update (see left white box for $t=10$).
+Besides from areas entering the \gls{ism}'s \gls{fov}, formerly occluded areas that become visible are also identified to provide new information (see white box for $t=12$). Finally, the redundancy reduction is formulated to treat regions of conflict as rich in new information. This is done to allow the map to react to changes in the environment e.g. a parked vehicles starting to move. Thus, dynamic objects are also treated as new information and remain in the update (see left white box for $t=10$).
 %=================================%
 %
 %=================================%
@@ -128,7 +128,7 @@ Using redundancy reduction, the low certain estimates can still be included in t
 \\\\
 Since the problem indeed seems to originate from the accumulation of false predictions in occluded areas, another solution might be to directly train the deep \gls{ism} to predict the geo \gls{ilm} and not the mapped geo \gls{ilm} patches. This solution has not been considered from the start since the work's aim is to initialize as much space around the vehicle as possible to increase the convergence speed. Also, it might be possible to train the deep \gls{ism} to, based on a given state of a map, predict either the best next occupancy state or the next update. This, however, is highly non-trivial since the network has to be trained to cope with the maps created by a number of sensor models including itself. 
 \\\\
-Even though the redundancy reduced IR$_{20}$M map comes close to the edge performance, it still lacked behind the geo IR$_{20}$M map's mIoU. Thus, in Section \ref{sec:exp_analyze_prior_properties}, it is analyzed how the inter- \& extrapolation properties of a deep \gls{ism} can be combined with the edge accuracy of a geo \gls{ism} during mapping.
+Even though the redundancy reduced IR$_{20}$M map comes close to the edge performance, it still lacks behind the geo IR$_{20}$M map's mIoU. Thus, in Section \ref{sec:exp_analyze_prior_properties}, it is analyzed how the inter- \& extrapolation properties of a deep \gls{ism} can be combined with the edge accuracy of a geo \gls{ism} during mapping.
 %==========================================================================%
 %
 %==========================================================================%
@@ -181,7 +181,7 @@ The findings of Fig. \ref{tab:conf_mat_deep_ism_map_comparison} are further qual
 		\import{imgs/08_occ_mapping_exp/comparison_of_maps}{comparison_of_maps_scenes_488_n_490.pdf_tex}}
 	\captionof{figure}{\label{fig:comparison_of_maps_diff_sens}Qualitative results of the occupancy maps created using different \gls{ism}s. The abbreviations are explained in Section \ref{subsec:setup_analyze_deep_ism_maps_diff_sensors}.}
 \end{center}
-The analysis in this section provides a quantitative as well as qualitative comparison of the occupancy maps created the proposed deep \gls{ism} using different sensor input, thus, answering RQ\ref{requ:comp_deep_occ_maps}.
+The analysis in this section provides a quantitative as well as qualitative comparison of the occupancy maps created by the proposed deep \gls{ism} using different sensor input, thus, answering RQ\ref{requ:comp_deep_occ_maps}.
 %==========================================================================%
 %
 %==========================================================================%
@@ -197,7 +197,7 @@ The experiments are performed using the same sensor inputs, test sets and ground
 \begin{itemize}[noitemsep,nolistsep,topsep=0pt]
 	\item the geo \gls{irm} using Yager's rule,
 	\item the redundancy reduced deep and geo \gls{irm} combined with Yager's rule and $\gls{sym:m_u_} = 0$ for the deep \gls{irm} and
-	\item the fusion of the reduced deep \gls{irm} with $\gls{sym:m_u_} = 0.3$ using Yager while the geo \gls{irm} is fused using Yager for all cells with $\gls{sym:m_u_} < 0.3$ and YaDer elsewhere
+	\item the fusion of the reduced deep \gls{irm} with $\gls{sym:m_u_} = 0.3$ using Yager while the geo \gls{irm} is fused using Yager for all cells with $\gls{sym:m_u_} < 0.3$ and YaDer elsewhere.
 \end{itemize}
 The considerations and definitions for this approach are detailed in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps}. 
 \\\\
@@ -254,4 +254,4 @@ Looking at the qualitative results in Fig. \ref{fig:qual_analysis_of_prior}, the
 %=================================%
 \subsection{Discussion of deep ISM Priors Analysis}
 \label{subsec:discussion_of_prior_analy}
-The above shown experimental results on real world sensor data together with the verification based on simulation in Section \ref{sec:exp_choice_comb_rule} show that the method devised in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps} is indeed capable to restrict the fusion of an \gls{ism} to a lower bound given a grace interval to allow for numerical instability. Thus providing an answer to RQ\ref{requ:disable_deep_ism_influence}. It has also been shown that the majority of the geo \gls{irm} map's correct predictions remain intact. The found falsification is to be expected since it is still a fusion approach. If both models result in similar errors, e.g. due to incorrect modeling, missing detections, false dynamic state of a detection etc., these errors are amplified resulting in a falsification. It is, however, shown that the falsification is reduced using the deep \gls{irm} as a prior, again demonstrating the restrictive influence of the deep \gls{ism} purely for initialization.
+The above shown experimental results on real world sensor data together with the verification based on simulation in Section \ref{sec:exp_choice_comb_rule} show that the method devised in Section \ref{subsec:method_to_use_deep_isms_as_priors_in_occmaps} is indeed capable to restrict the fusion of an \gls{ism} to a lower bound given a grace interval to allow for numerical instability, which provides an answer to RQ\ref{requ:disable_deep_ism_influence}. It has also been shown that the majority of the geo \gls{irm} map's correct predictions remain intact. The found falsification is to be expected since it is still a fusion approach. If both models result in similar errors, e.g. due to incorrect modeling, missing detections, false dynamic state of a detection etc., these errors are amplified resulting in a falsification. It is, however, shown that the falsification is reduced using the deep \gls{irm} as a prior, again demonstrating the restrictive influence of the deep \gls{ism} purely for initialization.

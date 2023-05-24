@@ -1612,7 +1612,7 @@ sceneIdxs = np.arange(len(nusc.scene))
 sceneIdxs = valIdxs
 
 # specific scenes
-# sceneIdxs = [0]
+sceneIdxs = [446]
 
 t0 = time.time()
 for iScene, sceneIdx in enumerate(sceneIdxs):

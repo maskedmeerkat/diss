@@ -72,5 +72,7 @@
     \put(0,0){\includegraphics[width=\unitlength,page=4]{icm_qual_comp.pdf}}%
     \put(0.85684641,0.63060707){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene B\end{tabular}}}}%
     \put(0.85684641,0.96118821){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Scene A\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{icm_qual_comp.pdf}}%
+    \put(0.92707595,0.9060888){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\textcolor{white}{Bus}\end{tabular}}}}%
   \end{picture}%
 \endgroup%
