@@ -64,11 +64,6 @@
 \include{chapters/08_occ_mapping_exp}
 \include{chapters/10_discussion}
 
-
-% Appendix
-% \appendix % not used in word template?!
-
-
 % Align table to the left
 
 \setlength\LTleft{-6pt}
@@ -110,6 +105,10 @@
 %	\listoftodos
 %	\newpage
 %}
-%\input{chapters/99_Appendix.tex}
+
+% Appendix
+\appendix
+\renewcommand{\thechapter}{\arabic{chapter}}
+\include{chapters/99_appendix}
 
 \end{document}
