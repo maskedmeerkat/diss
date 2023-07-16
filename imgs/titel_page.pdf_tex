@@ -58,6 +58,5 @@
     \put(0.33580896,0.89954337){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\Large \textbf{Deep Inverse Sensor Models as Priors }\\\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{titel_page.pdf}}%
     \put(0.39060051,0.86376162){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\Large \textbf{for evidential Occupancy Mapping}\end{tabular}}}}%
-    \put(0.16509764,1.01332971){\color[rgb]{0,0,0}\rotatebox{41.600701}{\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}\Huge \textbf{\textcolor[rgb]{0.5,0.5,0.5}{Proposal}}\end{tabular}}}}}%
   \end{picture}%
 \endgroup%
