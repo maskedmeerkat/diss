@@ -1290,7 +1290,7 @@ def saveImg(img, dirPath):
 
 # ================================================= MAIN ==============================================================#
 # flags to toggle visualization
-storeProgress = False
+storeProgress = True
 # radar
 storeRadarImg = True
 storeRadarMap = False
