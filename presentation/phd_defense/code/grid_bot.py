@@ -6,6 +6,9 @@ import numpy as np
 import cv2
 
 
+RUN_LOCAL_SERVER = False
+
+
 def img2grid(pnts, rows):
     pnts_ = np.zeros_like(pnts)
     pnts_[:, 0] = rows - pnts[:, 0]
@@ -92,12 +95,16 @@ def plot_grid(rows_columns, path_positions, grid_img):
 
 
 if __name__ == "__main__":
-    # Load the OpenAI api key and create a client
-    with open('./openai_api_key.txt') as file:
-        api_key = file.readline()
-    client = OpenAI(
-    api_key=api_key,
-    )
+    if RUN_LOCAL_SERVER:
+        # Create a client to a local LM Studio server
+        client = OpenAI(base_url="http://localhost:1234/v1", api_key="not-needed")
+    else:
+        # Load the OpenAI api key and create a client
+        with open('./openai_api_key.txt') as file:
+            api_key = file.readline()
+        client = OpenAI(
+            api_key=api_key,
+        )
 
     # Define the condition and grid messages
     condition_msg = (
@@ -111,13 +118,15 @@ if __name__ == "__main__":
         "You may only increase a row or a column in one step and you may only increase or decrease them by one. "
     )
     # grid_file_path = "./grids/g3x3__b_22.png"
-    grid_file_path = "./grids/g3x3__b_22_23.png"
+    # grid_file_path = "./grids/g3x3__b_22_23.png"
+    # grid_file_path = "./grids/g3x4.png"
+    grid_file_path = "./grids/g5x4.png"
     grid_img = cv2.imread(grid_file_path)[:, :, [2, 1, 0]]
     rows_columns, blocked_pnts, start_pnt, dest_pnt = extract_grid_from_image(grid_img)
     environment_msg = (
         f"The grid is of the form R={rows_columns[0]} and C={rows_columns[1]}. "
-        f"The following positions are blocked {blocked_pnts.tolist()} and may not be part of your answer. "
         f"You are at position {start_pnt.tolist()} and want to move to positions {dest_pnt.tolist()}."
+        f"The following positions are blocked {blocked_pnts.tolist()} and may not be part of your answer. "
     )
     print(condition_msg)
     print("----------------")
