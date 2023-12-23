@@ -1,3 +1,6 @@
+# key file
+*openai_api_key.txt
+
 # bib files
 *.bib.bak
 *.bib.sav.tmp
