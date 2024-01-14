@@ -1,5 +1,9 @@
+# temporary route predictions
+*route_map.html
+
 # key file
 *openai_api_key.txt
+*google_maps_api_key.txt
 
 # bib files
 *.bib.bak

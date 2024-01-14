@@ -120,13 +120,14 @@ if __name__ == "__main__":
     # grid_file_path = "./grids/g3x3__b_22.png"
     # grid_file_path = "./grids/g3x3__b_22_23.png"
     # grid_file_path = "./grids/g3x4.png"
-    grid_file_path = "./grids/g5x4.png"
+    # grid_file_path = "./grids/g5x4.png"
+    grid_file_path = "./grids/g_big.png"
     grid_img = cv2.imread(grid_file_path)[:, :, [2, 1, 0]]
     rows_columns, blocked_pnts, start_pnt, dest_pnt = extract_grid_from_image(grid_img)
     environment_msg = (
         f"The grid is of the form R={rows_columns[0]} and C={rows_columns[1]}. "
         f"You are at position {start_pnt.tolist()} and want to move to positions {dest_pnt.tolist()}."
-        f"The following positions are blocked {blocked_pnts.tolist()} and may not be part of your answer. "
+        f"The following positions are blocked {blocked_pnts.tolist()} and may under no circumstances be part of your output. "
     )
     print(condition_msg)
     print("----------------")
