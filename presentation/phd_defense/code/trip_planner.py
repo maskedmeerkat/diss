@@ -37,7 +37,7 @@ def plot_route(start_location, end_location, waypoints=None, zoom=10, api_key=No
 
     # Plot the start and end locations
     gmap.marker(*start_lat_lon, color='green', title='Start')
-    gmap.marker(*end_lat_lon, color='red', title='End')
+    gmap.marker(*end_lat_lon, color='blue', title='End')
 
     # Draw the route
     gmap.directions(start_lat_lon, end_lat_lon, waypoints=waypoints_lat_lon, travel_mode='driving')
@@ -64,16 +64,24 @@ if __name__ == "__main__":
         api_key=api_key,
     )
 
-    # Define the condition and grid messages
+    # Define the condition and request messages
     condition_msg = (
         "In the following, you behave as a navigation system. "
         "I'll tell you a Start S, Destination D and Preference P for the route. "
         "You will answer by providing a numbered list of cities to get from Start S to Destination D."
     )
 
-    start_location = input('Enter Start: ')
-    end_location = input('Enter Destination: ')
-    route_preference = input('Enter Route Preferences: ')
+    start_location = "Saarbrücken"
+    end_location = "Stuttgart"
+    # route_preference = "fastest route"
+    # route_preference = "route that avoid driving through Landau"
+    # route_preference = "route that also passes through France"
+    # route_preference = "fastest route that also passes through France"
+    route_preference = "route that passes through at least three countries"
+
+    # start_location = input('Enter Start: ')
+    # end_location = input('Enter Destination: ')
+    # route_preference = input('Enter Route Preferences: ')
     environment_msg = f"S: {start_location}, D:  {end_location}, P: {route_preference}"
     print(condition_msg)
     print("------------------------------------------------------------------------------------------------------------------------------------------------")
@@ -96,7 +104,7 @@ if __name__ == "__main__":
     print(response)
 
     # Extract the path from the response
-    waypoints = [city.split("\n")[0] for city in response.split(" ")[1:]]
+    waypoints = [city.split(",")[0].split("\n")[0] for city in response.split(". ")[1:]]
     waypoints = list(filter(None, waypoints))
     print(f"Extracted Waypoints: {waypoints}")
 
