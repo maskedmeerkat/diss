@@ -28,14 +28,22 @@
 \input{utils/functions.tex}
 
 % Begin document
-\AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
+\hypersetup{
+	pdfauthor={Daniel Max Bauer},        % Author of the document
+	pdftitle={Deep Inverse Sensor Models as Priors for evidential Occupancy Mapping},        % Title of the document
+	pdfstartview={FitH}, % FitH: Fit the width of the page to the window
+	pdfpagemode={UseOutlines} % Open with bookmarks panel (outlines) visible
+}
+%\AtBeginDocument{\AtBeginShipoutNext{\AtBeginShipoutDiscard}}
 \begin{document}
-\newgeometry{top=0cm,bottom=0cm,right=0cm,left=0cm}
-\begin{center}
-	\resizebox{\paperwidth}{!}{\import{imgs}{titel_page.pdf_tex}}
-\end{center}
+% Add cover image
+%\newgeometry{top=0cm,bottom=0cm,right=0cm,left=0cm}
+%\begin{center}
+%	\resizebox{\paperwidth}{!}{\import{imgs}{titel_page.pdf_tex}}
+%\end{center}
 % Add cover page
 \include{chapters/01_cover}
+
 \addblankpage
 % Restore ika geometry
 \newgeometry{left=3cm, right=2cm, top=3cm, bottom=2.5cm}
