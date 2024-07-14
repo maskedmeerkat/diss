@@ -117,11 +117,12 @@ if __name__ == "__main__":
         "Your answer shall be in form of a list of positions including the provided start and end positions. "
         "You may only increase a row or a column in one step and you may only increase or decrease them by one. "
     )
+    grid_file_path = "./grids/g3x3.png"
     # grid_file_path = "./grids/g3x3__b_22.png"
     # grid_file_path = "./grids/g3x3__b_22_23.png"
     # grid_file_path = "./grids/g3x4.png"
     # grid_file_path = "./grids/g5x4.png"
-    grid_file_path = "./grids/g_big.png"
+    # grid_file_path = "./grids/g_big.png"
     grid_img = cv2.imread(grid_file_path)[:, :, [2, 1, 0]]
     rows_columns, blocked_pnts, start_pnt, dest_pnt = extract_grid_from_image(grid_img)
     environment_msg = (
@@ -149,7 +150,7 @@ if __name__ == "__main__":
     print(response)
 
     # Extract the path from the response
-    path_positions = ast.literal_eval(response[response.find("[["):response.find("]]")+2])
+    path_positions = ast.literal_eval(response[response.rfind("[["):response.rfind("]]")+2])
     print(f"Extracted Path: {path_positions}")
     # path_positions = [(1, 2), (1, 3), (2, 3), (3, 3)]
 

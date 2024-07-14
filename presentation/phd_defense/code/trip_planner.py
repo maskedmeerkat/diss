@@ -4,6 +4,8 @@ from openai import OpenAI
 import webbrowser
 import os
 
+RUN_LOCAL_SERVER = True
+
 browser_path = "C:\\Program Files\\Mozilla Firefox\\firefox.exe"
 webbrowser.register('firefox', None, webbrowser.BackgroundBrowser(browser_path), preferred=True)
 
@@ -57,12 +59,16 @@ if __name__ == "__main__":
     with open('./google_maps_api_key.txt') as file:
         google_maps_api_key = file.readline()
 
-    # Load the OpenAI api key and create a client
-    with open('./openai_api_key.txt') as file:
-        api_key = file.readline()
-    client = OpenAI(
-        api_key=api_key,
-    )
+    if RUN_LOCAL_SERVER:
+        # Create a client to a local LM Studio server
+        client = OpenAI(base_url="http://localhost:1234/v1", api_key="not-needed")
+    else:
+        # Load the OpenAI api key and create a client
+        with open('./openai_api_key.txt') as file:
+            api_key = file.readline()
+        client = OpenAI(
+            api_key=api_key,
+        )
 
     # Define the condition and request messages
     condition_msg = (
@@ -71,10 +77,11 @@ if __name__ == "__main__":
         "You will answer by providing a numbered list of cities to get from Start S to Destination D."
     )
 
-    start_location = "Saarbrücken"
+    start_location = "Aachen"
     end_location = "Stuttgart"
     # route_preference = "fastest route"
-    # route_preference = "route that avoid driving through Landau"
+    # route_preference = "fastest route that only runs through Germany and avoid Düsseldorf"
+    # route_preference = "route that avoid driving through Cologne"
     # route_preference = "route that also passes through France"
     # route_preference = "fastest route that also passes through France"
     route_preference = "route that passes through at least three countries"
@@ -100,12 +107,17 @@ if __name__ == "__main__":
       temperature=0.7,
     )
     response = completion.choices[0].message.content
-    print("ChatGPT Response")
+    print("Response")
     print(response)
 
     # Extract the path from the response
     waypoints = [city.split(",")[0].split("\n")[0] for city in response.split(". ")[1:]]
     waypoints = list(filter(None, waypoints))
+    # Sometimes, start & end locations are not included in the predicted waypoints which causes incorrect travel paths.
+    if waypoints[0] != start_location:
+        waypoints = [start_location,] + waypoints
+    if waypoints[-1] != end_location:
+        waypoints = waypoints + [end_location,]
     print(f"Extracted Waypoints: {waypoints}")
 
     plot_route(start_location, end_location, waypoints=waypoints, api_key=google_maps_api_key)
